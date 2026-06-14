@@ -532,7 +532,13 @@ function onObjectEnterContainer(container, enter_object)
 	end
 end
 
-function getCMC(name, desc)
+-- negLands: when true (default) lands without a CMC are returned as "-1",
+-- the sentinel cascade uses to skip them. Pass false to get a land's real
+-- mana value ("0") instead, e.g. when totalling revealed CMC.
+function getCMC(name, desc, negLands)
+	if negLands == nil then
+		negLands = true
+	end
 	cmc = name:lower():match("(%d+) ?cmc")
 	if cmc == nil then
 		cmc = name:lower():match("cmc ?(%d+)")
@@ -545,7 +551,7 @@ function getCMC(name, desc)
 	end
 	isLand = name:match("Land")
 	if (cmc == nil or cmc == "0") and isLand then
-		cmc = "-1"
+		cmc = negLands and "-1" or "0"
 	end
 	if
 		cmc == nil and (desc:lower():match("suspend") or name:lower():match("pact") or name:lower():match("evermind"))

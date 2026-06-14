@@ -538,6 +538,8 @@ function revealFan(button, ply, alt)
 	local nRevealed = tonumber(button.getGMNotes())
 	if now - lastT > 10 then
 		nRevealed = 0
+		revealedCMC = revealedCMC or {}
+		revealedCMC[ply] = 0
 	end
 	button.memo = tostring(now)
 	local nUp = math.floor(nRevealed / revealNrow)
@@ -556,7 +558,7 @@ function revealFan(button, ply, alt)
 	card.highlightOn(stringColorToRGB(ply), 10)
 	nRevealed = nRevealed + 1
 	button.setGMNotes(tostring(nRevealed))
-	broadcastToAll(hexPrefix .. "[b]" .. nRevealed .. ":[/b][-] " .. card.getName():gsub("\n", " | "))
+	tallyRevealCMC(ply, hexPrefix, nRevealed, card)
 end
 
 function revealStack(button, ply, alt)
@@ -581,6 +583,8 @@ function revealStack(button, ply, alt)
 	local nRevealed = tonumber(button.getGMNotes())
 	if now - lastT > 10 then
 		nRevealed = 0
+		revealedCMC = revealedCMC or {}
+		revealedCMC[ply] = 0
 	end
 	button.memo = tostring(now)
 	local righ = libZone.getTransformRight()
@@ -592,7 +596,32 @@ function revealStack(button, ply, alt)
 	card.setRotationSmooth(rot, false, true)
 	nRevealed = nRevealed + 1
 	button.setGMNotes(tostring(nRevealed))
-	broadcastToAll(hexPrefix .. "[b]" .. nRevealed .. ":[/b][-] " .. card.getName():gsub("\n", " | "))
+	tallyRevealCMC(ply, hexPrefix, nRevealed, card)
+end
+
+-- accumulate revealed CMC (lands count as 0) and broadcast the running total;
+-- cards whose CMC can't be parsed are flagged and left out of the tally
+function tallyRevealCMC(ply, hexPrefix, nRevealed, card)
+	revealedCMC = revealedCMC or {}
+	revealedCMC[ply] = revealedCMC[ply] or 0
+	local cmc = getCMC(card.getName(), card.getDescription(), false)
+	local flag = ""
+	if cmc == nil then
+		flag = " [FF8800][b](CMC?)[/b][-]"
+	else
+		revealedCMC[ply] = revealedCMC[ply] + tonumber(cmc)
+	end
+	broadcastToAll(
+		hexPrefix
+			.. "[b]"
+			.. nRevealed
+			.. ":[/b][-] "
+			.. card.getName():gsub("\n", " | ")
+			.. flag
+			.. "  [b]total CMC: "
+			.. revealedCMC[ply]
+			.. "[/b]"
+	)
 end
 
 function checkPosMove(pos, libZone)
@@ -2104,7 +2133,13 @@ function onObjectEnterContainer(container, enter_object)
 	end
 end
 
-function getCMC(name, desc)
+-- negLands: when true (default) lands without a CMC are returned as "-1",
+-- the sentinel cascade uses to skip them. Pass false to get a land's real
+-- mana value ("0") instead, e.g. when totalling revealed CMC.
+function getCMC(name, desc, negLands)
+	if negLands == nil then
+		negLands = true
+	end
 	cmc = name:lower():match("(%d+) ?cmc")
 	if cmc == nil then
 		cmc = name:lower():match("cmc ?(%d+)")
@@ -2117,7 +2152,7 @@ function getCMC(name, desc)
 	end
 	isLand = name:match("Land")
 	if (cmc == nil or cmc == "0") and isLand then
-		cmc = "-1"
+		cmc = negLands and "-1" or "0"
 	end
 	if
 		cmc == nil and (desc:lower():match("suspend") or name:lower():match("pact") or name:lower():match("evermind"))
