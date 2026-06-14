@@ -21,6 +21,8 @@ function revealFan(button, ply, alt)
 	local nRevealed = tonumber(button.getGMNotes())
 	if now - lastT > 10 then
 		nRevealed = 0
+		revealedCMC = revealedCMC or {}
+		revealedCMC[ply] = 0
 	end
 	button.memo = tostring(now)
 	local nUp = math.floor(nRevealed / revealNrow)
@@ -39,7 +41,7 @@ function revealFan(button, ply, alt)
 	card.highlightOn(stringColorToRGB(ply), 10)
 	nRevealed = nRevealed + 1
 	button.setGMNotes(tostring(nRevealed))
-	broadcastToAll(hexPrefix .. "[b]" .. nRevealed .. ":[/b][-] " .. card.getName():gsub("\n", " | "))
+	tallyRevealCMC(ply, hexPrefix, nRevealed, card)
 end
 
 function revealStack(button, ply, alt)
@@ -64,6 +66,8 @@ function revealStack(button, ply, alt)
 	local nRevealed = tonumber(button.getGMNotes())
 	if now - lastT > 10 then
 		nRevealed = 0
+		revealedCMC = revealedCMC or {}
+		revealedCMC[ply] = 0
 	end
 	button.memo = tostring(now)
 	local righ = libZone.getTransformRight()
@@ -75,7 +79,32 @@ function revealStack(button, ply, alt)
 	card.setRotationSmooth(rot, false, true)
 	nRevealed = nRevealed + 1
 	button.setGMNotes(tostring(nRevealed))
-	broadcastToAll(hexPrefix .. "[b]" .. nRevealed .. ":[/b][-] " .. card.getName():gsub("\n", " | "))
+	tallyRevealCMC(ply, hexPrefix, nRevealed, card)
+end
+
+-- accumulate revealed CMC (lands count as 0) and broadcast the running total;
+-- cards whose CMC can't be parsed are flagged and left out of the tally
+function tallyRevealCMC(ply, hexPrefix, nRevealed, card)
+	revealedCMC = revealedCMC or {}
+	revealedCMC[ply] = revealedCMC[ply] or 0
+	local cmc = getCMC(card.getName(), card.getDescription(), false)
+	local flag = ""
+	if cmc == nil then
+		flag = " [FF8800][b](CMC?)[/b][-]"
+	else
+		revealedCMC[ply] = revealedCMC[ply] + tonumber(cmc)
+	end
+	broadcastToAll(
+		hexPrefix
+			.. "[b]"
+			.. nRevealed
+			.. ":[/b][-] "
+			.. card.getName():gsub("\n", " | ")
+			.. flag
+			.. "  [b]total CMC: "
+			.. revealedCMC[ply]
+			.. "[/b]"
+	)
 end
 
 function checkPosMove(pos, libZone)
