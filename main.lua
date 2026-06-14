@@ -1644,7 +1644,7 @@ function deckCascade(ply)
 
 	UI.setAttribute("GetValuePanel", "visibility", ply)
 	UI.setAttribute("GetValuePanel", "active", "True")
-	UI.setAttribute("CMtext", "text", "enter CMC\nto cascade for")
+	UI.setAttribute("CMtext", "text", "Enter CMC\nto cascade for")
 end
 
 function CMgetVal(ply, txt)
@@ -2162,6 +2162,7 @@ function deckSeachType(ply)
 		artifact = false,
 		enchantment = false,
 		planeswalker = false,
+		battle = false,
 		instant = false,
 		sorcery = false,
 	}
