@@ -33,6 +33,7 @@ function deckSeachType(ply)
 		artifact = false,
 		enchantment = false,
 		planeswalker = false,
+		battle = false,
 		instant = false,
 		sorcery = false,
 	}
