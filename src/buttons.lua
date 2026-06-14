@@ -1,0 +1,176 @@
+--------------------------------- TABLE BUTTONS --------------------------------
+function buildTableButtons()
+	-- support variables
+	nAlt = 3
+	drawDelay = 0.1 -- changing the draw delay might cause problems
+	for color, playerData in pairs(data) do
+		createTableButton(playerData["drawButton"], "Draw", "playerDraw", "Draw")
+		createTableButton(playerData["scryButton"], "Scry", "playerScry", "Scry")
+		createTableButton(playerData["millButton"], "Mill", "playerMill", "Mill")
+		createTableButton(playerData["untapButton"], "Untap", "playerUntap", "Untap")
+		createTableButtonM(playerData["mulliganButton"], "Mulligan", "playerMulligan", "Mulligan")
+		createTableButtonR(playerData["revealButton"])
+		data[color]["mulliganNumber"] = 7
+
+		playerData["drawButton"].max_typed_number = 99
+		playerData["scryButton"].max_typed_number = 99
+		playerData["millButton"].max_typed_number = 99
+		playerData["revealButton"].max_typed_number = 99
+	end
+end
+
+function onObjectNumberTyped(obj, ply, int)
+	local txt = " card"
+	if int > 1 then
+		txt = " cards"
+	end
+	for color, playerData in pairs(data) do
+		if obj == playerData["drawButton"] and color == ply then
+			local deck = getDeckFromZone(playerData["libraryZone"])
+			if deck == nil then
+				return
+			end
+			if int > deck.getQuantity() then
+				int = deck.getQuantity()
+			end
+			if int > 0 then
+				Player[ply].broadcast("drawing " .. int .. txt, ply)
+				Wait.time(function()
+					draw1(ply)
+				end, drawDelay, int)
+			end
+		end
+		if obj == playerData["scryButton"] and color == ply then
+			local deck = getDeckFromZone(playerData["libraryZone"])
+			if deck == nil then
+				return
+			end
+			if int > deck.getQuantity() then
+				int = deck.getQuantity()
+			end
+			if int > 0 then
+				Player[ply].broadcast("scrying " .. int .. txt, ply)
+				Wait.time(function()
+					scry1(ply)
+				end, drawDelay, int)
+			end
+		end
+		if obj == playerData["millButton"] and color == ply then
+			local deck = getDeckFromZone(playerData["libraryZone"])
+			if deck == nil then
+				return
+			end
+			if int > deck.getQuantity() then
+				int = deck.getQuantity()
+			end
+			if int > 0 then
+				Player[ply].broadcast("milling " .. int .. txt, ply)
+				Wait.time(function()
+					mill1(ply)
+				end, drawDelay, int)
+			end
+		end
+		if obj == playerData["revealButton"] and color == ply then
+			local deck = getDeckFromZone(playerData["libraryZone"])
+			if deck == nil then
+				return
+			end
+			if int > deck.getQuantity() then
+				int = deck.getQuantity()
+			end
+			if int > 0 then
+				Player[ply].broadcast("revealing " .. int .. txt, ply)
+				if obj.getRotation().z == 0 then
+					Wait.time(function()
+						revealFan(obj, ply)
+					end, drawDelay, int)
+				elseif obj.getRotation().z == 180 then
+					Wait.time(function()
+						revealStack(obj, ply)
+					end, drawDelay, int)
+				end
+			end
+		end
+	end
+end
+
+-- Creates a button with given funcionality on the object
+function createTableButton(object, name, clickFunction, ttip)
+	object.tooltip = false
+	object.interactable = true
+	object.setLock(true)
+	object.setName(name)
+	if name == "Untap" then
+		ttip = "[b]" .. ttip .. "[/b]"
+	else
+		ttip = "                  [b]"
+			.. ttip
+			.. "[/b]"
+			.. "\n       [i]left click[/i] for 1 card"
+			.. "\n     [i]right click[/i] for "
+			.. tostring(nAlt)
+			.. " cards\nor [i]type[/i] the desired amount"
+	end
+	return object.createButton({
+		click_function = clickFunction,
+		tooltip = ttip,
+		width = 600,
+		height = 600,
+		position = { 0, 0.1, 0 },
+		font_size = 250,
+		color = { 1, 1, 1, 0 },
+		font_color = { 1, 1, 1, 100 },
+	})
+end
+
+function createTableButtonM(object, name, clickFunction, ttip)
+	object.tooltip = false
+	object.interactable = false
+	object.setLock(true)
+	object.setName(name)
+	return object.createButton({
+		click_function = clickFunction,
+		tooltip = "           [b]Mulligan[/b]\n  [i]left click[/i] - friendly\n[i]right click[/i] - unfriendly",
+		width = 2500,
+		height = 850,
+		position = { 0, 0.1, 0 },
+		font_size = 250,
+		color = { 1, 1, 1, 0 },
+		font_color = { 1, 1, 1, 100 },
+		hover_color = { 1, 1, 1, 0.1 },
+		press_color = { 1, 0, 0, 0.2 },
+	})
+end
+
+function createTableButtonR(object)
+	object.tooltip = false
+	object.interactable = true
+	rot = object.getRotation()
+	rot[3] = 0
+	object.setRotation(rot)
+	object.setLock(true)
+	object.setName("Reveal")
+	object.memo = tostring(os.time())
+	object.setGMNotes("0")
+	return object.createButton({
+		click_function = "revealFan",
+		tooltip = "                  [b]fanned-out reveal[/b]\n[i]left click[/i] or [i]type[/i] number to reveal cards\n       [i]right click[/i] to swap button mode",
+		function_owner = self,
+		width = 600,
+		height = 600,
+		position = { 0, 0.1, 0 },
+		color = { 1, 1, 1, 0 },
+	}),
+		object.createButton({
+			click_function = "revealStack",
+			tooltip = "                     [b]stacked reveal[/b]\n[i]left click[/i] or [i]type[/i] number to reveal cards\n       [i]right click[/i] to swap button mode",
+			function_owner = self,
+			width = 600,
+			height = 600,
+			position = { 0, -0.1, 0 },
+			rotation = { 0, 0, 180 },
+			color = { 1, 1, 1, 0 },
+			font_color = { 1, 1, 1, 100 },
+		})
+end
+
