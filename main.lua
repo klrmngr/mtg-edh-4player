@@ -292,6 +292,7 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		press_color = { 1, 0, 0, 0.2 },
 	})
 	-- mulligan counter label below the button (noop click = display only)
+	-- NOTE: kept at index 1 so playerMulligan's editButton({ index = 1 }) updates it
 	object.createButton({
 		click_function = "noop",
 		label = "Mulligans: 0",
@@ -300,6 +301,26 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		position = { 0, 0.1, 1.4 },
 		font_size = 600,
 		font_color = { 1, 1, 1, 100 },
+	})
+	-- serum powder button, shifted sideways from the mulligan button.
+	-- Aim at a world point offset along x and convert it into local space
+	-- (positionToLocal handles each token's rotation for us).
+	local sideShift = 3
+	local wpos = object.getPosition()
+	local targetWorld = Vector(wpos.x + (wpos.x > 0 and sideShift or -sideShift), wpos.y, wpos.z)
+	local lp = object.positionToLocal(targetWorld)
+	object.createButton({
+		click_function = "playerSerumPowder",
+		label = "Serum Powder",
+		tooltip = "         [b]Serum Powder[/b]\n[i]left click[/i] to exile your hand and\n   draw a new one of the same size",
+		width = 4000,
+		height = 1000,
+		position = { lp.x, 0.1, lp.z },
+		font_size = 500,
+		color = { 1, 1, 1, 0 },
+		font_color = { 1, 1, 1, 100 },
+		hover_color = { 1, 1, 1, 0.1 },
+		press_color = { 1, 0, 0, 0.2 },
 	})
 end
 
@@ -753,6 +774,77 @@ function playerMulligan(button, playerColor, alt)
 	end
 end
 
+-------------------------------- SERUM POWDER ----------------------------------
+-- Exile the current hand and draw a fresh one of the same size.
+-- Hand size = 7 + 1 - mulliganCount: the +1 cancels the internal counter's
+-- offset (mulliganCount is the displayed mulligan number + 1), so the opening
+-- hand (mulliganCount == 1) is 7, one mulligan is 6, and so on.
+function playerSerumPowder(button, playerColor, alt)
+	if button ~= data[playerColor]["mulliganButton"] then
+		return
+	end
+	if data[playerColor]["serumCooldown"] then
+		return
+	end
+
+	local handSize = 7 + 1 - (data[playerColor]["mulliganCount"] or 0)
+
+	-- step 1: the hand must hold exactly handSize cards before powdering
+	local cards = {}
+	for _, obj in pairs(Player[playerColor].getHandObjects(1)) do
+		if obj.tag == "Card" then
+			table.insert(cards, obj)
+		end
+	end
+	if #cards ~= handSize then
+		Player[playerColor].broadcast(
+			"Serum Powder: expected " .. handSize .. " cards in hand (7 + 1 - mulligans) but found " .. #cards .. ".\n"
+				.. "Deal your hand with Mulligan first."
+		)
+		return
+	end
+
+	local deck = getDeckFromZone(data[playerColor]["libraryZone"])
+	if deck == nil then
+		Player[playerColor].broadcast("Serum Powder: no library found.")
+		return
+	end
+
+	data[playerColor]["serumCooldown"] = true
+	Wait.time(function()
+		data[playerColor]["serumCooldown"] = false
+	end, 2)
+	buttonPress(button, 0.5)
+
+	-- step 2: exile the current hand (stacked just past the library, like move2exile)
+	local zone = data[playerColor]["libraryZone"]
+	local exileRotY = zone.getRotation().y + exileRot
+	local exilePos = zone.getPosition() + zone.getTransformForward():scale(exileFor)
+	local i = 0
+	for _, card in pairs(cards) do
+		card.use_hands = false
+		card.use_gravity = true
+		local rot = card.getRotation()
+		rot.z = 0
+		rot.y = exileRotY
+		card.setRotationSmooth(rot, false, true)
+		card.setPositionSmooth({ x = exilePos.x, y = 3 + i * 0.4, z = exilePos.z }, false, true)
+		i = i + 1
+	end
+	Wait.time(function()
+		for _, card in pairs(cards) do
+			if card ~= nil then
+				card.use_hands = true
+			end
+		end
+	end, 1.5)
+
+	-- step 3: draw a fresh hand of the same size
+	Wait.time(function()
+		deck.deal(handSize, playerColor, 1)
+	end, 1.0)
+end
+
 ------------------------------------- UNTAP ------------------------------------
 -- stolen from Untapper Tool by Tipsy Hobbit//STEAM_0:1:13465982
 function playerUntap(button, playerColor, alt)
@@ -1005,8 +1097,9 @@ end
 function buttonCooldown(button, T)
 	buts = button.getButtons()
 	for i, but in pairs(buts) do
-		-- skip display-only labels so their text isn't mirrored during cooldown
-		if but.click_function ~= "noop" then
+		-- skip display-only labels and the serum powder button so their text
+		-- isn't mirrored during a neighbouring button's cooldown
+		if but.click_function ~= "noop" and but.click_function ~= "playerSerumPowder" then
 			local oldRot = but.rotation
 			local ind = but.index
 			button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 180 } })
