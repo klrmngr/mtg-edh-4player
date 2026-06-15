@@ -11,6 +11,7 @@ function buildTableButtons()
 		createTableButtonM(playerData["mulliganButton"], "Mulligan", "playerMulligan", "Mulligan")
 		createTableButtonR(playerData["revealButton"])
 		data[color]["mulliganNumber"] = 7
+		data[color]["mulliganCount"] = 0
 
 		playerData["drawButton"].max_typed_number = 99
 		playerData["scryButton"].max_typed_number = 99
@@ -128,9 +129,9 @@ function createTableButtonM(object, name, clickFunction, ttip)
 	object.interactable = false
 	object.setLock(true)
 	object.setName(name)
-	return object.createButton({
+	object.createButton({
 		click_function = clickFunction,
-		tooltip = "           [b]Mulligan[/b]\n  [i]left click[/i] - friendly\n[i]right click[/i] - unfriendly",
+		tooltip = "           [b]Mulligan[/b]\n  [i]left click[/i] to mulligan\n  [i]right click[/i] to reset count",
 		width = 2500,
 		height = 850,
 		position = { 0, 0.1, 0 },
@@ -140,7 +141,19 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		hover_color = { 1, 1, 1, 0.1 },
 		press_color = { 1, 0, 0, 0.2 },
 	})
+	-- mulligan counter label below the button (noop click = display only)
+	object.createButton({
+		click_function = "noop",
+		label = "Mulligans: 0",
+		width = 0,
+		height = 0,
+		position = { 0, 0.1, 1.4 },
+		font_size = 600,
+		font_color = { 1, 1, 1, 100 },
+	})
 end
+
+function noop() end
 
 function createTableButtonR(object)
 	object.tooltip = false

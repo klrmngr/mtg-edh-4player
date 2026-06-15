@@ -161,6 +161,7 @@ function buildTableButtons()
 		createTableButtonM(playerData["mulliganButton"], "Mulligan", "playerMulligan", "Mulligan")
 		createTableButtonR(playerData["revealButton"])
 		data[color]["mulliganNumber"] = 7
+		data[color]["mulliganCount"] = 0
 
 		playerData["drawButton"].max_typed_number = 99
 		playerData["scryButton"].max_typed_number = 99
@@ -278,9 +279,9 @@ function createTableButtonM(object, name, clickFunction, ttip)
 	object.interactable = false
 	object.setLock(true)
 	object.setName(name)
-	return object.createButton({
+	object.createButton({
 		click_function = clickFunction,
-		tooltip = "           [b]Mulligan[/b]\n  [i]left click[/i] - friendly\n[i]right click[/i] - unfriendly",
+		tooltip = "           [b]Mulligan[/b]\n  [i]left click[/i] to mulligan\n  [i]right click[/i] to reset count",
 		width = 2500,
 		height = 850,
 		position = { 0, 0.1, 0 },
@@ -290,7 +291,19 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		hover_color = { 1, 1, 1, 0.1 },
 		press_color = { 1, 0, 0, 0.2 },
 	})
+	-- mulligan counter label below the button (noop click = display only)
+	object.createButton({
+		click_function = "noop",
+		label = "Mulligans: 0",
+		width = 0,
+		height = 0,
+		position = { 0, 0.1, 1.4 },
+		font_size = 600,
+		font_color = { 1, 1, 1, 100 },
+	})
 end
+
+function noop() end
 
 function createTableButtonR(object)
 	object.tooltip = false
@@ -655,6 +668,11 @@ end
 ----------------------------------- MULLIGAN -----------------------------------
 function playerMulligan(button, playerColor, alt)
 	if button == data[playerColor]["mulliganButton"] then
+		if alt then
+			data[playerColor]["mulliganCount"] = 0
+			button.editButton({ index = 1, label = "Mulligans: 0" })
+			return
+		end
 		if nMullClick == nil then
 			nMullClick = 1
 		else
@@ -692,14 +710,13 @@ function playerMulligan(button, playerColor, alt)
 
 		local deck = getDeckFromZone(data[playerColor]["libraryZone"])
 		if deck ~= nil then
-			if not alt then
-				data[playerColor]["mulliganNumber"] = 7
-			else
-				data[playerColor]["mulliganNumber"] = data[playerColor]["mulliganNumber"] - 1
-				if data[playerColor]["mulliganNumber"] < 1 then
-					data[playerColor]["mulliganNumber"] = 1
-				end
-			end
+			data[playerColor]["mulliganNumber"] = 7
+			-- first click draws the opening hand (0 mulligans); each later click is a mulligan
+			data[playerColor]["mulliganCount"] = (data[playerColor]["mulliganCount"] or 0) + 1
+			button.editButton({
+				index = 1,
+				label = "Mulligans: " .. (data[playerColor]["mulliganCount"] - 1),
+			})
 			local objs = Player[playerColor].getHandObjects(1)
 			for _, obj in pairs(objs) do
 				if obj.tag == "Card" then
@@ -988,12 +1005,15 @@ end
 function buttonCooldown(button, T)
 	buts = button.getButtons()
 	for i, but in pairs(buts) do
-		local oldRot = but.rotation
-		local ind = but.index
-		button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 180 } })
-		Wait.time(function()
-			button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 0 } })
-		end, T)
+		-- skip display-only labels so their text isn't mirrored during cooldown
+		if but.click_function ~= "noop" then
+			local oldRot = but.rotation
+			local ind = but.index
+			button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 180 } })
+			Wait.time(function()
+				button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 0 } })
+			end, T)
+		end
 	end
 end
 

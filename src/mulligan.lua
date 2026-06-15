@@ -1,6 +1,11 @@
 ----------------------------------- MULLIGAN -----------------------------------
 function playerMulligan(button, playerColor, alt)
 	if button == data[playerColor]["mulliganButton"] then
+		if alt then
+			data[playerColor]["mulliganCount"] = 0
+			button.editButton({ index = 1, label = "Mulligans: 0" })
+			return
+		end
 		if nMullClick == nil then
 			nMullClick = 1
 		else
@@ -38,14 +43,13 @@ function playerMulligan(button, playerColor, alt)
 
 		local deck = getDeckFromZone(data[playerColor]["libraryZone"])
 		if deck ~= nil then
-			if not alt then
-				data[playerColor]["mulliganNumber"] = 7
-			else
-				data[playerColor]["mulliganNumber"] = data[playerColor]["mulliganNumber"] - 1
-				if data[playerColor]["mulliganNumber"] < 1 then
-					data[playerColor]["mulliganNumber"] = 1
-				end
-			end
+			data[playerColor]["mulliganNumber"] = 7
+			-- first click draws the opening hand (0 mulligans); each later click is a mulligan
+			data[playerColor]["mulliganCount"] = (data[playerColor]["mulliganCount"] or 0) + 1
+			button.editButton({
+				index = 1,
+				label = "Mulligans: " .. (data[playerColor]["mulliganCount"] - 1),
+			})
 			local objs = Player[playerColor].getHandObjects(1)
 			for _, obj in pairs(objs) do
 				if obj.tag == "Card" then
