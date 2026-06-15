@@ -1,4 +1,22 @@
 ----------------------------------- MULLIGAN -----------------------------------
+-- bump a player's mulligan counter and refresh the on-table label
+function bumpMulliganCount(color)
+	data[color]["mulliganCount"] = (data[color]["mulliganCount"] or 0) + 1
+	data[color]["mulliganButton"].editButton({
+		index = 1,
+		label = "Mulligans: " .. (data[color]["mulliganCount"] - 1),
+	})
+end
+
+function handIsEmpty(color)
+	for _, obj in pairs(Player[color].getHandObjects(1)) do
+		if obj.tag == "Card" then
+			return false
+		end
+	end
+	return true
+end
+
 function playerMulligan(button, playerColor, alt)
 	-- identify which player's mulligan button was clicked (not necessarily the clicker)
 	local ownerColor = nil
@@ -58,11 +76,7 @@ function playerMulligan(button, playerColor, alt)
 		if deck ~= nil then
 			data[playerColor]["mulliganNumber"] = 7
 			-- first click draws the opening hand (0 mulligans); each later click is a mulligan
-			data[playerColor]["mulliganCount"] = (data[playerColor]["mulliganCount"] or 0) + 1
-			button.editButton({
-				index = 1,
-				label = "Mulligans: " .. (data[playerColor]["mulliganCount"] - 1),
-			})
+			bumpMulliganCount(playerColor)
 			local objs = Player[playerColor].getHandObjects(1)
 			for _, obj in pairs(objs) do
 				if obj.tag == "Card" then
