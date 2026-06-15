@@ -25,6 +25,11 @@ function onObjectNumberTyped(obj, ply, int)
 	if int > 1 then
 		txt = " cards"
 	end
+	-- drawing a full 7 straight off your own deck with an empty hand counts as
+	-- taking a hand, so bump the mulligan counter (default deal still happens)
+	if int == 7 and data[ply] ~= nil and obj == getDeckFromZone(data[ply]["libraryZone"]) and handIsEmpty(ply) then
+		bumpMulliganCount(ply)
+	end
 	for color, playerData in pairs(data) do
 		if obj == playerData["drawButton"] and color == ply then
 			local deck = getDeckFromZone(playerData["libraryZone"])
