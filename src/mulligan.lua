@@ -101,9 +101,9 @@ end
 
 -------------------------------- SERUM POWDER ----------------------------------
 -- Exile the current hand and draw a fresh one of the same size.
--- Hand size = 7 + 1 - mulliganCount: the +1 cancels the internal counter's
--- offset (mulliganCount is the displayed mulligan number + 1), so the opening
--- hand (mulliganCount == 1) is 7, one mulligan is 6, and so on.
+-- Hand size = min(7, 7 + 2 - mulliganCount). mulliganCount is the displayed
+-- mulligan number + 1, so the opening hand and the first mulligan both draw 7,
+-- then it drops by one per additional mulligan.
 function playerSerumPowder(button, playerColor, alt)
 	if button ~= data[playerColor]["mulliganButton"] then
 		return
@@ -112,7 +112,7 @@ function playerSerumPowder(button, playerColor, alt)
 		return
 	end
 
-	local handSize = 7 + 1 - (data[playerColor]["mulliganCount"] or 0)
+	local handSize = math.min(7, 7 + 2 - (data[playerColor]["mulliganCount"] or 0))
 
 	-- step 1: the hand must hold exactly handSize cards before powdering
 	local cards = {}
@@ -123,8 +123,7 @@ function playerSerumPowder(button, playerColor, alt)
 	end
 	if #cards ~= handSize then
 		Player[playerColor].broadcast(
-			"Serum Powder: expected " .. handSize .. " cards in hand (7 + 1 - mulligans) but found " .. #cards .. ".\n"
-				.. "Deal your hand with Mulligan first."
+			"Serum Powder: expected " .. handSize .. " cards in hand but found " .. #cards .. "."
 		)
 		return
 	end
