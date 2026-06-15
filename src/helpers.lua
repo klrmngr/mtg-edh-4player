@@ -72,12 +72,15 @@ end
 function buttonCooldown(button, T)
 	buts = button.getButtons()
 	for i, but in pairs(buts) do
-		local oldRot = but.rotation
-		local ind = but.index
-		button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 180 } })
-		Wait.time(function()
-			button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 0 } })
-		end, T)
+		-- skip display-only labels so their text isn't mirrored during cooldown
+		if but.click_function ~= "noop" then
+			local oldRot = but.rotation
+			local ind = but.index
+			button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 180 } })
+			Wait.time(function()
+				button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 0 } })
+			end, T)
+		end
 	end
 end
 
