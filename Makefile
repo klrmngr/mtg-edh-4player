@@ -13,6 +13,7 @@ SRC = \
 	src/reveal_type.lua \
 	src/chat.lua \
 	src/scryfall.lua \
+	src/patchnotes.lua \
 	src/json.lua
 
 main.lua: $(SRC)
