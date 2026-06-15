@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """
-Watch the Lua script and XML UI and push them to Tabletop Simulator on save.
+Watch the source and push it to Tabletop Simulator on save.
+
+Pushes the Global script (main.lua + ui.xml) AND every object script/UI under
+objects/ (as produced by tts_pull.py), so the whole mod is updated at once.
 
 Usage:
-    python tts_push.py [path/to/script.lua] [path/to/ui.xml]
+    python tts_push.py [path/to/script.lua] [path/to/ui.xml] [objects_dir]
 
-Defaults to main.lua and ui.xml in the current directory.
-Saving either file pushes both (TTS reload carries script + ui together).
-ui.xml is optional — if absent, only the script is pushed.
+Defaults to main.lua, ui.xml, and ./objects next to the script.
+Saving any watched file pushes the full set.
 TTS must be running with a save open.
 """
 
@@ -24,18 +26,53 @@ EDITOR_PORT = 39998  # we listen here (TTS → editor)
 GLOBAL_GUID = "-1"
 
 
-def send_to_tts(script: str, ui: str = "") -> None:
-    state = {"name": "Global", "guid": GLOBAL_GUID, "script": script}
+def read_file(path: str) -> str:
+    try:
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        return ""
+
+
+def build_script_states(script_path: str, ui_path: str, objects_dir: str) -> list:
+    """Assemble scriptStates for Global plus every object under objects_dir."""
+    states = []
+
+    global_state = {"name": "Global", "guid": GLOBAL_GUID, "script": read_file(script_path)}
+    ui = read_file(ui_path)
     if ui:
-        state["ui"] = ui
-    msg = json.dumps({
-        "messageID": 1,
-        "scriptStates": [state],
-    })
+        global_state["ui"] = ui
+    states.append(global_state)
+
+    if os.path.isdir(objects_dir):
+        by_guid: dict = {}  # guid -> {name, script, ui}
+        for fn in sorted(os.listdir(objects_dir)):
+            if fn.endswith(".lua"):
+                base, kind = fn[:-4], "script"
+            elif fn.endswith(".xml"):
+                base, kind = fn[:-4], "ui"
+            else:
+                continue
+            name, _, guid = base.rpartition(".")  # "<name>.<guid>"
+            if not guid:
+                continue
+            entry = by_guid.setdefault(guid, {"name": name or "object", "guid": guid})
+            entry[kind] = read_file(os.path.join(objects_dir, fn))
+        for guid, entry in sorted(by_guid.items()):
+            state = {"name": entry["name"], "guid": guid, "script": entry.get("script", "")}
+            if entry.get("ui"):
+                state["ui"] = entry["ui"]
+            states.append(state)
+
+    return states
+
+
+def send_to_tts(states: list) -> None:
+    msg = json.dumps({"messageID": 1, "scriptStates": states})
     try:
         with socket.create_connection((TTS_HOST, TTS_PORT), timeout=3) as s:
             s.sendall(msg.encode())
-        print("[tts] pushed — waiting for reload...")
+        print(f"[tts] pushed {len(states)} script state(s) — waiting for reload...")
     except ConnectionRefusedError:
         print("[tts] ERROR: TTS not reachable on port 39999. Is the game running?")
     except Exception as e:
@@ -87,48 +124,47 @@ def listen_for_tts() -> None:
                 break
 
 
-def read_ui(ui_path: str) -> str:
-    try:
-        with open(ui_path, encoding="utf-8") as f:
-            return f.read()
-    except FileNotFoundError:
-        return ""
+def collect_mtimes(script_path: str, ui_path: str, objects_dir: str) -> dict:
+    mtimes = {}
+    for p in (script_path, ui_path):
+        if os.path.exists(p):
+            mtimes[p] = os.path.getmtime(p)
+    if os.path.isdir(objects_dir):
+        for fn in os.listdir(objects_dir):
+            if fn.endswith((".lua", ".xml")):
+                p = os.path.join(objects_dir, fn)
+                mtimes[p] = os.path.getmtime(p)
+    return mtimes
 
 
-def watch(path: str, ui_path: str) -> None:
-    print(f"[tts] watching {path}")
+def watch(script_path: str, ui_path: str, objects_dir: str) -> None:
+    print(f"[tts] watching {script_path}")
     if os.path.exists(ui_path):
         print(f"[tts] watching {ui_path}")
-    print("[tts] save either file to push to TTS  |  Ctrl+C to stop\n")
+    if os.path.isdir(objects_dir):
+        print(f"[tts] watching {objects_dir}/")
+    print("[tts] save any watched file to push to TTS  |  Ctrl+C to stop\n")
     last_mtimes = {}
     while True:
-        mtimes = {}
-        try:
-            mtimes[path] = os.path.getmtime(path)
-        except FileNotFoundError:
-            print(f"[tts] ERROR: {path} not found")
+        if not os.path.exists(script_path):
+            print(f"[tts] ERROR: {script_path} not found")
             time.sleep(2)
             continue
-        if os.path.exists(ui_path):
-            mtimes[ui_path] = os.path.getmtime(ui_path)
-
+        mtimes = collect_mtimes(script_path, ui_path, objects_dir)
         if last_mtimes and mtimes != last_mtimes:
-            with open(path, encoding="utf-8") as f:
-                script = f.read()
-            send_to_tts(script, read_ui(ui_path))
-
+            send_to_tts(build_script_states(script_path, ui_path, objects_dir))
         last_mtimes = mtimes
         time.sleep(0.3)
 
 
 if __name__ == "__main__":
-    path = sys.argv[1] if len(sys.argv) > 1 else "main.lua"
-    path = os.path.abspath(path)
+    path = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.abspath("main.lua")
     ui_path = os.path.abspath(sys.argv[2]) if len(sys.argv) > 2 else os.path.join(os.path.dirname(path), "ui.xml")
+    objects_dir = os.path.abspath(sys.argv[3]) if len(sys.argv) > 3 else os.path.join(os.path.dirname(path), "objects")
 
     threading.Thread(target=listen_for_tts, daemon=True).start()
 
     try:
-        watch(path, ui_path)
+        watch(path, ui_path, objects_dir)
     except KeyboardInterrupt:
         print("\n[tts] stopped")
