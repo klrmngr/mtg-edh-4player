@@ -43,6 +43,8 @@ function onload()
 	exileRot = -180
 	exileFor = 4.16
 	gravFor = -4.14
+
+	spawnPatchNotesButton()
 end
 
 -- Ensure data structure exists
