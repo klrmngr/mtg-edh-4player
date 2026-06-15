@@ -1,9 +1,22 @@
 ----------------------------------- MULLIGAN -----------------------------------
 function playerMulligan(button, playerColor, alt)
-	if button == data[playerColor]["mulliganButton"] then
+	-- identify which player's mulligan button was clicked (not necessarily the clicker)
+	local ownerColor = nil
+	for color, pdata in pairs(data) do
+		if button == pdata["mulliganButton"] then
+			ownerColor = color
+			break
+		end
+	end
+	if ownerColor ~= nil then
 		if alt then
-			data[playerColor]["mulliganCount"] = 0
+			-- right-click: anyone may reset this player's mulligan count
+			data[ownerColor]["mulliganCount"] = 0
 			button.editButton({ index = 1, label = "Mulligans: 0" })
+			return
+		end
+		-- left-click: only the owning player may mulligan their own hand
+		if playerColor ~= ownerColor then
 			return
 		end
 		if nMullClick == nil then
