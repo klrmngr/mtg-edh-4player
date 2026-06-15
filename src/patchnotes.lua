@@ -63,7 +63,7 @@ function showPatchNotes(obj, color, alt)
 			if type(rel.body) == "string" then
 				notes = cleanPatchNotes(rel.body)
 			end
-			table.insert(parts, "<b><size=22>" .. tag .. "</size></b>\n" .. notes)
+			table.insert(parts, "<b>" .. tag .. "</b>\n" .. notes)
 		end
 		UI.setAttribute("PatchNotesTitle", "text", "Patch Notes")
 		UI.setValue("PatchNotesText", table.concat(parts, "\n\n"))
