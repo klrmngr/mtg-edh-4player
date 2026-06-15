@@ -142,6 +142,7 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		press_color = { 1, 0, 0, 0.2 },
 	})
 	-- mulligan counter label below the button (noop click = display only)
+	-- NOTE: kept at index 1 so playerMulligan's editButton({ index = 1 }) updates it
 	object.createButton({
 		click_function = "noop",
 		label = "Mulligans: 0",
@@ -150,6 +151,26 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		position = { 0, 0.1, 1.4 },
 		font_size = 600,
 		font_color = { 1, 1, 1, 100 },
+	})
+	-- serum powder button, shifted sideways from the mulligan button.
+	-- Aim at a world point offset along x and convert it into local space
+	-- (positionToLocal handles each token's rotation for us).
+	local sideShift = 3
+	local wpos = object.getPosition()
+	local targetWorld = Vector(wpos.x + (wpos.x > 0 and sideShift or -sideShift), wpos.y, wpos.z)
+	local lp = object.positionToLocal(targetWorld)
+	object.createButton({
+		click_function = "playerSerumPowder",
+		label = "Serum Powder",
+		tooltip = "         [b]Serum Powder[/b]\n[i]left click[/i] to exile your hand and\n   draw a new one of the same size",
+		width = 4000,
+		height = 1000,
+		position = { lp.x, 0.1, lp.z },
+		font_size = 500,
+		color = { 1, 1, 1, 0 },
+		font_color = { 1, 1, 1, 100 },
+		hover_color = { 1, 1, 1, 0.1 },
+		press_color = { 1, 0, 0, 0.2 },
 	})
 end
 
