@@ -1,5 +1,5 @@
 function onLoad()
-  link='https://steamcommunity.com/sharedfiles/filedetails/?id=2296042369',
+  link='https://steamcommunity.com/sharedfiles/filedetails/?id=3745501663',
 
   self.setName(link)
   self.setDescription(link)
