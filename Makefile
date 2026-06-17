@@ -5,6 +5,7 @@ SRC = \
 	src/movement.lua \
 	src/reveal.lua \
 	src/mulligan.lua \
+	src/etali.lua \
 	src/untap.lua \
 	src/draw.lua \
 	src/helpers.lua \
