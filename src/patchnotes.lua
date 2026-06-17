@@ -85,7 +85,13 @@ function cleanPatchNotes(body)
 	-- strip the "by @user in <pr-url>" trailer and collapse markdown links to text
 	body = body:gsub(" by @%S+ in %S+", "")
 	body = body:gsub("%[(.-)%]%((.-)%)", "%1")
-	-- markdown -> TTS rich text
+	-- escape XML specials so stray <, >, & in the notes (e.g. a PR title that
+	-- mentions a tag) don't break the panel's XML when injected via setValue
+	body = body:gsub("&", "&amp;")
+	body = body:gsub("<", "&lt;")
+	body = body:gsub(">", "&gt;")
+	-- markdown -> TTS rich text (these tags are produced after escaping, so they
+	-- stay real tags while the notes' own angle brackets are now literal text)
 	body = body:gsub("%*%*(.-)%*%*", "<b>%1</b>")
 	body = body:gsub("## (.-)\n", "<b>%1</b>\n")
 	body = body:gsub("\n%s*%* ", "\n• ")
