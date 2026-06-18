@@ -15,6 +15,11 @@ function onload()
 				getObjectFromGUID(guid).interactable = false
 			end)
 		end
+		-- remove the Bruh button from the middle of the table
+		local bruh = getObjectFromGUID("5a7db4")
+		if bruh ~= nil then
+			destroyObject(bruh)
+		end
 	end, 5)
 
 	-- flip hands on load
