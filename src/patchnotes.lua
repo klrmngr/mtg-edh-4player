@@ -1,6 +1,6 @@
 -------------------------------- PATCH NOTES -----------------------------------
 -- Version currently deployed. Bump this when cutting a new release.
-VERSION = "v0.1.3"
+VERSION = "v0.1.4"
 
 local PATCH_NOTES_TAG = "patchNotesButton"
 local RELEASES_API = "https://api.github.com/repos/klrmngr/mtg-edh-4player/releases"
