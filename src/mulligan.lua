@@ -1,4 +1,6 @@
 ----------------------------------- MULLIGAN -----------------------------------
+mulliganResetDelay = 300 -- auto-reset the count after this many seconds idle
+
 -- bump a player's mulligan counter and refresh the on-table label
 function bumpMulliganCount(color)
 	data[color]["mulliganCount"] = (data[color]["mulliganCount"] or 0) + 1
@@ -6,6 +8,23 @@ function bumpMulliganCount(color)
 		index = 1,
 		label = "Mulligans: " .. (data[color]["mulliganCount"] - 1),
 	})
+	-- restart the idle timer: if the count isn't touched again in time, reset it
+	if data[color]["mulliganResetTimer"] ~= nil then
+		Wait.stop(data[color]["mulliganResetTimer"])
+	end
+	data[color]["mulliganResetTimer"] = Wait.time(function()
+		resetMulliganCount(color)
+	end, mulliganResetDelay)
+end
+
+-- reset a player's mulligan counter to 0 and cancel any pending idle timer
+function resetMulliganCount(color)
+	if data[color]["mulliganResetTimer"] ~= nil then
+		Wait.stop(data[color]["mulliganResetTimer"])
+		data[color]["mulliganResetTimer"] = nil
+	end
+	data[color]["mulliganCount"] = 0
+	data[color]["mulliganButton"].editButton({ index = 1, label = "Mulligans: 0" })
 end
 
 function handIsEmpty(color)
@@ -29,8 +48,7 @@ function playerMulligan(button, playerColor, alt)
 	if ownerColor ~= nil then
 		if alt then
 			-- right-click: anyone may reset this player's mulligan count
-			data[ownerColor]["mulliganCount"] = 0
-			button.editButton({ index = 1, label = "Mulligans: 0" })
+			resetMulliganCount(ownerColor)
 			return
 		end
 		-- left-click: only the owning player may mulligan their own hand
