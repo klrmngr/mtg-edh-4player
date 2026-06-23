@@ -19,7 +19,7 @@ function revealFan(button, ply, alt)
 	local now = os.time()
 	local lastT = tonumber(button.memo)
 	local nRevealed = tonumber(button.getGMNotes())
-	if now - lastT > 10 then
+	if now - lastT > 30 then
 		nRevealed = 0
 		revealedCMC = revealedCMC or {}
 		revealedCMC[ply] = 0
@@ -64,7 +64,7 @@ function revealStack(button, ply, alt)
 	local now = os.time()
 	local lastT = tonumber(button.memo)
 	local nRevealed = tonumber(button.getGMNotes())
-	if now - lastT > 10 then
+	if now - lastT > 30 then
 		nRevealed = 0
 		revealedCMC = revealedCMC or {}
 		revealedCMC[ply] = 0
