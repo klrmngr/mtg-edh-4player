@@ -202,7 +202,7 @@ function cascade(deck, playerColor, CMC)
 			end
 			return
 		end
-		isLand = cmc == "-1"
+		local isLand = cmc == "-1"
 		if not isLand and tonumber(cmc) <= tonumber(CMC) then
 			cardFound = true
 			break
@@ -549,7 +549,7 @@ function getCMC(name, desc, negLands)
 	if cmc == nil then
 		cmc = desc:lower():match("cmc ?(%d+)")
 	end
-	isLand = name:match("Land")
+	local isLand = cardIsLand(name)
 	if (cmc == nil or cmc == "0") and isLand then
 		cmc = negLands and "-1" or "0"
 	end

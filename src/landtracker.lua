@@ -4,7 +4,7 @@
 -- playmat zone (same spot the old manager used) and tracks the lands that have
 -- entered each player's land zone this turn.
 --
--- "A land entering the battlefield this turn" = a land card (see isLand) that
+-- "A land entering the battlefield this turn" = a land card (see cardIsLand) that
 -- enters that player's landZone and was NOT in the landZone when their turn
 -- began. The lands' names are listed in the display.
 
@@ -97,7 +97,7 @@ function resetLandTracker(color)
 	local zone = data[color]["landZone"]
 	if zone ~= nil then
 		for _, obj in ipairs(zone.getObjects()) do
-			if isLand(obj) then
+			if cardIsLand(obj) then
 				landZoneBaseline[color][obj.getGUID()] = true
 			end
 		end
@@ -121,7 +121,7 @@ end
 -- entered a land zone and didn't start the turn there.
 function trackLandEnter(zone, obj)
 	local color = landZoneColor(zone)
-	if color == nil or not isLand(obj) then
+	if color == nil or not cardIsLand(obj) then
 		return
 	end
 	local guid = obj.getGUID()
@@ -158,7 +158,7 @@ function refreshLandTrackerText(color)
 	if #names == 0 then
 		label = "Lands this turn: none"
 	else
-		label = "Lands this turn (" .. #names .. "): " .. table.concat(names, ", ")
+		label = "Lands this turn (" .. #names .. "):\n" .. table.concat(names, "\n")
 	end
 	mat.editButton({ index = 0, label = label })
 end

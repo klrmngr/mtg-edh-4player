@@ -949,7 +949,7 @@ function etaliRevealNext(ownerColor, clickerColor)
 		return -- empty library
 	end
 	Wait.condition(function()
-		local isLand = getCMC(card.getName(), card.getDescription()) == "-1"
+		local isLand = cardIsLand(card)
 		if isLand then
 			etaliExile(ownerColor, card)
 			Wait.time(function()
@@ -1002,7 +1002,7 @@ end
 -- playmat zone (same spot the old manager used) and tracks the lands that have
 -- entered each player's land zone this turn.
 --
--- "A land entering the battlefield this turn" = a land card (see isLand) that
+-- "A land entering the battlefield this turn" = a land card (see cardIsLand) that
 -- enters that player's landZone and was NOT in the landZone when their turn
 -- began. The lands' names are listed in the display.
 
@@ -1095,7 +1095,7 @@ function resetLandTracker(color)
 	local zone = data[color]["landZone"]
 	if zone ~= nil then
 		for _, obj in ipairs(zone.getObjects()) do
-			if isLand(obj) then
+			if cardIsLand(obj) then
 				landZoneBaseline[color][obj.getGUID()] = true
 			end
 		end
@@ -1119,7 +1119,7 @@ end
 -- entered a land zone and didn't start the turn there.
 function trackLandEnter(zone, obj)
 	local color = landZoneColor(zone)
-	if color == nil or not isLand(obj) then
+	if color == nil or not cardIsLand(obj) then
 		return
 	end
 	local guid = obj.getGUID()
@@ -1156,7 +1156,7 @@ function refreshLandTrackerText(color)
 	if #names == 0 then
 		label = "Lands this turn: none"
 	else
-		label = "Lands this turn (" .. #names .. "): " .. table.concat(names, ", ")
+		label = "Lands this turn (" .. #names .. "):\n" .. table.concat(names, "\n")
 	end
 	mat.editButton({ index = 0, label = label })
 end
@@ -1569,25 +1569,30 @@ function handOn(obj)
 	end
 end
 
--- true if the card object is a land (basic lands included). Lands in this mod
--- carry "Land" in their name/type line, so a case-insensitive "land" match
--- identifies them. We check the name, a "Land" tag, and the type line (the first
--- line of the description) only -- never the rest of the rules text, so nonland
--- cards that merely mention "land" in their oracle text aren't miscounted.
-function isLand(card)
-	if card == nil or card.type ~= "Card" then
+-- Single source of truth for "is this card a land?" (basic lands included).
+-- Accepts either a card object or a name string. Card nicknames in this mod are
+-- "<name>\n<type line> <cmc>CMC", so the type line is part of the name; matching
+-- "land" there identifies lands without scanning the rules text. For objects we
+-- also accept a "Land" tag.
+function cardIsLand(card)
+	if card == nil then
 		return false
 	end
-	if (card.getName() or ""):lower():find("land") then
-		return true
-	end
-	for _, tag in ipairs(card.getTags()) do
-		if tag:lower() == "land" then
-			return true
+	local name
+	if type(card) == "string" then
+		name = card
+	else
+		if card.getName == nil then
+			return false
 		end
+		for _, tag in ipairs(card.getTags()) do
+			if tag:lower() == "land" then
+				return true
+			end
+		end
+		name = card.getName()
 	end
-	local typeLine = ((card.getDescription() or ""):match("^[^\r\n]*") or ""):lower()
-	return typeLine:find("land") ~= nil
+	return (name or ""):lower():find("land") ~= nil
 end
 
 -- card nicknames in this mod are "<name>\n<type line> <cmc>CMC" (the importer
@@ -2330,7 +2335,7 @@ function cascade(deck, playerColor, CMC)
 			end
 			return
 		end
-		isLand = cmc == "-1"
+		local isLand = cmc == "-1"
 		if not isLand and tonumber(cmc) <= tonumber(CMC) then
 			cardFound = true
 			break
@@ -2677,7 +2682,7 @@ function getCMC(name, desc, negLands)
 	if cmc == nil then
 		cmc = desc:lower():match("cmc ?(%d+)")
 	end
-	isLand = name:match("Land")
+	local isLand = cardIsLand(name)
 	if (cmc == nil or cmc == "0") and isLand then
 		cmc = negLands and "-1" or "0"
 	end
