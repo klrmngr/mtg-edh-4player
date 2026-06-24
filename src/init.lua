@@ -46,6 +46,7 @@ function onload()
 
 	spawnPatchNotesButton()
 	spawnLandTrackerText()
+	initFetchlands()
 end
 
 -- Ensure data structure exists

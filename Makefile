@@ -7,6 +7,7 @@ SRC = \
 	src/mulligan.lua \
 	src/etali.lua \
 	src/landtracker.lua \
+	src/fetchland.lua \
 	src/frozen.lua \
 	src/untap.lua \
 	src/draw.lua \

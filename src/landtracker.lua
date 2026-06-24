@@ -120,6 +120,10 @@ end
 -- called from onObjectEnterZone (see context_menus.lua). Records a land that
 -- entered a land zone and didn't start the turn there.
 function trackLandEnter(zone, obj)
+	-- ignore fetchland preview copies (see fetchland.lua)
+	if obj ~= nil and obj.hasTag("FetchPreview") then
+		return
+	end
 	local color = landZoneColor(zone)
 	if color == nil or not cardIsLand(obj) then
 		return
