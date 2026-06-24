@@ -45,6 +45,7 @@ function onload()
 	gravFor = -4.14
 
 	spawnPatchNotesButton()
+	spawnLandTrackerText()
 end
 
 -- Ensure data structure exists
@@ -73,6 +74,12 @@ function registerObjectGUIDs()
 	data["Red"]["playmat"] = getObjectFromGUID("c20e3f")
 	data["Yellow"]["playmat"] = getObjectFromGUID("129eaa")
 	data["Blue"]["playmat"] = getObjectFromGUID("56cd9d")
+
+	-- dedicated land scripting zone on each playmat (where lands are played)
+	data["White"]["landZone"] = getObjectFromGUID("c24ef0")
+	data["Red"]["landZone"] = getObjectFromGUID("772714")
+	data["Yellow"]["landZone"] = getObjectFromGUID("00f87d")
+	data["Blue"]["landZone"] = getObjectFromGUID("e63cad")
 
 	data["White"]["mulliganButton"] = getObjectFromGUID("3b07ae")
 	data["Red"]["mulliganButton"] = getObjectFromGUID("c53ac6")

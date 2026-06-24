@@ -45,6 +45,7 @@ function onload()
 	gravFor = -4.14
 
 	spawnPatchNotesButton()
+	spawnLandTrackerText()
 end
 
 -- Ensure data structure exists
@@ -73,6 +74,12 @@ function registerObjectGUIDs()
 	data["Red"]["playmat"] = getObjectFromGUID("c20e3f")
 	data["Yellow"]["playmat"] = getObjectFromGUID("129eaa")
 	data["Blue"]["playmat"] = getObjectFromGUID("56cd9d")
+
+	-- dedicated land scripting zone on each playmat (where lands are played)
+	data["White"]["landZone"] = getObjectFromGUID("c24ef0")
+	data["Red"]["landZone"] = getObjectFromGUID("772714")
+	data["Yellow"]["landZone"] = getObjectFromGUID("00f87d")
+	data["Blue"]["landZone"] = getObjectFromGUID("e63cad")
 
 	data["White"]["mulliganButton"] = getObjectFromGUID("3b07ae")
 	data["Red"]["mulliganButton"] = getObjectFromGUID("c53ac6")
@@ -949,14 +956,20 @@ function etaliRevealNext(ownerColor, clickerColor)
 				etaliRevealNext(ownerColor, clickerColor)
 			end, 0.45)
 		else
-			etaliPlaceNonland(clickerColor, card)
+			etaliPlaceNonland(clickerColor, ownerColor, card)
 		end
 	end, function()
 		return not card.spawning
 	end)
 end
 
--- send a revealed land to its owner's exile (mirrors move2exile placement)
+-- how far above the playmat (toward table centre) the etali cards are staged,
+-- and how long a moved card glows in its owner's colour
+etaliAbove = -12.5
+etaliGlow = 30
+
+-- send a revealed land to its owner's exile (mirrors move2exile placement) and
+-- glow it in the owner's colour so everyone can see whose card moved
 function etaliExile(ownerColor, card)
 	local zone = data[ownerColor]["libraryZone"]
 	local rot = card.getRotation()
@@ -966,17 +979,186 @@ function etaliExile(ownerColor, card)
 	pos.y = 3
 	card.setRotationSmooth(rot, false, true)
 	card.setPositionSmooth(pos, false, true)
+	card.highlightOn(stringColorToRGB(ownerColor), etaliGlow)
 end
 
--- place a revealed nonland face up in a row in front of the clicking player
-function etaliPlaceNonland(clickerColor, card)
+-- place a revealed nonland face up in a row above the clicking player's mat,
+-- glowing in the card owner's colour so everyone can see whose card moved
+function etaliPlaceNonland(clickerColor, ownerColor, card)
 	local mat = data[clickerColor]["playmat"]
 	local i = etaliPlaced or 0
 	etaliPlaced = i + 1
-	local pos = mat.getPosition() + mat.getTransformRight():scale((i - 1.5) * 3)
+	local pos = mat.getPosition()
+		+ mat.getTransformRight():scale((i - 1.5) * 3)
+		+ mat.getTransformForward():scale(etaliAbove)
 	pos.y = 3
 	card.setRotationSmooth({ 0, mat.getRotation().y, 0 }, false, true)
 	card.setPositionSmooth(pos, false, true)
+	card.highlightOn(stringColorToRGB(ownerColor), etaliGlow)
+end
+--------------------------------- LAND TRACKER ---------------------------------
+-- Per-player land / mana display. This will eventually replace the standalone
+-- Land_Zone_Manager object. For now it renders text anchored to each player's
+-- playmat zone (same spot the old manager used) and tracks the lands that have
+-- entered each player's land zone this turn.
+--
+-- "A land entering the battlefield this turn" = a land card (see isLand) that
+-- enters that player's landZone and was NOT in the landZone when their turn
+-- began. The lands' names are listed in the display.
+
+-- screen-space placement copied from the old Land_Zone_Manager.createButtons
+landTrackerHeight = 0.10 -- local Y above the zone
+landTrackerPosZ = 0.6 -- local Z (further "forward")
+landTrackerSpacing = 0.05 -- gap between stacked lines
+
+-- per-color state
+landsEnteredThisTurn = {} -- color -> array of { guid, name } entered this turn
+landZoneBaseline = {} -- color -> set of land guids present at this player's turn start
+glowingLands = {} -- card objects currently glowing (lands played this turn)
+
+-- create the display on every playmat zone and initialise tracking state
+function spawnLandTrackerText()
+	for color, _ in pairs(data) do
+		createLandTrackerButtons(color)
+		landsEnteredThisTurn[color] = {}
+		landZoneBaseline[color] = {}
+	end
+	-- the active player's turn is already underway on load, so snapshot their
+	-- baseline now (we missed their onPlayerTurnStart)
+	if Turns ~= nil and Turns.turn_color ~= nil and data[Turns.turn_color] ~= nil then
+		resetLandTracker(Turns.turn_color)
+	end
+	for color, _ in pairs(data) do
+		refreshLandTrackerText(color)
+	end
+end
+
+function createLandTrackerButtons(color)
+	local mat = data[color]["playmat"]
+	if mat == nil then
+		return
+	end
+	mat.clearButtons()
+
+	-- text is scaled by the inverse of the zone scale so it renders at a
+	-- consistent size regardless of how big the playmat zone is
+	local scale = mat.getScale()
+	local textScale = { 1 / scale.x, 1 / scale.y, 1 / scale.z }
+
+	-- White/Yellow display on the right, Blue/Red on the left (old layout)
+	local posX = 0.5
+	if color == "Blue" or color == "Red" then
+		posX = -0.5
+	end
+
+	-- index 0: lands entered this turn
+	mat.createButton({
+		click_function = "null",
+		function_owner = Global,
+		label = "Lands this turn: none",
+		position = { posX, landTrackerHeight, landTrackerPosZ },
+		scale = textScale,
+		width = 0,
+		height = 0,
+		font_size = 250,
+		font_color = { 1, 1, 1 },
+	})
+end
+
+----------------------------------- TURN LOGIC ----------------------------------
+
+-- at the start of a player's turn the previous turn has ended, so stop the
+-- glow on any lands played during it; then snapshot the lands already in the
+-- starting player's land zone and clear their entered-this-turn list
+function onPlayerTurnStart(player_color_start, player_color_previous)
+	clearLandGlows()
+	if data[player_color_start] ~= nil then
+		resetLandTracker(player_color_start)
+	end
+end
+
+-- turn off the glow on every land that was played this turn
+function clearLandGlows()
+	for _, card in ipairs(glowingLands) do
+		if card ~= nil then
+			pcall(function()
+				card.highlightOff()
+			end)
+		end
+	end
+	glowingLands = {}
+end
+
+function resetLandTracker(color)
+	landsEnteredThisTurn[color] = {}
+	landZoneBaseline[color] = {}
+	local zone = data[color]["landZone"]
+	if zone ~= nil then
+		for _, obj in ipairs(zone.getObjects()) do
+			if isLand(obj) then
+				landZoneBaseline[color][obj.getGUID()] = true
+			end
+		end
+	end
+	refreshLandTrackerText(color)
+end
+
+---------------------------------- ENTER LOGIC ----------------------------------
+
+-- which player's land zone is this, if any
+function landZoneColor(zone)
+	for color, _ in pairs(data) do
+		if data[color]["landZone"] == zone then
+			return color
+		end
+	end
+	return nil
+end
+
+-- called from onObjectEnterZone (see context_menus.lua). Records a land that
+-- entered a land zone and didn't start the turn there.
+function trackLandEnter(zone, obj)
+	local color = landZoneColor(zone)
+	if color == nil or not isLand(obj) then
+		return
+	end
+	local guid = obj.getGUID()
+	-- ignore lands that were already in the zone when the turn began
+	if landZoneBaseline[color] and landZoneBaseline[color][guid] then
+		return
+	end
+	landsEnteredThisTurn[color] = landsEnteredThisTurn[color] or {}
+	-- don't list the same card twice (e.g. nudged out and back in)
+	for _, e in ipairs(landsEnteredThisTurn[color]) do
+		if e.guid == guid then
+			return
+		end
+	end
+	table.insert(landsEnteredThisTurn[color], { guid = guid, name = mainCardName(obj.getName()) })
+	-- glow the land grey until the end of the turn
+	obj.highlightOn({ 0.5, 0.5, 0.5 })
+	table.insert(glowingLands, obj)
+	refreshLandTrackerText(color)
+end
+
+------------------------------------ DISPLAY ------------------------------------
+
+function refreshLandTrackerText(color)
+	local mat = data[color]["playmat"]
+	if mat == nil then
+		return
+	end
+	local names = {}
+	for _, e in ipairs(landsEnteredThisTurn[color] or {}) do
+		table.insert(names, e.name)
+	end
+	local label
+	if #names == 0 then
+		label = "Lands this turn: none"
+	else
+		label = "Lands this turn (" .. #names .. "): " .. table.concat(names, ", ")
+	end
+	mat.editButton({ index = 0, label = label })
 end
 -------------------------------- FROZEN TOKENS ---------------------------------
 -- Tokens drawn from the frozen bags, when dropped onto a card, apply the Frozen
@@ -1387,6 +1569,37 @@ function handOn(obj)
 	end
 end
 
+-- true if the card object is a land (basic lands included). Lands in this mod
+-- carry "Land" in their name/type line, so a case-insensitive "land" match
+-- identifies them. We check the name, a "Land" tag, and the type line (the first
+-- line of the description) only -- never the rest of the rules text, so nonland
+-- cards that merely mention "land" in their oracle text aren't miscounted.
+function isLand(card)
+	if card == nil or card.type ~= "Card" then
+		return false
+	end
+	if (card.getName() or ""):lower():find("land") then
+		return true
+	end
+	for _, tag in ipairs(card.getTags()) do
+		if tag:lower() == "land" then
+			return true
+		end
+	end
+	local typeLine = ((card.getDescription() or ""):match("^[^\r\n]*") or ""):lower()
+	return typeLine:find("land") ~= nil
+end
+
+-- card nicknames in this mod are "<name>\n<type line> <cmc>CMC" (the importer
+-- appends the type line and CMC on following lines). Return just the displayed
+-- card name: the first line, trimmed.
+function mainCardName(name)
+	if name == nil then
+		return ""
+	end
+	return (name:match("^[^\r\n]*") or ""):gsub("%s+$", "")
+end
+
 function null() end
 
 --------------------------------- CONTEXT MENU ---------------------------------
@@ -1454,6 +1667,8 @@ function onObjectEnterZone(zone, obj)
 	if obj.getName():lower():find("planechase") then
 		return
 	end
+	-- land tracker: note lands entering a player's land zone (see landtracker.lua)
+	trackLandEnter(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false

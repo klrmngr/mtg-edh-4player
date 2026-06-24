@@ -63,6 +63,8 @@ function onObjectEnterZone(zone, obj)
 	if obj.getName():lower():find("planechase") then
 		return
 	end
+	-- land tracker: note lands entering a player's land zone (see landtracker.lua)
+	trackLandEnter(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false

@@ -163,5 +163,36 @@ function handOn(obj)
 	end
 end
 
+-- true if the card object is a land (basic lands included). Lands in this mod
+-- carry "Land" in their name/type line, so a case-insensitive "land" match
+-- identifies them. We check the name, a "Land" tag, and the type line (the first
+-- line of the description) only -- never the rest of the rules text, so nonland
+-- cards that merely mention "land" in their oracle text aren't miscounted.
+function isLand(card)
+	if card == nil or card.type ~= "Card" then
+		return false
+	end
+	if (card.getName() or ""):lower():find("land") then
+		return true
+	end
+	for _, tag in ipairs(card.getTags()) do
+		if tag:lower() == "land" then
+			return true
+		end
+	end
+	local typeLine = ((card.getDescription() or ""):match("^[^\r\n]*") or ""):lower()
+	return typeLine:find("land") ~= nil
+end
+
+-- card nicknames in this mod are "<name>\n<type line> <cmc>CMC" (the importer
+-- appends the type line and CMC on following lines). Return just the displayed
+-- card name: the first line, trimmed.
+function mainCardName(name)
+	if name == nil then
+		return ""
+	end
+	return (name:match("^[^\r\n]*") or ""):gsub("%s+$", "")
+end
+
 function null() end
 
