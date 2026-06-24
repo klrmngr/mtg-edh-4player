@@ -111,6 +111,17 @@ function registerObjectGUIDs()
 	data["Red"]["revealButton"] = getObjectFromGUID("0ad181")
 	data["Yellow"]["revealButton"] = getObjectFromGUID("59ab68")
 	data["Blue"]["revealButton"] = getObjectFromGUID("c489e1")
+
+	-- life trackers identify their owner via their Description (a colour name)
+	for _, guid in ipairs({ "23e485", "37e533", "395037", "448880" }) do
+		local tracker = getObjectFromGUID(guid)
+		if tracker ~= nil then
+			local owner = tracker.getDescription()
+			if data[owner] ~= nil then
+				data[owner]["lifeTracker"] = tracker
+			end
+		end
+	end
 end
 
 props = {

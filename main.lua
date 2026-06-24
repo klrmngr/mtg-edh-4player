@@ -111,6 +111,17 @@ function registerObjectGUIDs()
 	data["Red"]["revealButton"] = getObjectFromGUID("0ad181")
 	data["Yellow"]["revealButton"] = getObjectFromGUID("59ab68")
 	data["Blue"]["revealButton"] = getObjectFromGUID("c489e1")
+
+	-- life trackers identify their owner via their Description (a colour name)
+	for _, guid in ipairs({ "23e485", "37e533", "395037", "448880" }) do
+		local tracker = getObjectFromGUID(guid)
+		if tracker ~= nil then
+			local owner = tracker.getDescription()
+			if data[owner] ~= nil then
+				data[owner]["lifeTracker"] = tracker
+			end
+		end
+	end
 end
 
 props = {
@@ -1184,6 +1195,11 @@ fetchPreviewRowStep = 1.8 -- vertical gap between wrapped rows
 
 -- fetchland guid -> array of spawned preview objects
 fetchPreviews = {}
+-- preview guid -> { color, fetchGuid, cardGuid, name } for resolving double-clicks
+fetchPreviewData = {}
+-- preview guid -> last click time (for double-click detection)
+fetchPreviewLastClick = {}
+fetchDoubleClickSecs = 0.5
 
 -- If the card is a fetch-style land, return a lowercased list of the land types
 -- it can search for ("basic" means any basic land); otherwise return nil.
@@ -1237,6 +1253,8 @@ function clearFetchPreviews(guid)
 	end
 	for _, p in ipairs(list) do
 		if p ~= nil then
+			fetchPreviewData[p.getGUID()] = nil
+			fetchPreviewLastClick[p.getGUID()] = nil
 			pcall(function()
 				destroyObject(p)
 			end)
@@ -1311,14 +1329,134 @@ function showFetchPreviews(zone, fetch)
 			scale = { fetchPreviewScale, fetchPreviewScale, fetchPreviewScale },
 			callback_function = function(obj)
 				obj.setVar("noencode", true)
-				obj.interactable = false
 				obj.setLock(true)
 				-- only the land zone's owner sees their own fetch previews
 				obj.setInvisibleTo(allBut(color))
+				-- record what this preview resolves to, and add a click target
+				fetchPreviewData[obj.getGUID()] = {
+					color = color,
+					fetchGuid = fetch.getGUID(),
+					cardGuid = cardData.GUID,
+					name = mainCardName(cardData.Nickname),
+				}
+				obj.createButton({
+					click_function = "fetchPreviewClick",
+					function_owner = Global,
+					label = "",
+					position = { 0, 0.3, 0 },
+					rotation = { 0, 0, 0 },
+					width = 1500,
+					height = 2100,
+					scale = { 1, 1, 1 },
+					color = { 0, 0, 0, 0 },
+				})
 			end,
 		})
 		table.insert(fetchPreviews[fetch.getGUID()], preview)
 	end
+end
+
+-- double-click handler on a preview: only the land zone's owner can resolve it
+function fetchPreviewClick(obj, color, alt)
+	local info = fetchPreviewData[obj.getGUID()]
+	if info == nil or color ~= info.color then
+		return
+	end
+	local guid = obj.getGUID()
+	local now = os.clock()
+	local last = fetchPreviewLastClick[guid]
+	if last ~= nil and (now - last) <= fetchDoubleClickSecs then
+		fetchPreviewLastClick[guid] = nil
+		resolveFetch(info)
+	else
+		fetchPreviewLastClick[guid] = now
+	end
+end
+
+-- carry out a fetch: lose 1 life, pull the chosen land next to the fetchland,
+-- and send the fetchland to the graveyard
+function resolveFetch(info)
+	local color = info.color
+	local fetch = getObjectFromGUID(info.fetchGuid)
+
+	-- 1. lose 1 life
+	loseLife(color, 1)
+
+	-- 2. pull the chosen land from the library, place it next to the fetchland
+	local rotY = fetch ~= nil and fetch.getRotation().y or 0
+	local landPos
+	if fetch ~= nil then
+		local zone = data[color]["landZone"]
+		local yaw = math.rad(zone.getRotation().y)
+		local rgt = { x = math.cos(yaw), z = -math.sin(yaw) }
+		local b = fetch.getPosition()
+		landPos = { x = b.x + rgt.x * 2.6, y = b.y + 1, z = b.z + rgt.z * 2.6 }
+	else
+		landPos = data[color]["landZone"].getPosition()
+	end
+	-- find the chosen land in the library by name (deck.getObjects() gives live
+	-- guids/indexes; the GUID captured at preview time isn't reliable) and take
+	-- exactly that card by index
+	local deck = getDeckFromZone(data[color]["libraryZone"])
+	local taken = false
+	if deck ~= nil then
+		for _, entry in ipairs(deck.getObjects()) do
+			if mainCardName(entry.name) == info.name then
+				pcall(function()
+					deck.takeObject({
+						index = entry.index,
+						position = landPos,
+						rotation = { 0, rotY, 0 },
+						smooth = true,
+					})
+				end)
+				taken = true
+				break
+			end
+		end
+	end
+	if not taken then
+		-- fallback: the land is a loose card in the library, not inside a deck
+		local loose = getObjectFromGUID(info.cardGuid)
+		if loose ~= nil then
+			loose.setRotationSmooth({ 0, rotY, 0 }, false, true)
+			loose.setPositionSmooth(landPos, false, true)
+		end
+	end
+
+	-- shuffle the library after fetching (let the take settle, then re-fetch the
+	-- deck in case it changed)
+	if taken then
+		Wait.time(function()
+			local d = getDeckFromZone(data[color]["libraryZone"])
+			if d ~= nil then
+				pcall(function()
+					d.shuffle()
+				end)
+			end
+		end, 0.5)
+	end
+
+	-- 3. send the fetchland to the graveyard (reuse the discard placement)
+	if fetch ~= nil then
+		discardCard(fetch, color)
+	end
+
+	-- previews are no longer valid
+	clearFetchPreviews(info.fetchGuid)
+end
+
+-- subtract n life from a player's Life_Tracker and update its display
+function loseLife(color, n)
+	local tracker = data[color] and data[color]["lifeTracker"]
+	if tracker == nil then
+		return
+	end
+	local count = tonumber(tracker.getVar("count")) or 0
+	count = count - n
+	tracker.setVar("count", count)
+	tracker.editButton({ index = 0, label = tostring(count) })
+	tracker.call("updateSave")
 end
 
 -- event hooks (called from onObjectEnterZone / onObjectLeaveZone)
