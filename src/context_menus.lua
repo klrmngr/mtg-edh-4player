@@ -65,6 +65,8 @@ function onObjectEnterZone(zone, obj)
 	end
 	-- land tracker: note lands entering a player's land zone (see landtracker.lua)
 	trackLandEnter(zone, obj)
+	-- fetchlands: show previews of fetchable lands above them (see fetchland.lua)
+	fetchlandEnter(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false
@@ -115,6 +117,8 @@ function onObjectLeaveZone(zone, obj)
 	if obj.getName():lower():find("planechase") then
 		return
 	end
+	-- fetchlands: remove previews when a fetchland leaves a land zone
+	fetchlandLeave(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false

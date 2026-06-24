@@ -163,25 +163,30 @@ function handOn(obj)
 	end
 end
 
--- true if the card object is a land (basic lands included). Lands in this mod
--- carry "Land" in their name/type line, so a case-insensitive "land" match
--- identifies them. We check the name, a "Land" tag, and the type line (the first
--- line of the description) only -- never the rest of the rules text, so nonland
--- cards that merely mention "land" in their oracle text aren't miscounted.
-function isLand(card)
-	if card == nil or card.type ~= "Card" then
+-- Single source of truth for "is this card a land?" (basic lands included).
+-- Accepts either a card object or a name string. Card nicknames in this mod are
+-- "<name>\n<type line> <cmc>CMC", so the type line is part of the name; matching
+-- "land" there identifies lands without scanning the rules text. For objects we
+-- also accept a "Land" tag.
+function cardIsLand(card)
+	if card == nil then
 		return false
 	end
-	if (card.getName() or ""):lower():find("land") then
-		return true
-	end
-	for _, tag in ipairs(card.getTags()) do
-		if tag:lower() == "land" then
-			return true
+	local name
+	if type(card) == "string" then
+		name = card
+	else
+		if card.getName == nil then
+			return false
 		end
+		for _, tag in ipairs(card.getTags()) do
+			if tag:lower() == "land" then
+				return true
+			end
+		end
+		name = card.getName()
 	end
-	local typeLine = ((card.getDescription() or ""):match("^[^\r\n]*") or ""):lower()
-	return typeLine:find("land") ~= nil
+	return (name or ""):lower():find("land") ~= nil
 end
 
 -- card nicknames in this mod are "<name>\n<type line> <cmc>CMC" (the importer

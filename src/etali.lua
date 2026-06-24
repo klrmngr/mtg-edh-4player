@@ -30,7 +30,7 @@ function etaliRevealNext(ownerColor, clickerColor)
 		return -- empty library
 	end
 	Wait.condition(function()
-		local isLand = getCMC(card.getName(), card.getDescription()) == "-1"
+		local isLand = cardIsLand(card)
 		if isLand then
 			etaliExile(ownerColor, card)
 			Wait.time(function()
