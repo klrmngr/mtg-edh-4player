@@ -1580,27 +1580,115 @@ function fetchPreviewClick(obj, color, alt)
 	end
 end
 
--- does this land enter the battlefield tapped? matches the common templates:
--- "<land> comes into play tapped", "<land> enters the battlefield tapped", and
--- "this land enters the battlefield tapped unless ..." (still treated as tapped)
-function landEntersTapped(card)
+-- map a spelled-out (or numeric) count to a number, e.g. "two" -> 2
+function wordToCount(w)
+	local words = {
+		one = 1, two = 2, three = 3, four = 4, five = 5,
+		six = 6, seven = 7, eight = 8, nine = 9, ten = 10,
+	}
+	return words[w] or tonumber(w)
+end
+
+-- is this object a basic land? (checks the type line in its "<name>\n<type>" nickname)
+function cardIsBasicLand(obj)
+	if obj == nil or obj.type ~= "Card" or obj.hasTag("FetchPreview") then
+		return false
+	end
+	local typeLine = (obj.getName():match("[\r\n]+(.*)$") or ""):lower()
+	return typeLine:find("basic land") ~= nil
+end
+
+-- how many basic lands does this player control (in their land zone)?
+function countBasicLands(color)
+	local zone = data[color] and data[color]["landZone"]
+	if zone == nil then
+		return 0
+	end
+	local n = 0
+	for _, obj in ipairs(zone.getObjects()) do
+		if cardIsBasicLand(obj) then
+			n = n + 1
+		end
+	end
+	return n
+end
+
+-- how many lands (basic or not) does this player control, in their land zone?
+-- skips fetch preview copies floating above their fetchlands
+function countLands(color)
+	local zone = data[color] and data[color]["landZone"]
+	if zone == nil then
+		return 0
+	end
+	local n = 0
+	for _, obj in ipairs(zone.getObjects()) do
+		if obj.type == "Card" and not obj.hasTag("FetchPreview") and cardIsLand(obj) then
+			n = n + 1
+		end
+	end
+	return n
+end
+
+-- does the fetchland itself put the fetched land onto the battlefield tapped?
+-- Most "fetch a basic tapped" lands (Evolving Wilds, Terramorphic Expanse, ...)
+-- always do. Fabled Passage is the exception: it untaps the land if you already
+-- control N or more lands (counting Fabled Passage itself), so this must be
+-- evaluated before the fetchland leaves the battlefield.
+function fetchlandForcesTapped(fetch, color)
+	if fetch == nil then
+		return false
+	end
+	local desc = (fetch.getDescription() or ""):lower()
+	if desc:find("onto the battlefield tapped") == nil and desc:find("into play tapped") == nil then
+		return false
+	end
+	local word = desc:match("if you control (%a+) or more lands")
+	if word ~= nil then
+		local need = wordToCount(word)
+		if need ~= nil and countLands(color) >= need then
+			return false
+		end
+	end
+	return true
+end
+
+-- does this land enter the battlefield tapped for `color`? matches the common
+-- templates: "<land> comes into play tapped", "<land> enters the battlefield
+-- tapped", and "... tapped unless ...". The "tapped unless you control N or more
+-- basic lands" clause (tango/battle lands) is evaluated against the player's
+-- basics; any other "unless" clause defaults to entering tapped.
+function landEntersTapped(card, color)
 	if card == nil then
 		return false
 	end
 	local desc = (card.getDescription() or ""):lower()
-	return desc:find("enters the battlefield tapped") ~= nil
-		or desc:find("enters tapped") ~= nil
-		or desc:find("comes into play tapped") ~= nil
+	if
+		desc:find("enters the battlefield tapped") == nil
+		and desc:find("enters tapped") == nil
+		and desc:find("comes into play tapped") == nil
+	then
+		return false
+	end
+	-- tango/battle lands: untapped once the player controls enough basics
+	local word = desc:match("tapped unless you control (%a+) or more basic land")
+	if word ~= nil then
+		local need = wordToCount(word)
+		if need ~= nil then
+			return countBasicLands(color) < need
+		end
+	end
+	return true
 end
 
 -- orient a freshly fetched land to the player's untapped rotation (the land
--- zone's), then tap it (90 degrees) only if its text says it enters tapped
-function orientFetchedLand(card, baseY)
+-- zone's), then tap it (90 degrees) if the fetchland forced it tapped or the
+-- land's own text says it enters tapped
+function orientFetchedLand(card, baseY, color, forcedTapped)
 	if card == nil then
 		return
 	end
 	local y = baseY
-	if landEntersTapped(card) then
+	if forcedTapped or landEntersTapped(card, color) then
 		y = baseY + 90
 	end
 	card.setRotationSmooth({ 0, y, 0 }, false, true)
@@ -1617,6 +1705,11 @@ function resolveFetch(info)
 	if fetch ~= nil and (fetch.getDescription() or ""):lower():find("pay 1 life") then
 		loseLife(color, 1)
 	end
+
+	-- decide whether the fetchland forces the land in tapped, while the fetchland
+	-- and the player's current lands are all still on the battlefield (matters for
+	-- Fabled Passage, which counts itself toward its "4 or more lands" check)
+	local forcedTapped = fetchlandForcesTapped(fetch, color)
 
 	-- 2. pull the chosen land from the library, place it next to the fetchland.
 	-- Orient it to the land zone (untapped), never to the fetchland -- which may
@@ -1647,7 +1740,7 @@ function resolveFetch(info)
 						rotation = { 0, baseY, 0 },
 						smooth = true,
 						callback_function = function(obj)
-							orientFetchedLand(obj, baseY)
+							orientFetchedLand(obj, baseY, color, forcedTapped)
 						end,
 					})
 				end)
@@ -1661,7 +1754,7 @@ function resolveFetch(info)
 		local loose = getObjectFromGUID(info.cardGuid)
 		if loose ~= nil then
 			loose.setPositionSmooth(landPos, false, true)
-			orientFetchedLand(loose, baseY)
+			orientFetchedLand(loose, baseY, color, forcedTapped)
 		end
 	end
 
