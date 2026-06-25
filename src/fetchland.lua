@@ -57,7 +57,10 @@ end
 
 -- does a library card (matched on its nickname / type line) satisfy the fetch?
 function fetchCardMatches(nickname, targets)
-	local typeLine = (nickname or ""):lower()
+	-- match only against the type line, not the card name: nicknames are
+	-- "<name>\n<type line> <cmc>CMC", and a name can contain a subtype substring
+	-- (e.g. Misty Rainforest -> "forest") that must not count as a match
+	local typeLine = ((nickname or ""):match("[\r\n]+(.*)$") or ""):lower()
 	if not typeLine:find("land") then
 		return false
 	end
