@@ -1407,14 +1407,17 @@ function fetchPreviewClick(obj, color, alt)
 	end
 end
 
--- carry out a fetch: lose 1 life, pull the chosen land next to the fetchland,
--- and send the fetchland to the graveyard
+-- carry out a fetch: lose 1 life (only if the land says so), pull the chosen
+-- land next to the fetchland, and send the fetchland to the graveyard
 function resolveFetch(info)
 	local color = info.color
 	local fetch = getObjectFromGUID(info.fetchGuid)
 
-	-- 1. lose 1 life
-	loseLife(color, 1)
+	-- 1. lose 1 life, but only if the fetchland actually says "pay 1 life"
+	-- (some lands -- Evolving Wilds, panoramas, etc. -- fetch for free)
+	if fetch ~= nil and (fetch.getDescription() or ""):lower():find("pay 1 life") then
+		loseLife(color, 1)
+	end
 
 	-- 2. pull the chosen land from the library, place it next to the fetchland
 	local rotY = fetch ~= nil and fetch.getRotation().y or 0
