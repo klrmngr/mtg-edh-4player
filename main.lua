@@ -1204,8 +1204,11 @@ fetchPreviewData = {}
 fetchPreviewLastClick = {}
 fetchDoubleClickSecs = 0.5
 
--- If the card is a fetch-style land, return a lowercased list of the land types
--- it can search for ("basic" means any basic land); otherwise return nil.
+-- If the card is a fetch-style land, describe what it can search for; otherwise
+-- return nil. Result: { subtypes = {...}, requireBasic = bool, anyBasic = bool }.
+--   subtypes    - named land subtypes the fetch lists (e.g. island, mountain)
+--   requireBasic - the fetch says "basic", so only basic lands qualify
+--   anyBasic    - "basic land" with no named subtype: any basic land qualifies
 function fetchLandTargets(card)
 	if not cardIsLand(card) then
 		return nil
@@ -1215,19 +1218,19 @@ function fetchLandTargets(card)
 		return nil
 	end
 	local phrase = desc:match("search your library for (.-) card") or desc
-	local targets = {}
-	if phrase:find("basic land") then
-		table.insert(targets, "basic")
-	end
+	-- "basic Island, ..." / "basic land" restrict to basics; "nonbasic" does not
+	local requireBasic = phrase:find("basic") ~= nil and phrase:find("nonbasic") == nil
+	local subtypes = {}
 	for _, t in ipairs(fetchSubtypes) do
 		if phrase:find(t) then
-			table.insert(targets, t)
+			table.insert(subtypes, t)
 		end
 	end
-	if #targets == 0 then
+	local anyBasic = requireBasic and #subtypes == 0
+	if #subtypes == 0 and not anyBasic then
 		return nil
 	end
-	return targets
+	return { subtypes = subtypes, requireBasic = requireBasic, anyBasic = anyBasic }
 end
 
 -- does a library card (matched on its nickname / type line) satisfy the fetch?
@@ -1236,12 +1239,17 @@ function fetchCardMatches(nickname, targets)
 	if not typeLine:find("land") then
 		return false
 	end
-	for _, t in ipairs(targets) do
-		if t == "basic" then
-			if typeLine:find("basic land") then
-				return true
-			end
-		elseif typeLine:find(t) then
+	local isBasic = typeLine:find("basic land") ~= nil
+	-- "basic land card" with no named subtype: any basic land
+	if targets.anyBasic then
+		return isBasic
+	end
+	-- a fetch that names "basic <subtype>" only takes basic lands of that subtype
+	if targets.requireBasic and not isBasic then
+		return false
+	end
+	for _, t in ipairs(targets.subtypes) do
+		if typeLine:find(t) then
 			return true
 		end
 	end
