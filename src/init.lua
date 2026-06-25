@@ -45,6 +45,7 @@ function onload()
 	gravFor = -4.14
 
 	spawnPatchNotesButton()
+	checkForUpdate()
 	spawnLandTrackerText()
 	initFetchlands()
 end
