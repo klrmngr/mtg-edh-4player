@@ -1580,6 +1580,32 @@ function fetchPreviewClick(obj, color, alt)
 	end
 end
 
+-- does this land enter the battlefield tapped? matches the common templates:
+-- "<land> comes into play tapped", "<land> enters the battlefield tapped", and
+-- "this land enters the battlefield tapped unless ..." (still treated as tapped)
+function landEntersTapped(card)
+	if card == nil then
+		return false
+	end
+	local desc = (card.getDescription() or ""):lower()
+	return desc:find("enters the battlefield tapped") ~= nil
+		or desc:find("enters tapped") ~= nil
+		or desc:find("comes into play tapped") ~= nil
+end
+
+-- orient a freshly fetched land to the player's untapped rotation (the land
+-- zone's), then tap it (90 degrees) only if its text says it enters tapped
+function orientFetchedLand(card, baseY)
+	if card == nil then
+		return
+	end
+	local y = baseY
+	if landEntersTapped(card) then
+		y = baseY + 90
+	end
+	card.setRotationSmooth({ 0, y, 0 }, false, true)
+end
+
 -- carry out a fetch: lose 1 life (only if the land says so), pull the chosen
 -- land next to the fetchland, and send the fetchland to the graveyard
 function resolveFetch(info)
@@ -1592,8 +1618,10 @@ function resolveFetch(info)
 		loseLife(color, 1)
 	end
 
-	-- 2. pull the chosen land from the library, place it next to the fetchland
-	local rotY = fetch ~= nil and fetch.getRotation().y or 0
+	-- 2. pull the chosen land from the library, place it next to the fetchland.
+	-- Orient it to the land zone (untapped), never to the fetchland -- which may
+	-- itself be tapped/rotated -- then tap it afterwards only if it enters tapped.
+	local baseY = data[color]["landZone"].getRotation().y
 	local landPos
 	if fetch ~= nil then
 		local zone = data[color]["landZone"]
@@ -1616,8 +1644,11 @@ function resolveFetch(info)
 					deck.takeObject({
 						index = entry.index,
 						position = landPos,
-						rotation = { 0, rotY, 0 },
+						rotation = { 0, baseY, 0 },
 						smooth = true,
+						callback_function = function(obj)
+							orientFetchedLand(obj, baseY)
+						end,
 					})
 				end)
 				taken = true
@@ -1629,8 +1660,8 @@ function resolveFetch(info)
 		-- fallback: the land is a loose card in the library, not inside a deck
 		local loose = getObjectFromGUID(info.cardGuid)
 		if loose ~= nil then
-			loose.setRotationSmooth({ 0, rotY, 0 }, false, true)
 			loose.setPositionSmooth(landPos, false, true)
+			orientFetchedLand(loose, baseY)
 		end
 	end
 
