@@ -5,6 +5,71 @@ VERSION = "v0.1.4"
 local PATCH_NOTES_TAG = "patchNotesButton"
 local RELEASES_API = "https://api.github.com/repos/klrmngr/mtg-edh-4player/releases"
 
+-- split a "vX.Y.Z" tag into numeric parts, e.g. "v0.1.10" -> {0, 1, 10}
+function parseVersion(s)
+	local parts = {}
+	for n in tostring(s or ""):gmatch("%d+") do
+		table.insert(parts, tonumber(n))
+	end
+	return parts
+end
+
+-- is version tag `a` newer than `b`? (numeric, component-wise; missing = 0)
+function versionNewer(a, b)
+	local pa = parseVersion(a)
+	local pb = parseVersion(b)
+	for i = 1, math.max(#pa, #pb) do
+		local x = pa[i] or 0
+		local y = pb[i] or 0
+		if x ~= y then
+			return x > y
+		end
+	end
+	return false
+end
+
+-- the spawned patch-notes tile, or nil if it isn't on the table yet
+function patchNotesTile()
+	for _, obj in ipairs(getAllObjects()) do
+		if obj.getGMNotes() == PATCH_NOTES_TAG then
+			return obj
+		end
+	end
+	return nil
+end
+
+-- on load: ask GitHub for the newest release and, if it's newer than the loaded
+-- VERSION, flag it on the patch-notes tile and tell everyone once
+function checkForUpdate()
+	WebRequest.get(RELEASES_API, function(req)
+		if req.is_error then
+			return
+		end
+		local releases = JSONdecode(req.text)
+		if type(releases) ~= "table" or releases[1] == nil then
+			return
+		end
+		local latest = releases[1].tag_name or releases[1].name
+		if latest == nil or not versionNewer(latest, VERSION) then
+			return
+		end
+		broadcastToAll(
+			"A newer version (" .. latest .. ") is available -- this table is running " .. VERSION .. ".",
+			{ 1, 0.85, 0.2 }
+		)
+		-- flag the tile once it has finished spawning
+		Wait.condition(function()
+			local tile = patchNotesTile()
+			if tile ~= nil then
+				tile.setColorTint({ 0.85, 0.6, 0.1 })
+				tile.editButton({ index = 0, label = VERSION .. "\nupdate: " .. latest })
+			end
+		end, function()
+			return patchNotesTile() ~= nil
+		end, 10)
+	end)
+end
+
 -- spawn a clickable tile off to the side of the table (called from onload)
 function spawnPatchNotesButton()
 	-- remove any leftover patch-notes tile so reloads don't stack duplicates
