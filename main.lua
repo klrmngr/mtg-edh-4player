@@ -82,6 +82,19 @@ function registerObjectGUIDs()
 	data["Yellow"]["landZone"] = getObjectFromGUID("00f87d")
 	data["Blue"]["landZone"] = getObjectFromGUID("e63cad")
 
+	-- command-zone scripting zones (one per player), used by the reset button to
+	-- snapshot/restore commanders
+	data["White"]["commandZone"] = getObjectFromGUID("8fc485")
+	data["Red"]["commandZone"] = getObjectFromGUID("750cd5")
+	data["Yellow"]["commandZone"] = getObjectFromGUID("c451cd")
+	data["Blue"]["commandZone"] = getObjectFromGUID("879cc5")
+
+	-- exile scripting zones (one per player); the reset button clears these too
+	data["White"]["exileZone"] = getObjectFromGUID("d614cb")
+	data["Red"]["exileZone"] = getObjectFromGUID("878032")
+	data["Yellow"]["exileZone"] = getObjectFromGUID("ee5024")
+	data["Blue"]["exileZone"] = getObjectFromGUID("bc8e3c")
+
 	data["White"]["mulliganButton"] = getObjectFromGUID("3b07ae")
 	data["Red"]["mulliganButton"] = getObjectFromGUID("c53ac6")
 	data["Yellow"]["mulliganButton"] = getObjectFromGUID("47645d")
@@ -357,6 +370,20 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		height = 1000,
 		position = { lp.x, 0.1, lp.z + 1.8 },
 		font_size = 500,
+		color = { 1, 1, 1, 0 },
+		font_color = { 1, 1, 1, 100 },
+		hover_color = { 1, 1, 1, 0.1 },
+		press_color = { 1, 0, 0, 0.2 },
+	})
+	-- reset button, directly under the mulligan counter (z = 1.4)
+	object.createButton({
+		click_function = "playerReset",
+		label = "Reset",
+		tooltip = "              [b]Reset Board[/b]\n[i]double-click[/i] to restore your library,\n   board, and commander to game start",
+		width = 2500,
+		height = 700,
+		position = { 0, 0.1, 2.8 },
+		font_size = 250,
 		color = { 1, 1, 1, 0 },
 		font_color = { 1, 1, 1, 100 },
 		hover_color = { 1, 1, 1, 0.1 },
@@ -731,6 +758,9 @@ mulliganResetDelay = 300 -- auto-reset the count after this many seconds idle
 
 -- bump a player's mulligan counter and refresh the on-table label
 function bumpMulliganCount(color)
+	-- the first bump is the opening hand: snapshot the board for the reset button
+	-- while the library is still complete (see reset.lua)
+	captureResetSnapshot(color)
 	data[color]["mulliganCount"] = (data[color]["mulliganCount"] or 0) + 1
 	data[color]["mulliganButton"].editButton({
 		index = 1,
@@ -929,6 +959,132 @@ function playerSerumPowder(button, playerColor, alt)
 	end, 1.0)
 end
 
+----------------------------------- BOARD RESET ----------------------------------
+-- A per-player "Reset" button (under the mulligan count) restores that player's
+-- board to its game-start state. At the opening hand (the first mulligan bump,
+-- detected the same way mulligans are) we snapshot the full library deck and the
+-- command zone. Double-clicking Reset destroys that player's Card/Deck objects
+-- across their library, hand, battlefield (playmat), graveyard, command zone, and
+-- exile, then respawns the snapshot deck + commander(s) and re-shuffles the
+-- library.
+--
+-- Limitations: cards sitting outside every tracked zone (loose on the table, or
+-- taken by another player) and token creatures (Custom_Token) are not destroyed.
+
+resetDoubleClickSecs = 0.5
+resetLastClick = {} -- color -> last reset click time (for double-click detection)
+
+-- take the game-start snapshot for a player, once. Called from bumpMulliganCount
+-- the first time it fires, while the library is still complete.
+function captureResetSnapshot(color)
+	if data[color] == nil or data[color]["resetSnapshot"] ~= nil then
+		return
+	end
+	local snap = { commanders = {} }
+	-- the full library deck, before the opening hand is drawn
+	local deck = getDeckFromZone(data[color]["libraryZone"])
+	if deck ~= nil then
+		snap.deckData = deck.getData()
+	end
+	-- whatever is sitting in the command zone (commander, partner, ...)
+	local cz = data[color]["commandZone"]
+	if cz ~= nil then
+		for _, obj in ipairs(cz.getObjects()) do
+			if obj.type == "Card" or obj.type == "Deck" then
+				table.insert(snap.commanders, obj.getData())
+			end
+		end
+	end
+	data[color]["resetSnapshot"] = snap
+end
+
+-- button handler: owner-only, double-click to confirm
+function playerReset(button, color, alt)
+	local ownerColor = nil
+	for c, pdata in pairs(data) do
+		if button == pdata["mulliganButton"] then
+			ownerColor = c
+			break
+		end
+	end
+	if ownerColor == nil or color ~= ownerColor then
+		return
+	end
+	local now = os.clock()
+	local last = resetLastClick[ownerColor]
+	if last ~= nil and (now - last) <= resetDoubleClickSecs then
+		resetLastClick[ownerColor] = nil
+		doBoardReset(ownerColor)
+	else
+		resetLastClick[ownerColor] = now
+		Player[color].broadcast("Double-click Reset to restore your board to its game-start state.")
+	end
+end
+
+-- destroy the player's cards across their tracked areas, then respawn the snapshot
+function doBoardReset(color)
+	local snap = data[color] and data[color]["resetSnapshot"]
+	if snap == nil then
+		Player[color].broadcast("Reset: no game-start snapshot yet -- draw your opening hand first.")
+		return
+	end
+
+	-- clear fetch previews + land-tracker state for this player up front, while
+	-- the soon-to-be-destroyed lands are still in their zone
+	local lz = data[color]["landZone"]
+	if lz ~= nil then
+		for _, obj in ipairs(lz.getObjects()) do
+			clearFetchPreviews(obj.getGUID())
+		end
+	end
+	landsEnteredThisTurn[color] = {}
+	refreshLandTrackerText(color)
+
+	-- 1. destroy this player's Card/Deck objects across their areas
+	local seen = {}
+	local function wipe(objs)
+		for _, obj in ipairs(objs) do
+			if obj ~= nil and (obj.type == "Card" or obj.type == "Deck") and not seen[obj.getGUID()] then
+				seen[obj.getGUID()] = true
+				pcall(function()
+					destroyObject(obj)
+				end)
+			end
+		end
+	end
+	for _, zone in ipairs({
+		data[color]["libraryZone"],
+		data[color]["graveyard"],
+		data[color]["playmat"],
+		data[color]["commandZone"],
+		data[color]["exileZone"],
+	}) do
+		if zone ~= nil then
+			wipe(zone.getObjects())
+		end
+	end
+	wipe(Player[color].getHandObjects(1))
+
+	-- 2. respawn the snapshot deck + commanders at their captured transforms
+	if snap.deckData ~= nil then
+		spawnObjectData({ data = snap.deckData })
+	end
+	for _, cdata in ipairs(snap.commanders or {}) do
+		spawnObjectData({ data = cdata })
+	end
+
+	-- 3. re-shuffle the freshly spawned library once it settles
+	Wait.time(function()
+		local deck = getDeckFromZone(data[color]["libraryZone"])
+		if deck ~= nil then
+			pcall(function()
+				deck.shuffle()
+			end)
+		end
+	end, 1)
+
+	Player[color].broadcast("Board reset to game-start state.")
+end
 ------------------------------------ ETALI -------------------------------------
 -- Reveal the top of every player's library until a nonland is hit: each land
 -- revealed goes to that player's exile, and the first nonland from each deck is

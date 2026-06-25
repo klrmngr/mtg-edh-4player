@@ -82,6 +82,19 @@ function registerObjectGUIDs()
 	data["Yellow"]["landZone"] = getObjectFromGUID("00f87d")
 	data["Blue"]["landZone"] = getObjectFromGUID("e63cad")
 
+	-- command-zone scripting zones (one per player), used by the reset button to
+	-- snapshot/restore commanders
+	data["White"]["commandZone"] = getObjectFromGUID("8fc485")
+	data["Red"]["commandZone"] = getObjectFromGUID("750cd5")
+	data["Yellow"]["commandZone"] = getObjectFromGUID("c451cd")
+	data["Blue"]["commandZone"] = getObjectFromGUID("879cc5")
+
+	-- exile scripting zones (one per player); the reset button clears these too
+	data["White"]["exileZone"] = getObjectFromGUID("d614cb")
+	data["Red"]["exileZone"] = getObjectFromGUID("878032")
+	data["Yellow"]["exileZone"] = getObjectFromGUID("ee5024")
+	data["Blue"]["exileZone"] = getObjectFromGUID("bc8e3c")
+
 	data["White"]["mulliganButton"] = getObjectFromGUID("3b07ae")
 	data["Red"]["mulliganButton"] = getObjectFromGUID("c53ac6")
 	data["Yellow"]["mulliganButton"] = getObjectFromGUID("47645d")
