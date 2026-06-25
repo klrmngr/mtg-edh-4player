@@ -17,14 +17,20 @@ fetchPreviewRowStep = 1.8 -- vertical gap between wrapped rows
 
 -- fetchland guid -> array of spawned preview objects
 fetchPreviews = {}
+-- fetchland guid -> spawn generation; bumped on every clear so an in-flight
+-- staggered spawn (see showFetchPreviews) knows to stop
+fetchPreviewGen = {}
 -- preview guid -> { color, fetchGuid, cardGuid, name } for resolving double-clicks
 fetchPreviewData = {}
 -- preview guid -> last click time (for double-click detection)
 fetchPreviewLastClick = {}
 fetchDoubleClickSecs = 0.5
 
--- If the card is a fetch-style land, return a lowercased list of the land types
--- it can search for ("basic" means any basic land); otherwise return nil.
+-- If the card is a fetch-style land, describe what it can search for; otherwise
+-- return nil. Result: { subtypes = {...}, requireBasic = bool, anyBasic = bool }.
+--   subtypes    - named land subtypes the fetch lists (e.g. island, mountain)
+--   requireBasic - the fetch says "basic", so only basic lands qualify
+--   anyBasic    - "basic land" with no named subtype: any basic land qualifies
 function fetchLandTargets(card)
 	if not cardIsLand(card) then
 		return nil
@@ -34,19 +40,19 @@ function fetchLandTargets(card)
 		return nil
 	end
 	local phrase = desc:match("search your library for (.-) card") or desc
-	local targets = {}
-	if phrase:find("basic land") then
-		table.insert(targets, "basic")
-	end
+	-- "basic Island, ..." / "basic land" restrict to basics; "nonbasic" does not
+	local requireBasic = phrase:find("basic") ~= nil and phrase:find("nonbasic") == nil
+	local subtypes = {}
 	for _, t in ipairs(fetchSubtypes) do
 		if phrase:find(t) then
-			table.insert(targets, t)
+			table.insert(subtypes, t)
 		end
 	end
-	if #targets == 0 then
+	local anyBasic = requireBasic and #subtypes == 0
+	if #subtypes == 0 and not anyBasic then
 		return nil
 	end
-	return targets
+	return { subtypes = subtypes, requireBasic = requireBasic, anyBasic = anyBasic }
 end
 
 -- does a library card (matched on its nickname / type line) satisfy the fetch?
@@ -55,12 +61,17 @@ function fetchCardMatches(nickname, targets)
 	if not typeLine:find("land") then
 		return false
 	end
-	for _, t in ipairs(targets) do
-		if t == "basic" then
-			if typeLine:find("basic land") then
-				return true
-			end
-		elseif typeLine:find(t) then
+	local isBasic = typeLine:find("basic land") ~= nil
+	-- "basic land card" with no named subtype: any basic land
+	if targets.anyBasic then
+		return isBasic
+	end
+	-- a fetch that names "basic <subtype>" only takes basic lands of that subtype
+	if targets.requireBasic and not isBasic then
+		return false
+	end
+	for _, t in ipairs(targets.subtypes) do
+		if typeLine:find(t) then
 			return true
 		end
 	end
@@ -69,6 +80,8 @@ end
 
 -- remove the previews belonging to a fetchland
 function clearFetchPreviews(guid)
+	-- invalidate any in-flight staggered spawn for this fetchland
+	fetchPreviewGen[guid] = (fetchPreviewGen[guid] or 0) + 1
 	local list = fetchPreviews[guid]
 	if list == nil then
 		return
@@ -124,7 +137,21 @@ function showFetchPreviews(zone, fetch)
 	local fwd = { x = math.sin(yaw), z = math.cos(yaw) }
 	local rgt = { x = math.cos(yaw), z = -math.sin(yaw) }
 	local base = fetch.getPosition()
-	for i, cardData in ipairs(matches) do
+	local fetchGuid = fetch.getGUID()
+	-- generation was just bumped by clearFetchPreviews above; capture it so the
+	-- staggered spawn below stops if a newer call supersedes this one
+	local gen = fetchPreviewGen[fetchGuid]
+
+	-- spawn the previews one per frame rather than all at once -- spawning every
+	-- matching land in a single frame causes a visible stutter
+	local function spawnPreview(i)
+		if i > #matches then
+			return
+		end
+		-- abort if this run was superseded (cleared/re-shown) or the fetch moved
+		if fetchPreviewGen[fetchGuid] ~= gen or not zoneContains(zone, fetch) then
+			return
+		end
 		local idx = i - 1
 		local row = math.floor(idx / fetchPreviewPerRow)
 		local col = idx % fetchPreviewPerRow
@@ -136,7 +163,7 @@ function showFetchPreviews(zone, fetch)
 			y = base.y + 0.5,
 			z = base.z + fwd.z * offFwd + rgt.z * offRight,
 		}
-
+		local cardData = matches[i]
 		-- tag the copy so the land tracker / fetch logic ignore it
 		cardData.Tags = { "FetchPreview" }
 		-- force the small scale in the data too (in case the spawn param is ignored)
@@ -157,7 +184,7 @@ function showFetchPreviews(zone, fetch)
 				-- record what this preview resolves to, and add a click target
 				fetchPreviewData[obj.getGUID()] = {
 					color = color,
-					fetchGuid = fetch.getGUID(),
+					fetchGuid = fetchGuid,
 					cardGuid = cardData.GUID,
 					name = mainCardName(cardData.Nickname),
 				}
@@ -174,8 +201,15 @@ function showFetchPreviews(zone, fetch)
 				})
 			end,
 		})
-		table.insert(fetchPreviews[fetch.getGUID()], preview)
+		-- the list may have been cleared between scheduling and now
+		if fetchPreviews[fetchGuid] ~= nil then
+			table.insert(fetchPreviews[fetchGuid], preview)
+		end
+		Wait.frames(function()
+			spawnPreview(i + 1)
+		end, 1)
 	end
+	spawnPreview(1)
 end
 
 -- double-click handler on a preview: only the land zone's owner can resolve it
@@ -195,14 +229,17 @@ function fetchPreviewClick(obj, color, alt)
 	end
 end
 
--- carry out a fetch: lose 1 life, pull the chosen land next to the fetchland,
--- and send the fetchland to the graveyard
+-- carry out a fetch: lose 1 life (only if the land says so), pull the chosen
+-- land next to the fetchland, and send the fetchland to the graveyard
 function resolveFetch(info)
 	local color = info.color
 	local fetch = getObjectFromGUID(info.fetchGuid)
 
-	-- 1. lose 1 life
-	loseLife(color, 1)
+	-- 1. lose 1 life, but only if the fetchland actually says "pay 1 life"
+	-- (some lands -- Evolving Wilds, panoramas, etc. -- fetch for free)
+	if fetch ~= nil and (fetch.getDescription() or ""):lower():find("pay 1 life") then
+		loseLife(color, 1)
+	end
 
 	-- 2. pull the chosen land from the library, place it next to the fetchland
 	local rotY = fetch ~= nil and fetch.getRotation().y or 0
@@ -289,10 +326,29 @@ function fetchlandEnter(zone, obj)
 	if landZoneColor(zone) == nil or fetchLandTargets(obj) == nil then
 		return
 	end
-	-- let the card settle and the library become readable
-	Wait.frames(function()
-		showFetchPreviews(zone, obj)
-	end, 5)
+	-- wait for the fetchland to come to rest before showing previews, so they
+	-- don't pop up mid-drop. Bail if it's been picked up / destroyed or has
+	-- since left the zone (fetchlandLeave handles clearing in that case).
+	Wait.condition(function()
+		if obj ~= nil and zoneContains(zone, obj) then
+			showFetchPreviews(zone, obj)
+		end
+	end, function()
+		return obj == nil or obj.resting or not zoneContains(zone, obj)
+	end)
+end
+
+-- is obj currently inside zone?
+function zoneContains(zone, obj)
+	if zone == nil or obj == nil then
+		return false
+	end
+	for _, o in ipairs(zone.getObjects()) do
+		if o == obj then
+			return true
+		end
+	end
+	return false
 end
 
 function fetchlandLeave(zone, obj)
