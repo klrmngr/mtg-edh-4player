@@ -346,6 +346,35 @@ function orientFetchedLand(card, baseY, color, forcedTapped)
 	card.setRotationSmooth({ 0, y, 0 }, false, true)
 end
 
+-- how many cards does this land's "when ~ enters the battlefield, surveil/scry N"
+-- trigger look at? returns 0 if it has no such enters-the-battlefield trigger.
+function surveilOnEnter(card)
+	if card == nil then
+		return 0
+	end
+	local desc = (card.getDescription() or ""):lower()
+	local n = desc:match("enters the battlefield, surveil (%d+)")
+		or desc:match("enters, surveil (%d+)")
+		or desc:match("enters the battlefield, scry (%d+)")
+	return tonumber(n) or 0
+end
+
+-- run any "enters the battlefield" trigger of a freshly fetched land. For surveil
+-- lands, auto-surveil for the player using the same scry primitive as the Scry
+-- button, after the post-fetch library shuffle has settled.
+function fetchedLandETB(card, color)
+	local n = surveilOnEnter(card)
+	if n <= 0 then
+		return
+	end
+	Wait.time(function()
+		Wait.time(function()
+			scry1(color)
+		end, drawDelay, n)
+	end, 0.9)
+	Player[color].broadcast("Surveil " .. n .. " from " .. mainCardName(card.getName()) .. ".")
+end
+
 -- carry out a fetch: lose 1 life (only if the land says so), pull the chosen
 -- land next to the fetchland, and send the fetchland to the graveyard
 function resolveFetch(info)
@@ -393,6 +422,7 @@ function resolveFetch(info)
 						smooth = true,
 						callback_function = function(obj)
 							orientFetchedLand(obj, baseY, color, forcedTapped)
+							fetchedLandETB(obj, color)
 						end,
 					})
 				end)
@@ -407,6 +437,7 @@ function resolveFetch(info)
 		if loose ~= nil then
 			loose.setPositionSmooth(landPos, false, true)
 			orientFetchedLand(loose, baseY, color, forcedTapped)
+			fetchedLandETB(loose, color)
 		end
 	end
 
