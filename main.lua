@@ -1195,6 +1195,9 @@ fetchPreviewRowStep = 1.8 -- vertical gap between wrapped rows
 
 -- fetchland guid -> array of spawned preview objects
 fetchPreviews = {}
+-- fetchland guid -> spawn generation; bumped on every clear so an in-flight
+-- staggered spawn (see showFetchPreviews) knows to stop
+fetchPreviewGen = {}
 -- preview guid -> { color, fetchGuid, cardGuid, name } for resolving double-clicks
 fetchPreviewData = {}
 -- preview guid -> last click time (for double-click detection)
@@ -1247,6 +1250,8 @@ end
 
 -- remove the previews belonging to a fetchland
 function clearFetchPreviews(guid)
+	-- invalidate any in-flight staggered spawn for this fetchland
+	fetchPreviewGen[guid] = (fetchPreviewGen[guid] or 0) + 1
 	local list = fetchPreviews[guid]
 	if list == nil then
 		return
@@ -1302,7 +1307,21 @@ function showFetchPreviews(zone, fetch)
 	local fwd = { x = math.sin(yaw), z = math.cos(yaw) }
 	local rgt = { x = math.cos(yaw), z = -math.sin(yaw) }
 	local base = fetch.getPosition()
-	for i, cardData in ipairs(matches) do
+	local fetchGuid = fetch.getGUID()
+	-- generation was just bumped by clearFetchPreviews above; capture it so the
+	-- staggered spawn below stops if a newer call supersedes this one
+	local gen = fetchPreviewGen[fetchGuid]
+
+	-- spawn the previews one per frame rather than all at once -- spawning every
+	-- matching land in a single frame causes a visible stutter
+	local function spawnPreview(i)
+		if i > #matches then
+			return
+		end
+		-- abort if this run was superseded (cleared/re-shown) or the fetch moved
+		if fetchPreviewGen[fetchGuid] ~= gen or not zoneContains(zone, fetch) then
+			return
+		end
 		local idx = i - 1
 		local row = math.floor(idx / fetchPreviewPerRow)
 		local col = idx % fetchPreviewPerRow
@@ -1314,7 +1333,7 @@ function showFetchPreviews(zone, fetch)
 			y = base.y + 0.5,
 			z = base.z + fwd.z * offFwd + rgt.z * offRight,
 		}
-
+		local cardData = matches[i]
 		-- tag the copy so the land tracker / fetch logic ignore it
 		cardData.Tags = { "FetchPreview" }
 		-- force the small scale in the data too (in case the spawn param is ignored)
@@ -1335,7 +1354,7 @@ function showFetchPreviews(zone, fetch)
 				-- record what this preview resolves to, and add a click target
 				fetchPreviewData[obj.getGUID()] = {
 					color = color,
-					fetchGuid = fetch.getGUID(),
+					fetchGuid = fetchGuid,
 					cardGuid = cardData.GUID,
 					name = mainCardName(cardData.Nickname),
 				}
@@ -1352,8 +1371,15 @@ function showFetchPreviews(zone, fetch)
 				})
 			end,
 		})
-		table.insert(fetchPreviews[fetch.getGUID()], preview)
+		-- the list may have been cleared between scheduling and now
+		if fetchPreviews[fetchGuid] ~= nil then
+			table.insert(fetchPreviews[fetchGuid], preview)
+		end
+		Wait.frames(function()
+			spawnPreview(i + 1)
+		end, 1)
 	end
+	spawnPreview(1)
 end
 
 -- double-click handler on a preview: only the land zone's owner can resolve it
@@ -1467,10 +1493,29 @@ function fetchlandEnter(zone, obj)
 	if landZoneColor(zone) == nil or fetchLandTargets(obj) == nil then
 		return
 	end
-	-- let the card settle and the library become readable
-	Wait.frames(function()
-		showFetchPreviews(zone, obj)
-	end, 5)
+	-- wait for the fetchland to come to rest before showing previews, so they
+	-- don't pop up mid-drop. Bail if it's been picked up / destroyed or has
+	-- since left the zone (fetchlandLeave handles clearing in that case).
+	Wait.condition(function()
+		if obj ~= nil and zoneContains(zone, obj) then
+			showFetchPreviews(zone, obj)
+		end
+	end, function()
+		return obj == nil or obj.resting or not zoneContains(zone, obj)
+	end)
+end
+
+-- is obj currently inside zone?
+function zoneContains(zone, obj)
+	if zone == nil or obj == nil then
+		return false
+	end
+	for _, o in ipairs(zone.getObjects()) do
+		if o == obj then
+			return true
+		end
+	end
+	return false
 end
 
 function fetchlandLeave(zone, obj)
