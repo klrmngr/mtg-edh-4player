@@ -5,6 +5,7 @@ SRC = \
 	src/movement.lua \
 	src/reveal.lua \
 	src/mulligan.lua \
+	src/reset.lua \
 	src/etali.lua \
 	src/landtracker.lua \
 	src/fetchland.lua \

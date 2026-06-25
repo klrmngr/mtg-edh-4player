@@ -3,6 +3,9 @@ mulliganResetDelay = 300 -- auto-reset the count after this many seconds idle
 
 -- bump a player's mulligan counter and refresh the on-table label
 function bumpMulliganCount(color)
+	-- the first bump is the opening hand: snapshot the board for the reset button
+	-- while the library is still complete (see reset.lua)
+	captureResetSnapshot(color)
 	data[color]["mulliganCount"] = (data[color]["mulliganCount"] or 0) + 1
 	data[color]["mulliganButton"].editButton({
 		index = 1,

@@ -191,6 +191,20 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		hover_color = { 1, 1, 1, 0.1 },
 		press_color = { 1, 0, 0, 0.2 },
 	})
+	-- reset button, directly under the mulligan counter (z = 1.4)
+	object.createButton({
+		click_function = "playerReset",
+		label = "Reset",
+		tooltip = "              [b]Reset Board[/b]\n[i]double-click[/i] to restore your library,\n   board, and commander to game start",
+		width = 2500,
+		height = 700,
+		position = { 0, 0.1, 2.8 },
+		font_size = 250,
+		color = { 1, 1, 1, 0 },
+		font_color = { 1, 1, 1, 100 },
+		hover_color = { 1, 1, 1, 0.1 },
+		press_color = { 1, 0, 0, 0.2 },
+	})
 end
 
 function noop() end
