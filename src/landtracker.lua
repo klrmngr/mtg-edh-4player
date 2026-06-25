@@ -129,14 +129,10 @@ function trackLandEnter(zone, obj)
 		return
 	end
 	-- wait for the card to come to rest before counting it: a card being drawn
-	-- animates through the land zone without stopping, and must not be counted
-	-- as a land played this turn. Bail if it left the zone (transit) or is gone.
-	Wait.condition(function()
-		if obj ~= nil and zoneContains(zone, obj) then
-			registerLandEntered(color, obj)
-		end
-	end, function()
-		return obj == nil or obj.resting or not zoneContains(zone, obj)
+	-- animates through the land zone without stopping, and must not be counted as
+	-- a land played this turn. whenSettledInZone skips it if it left in transit.
+	whenSettledInZone(obj, zone, function()
+		registerLandEntered(color, obj)
 	end)
 end
 

@@ -16,11 +16,7 @@ function onObjectDropped(playerColor, object)
 	if object == nil or not object.hasTag("frozenToken") then
 		return
 	end
-	Wait.condition(function()
-		freezeCardUnder(object)
-	end, function()
-		return object == nil or object.resting
-	end)
+	whenSettled(object, freezeCardUnder)
 end
 
 -- raycast straight down from the token; freeze the first card it's resting on

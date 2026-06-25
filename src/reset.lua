@@ -11,8 +11,6 @@
 -- taken by another player) and token creatures (Custom_Token) are not destroyed.
 
 resetDoubleClickSecs = 0.5
-resetLastClick = {} -- color -> last reset click time (for double-click detection)
-
 -- take the game-start snapshot for a player, once. Called from bumpMulliganCount
 -- the first time it fires, while the library is still complete.
 function captureResetSnapshot(color)
@@ -49,13 +47,9 @@ function playerReset(button, color, alt)
 	if ownerColor == nil or color ~= ownerColor then
 		return
 	end
-	local now = os.clock()
-	local last = resetLastClick[ownerColor]
-	if last ~= nil and (now - last) <= resetDoubleClickSecs then
-		resetLastClick[ownerColor] = nil
+	if isDoubleClick("reset_" .. ownerColor, resetDoubleClickSecs) then
 		doBoardReset(ownerColor)
 	else
-		resetLastClick[ownerColor] = now
 		Player[color].broadcast("Double-click Reset to restore your board to its game-start state.")
 	end
 end

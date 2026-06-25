@@ -22,8 +22,6 @@ fetchPreviews = {}
 fetchPreviewGen = {}
 -- preview guid -> { color, fetchGuid, cardGuid, name } for resolving double-clicks
 fetchPreviewData = {}
--- preview guid -> last click time (for double-click detection)
-fetchPreviewLastClick = {}
 fetchDoubleClickSecs = 0.5
 
 -- If the card is a fetch-style land, describe what it can search for; otherwise
@@ -60,7 +58,7 @@ function fetchCardMatches(nickname, targets)
 	-- match only against the type line, not the card name: nicknames are
 	-- "<name>\n<type line> <cmc>CMC", and a name can contain a subtype substring
 	-- (e.g. Misty Rainforest -> "forest") that must not count as a match
-	local typeLine = ((nickname or ""):match("[\r\n]+(.*)$") or ""):lower()
+	local typeLine = cardTypeLine(nickname)
 	if not typeLine:find("land") then
 		return false
 	end
@@ -92,7 +90,6 @@ function clearFetchPreviews(guid)
 	for _, p in ipairs(list) do
 		if p ~= nil then
 			fetchPreviewData[p.getGUID()] = nil
-			fetchPreviewLastClick[p.getGUID()] = nil
 			pcall(function()
 				destroyObject(p)
 			end)
@@ -221,14 +218,8 @@ function fetchPreviewClick(obj, color, alt)
 	if info == nil or color ~= info.color then
 		return
 	end
-	local guid = obj.getGUID()
-	local now = os.clock()
-	local last = fetchPreviewLastClick[guid]
-	if last ~= nil and (now - last) <= fetchDoubleClickSecs then
-		fetchPreviewLastClick[guid] = nil
+	if isDoubleClick(obj.getGUID(), fetchDoubleClickSecs) then
 		resolveFetch(info)
-	else
-		fetchPreviewLastClick[guid] = now
 	end
 end
 
@@ -246,8 +237,7 @@ function cardIsBasicLand(obj)
 	if obj == nil or obj.type ~= "Card" or obj.hasTag("FetchPreview") then
 		return false
 	end
-	local typeLine = (obj.getName():match("[\r\n]+(.*)$") or ""):lower()
-	return typeLine:find("basic land") ~= nil
+	return cardTypeLine(obj):find("basic land") ~= nil
 end
 
 -- how many basic lands does this player control (in their land zone)?
@@ -485,28 +475,11 @@ function fetchlandEnter(zone, obj)
 		return
 	end
 	-- wait for the fetchland to come to rest before showing previews, so they
-	-- don't pop up mid-drop. Bail if it's been picked up / destroyed or has
-	-- since left the zone (fetchlandLeave handles clearing in that case).
-	Wait.condition(function()
-		if obj ~= nil and zoneContains(zone, obj) then
-			showFetchPreviews(zone, obj)
-		end
-	end, function()
-		return obj == nil or obj.resting or not zoneContains(zone, obj)
+	-- don't pop up mid-drop. Bails if it's been picked up / destroyed or has since
+	-- left the zone (fetchlandLeave handles clearing in that case).
+	whenSettledInZone(obj, zone, function()
+		showFetchPreviews(zone, obj)
 	end)
-end
-
--- is obj currently inside zone?
-function zoneContains(zone, obj)
-	if zone == nil or obj == nil then
-		return false
-	end
-	for _, o in ipairs(zone.getObjects()) do
-		if o == obj then
-			return true
-		end
-	end
-	return false
 end
 
 function fetchlandLeave(zone, obj)
