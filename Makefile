@@ -24,6 +24,15 @@ SRC = \
 main.lua: $(SRC)
 	cat $(SRC) > main.lua
 
+# fail if the committed main.lua doesn't match a fresh build from src/ -- catches
+# edits made directly to the generated main.lua (which a rebuild would clobber)
+.PHONY: check
+check:
+	@cat $(SRC) > main.lua
+	@git diff --exit-code -- main.lua \
+		&& echo "main.lua is in sync with src/" \
+		|| { echo "ERROR: main.lua differs from src/ build -- commit the rebuild"; exit 1; }
+
 .PHONY: clean
 clean:
 	rm -f main.lua

@@ -199,5 +199,72 @@ function mainCardName(name)
 	return (name:match("^[^\r\n]*") or ""):gsub("%s+$", "")
 end
 
+-- the lowercased type line of a card: the text after the first newline in its
+-- "<name>\n<type line> <cmc>CMC" nickname. Accepts a nickname string or a card
+-- object. Returns "" if there's no type line. Matching subtypes/supertypes here
+-- (rather than the whole nickname) avoids a card name being mistaken for a type.
+function cardTypeLine(nameOrObj)
+	local name
+	if type(nameOrObj) == "string" then
+		name = nameOrObj
+	elseif nameOrObj ~= nil and nameOrObj.getName ~= nil then
+		name = nameOrObj.getName()
+	end
+	return ((name or ""):match("[\r\n]+(.*)$") or ""):lower()
+end
+
+-- is obj currently inside zone?
+function zoneContains(zone, obj)
+	if zone == nil or obj == nil then
+		return false
+	end
+	for _, o in ipairs(zone.getObjects()) do
+		if o == obj then
+			return true
+		end
+	end
+	return false
+end
+
+-- run fn(obj) once obj has come to rest. Does nothing if obj is destroyed first.
+function whenSettled(obj, fn)
+	Wait.condition(function()
+		if obj ~= nil then
+			fn(obj)
+		end
+	end, function()
+		return obj == nil or obj.resting
+	end)
+end
+
+-- run fn(obj) once obj has come to rest while still inside zone. Does nothing if
+-- obj is destroyed or leaves zone before settling (e.g. a card just passing
+-- through the zone while being drawn/moved).
+function whenSettledInZone(obj, zone, fn)
+	Wait.condition(function()
+		if obj ~= nil and zoneContains(zone, obj) then
+			fn(obj)
+		end
+	end, function()
+		return obj == nil or obj.resting or not zoneContains(zone, obj)
+	end)
+end
+
+-- double-click detection: returns true on the second call with the same key
+-- within `window` seconds (default 0.5), else false. Key it however suits the
+-- caller (object guid, player colour, ...).
+doubleClickTimes = {}
+function isDoubleClick(key, window)
+	window = window or 0.5
+	local now = os.clock()
+	local last = doubleClickTimes[key]
+	if last ~= nil and (now - last) <= window then
+		doubleClickTimes[key] = nil
+		return true
+	end
+	doubleClickTimes[key] = now
+	return false
+end
+
 function null() end
 

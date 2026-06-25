@@ -58,36 +58,20 @@ function playerMulligan(button, playerColor, alt)
 		if playerColor ~= ownerColor then
 			return
 		end
-		if nMullClick == nil then
-			nMullClick = 1
-		else
-			nMullClick = nMullClick + 1
-		end
-		Wait.time(function()
-			nMullClick = 0
-		end, 0.5)
-
-		local proceed = true
-		local playmat = data[playerColor]["playmat"]
-		for k, v in pairs(playmat.getObjects()) do
-			if (v.type == "Card" or v.type == "Deck") and nMullClick < 2 then
-				proceed = false
+		-- with cards already in the play area, require a double-click so an
+		-- accidental mid-game press doesn't wipe the board into a mulligan
+		local cardsInPlay = false
+		for _, v in pairs(data[playerColor]["playmat"].getObjects()) do
+			if v.type == "Card" or v.type == "Deck" then
+				cardsInPlay = true
+				break
 			end
 		end
-		if not proceed then
-			if mulliganSatety == nil then
-				mulliganSatety = true
-			end
-			if mulliganSatety then
-				Player[playerColor].broadcast(
-					"Cards detected in the play area = accidental mulligan press in the middle of a game?\n"
-						.. "If you still wish to mulligan, [b]double click[/b] the button."
-				)
-				mulliganSatety = false
-				Wait.time(function()
-					mulliganSatety = true
-				end, 10)
-			end
+		if cardsInPlay and not isDoubleClick("mull_" .. playerColor) then
+			Player[playerColor].broadcast(
+				"Cards detected in the play area = accidental mulligan press in the middle of a game?\n"
+					.. "If you still wish to mulligan, [b]double click[/b] the button."
+			)
 			return
 		end
 

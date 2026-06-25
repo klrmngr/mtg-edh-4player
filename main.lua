@@ -813,36 +813,20 @@ function playerMulligan(button, playerColor, alt)
 		if playerColor ~= ownerColor then
 			return
 		end
-		if nMullClick == nil then
-			nMullClick = 1
-		else
-			nMullClick = nMullClick + 1
-		end
-		Wait.time(function()
-			nMullClick = 0
-		end, 0.5)
-
-		local proceed = true
-		local playmat = data[playerColor]["playmat"]
-		for k, v in pairs(playmat.getObjects()) do
-			if (v.type == "Card" or v.type == "Deck") and nMullClick < 2 then
-				proceed = false
+		-- with cards already in the play area, require a double-click so an
+		-- accidental mid-game press doesn't wipe the board into a mulligan
+		local cardsInPlay = false
+		for _, v in pairs(data[playerColor]["playmat"].getObjects()) do
+			if v.type == "Card" or v.type == "Deck" then
+				cardsInPlay = true
+				break
 			end
 		end
-		if not proceed then
-			if mulliganSatety == nil then
-				mulliganSatety = true
-			end
-			if mulliganSatety then
-				Player[playerColor].broadcast(
-					"Cards detected in the play area = accidental mulligan press in the middle of a game?\n"
-						.. "If you still wish to mulligan, [b]double click[/b] the button."
-				)
-				mulliganSatety = false
-				Wait.time(function()
-					mulliganSatety = true
-				end, 10)
-			end
+		if cardsInPlay and not isDoubleClick("mull_" .. playerColor) then
+			Player[playerColor].broadcast(
+				"Cards detected in the play area = accidental mulligan press in the middle of a game?\n"
+					.. "If you still wish to mulligan, [b]double click[/b] the button."
+			)
 			return
 		end
 
@@ -972,8 +956,6 @@ end
 -- taken by another player) and token creatures (Custom_Token) are not destroyed.
 
 resetDoubleClickSecs = 0.5
-resetLastClick = {} -- color -> last reset click time (for double-click detection)
-
 -- take the game-start snapshot for a player, once. Called from bumpMulliganCount
 -- the first time it fires, while the library is still complete.
 function captureResetSnapshot(color)
@@ -1010,13 +992,9 @@ function playerReset(button, color, alt)
 	if ownerColor == nil or color ~= ownerColor then
 		return
 	end
-	local now = os.clock()
-	local last = resetLastClick[ownerColor]
-	if last ~= nil and (now - last) <= resetDoubleClickSecs then
-		resetLastClick[ownerColor] = nil
+	if isDoubleClick("reset_" .. ownerColor, resetDoubleClickSecs) then
 		doBoardReset(ownerColor)
 	else
-		resetLastClick[ownerColor] = now
 		Player[color].broadcast("Double-click Reset to restore your board to its game-start state.")
 	end
 end
@@ -1295,14 +1273,10 @@ function trackLandEnter(zone, obj)
 		return
 	end
 	-- wait for the card to come to rest before counting it: a card being drawn
-	-- animates through the land zone without stopping, and must not be counted
-	-- as a land played this turn. Bail if it left the zone (transit) or is gone.
-	Wait.condition(function()
-		if obj ~= nil and zoneContains(zone, obj) then
-			registerLandEntered(color, obj)
-		end
-	end, function()
-		return obj == nil or obj.resting or not zoneContains(zone, obj)
+	-- animates through the land zone without stopping, and must not be counted as
+	-- a land played this turn. whenSettledInZone skips it if it left in transit.
+	whenSettledInZone(obj, zone, function()
+		registerLandEntered(color, obj)
 	end)
 end
 
@@ -1370,8 +1344,6 @@ fetchPreviews = {}
 fetchPreviewGen = {}
 -- preview guid -> { color, fetchGuid, cardGuid, name } for resolving double-clicks
 fetchPreviewData = {}
--- preview guid -> last click time (for double-click detection)
-fetchPreviewLastClick = {}
 fetchDoubleClickSecs = 0.5
 
 -- If the card is a fetch-style land, describe what it can search for; otherwise
@@ -1408,7 +1380,7 @@ function fetchCardMatches(nickname, targets)
 	-- match only against the type line, not the card name: nicknames are
 	-- "<name>\n<type line> <cmc>CMC", and a name can contain a subtype substring
 	-- (e.g. Misty Rainforest -> "forest") that must not count as a match
-	local typeLine = ((nickname or ""):match("[\r\n]+(.*)$") or ""):lower()
+	local typeLine = cardTypeLine(nickname)
 	if not typeLine:find("land") then
 		return false
 	end
@@ -1440,7 +1412,6 @@ function clearFetchPreviews(guid)
 	for _, p in ipairs(list) do
 		if p ~= nil then
 			fetchPreviewData[p.getGUID()] = nil
-			fetchPreviewLastClick[p.getGUID()] = nil
 			pcall(function()
 				destroyObject(p)
 			end)
@@ -1569,22 +1540,24 @@ function fetchPreviewClick(obj, color, alt)
 	if info == nil or color ~= info.color then
 		return
 	end
-	local guid = obj.getGUID()
-	local now = os.clock()
-	local last = fetchPreviewLastClick[guid]
-	if last ~= nil and (now - last) <= fetchDoubleClickSecs then
-		fetchPreviewLastClick[guid] = nil
+	if isDoubleClick(obj.getGUID(), fetchDoubleClickSecs) then
 		resolveFetch(info)
-	else
-		fetchPreviewLastClick[guid] = now
 	end
 end
 
 -- map a spelled-out (or numeric) count to a number, e.g. "two" -> 2
 function wordToCount(w)
 	local words = {
-		one = 1, two = 2, three = 3, four = 4, five = 5,
-		six = 6, seven = 7, eight = 8, nine = 9, ten = 10,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
 	}
 	return words[w] or tonumber(w)
 end
@@ -1594,8 +1567,7 @@ function cardIsBasicLand(obj)
 	if obj == nil or obj.type ~= "Card" or obj.hasTag("FetchPreview") then
 		return false
 	end
-	local typeLine = (obj.getName():match("[\r\n]+(.*)$") or ""):lower()
-	return typeLine:find("basic land") ~= nil
+	return cardTypeLine(obj):find("basic land") ~= nil
 end
 
 -- how many basic lands does this player control (in their land zone)?
@@ -1833,28 +1805,11 @@ function fetchlandEnter(zone, obj)
 		return
 	end
 	-- wait for the fetchland to come to rest before showing previews, so they
-	-- don't pop up mid-drop. Bail if it's been picked up / destroyed or has
-	-- since left the zone (fetchlandLeave handles clearing in that case).
-	Wait.condition(function()
-		if obj ~= nil and zoneContains(zone, obj) then
-			showFetchPreviews(zone, obj)
-		end
-	end, function()
-		return obj == nil or obj.resting or not zoneContains(zone, obj)
+	-- don't pop up mid-drop. Bails if it's been picked up / destroyed or has since
+	-- left the zone (fetchlandLeave handles clearing in that case).
+	whenSettledInZone(obj, zone, function()
+		showFetchPreviews(zone, obj)
 	end)
-end
-
--- is obj currently inside zone?
-function zoneContains(zone, obj)
-	if zone == nil or obj == nil then
-		return false
-	end
-	for _, o in ipairs(zone.getObjects()) do
-		if o == obj then
-			return true
-		end
-	end
-	return false
 end
 
 function fetchlandLeave(zone, obj)
@@ -1902,11 +1857,7 @@ function onObjectDropped(playerColor, object)
 	if object == nil or not object.hasTag("frozenToken") then
 		return
 	end
-	Wait.condition(function()
-		freezeCardUnder(object)
-	end, function()
-		return object == nil or object.resting
-	end)
+	whenSettled(object, freezeCardUnder)
 end
 
 -- raycast straight down from the token; freeze the first card it's resting on
@@ -2204,7 +2155,11 @@ function buttonCooldown(button, T)
 	for i, but in pairs(buts) do
 		-- skip display-only labels and the serum powder button so their text
 		-- isn't mirrored during a neighbouring button's cooldown
-		if but.click_function ~= "noop" and but.click_function ~= "playerSerumPowder" and but.click_function ~= "playerEtali" then
+		if
+			but.click_function ~= "noop"
+			and but.click_function ~= "playerSerumPowder"
+			and but.click_function ~= "playerEtali"
+		then
 			local oldRot = but.rotation
 			local ind = but.index
 			button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 180 } })
@@ -2327,6 +2282,73 @@ function mainCardName(name)
 		return ""
 	end
 	return (name:match("^[^\r\n]*") or ""):gsub("%s+$", "")
+end
+
+-- the lowercased type line of a card: the text after the first newline in its
+-- "<name>\n<type line> <cmc>CMC" nickname. Accepts a nickname string or a card
+-- object. Returns "" if there's no type line. Matching subtypes/supertypes here
+-- (rather than the whole nickname) avoids a card name being mistaken for a type.
+function cardTypeLine(nameOrObj)
+	local name
+	if type(nameOrObj) == "string" then
+		name = nameOrObj
+	elseif nameOrObj ~= nil and nameOrObj.getName ~= nil then
+		name = nameOrObj.getName()
+	end
+	return ((name or ""):match("[\r\n]+(.*)$") or ""):lower()
+end
+
+-- is obj currently inside zone?
+function zoneContains(zone, obj)
+	if zone == nil or obj == nil then
+		return false
+	end
+	for _, o in ipairs(zone.getObjects()) do
+		if o == obj then
+			return true
+		end
+	end
+	return false
+end
+
+-- run fn(obj) once obj has come to rest. Does nothing if obj is destroyed first.
+function whenSettled(obj, fn)
+	Wait.condition(function()
+		if obj ~= nil then
+			fn(obj)
+		end
+	end, function()
+		return obj == nil or obj.resting
+	end)
+end
+
+-- run fn(obj) once obj has come to rest while still inside zone. Does nothing if
+-- obj is destroyed or leaves zone before settling (e.g. a card just passing
+-- through the zone while being drawn/moved).
+function whenSettledInZone(obj, zone, fn)
+	Wait.condition(function()
+		if obj ~= nil and zoneContains(zone, obj) then
+			fn(obj)
+		end
+	end, function()
+		return obj == nil or obj.resting or not zoneContains(zone, obj)
+	end)
+end
+
+-- double-click detection: returns true on the second call with the same key
+-- within `window` seconds (default 0.5), else false. Key it however suits the
+-- caller (object guid, player colour, ...).
+doubleClickTimes = {}
+function isDoubleClick(key, window)
+	window = window or 0.5
+	local now = os.clock()
+	local last = doubleClickTimes[key]
+	if last ~= nil and (now - last) <= window then
+		doubleClickTimes[key] = nil
+		return true
+	end
+	doubleClickTimes[key] = now
+	return false
 end
 
 function null() end
@@ -4243,7 +4265,11 @@ function showPatchNotes(obj, color, alt)
 	end
 	WebRequest.get(RELEASES_API, function(req)
 		if req.is_error then
-			broadcastToColor("Patch notes: couldn't reach GitHub (" .. tostring(req.error) .. ")", color, { 1, 0.4, 0.4 })
+			broadcastToColor(
+				"Patch notes: couldn't reach GitHub (" .. tostring(req.error) .. ")",
+				color,
+				{ 1, 0.4, 0.4 }
+			)
 			return
 		end
 		local releases = JSONdecode(req.text)
