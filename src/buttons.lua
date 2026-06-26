@@ -177,20 +177,9 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		hover_color = { 1, 1, 1, 0.1 },
 		press_color = { 1, 0, 0, 0.2 },
 	})
-	-- etali button, directly under the serum powder button
-	object.createButton({
-		click_function = "playerEtali",
-		label = "Etali",
-		tooltip = "                  [b]Etali[/b]\nreveal each library until a nonland:\n  lands go to that player's exile,\n  the nonland comes to you",
-		width = 4000,
-		height = 1000,
-		position = { lp.x, 0.1, lp.z + 1.8 },
-		font_size = 500,
-		color = { 1, 1, 1, 0 },
-		font_color = { 1, 1, 1, 100 },
-		hover_color = { 1, 1, 1, 0.1 },
-		press_color = { 1, 0, 0, 0.2 },
-	})
+	-- (the Etali button is no longer here -- it spawns under the command zone only
+	-- when a player starts a game with Etali, Primal Conqueror as their commander;
+	-- see etali.lua)
 	-- reset button, directly under the mulligan counter (z = 1.4)
 	object.createButton({
 		click_function = "playerReset",

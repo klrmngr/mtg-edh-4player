@@ -8,6 +8,8 @@ function bumpMulliganCount(color)
 	-- for the reset button while the library is still complete (see reset.lua)
 	if (data[color]["mulliganCount"] or 0) == 0 then
 		captureResetSnapshot(color, true)
+		-- show/hide this player's Etali button based on their command zone now
+		refreshEtaliButton(color)
 	end
 	data[color]["mulliganCount"] = (data[color]["mulliganCount"] or 0) + 1
 	data[color]["mulliganButton"].editButton({
@@ -162,10 +164,11 @@ function playerSerumPowder(button, playerColor, alt)
 	end, 2)
 	buttonPress(button, 0.5)
 
-	-- step 2: exile the current hand (stacked just past the library, like move2exile)
-	local zone = data[playerColor]["libraryZone"]
-	local exileRotY = zone.getRotation().y + exileRot
-	local exilePos = zone.getPosition() + zone.getTransformForward():scale(exileFor)
+	-- step 2: exile the current hand (stacked on the dedicated exile zone, which
+	-- keeps placement correct regardless of how the zones are rotated)
+	local zone = data[playerColor]["exileZone"]
+	local exileRotY = zone.getRotation().y
+	local exilePos = zone.getPosition()
 	local i = 0
 	for _, card in pairs(cards) do
 		card.use_hands = false

@@ -41,7 +41,6 @@ function onload()
 	revealUpS = 3.1
 	revealRi = 1.5
 	exileRot = -180
-	exileFor = 4.16
 	gravFor = -4.14
 
 	spawnPatchNotesButton()
