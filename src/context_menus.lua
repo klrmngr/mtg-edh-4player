@@ -67,6 +67,8 @@ function onObjectEnterZone(zone, obj)
 	trackLandEnter(zone, obj)
 	-- fetchlands: show previews of fetchable lands above them (see fetchland.lua)
 	fetchlandEnter(zone, obj)
+	-- double-faced cards: flip to a land back face dropped in a land zone (dfc.lua)
+	dfcLandEnter(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false

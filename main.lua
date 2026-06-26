@@ -2438,6 +2438,42 @@ function initFetchlands()
 		end
 	end
 end
+-------------------------------- DOUBLE-FACED CARDS ----------------------------
+-- A double-faced card is a TTS object with two states (state 1 = front face,
+-- state 2 = back face). When such a card is dropped into a player's land zone and
+-- its back face is a land (per the type line, the 2nd line of that face's name),
+-- flip it to the back face. Called from onObjectEnterZone (context_menus.lua).
+function dfcLandEnter(zone, obj)
+	if obj == nil or obj.type ~= "Card" then
+		return
+	end
+	if landZoneColor(zone) == nil then
+		return -- not a land zone
+	end
+	local states = obj.getStates()
+	if states == nil or #states == 0 then
+		return -- single-faced card
+	end
+	-- map each state's name by id; getStates() may omit the active state, so add it
+	local names = {}
+	for _, st in ipairs(states) do
+		names[st.id] = st.name
+	end
+	names[obj.getStateId()] = obj.getName()
+	local backName = names[2]
+	if backName == nil or not nameTypeLineIsLand(backName) then
+		return -- no back face, or it isn't a land
+	end
+	if obj.getStateId() == 2 then
+		return -- already showing the land face
+	end
+	-- wait until it settles, and only flip if it's still in the land zone
+	whenSettledInZone(obj, zone, function(o)
+		if o.getStateId() ~= 2 then
+			o.setState(2)
+		end
+	end)
+end
 -------------------------------- FROZEN TOKENS ---------------------------------
 -- Tokens drawn from the frozen bags, when dropped onto a card, apply the Frozen
 -- keyword (mtg_frozen, the same flag the Untap button respects) to that card and
@@ -2888,6 +2924,13 @@ function cardIsInstantOrSorcery(card)
 	return nameIsInstantOrSorcery(card.getName())
 end
 
+-- does the type line (2nd line of the nickname) name a land? used to spot a
+-- double-faced card whose back face is a land
+function nameTypeLineIsLand(name)
+	local typeLine = ((name or ""):match("\n([^\r\n]*)") or ""):lower()
+	return typeLine:find("land") ~= nil
+end
+
 -- write text into a card's "Notepad[sup]π[/sup]" Encoder prop (propID "πotepad",
 -- value note = { text, editON }). Mirrors frozen.lua's πKeywords handling.
 function setCardNotepad(card, text)
@@ -3059,6 +3102,8 @@ function onObjectEnterZone(zone, obj)
 	trackLandEnter(zone, obj)
 	-- fetchlands: show previews of fetchable lands above them (see fetchland.lua)
 	fetchlandEnter(zone, obj)
+	-- double-faced cards: flip to a land back face dropped in a land zone (dfc.lua)
+	dfcLandEnter(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false
