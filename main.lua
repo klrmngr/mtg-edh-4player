@@ -759,9 +759,12 @@ mulliganResetDelay = 300 -- auto-reset the count after this many seconds idle
 
 -- bump a player's mulligan counter and refresh the on-table label
 function bumpMulliganCount(color)
-	-- the first bump is the opening hand: snapshot the board for the reset button
-	-- while the library is still complete (see reset.lua)
-	captureResetSnapshot(color)
+	-- a bump while the count sits at 0 is a fresh opening hand (the very first one,
+	-- or the first after a right-click / inactivity reset): (re)snapshot the board
+	-- for the reset button while the library is still complete (see reset.lua)
+	if (data[color]["mulliganCount"] or 0) == 0 then
+		captureResetSnapshot(color, true)
+	end
 	data[color]["mulliganCount"] = (data[color]["mulliganCount"] or 0) + 1
 	data[color]["mulliganButton"].editButton({
 		index = 1,
@@ -957,10 +960,15 @@ end
 -- taken by another player) and token creatures (Custom_Token) are not destroyed.
 
 resetDoubleClickSecs = 0.5
--- take the game-start snapshot for a player, once. Called from bumpMulliganCount
--- the first time it fires, while the library is still complete.
-function captureResetSnapshot(color)
-	if data[color] == nil or data[color]["resetSnapshot"] ~= nil then
+-- take the game-start snapshot for a player. Called from bumpMulliganCount on
+-- each fresh opening hand (count at 0), while the library is still complete.
+-- Without force, an existing snapshot is kept; force overwrites it so a new game
+-- after a mulligan-count reset re-snapshots the (possibly different) library.
+function captureResetSnapshot(color, force)
+	if data[color] == nil then
+		return
+	end
+	if data[color]["resetSnapshot"] ~= nil and not force then
 		return
 	end
 	local snap = { commanders = {} }

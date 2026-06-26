@@ -11,10 +11,15 @@
 -- taken by another player) and token creatures (Custom_Token) are not destroyed.
 
 resetDoubleClickSecs = 0.5
--- take the game-start snapshot for a player, once. Called from bumpMulliganCount
--- the first time it fires, while the library is still complete.
-function captureResetSnapshot(color)
-	if data[color] == nil or data[color]["resetSnapshot"] ~= nil then
+-- take the game-start snapshot for a player. Called from bumpMulliganCount on
+-- each fresh opening hand (count at 0), while the library is still complete.
+-- Without force, an existing snapshot is kept; force overwrites it so a new game
+-- after a mulligan-count reset re-snapshots the (possibly different) library.
+function captureResetSnapshot(color, force)
+	if data[color] == nil then
+		return
+	end
+	if data[color]["resetSnapshot"] ~= nil and not force then
 		return
 	end
 	local snap = { commanders = {} }
