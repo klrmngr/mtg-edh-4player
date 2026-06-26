@@ -6,7 +6,9 @@ SRC = \
 	src/reveal.lua \
 	src/mulligan.lua \
 	src/reset.lua \
+	src/command_buttons.lua \
 	src/etali.lua \
+	src/coinflip.lua \
 	src/landtracker.lua \
 	src/fetchland.lua \
 	src/frozen.lua \

@@ -193,6 +193,44 @@ function cardIsLand(card)
 	return (name or ""):lower():find("land") ~= nil
 end
 
+-- the card nickname's second line is its type line (see mainCardName), so an
+-- instant/sorcery is detected by "instant"/"sorcery" appearing there
+function nameIsInstantOrSorcery(name)
+	local typeLine = ((name or ""):match("\n([^\r\n]*)") or ""):lower()
+	return typeLine:find("instant") ~= nil or typeLine:find("sorcery") ~= nil
+end
+
+-- as above, for a live card object (vs. a deck-contained card's name string)
+function cardIsInstantOrSorcery(card)
+	if card == nil or card.getName == nil then
+		return false
+	end
+	return nameIsInstantOrSorcery(card.getName())
+end
+
+-- write text into a card's "Notepad[sup]π[/sup]" Encoder prop (propID "πotepad",
+-- value note = { text, editON }). Mirrors frozen.lua's πKeywords handling.
+function setCardNotepad(card, text)
+	local enc = Global.getVar("Encoder")
+	if enc == nil or card == nil then
+		return
+	end
+	if enc.call("APIobjectExists", { obj = card }) == false then
+		enc.call("APIencodeObject", { obj = card })
+	end
+	if enc.call("APIobjIsPropEnabled", { obj = card, propID = "πotepad" }) == false then
+		enc.call("APIobjEnableProp", { obj = card, propID = "πotepad" })
+	end
+	local data = enc.call("APIobjGetPropData", { obj = card, propID = "πotepad" })
+	if data == nil then
+		return
+	end
+	data.note = data.note or { editON = true }
+	data.note.text = text
+	enc.call("APIobjSetPropData", { obj = card, propID = "πotepad", data = data })
+	enc.call("APIrebuildButtons", { obj = card })
+end
+
 -- card nicknames in this mod are "<name>\n<type line> <cmc>CMC" (the importer
 -- appends the type line and CMC on following lines). Return just the displayed
 -- card name: the first line, trimmed.
