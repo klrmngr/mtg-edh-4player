@@ -133,11 +133,12 @@ function move2exile(ply)
 		if gr.type == "Card" then
 			handTrigger(gr)
 		end
+		-- anchor on the dedicated exile zone so placement survives zone rotation
+		local zone = data[ply]["exileZone"]
 		local rot = gr.getRotation()
 		rot.z = 0
-		rot.y = data[ply]["libraryZone"].getRotation().y + exileRot
-		local pos = data[ply]["libraryZone"].getPosition()
-			+ data[ply]["libraryZone"].getTransformForward():scale(exileFor)
+		rot.y = zone.getRotation().y
+		local pos = zone.getPosition()
 		pos[2] = 3
 		gr.setRotationSmooth(rot, false, true)
 		gr.setPositionSmooth(pos, false, true)

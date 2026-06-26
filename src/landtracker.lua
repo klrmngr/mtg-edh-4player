@@ -74,6 +74,8 @@ end
 -- starting player's land zone and clear their entered-this-turn list
 function onPlayerTurnStart(player_color_start, player_color_previous)
 	clearLandGlows()
+	-- the previous player's turn just ended -- drop their Etali glow if it's theirs
+	maybeClearEtaliGlows(player_color_previous)
 	if data[player_color_start] ~= nil then
 		resetLandTracker(player_color_start)
 	end
