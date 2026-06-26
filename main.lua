@@ -2146,9 +2146,14 @@ end
 function buttonCooldown(button, T)
 	buts = button.getButtons()
 	for i, but in pairs(buts) do
-		-- skip display-only labels and the serum powder button so their text
-		-- isn't mirrored during a neighbouring button's cooldown
-		if but.click_function ~= "noop" and but.click_function ~= "playerSerumPowder" and but.click_function ~= "playerEtali" then
+		-- skip display-only labels and the serum powder / etali / reset buttons so
+		-- their text isn't mirrored during a neighbouring button's cooldown
+		if
+			but.click_function ~= "noop"
+			and but.click_function ~= "playerSerumPowder"
+			and but.click_function ~= "playerEtali"
+			and but.click_function ~= "playerReset"
+		then
 			local oldRot = but.rotation
 			local ind = but.index
 			button.editButton({ index = ind, rotation = { x = oldRot.x, y = oldRot.y, z = 180 } })
