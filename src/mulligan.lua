@@ -153,6 +153,19 @@ function playerSerumPowder(button, playerColor, alt)
 		return
 	end
 
+	-- there must actually be a Serum Powder card in hand to powder
+	local hasPowder = false
+	for _, card in ipairs(cards) do
+		if mainCardName(card.getName()):lower() == "serum powder" then
+			hasPowder = true
+			break
+		end
+	end
+	if not hasPowder then
+		Player[playerColor].broadcast("Serum Powder: no Serum Powder card in your hand.")
+		return
+	end
+
 	local deck = getDeckFromZone(data[playerColor]["libraryZone"])
 	if deck == nil then
 		Player[playerColor].broadcast("Serum Powder: no library found.")
