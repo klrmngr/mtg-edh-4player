@@ -1,4 +1,25 @@
 ------------------------------------ REVEAL ------------------------------------
+-- world position of the n-th card (0-based) in the fanned-reveal layout above
+-- ply's library, and the matching face-up rotation. The library zone was rotated
+-- ~180°, so the offsets are negated and the card facing drops the old +180.
+-- Shared by the reveal buttons and the Ral abilities.
+function revealFanPos(ply, n)
+	local libZone = data[ply]["libraryZone"]
+	local nUp = math.floor(n / revealNrow)
+	local nSide = n - nUp * revealNrow
+	local forw = libZone.getTransformForward()
+	local righ = libZone.getTransformRight()
+	return libZone.getPosition()
+		+ forw:scale(-(revealUp + revealUpS * nUp))
+		+ righ:scale(-deckDirs[ply] * 2.25 * (nSide + revealRi))
+end
+
+function revealFanRot(ply)
+	local rot = data[ply]["libraryZone"].getRotation()
+	rot[3] = 0
+	return rot
+end
+
 function revealFan(button, ply, alt)
 	if button ~= data[ply]["revealButton"] then
 		return
@@ -25,16 +46,8 @@ function revealFan(button, ply, alt)
 		revealedCMC[ply] = 0
 	end
 	button.memo = tostring(now)
-	local nUp = math.floor(nRevealed / revealNrow)
-	local nSide = nRevealed - nUp * revealNrow
-	local forw = libZone.getTransformForward()
-	local righ = libZone.getTransformRight()
-	local pos = libZone.getPosition()
-		+ forw:scale(revealUp + revealUpS * nUp)
-		+ righ:scale(deckDirs[ply] * 2.25 * (nSide + revealRi))
-	local rot = libZone.getRotation()
-	rot[2] = rot[2] + 180
-	rot[3] = 0
+	local pos = revealFanPos(ply, nRevealed)
+	local rot = revealFanRot(ply)
 	checkPosMove(pos, libZone)
 	card.setPositionSmooth(pos, false, true)
 	card.setRotationSmooth(rot, false, true)
@@ -70,10 +83,11 @@ function revealStack(button, ply, alt)
 		revealedCMC[ply] = 0
 	end
 	button.memo = tostring(now)
+	-- as in revealFan: the library zone was rotated ~180°, so negate the side
+	-- offset and drop the old +180 on the card facing
 	local righ = libZone.getTransformRight()
-	local pos = libZone.getPosition() + vector(0, 2, 0) + righ:scale(deckDirs[ply] * 2.4)
+	local pos = libZone.getPosition() + vector(0, 2, 0) + righ:scale(-deckDirs[ply] * 2.4)
 	local rot = libZone.getRotation()
-	rot[2] = rot[2] + 180
 	rot[3] = 0
 	card.setPositionSmooth(pos, false, true)
 	card.setRotationSmooth(rot, false, true)

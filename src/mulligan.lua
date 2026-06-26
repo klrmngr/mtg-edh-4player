@@ -8,8 +8,9 @@ function bumpMulliganCount(color)
 	-- for the reset button while the library is still complete (see reset.lua)
 	if (data[color]["mulliganCount"] or 0) == 0 then
 		captureResetSnapshot(color, true)
-		-- show/hide this player's Etali button based on their command zone now
+		-- show/hide this player's commander buttons based on their command zone now
 		refreshEtaliButton(color)
+		refreshRalButton(color)
 	end
 	data[color]["mulliganCount"] = (data[color]["mulliganCount"] or 0) + 1
 	data[color]["mulliganButton"].editButton({
