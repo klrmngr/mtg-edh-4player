@@ -208,6 +208,13 @@ function cardIsInstantOrSorcery(card)
 	return nameIsInstantOrSorcery(card.getName())
 end
 
+-- does the type line (2nd line of the nickname) name a land? used to spot a
+-- double-faced card whose back face is a land
+function nameTypeLineIsLand(name)
+	local typeLine = ((name or ""):match("\n([^\r\n]*)") or ""):lower()
+	return typeLine:find("land") ~= nil
+end
+
 -- write text into a card's "Notepad[sup]π[/sup]" Encoder prop (propID "πotepad",
 -- value note = { text, editON }). Mirrors frozen.lua's πKeywords handling.
 function setCardNotepad(card, text)
