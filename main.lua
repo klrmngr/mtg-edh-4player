@@ -5147,29 +5147,17 @@ end
 -- User-Agent and re-serves the bytes to TTS. Triggered manually via the "Fix Card
 -- Images" context-menu item that gets attached to every card/deck (see below).
 --------------------------------------------------------------------------------
-IMAGE_PROXY = "https://images.weserv.nl/?url="
+IMAGE_HOST = "https://img.klrmngr.com"
 
 function proxyImageURL(url)
 	if type(url) ~= "string" or url == "" then
 		return url
 	end
-	-- only rewrite Scryfall CDN images; leave custom backs / other hosts alone
-	if not url:find("cards%.scryfall%.io") then
-		return url
-	end
-	-- already proxied
-	if url:find("images%.weserv%.nl") then
-		return url
-	end
-	-- Drop the scheme, then percent-encode "?" and "&" so the Scryfall URL nests
-	-- inside weserv's own "url" query param. We must KEEP the "?<timestamp>" --
-	-- some Scryfall large/normal jpgs now 404 without it. weserv re-encodes the
-	-- image (incl. progressive jpg -> baseline), so TTS can always decode it.
-	local src = url:gsub("^https?://", "")
-	src = src:gsub("[?&]", function(c)
-		return string.format("%%%02X", string.byte(c))
-	end)
-	return IMAGE_PROXY .. src
+	-- Serve Scryfall card images from our own R2-backed cache (img.klrmngr.com)
+	-- instead of cards.scryfall.io, which 400s on TTS's default UnityPlayer
+	-- User-Agent. Keep the path + ?timestamp; the cache serves by path and the
+	-- mirrored images are baseline JPEGs, so TTS can always decode them.
+	return (url:gsub("https?://cards%.scryfall%.io", IMAGE_HOST))
 end
 
 function proxyFixImages(playerColor, menuPosition, obj)
