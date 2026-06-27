@@ -11,10 +11,15 @@ This keeps pushes small and reliable (pushing all ~117 scripts at once is
 after a fresh tts_pull.
 
 Usage:
-    python tts_push.py [path/to/script.lua] [path/to/ui.xml] [objects_dir] [--all]
+    python tts_push.py [path/to/script.lua] [path/to/ui.xml] [objects_dir] [--all] [--log]
 
 Defaults to main.lua, ui.xml, and ./objects next to the script.
 TTS must be running with a save open.
+
+--log also tails TTS's Unity Player.log and prints its lines (prefixed "[log]"),
+which is the only place engine messages like image-load failures
+("load image failed unsupported format: UNKNOWN") show up -- they are NOT sent
+over the editor socket. Override the auto-detected path with env var TTS_LOG.
 """
 
 import json
@@ -117,16 +122,28 @@ def handle_tts_message(conn: socket.socket) -> None:
             return
 
         mid = msg.get("messageID")
-        if mid == 1:
+        if mid == 0:
+            print("[tts] pushing new object script")
+        elif mid == 1:
             print("[tts] game reloaded ok")
         elif mid == 2:
-            print(f"[tts] print: {msg.get('message', '').strip()}")
+            # Print/debug messages = the in-game console (print(), log(), and
+            # engine notices). This is where image-load failures show up.
+            print(f"[tts] log: {msg.get('message', '').rstrip()}")
         elif mid == 3:
             guid = msg.get("guid", "?")
+            prefix = msg.get("errorMessagePrefix", "").strip()
             error = msg.get("error", "unknown error").strip()
-            print(f"[tts] ERROR (guid={guid}): {error}")
+            print(f"[tts] ERROR (guid={guid}): {prefix}{(' ' if prefix else '')}{error}")
+        elif mid == 5:
+            print(f"[tts] return ({msg.get('returnID', '?')}): {msg.get('returnValue')}")
         elif mid == 6:
             print("[tts] game saved")
+        elif mid == 7:
+            print(f"[tts] object created (guid={msg.get('guid', '?')})")
+        else:
+            # never silently drop anything TTS sends
+            print(f"[tts] msg (id={mid}): {json.dumps(msg)[:1000]}")
 
 
 def listen_for_tts() -> None:
@@ -145,6 +162,61 @@ def listen_for_tts() -> None:
                 threading.Thread(target=handle_tts_message, args=(conn,), daemon=True).start()
             except Exception:
                 break
+
+
+# Where TTS writes its Unity Player.log -- engine output plus the image-load
+# failures ("load image failed unsupported format: UNKNOWN") that never reach the
+# external-editor socket. First existing / most-recently-modified path wins.
+TTS_LOG_CANDIDATES = (
+    "~/.config/unity3d/Berserk Games/Tabletop Simulator/Player.log",
+    "~/.steam/steam/steamapps/compatdata/286160/pfx/drive_c/users/steamuser/"
+    "AppData/LocalLow/Berserk Games/Tabletop Simulator/Player.log",
+    "~/.local/share/Steam/steamapps/compatdata/286160/pfx/drive_c/users/steamuser/"
+    "AppData/LocalLow/Berserk Games/Tabletop Simulator/Player.log",
+)
+
+# Noisy Unity lines that would otherwise drown out the messages we care about.
+LOG_SKIP = (
+    "Unloading ",
+    "Total: ",
+    "BoxCollider does not support",
+    "The effective box size",
+    "If you absolutely need to use negative scaling",
+    "cloud.unity3d.com",  # Unity telemetry curl spam (not weserv/scryfall)
+)
+
+
+def find_tts_log() -> str:
+    existing = [os.path.expanduser(p) for p in TTS_LOG_CANDIDATES]
+    existing = [p for p in existing if os.path.exists(p)]
+    return max(existing, key=os.path.getmtime) if existing else ""
+
+
+def tail_tts_log(path: str) -> None:
+    """Follow TTS's Player.log and print new lines (the in-game/engine log)."""
+    print(f"[log] tailing {path}")
+    while True:
+        try:
+            with open(path, "r", encoding="utf-8", errors="replace") as f:
+                f.seek(0, os.SEEK_END)
+                inode = os.fstat(f.fileno()).st_ino
+                while True:
+                    line = f.readline()
+                    if line:
+                        s = line.rstrip()
+                        if s and not any(skip in s for skip in LOG_SKIP):
+                            print(f"[log] {s}")
+                        continue
+                    time.sleep(0.3)
+                    # reopen if TTS rotated/truncated the log (it rewrites on launch)
+                    try:
+                        st = os.stat(path)
+                        if st.st_ino != inode or st.st_size < f.tell():
+                            break
+                    except FileNotFoundError:
+                        break
+        except FileNotFoundError:
+            time.sleep(1.0)
 
 
 def collect_mtimes(script_path: str, ui_path: str, objects_dir: str) -> dict:
@@ -189,12 +261,20 @@ def watch(script_path: str, ui_path: str, objects_dir: str, push_all: bool) -> N
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     push_all = "--all" in sys.argv
+    tail_log = "--log" in sys.argv
 
     path = os.path.abspath(args[0]) if len(args) > 0 else os.path.abspath("main.lua")
     ui_path = os.path.abspath(args[1]) if len(args) > 1 else os.path.join(os.path.dirname(path), "ui.xml")
     objects_dir = os.path.abspath(args[2]) if len(args) > 2 else os.path.join(os.path.dirname(path), "objects")
 
     threading.Thread(target=listen_for_tts, daemon=True).start()
+
+    if tail_log:
+        log_path = os.environ.get("TTS_LOG") or find_tts_log()
+        if log_path and os.path.exists(log_path):
+            threading.Thread(target=tail_tts_log, args=(log_path,), daemon=True).start()
+        else:
+            print("[log] WARNING: --log set but no TTS Player.log found (set TTS_LOG=/path/to/Player.log)")
 
     try:
         watch(path, ui_path, objects_dir, push_all)
