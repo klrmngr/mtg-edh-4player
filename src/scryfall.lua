@@ -469,9 +469,15 @@ function proxyImageURL(url)
 	if url:find("images%.weserv%.nl") then
 		return url
 	end
-	-- drop scheme + any ?query so the source nests cleanly in the proxy's url param
-	local clean = url:gsub("^https?://", ""):gsub("%?.*", "")
-	return IMAGE_PROXY .. clean
+	-- Drop the scheme, then percent-encode "?" and "&" so the Scryfall URL nests
+	-- inside weserv's own "url" query param. We must KEEP the "?<timestamp>" --
+	-- some Scryfall large/normal jpgs now 404 without it. weserv re-encodes the
+	-- image (incl. progressive jpg -> baseline), so TTS can always decode it.
+	local src = url:gsub("^https?://", "")
+	src = src:gsub("[?&]", function(c)
+		return string.format("%%%02X", string.byte(c))
+	end)
+	return IMAGE_PROXY .. src
 end
 
 function proxyFixImages(playerColor, menuPosition, obj)
