@@ -34,3 +34,7 @@ python tts_push.py
 ```
 
 Releases are versioned with git tags (`vX.Y.Z`); bump `VERSION` in `src/patchnotes.lua` when cutting one.
+
+## Fix Card Images:
+
+This band-aid fix currently relies on a third party image proxy. I will be removing this dependency soon, probably with self hosted bulk downloads of scryfall card images.
