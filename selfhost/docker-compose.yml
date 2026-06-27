@@ -1,0 +1,33 @@
+# Self-hosted Scryfall image cache for the TTS mod.
+#
+# - `img`:        nginx serving the local ./scryfall-mirror (built by
+#                 scryfall_mirror.py). Mirror-first; falls back to the weserv
+#                 proxy for any card not yet mirrored, so TTS never 404s.
+# - `cloudflared`: exposes `img` to the internet through a Cloudflare Tunnel
+#                 (no port-forwarding, free TLS + edge caching). The tunnel
+#                 reaches nginx as http://img:80 over the compose network.
+#
+# Setup: see ../SELFHOST.md. Put your tunnel token in selfhost/.env first.
+
+services:
+  img:
+    image: nginx:alpine
+    restart: unless-stopped
+    volumes:
+      - ../scryfall-mirror:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - nginx-cache:/var/cache/nginx
+    expose:
+      - "80"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    depends_on:
+      - img
+
+volumes:
+  nginx-cache:
