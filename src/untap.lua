@@ -70,6 +70,8 @@ function playerUntap(button, playerColor, alt)
 				end
 			end
 		end
+	else
+		warnNotYours(button, playerColor)
 	end
 end
 

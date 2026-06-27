@@ -11,6 +11,8 @@ function playerDraw(button, playerColor, alt)
 				draw1(playerColor)
 			end, drawDelay, nAlt)
 		end
+	else
+		warnNotYours(button, playerColor)
 	end
 end
 
@@ -39,6 +41,8 @@ function playerMill(button, playerColor, alt)
 				mill1(playerColor)
 			end, drawDelay, nAlt)
 		end
+	else
+		warnNotYours(button, playerColor)
 	end
 end
 
@@ -71,6 +75,8 @@ function playerScry(button, playerColor, alt)
 				scry1(playerColor)
 			end, drawDelay, nAlt)
 		end
+	else
+		warnNotYours(button, playerColor)
 	end
 end
 

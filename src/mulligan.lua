@@ -11,6 +11,8 @@ function bumpMulliganCount(color)
 		-- show/hide this player's commander buttons based on their command zone now
 		refreshEtaliButton(color)
 		refreshRalButton(color)
+		-- deal goblin sticker cards if their commander is "_____ Goblin" (once)
+		refreshGoblinStickers(color)
 	end
 	data[color]["mulliganCount"] = (data[color]["mulliganCount"] or 0) + 1
 	data[color]["mulliganButton"].editButton({
@@ -58,10 +60,14 @@ function playerMulligan(button, playerColor, alt)
 		if alt then
 			-- right-click: anyone may reset this player's mulligan count
 			resetMulliganCount(ownerColor)
+			-- re-arm goblin stickers so the next opening hand re-deals (manual reset
+			-- only -- the inactivity timer must not wipe stickers mid-game)
+			data[ownerColor]["goblinStickersDealt"] = nil
 			return
 		end
 		-- left-click: only the owning player may mulligan their own hand
 		if playerColor ~= ownerColor then
+			warnNotYours(button, playerColor)
 			return
 		end
 		-- with cards already in the play area, require a double-click so an
@@ -131,6 +137,7 @@ end
 -- then it drops by one per additional mulligan.
 function playerSerumPowder(button, playerColor, alt)
 	if button ~= data[playerColor]["mulliganButton"] then
+		warnNotYours(button, playerColor)
 		return
 	end
 	if data[playerColor]["serumCooldown"] then

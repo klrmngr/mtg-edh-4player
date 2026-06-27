@@ -50,6 +50,7 @@ function playerReset(button, color, alt)
 		end
 	end
 	if ownerColor == nil or color ~= ownerColor then
+		warnNotYours(button, color)
 		return
 	end
 	if isDoubleClick("reset_" .. ownerColor, resetDoubleClickSecs) then
