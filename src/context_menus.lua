@@ -4,6 +4,7 @@ function addZoneContextMenus()
 	for color, playerData in pairs(data) do
 		for _, obj in pairs(playerData["libraryZone"].getObjects()) do
 			if obj.type == "Deck" and not (obj.getName():lower():find("planechase")) then
+				obj.addContextMenuItem("Fix Card Images", proxyFixImages)
 				obj.addContextMenuItem("Cascade for X", deckCascade)
 				obj.addContextMenuItem("Reveal until Type", deckSeachType)
 				addLandContextMenus(obj)
@@ -11,6 +12,7 @@ function addZoneContextMenus()
 		end
 		for _, obj in pairs(playerData["playmat"].getObjects()) do
 			if obj.type == "Card" then
+				obj.addContextMenuItem("Fix Card Images", proxyFixImages)
 				obj.addContextMenuItem("Make Token Copy", cardToken)
 				if obj.getDescription():lower():find("cascade") then
 					obj.addContextMenuItem("Cascade", cardCascade)
@@ -90,6 +92,9 @@ function onObjectEnterZone(zone, obj)
 		end
 	end
 	obj.clearContextMenu()
+	if obj.type == "Card" or obj.type == "Deck" then
+		obj.addContextMenuItem("Fix Card Images", proxyFixImages)
+	end
 	if obj.type == "Card" then
 		-- obj.addContextMenuItem('Encoder Menu',toggleEncMenu)
 	end
@@ -142,6 +147,9 @@ function onObjectLeaveZone(zone, obj)
 		end
 	end
 	obj.clearContextMenu()
+	if obj.type == "Card" or obj.type == "Deck" then
+		obj.addContextMenuItem("Fix Card Images", proxyFixImages)
+	end
 	if obj.type == "Card" then
 		-- obj.addContextMenuItem('Encoder Menu',toggleEncMenu)
 	end

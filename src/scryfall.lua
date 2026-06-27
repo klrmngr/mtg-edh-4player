@@ -445,3 +445,91 @@ function encodeString(str)
 	return output
 end
 
+--------------------------------------------------------------------------------
+------------ PROXY FIX: re-route Scryfall card images via an image proxy --------
+-- Scryfall now rejects requests that use a default HTTP-library User-Agent with
+-- HTTP 400 ("generic_user_agent"). TTS downloads card textures with its own
+-- Unity User-Agent and gives us no way to change it, so images fetched straight
+-- from cards.scryfall.io fail to load ("unsupported format: UNKNOWN"). Instead we
+-- route the image through an image proxy that fetches from Scryfall with its own
+-- User-Agent and re-serves the bytes to TTS. Triggered manually via the "Fix Card
+-- Images" context-menu item that gets attached to every card/deck (see below).
+--------------------------------------------------------------------------------
+IMAGE_PROXY = "https://images.weserv.nl/?url="
+
+function proxyImageURL(url)
+	if type(url) ~= "string" or url == "" then
+		return url
+	end
+	-- only rewrite Scryfall CDN images; leave custom backs / other hosts alone
+	if not url:find("cards%.scryfall%.io") then
+		return url
+	end
+	-- already proxied
+	if url:find("images%.weserv%.nl") then
+		return url
+	end
+	-- drop scheme + any ?query so the source nests cleanly in the proxy's url param
+	local clean = url:gsub("^https?://", ""):gsub("%?.*", "")
+	return IMAGE_PROXY .. clean
+end
+
+function proxyFixImages(playerColor, menuPosition, obj)
+	-- context-menu callbacks pass the object as the 3rd arg; fall back to selection
+	if obj == nil and playerColor and Player[playerColor] then
+		obj = Player[playerColor].getSelectedObjects()[1]
+	end
+	if obj == nil or not (obj.type == "Card" or obj.type == "Deck") then
+		if playerColor then
+			broadcastToColor("Fix Images: right-click a card or deck.", playerColor, { 1, 0.6, 0.2 })
+		end
+		return
+	end
+
+	local d = obj.getData()
+	local changed = 0
+	local function rewriteCustomDeck(cdTable)
+		if type(cdTable) ~= "table" then
+			return
+		end
+		for _, cd in pairs(cdTable) do
+			local f, b = cd.FaceURL, cd.BackURL
+			cd.FaceURL = proxyImageURL(f)
+			cd.BackURL = proxyImageURL(b)
+			if cd.FaceURL ~= f then
+				changed = changed + 1
+			end
+			if cd.BackURL ~= b then
+				changed = changed + 1
+			end
+		end
+	end
+
+	rewriteCustomDeck(d.CustomDeck)
+	-- decks carry per-card CustomDeck tables on their contained objects too
+	if d.ContainedObjects then
+		for _, co in ipairs(d.ContainedObjects) do
+			rewriteCustomDeck(co.CustomDeck)
+		end
+	end
+
+	if changed == 0 then
+		broadcastToColor("Fix Images: no Scryfall images found on this object.", playerColor, { 1, 0.6, 0.2 })
+		return
+	end
+
+	destroyObject(obj)
+	spawnObjectData({ data = d })
+	broadcastToColor("Fix Images: re-routed " .. changed .. " image(s) through the proxy.", playerColor, { 0.4, 1, 0.4 })
+end
+
+-- attach the manual fix to every newly spawned card/deck (imported cards land here)
+function onObjectSpawn(obj)
+	if obj == nil then
+		return
+	end
+	if obj.type == "Card" or obj.type == "Deck" then
+		obj.addContextMenuItem("Fix Card Images", proxyFixImages)
+	end
+end
+
