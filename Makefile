@@ -9,6 +9,7 @@ SRC = \
 	src/command_buttons.lua \
 	src/etali.lua \
 	src/coinflip.lua \
+	src/stickers.lua \
 	src/landtracker.lua \
 	src/fetchland.lua \
 	src/dfc.lua \

@@ -630,6 +630,7 @@ end
 
 function revealFan(button, ply, alt)
 	if button ~= data[ply]["revealButton"] then
+		warnNotYours(button, ply)
 		return
 	end
 	if alt then
@@ -667,6 +668,7 @@ end
 
 function revealStack(button, ply, alt)
 	if button ~= data[ply]["revealButton"] then
+		warnNotYours(button, ply)
 		return
 	end
 	if alt then
@@ -770,6 +772,8 @@ function bumpMulliganCount(color)
 		-- show/hide this player's commander buttons based on their command zone now
 		refreshEtaliButton(color)
 		refreshRalButton(color)
+		-- deal goblin sticker cards if their commander is "_____ Goblin" (once)
+		refreshGoblinStickers(color)
 	end
 	data[color]["mulliganCount"] = (data[color]["mulliganCount"] or 0) + 1
 	data[color]["mulliganButton"].editButton({
@@ -817,10 +821,14 @@ function playerMulligan(button, playerColor, alt)
 		if alt then
 			-- right-click: anyone may reset this player's mulligan count
 			resetMulliganCount(ownerColor)
+			-- re-arm goblin stickers so the next opening hand re-deals (manual reset
+			-- only -- the inactivity timer must not wipe stickers mid-game)
+			data[ownerColor]["goblinStickersDealt"] = nil
 			return
 		end
 		-- left-click: only the owning player may mulligan their own hand
 		if playerColor ~= ownerColor then
+			warnNotYours(button, playerColor)
 			return
 		end
 		-- with cards already in the play area, require a double-click so an
@@ -890,6 +898,7 @@ end
 -- then it drops by one per additional mulligan.
 function playerSerumPowder(button, playerColor, alt)
 	if button ~= data[playerColor]["mulliganButton"] then
+		warnNotYours(button, playerColor)
 		return
 	end
 	if data[playerColor]["serumCooldown"] then
@@ -1019,6 +1028,7 @@ function playerReset(button, color, alt)
 		end
 	end
 	if ownerColor == nil or color ~= ownerColor then
+		warnNotYours(button, color)
 		return
 	end
 	if isDoubleClick("reset_" .. ownerColor, resetDoubleClickSecs) then
@@ -1758,6 +1768,155 @@ function pifNext(color, queue, idx)
 		return not card.spawning
 	end)
 end
+------------------------------- GOBLIN STICKERS --------------------------------
+-- When a game starts (the same hook as Etali/Ral -- see bumpMulliganCount) with a
+-- "_____ Goblin" card in the player's library (deck), deal that player 3 random
+-- sticker cards from the locked bag onto their board, once. Each dealt card's name
+-- is three words; we write the word with the most unique vowels (y counts), every
+-- vowel capitalised, plus the count, into its π Notepad.
+
+GOBLIN_STICKER_BAG = "3d4dca" -- locked infinite bag of sticker cards
+GOBLIN_STICKER_COUNT = 3
+goblinStickerSpacing = 2.5 -- gap between dealt cards along the mat's right axis
+goblinStickerForward = 0 -- offset along the mat's forward axis (tune placement)
+
+-- the "_____ Goblin" card: first-line name is underscores followed by "goblin"
+function isGoblinName(name)
+	return mainCardName(name):lower():match("^_+%s*goblin") ~= nil
+end
+
+-- does this player's library (deck) contain the "_____ Goblin" card? scans the
+-- library zone for the deck (or any loose cards) and checks their card names
+function libraryHasGoblin(color)
+	local lz = data[color] and data[color]["libraryZone"]
+	if lz == nil then
+		return false
+	end
+	for _, obj in ipairs(lz.getObjects()) do
+		if obj.type == "Card" then
+			if isGoblinName(obj.getName()) then
+				return true
+			end
+		elseif obj.type == "Deck" then
+			for _, c in ipairs(obj.getObjects()) do
+				if isGoblinName(c.name) then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+
+-- game-start hook: once per player, deal the stickers if they have the Goblin
+function refreshGoblinStickers(color)
+	if data[color] == nil or data[color]["goblinStickersDealt"] then
+		return
+	end
+	if not libraryHasGoblin(color) then
+		return
+	end
+	data[color]["goblinStickersDealt"] = true
+	dealGoblinStickers(color)
+end
+
+-- n distinct random entries from a list
+function pickRandomEntries(list, n)
+	local pool = {}
+	for _, v in ipairs(list) do
+		table.insert(pool, v)
+	end
+	local out = {}
+	for _ = 1, math.min(n, #pool) do
+		local idx = math.random(#pool)
+		table.insert(out, pool[idx])
+		table.remove(pool, idx)
+	end
+	return out
+end
+
+-- destroy this player's previously dealt sticker cards
+function clearGoblinStickers(color)
+	if data[color] == nil then
+		return
+	end
+	for _, card in ipairs(data[color]["goblinStickers"] or {}) do
+		if card ~= nil then
+			pcall(function()
+				destroyObject(card)
+			end)
+		end
+	end
+	data[color]["goblinStickers"] = {}
+end
+
+-- pull a fresh deck of 10 sticker cards from the infinite bag (a clone, so the bag
+-- isn't depleted), then deal 3 random cards from it. Replaces any previous stickers.
+function dealGoblinStickers(color)
+	local bag = getObjectFromGUID(GOBLIN_STICKER_BAG)
+	if bag == nil then
+		return
+	end
+	clearGoblinStickers(color) -- replace any previously dealt stickers (resets the list)
+	local mat = data[color]["playmat"]
+	local stagePos = mat.getPosition()
+	stagePos.y = 6 -- stage the deck above the board, out of the way
+	bag.takeObject({
+		position = stagePos,
+		smooth = false,
+		callback_function = function(deck)
+			Wait.condition(function()
+				dealFromStickerDeck(color, deck)
+			end, function()
+				return deck == nil or not deck.spawning
+			end)
+		end,
+	})
+end
+
+-- deal 3 random cards from a freshly-pulled sticker deck onto color's board,
+-- centred in a row with their sticker notes, then discard the rest of the deck
+function dealFromStickerDeck(color, deck)
+	if deck == nil then
+		return
+	end
+	deck.setLock(true) -- keep the staging deck from falling onto the board
+	local cards = deck.getObjects()
+	if cards == nil or #cards == 0 then
+		pcall(function()
+			destroyObject(deck)
+		end)
+		return
+	end
+	local picks = pickRandomEntries(cards, GOBLIN_STICKER_COUNT)
+	local mat = data[color]["playmat"]
+	for i, entry in ipairs(picks) do
+		local pos = mat.getPosition()
+			+ mat.getTransformRight():scale((i - (#picks + 1) / 2) * goblinStickerSpacing)
+			+ mat.getTransformForward():scale(goblinStickerForward)
+		pos.y = 3
+		local card = deck.takeObject({
+			guid = entry.guid,
+			position = pos,
+			rotation = { 0, mat.getRotation().y, 0 },
+			smooth = false,
+		})
+		if card ~= nil then
+			table.insert(data[color]["goblinStickers"], card)
+			whenSettled(card, function(c)
+				setCardNotepad(c, stickerNotepad(mainCardName(c.getName())))
+			end)
+		end
+	end
+	-- discard the leftover deck once the takes have processed
+	Wait.time(function()
+		if deck ~= nil then
+			pcall(function()
+				destroyObject(deck)
+			end)
+		end
+	end, 1)
+end
 --------------------------------- LAND TRACKER ---------------------------------
 -- Per-player land / mana display. This will eventually replace the standalone
 -- Land_Zone_Manager object. For now it renders text anchored to each player's
@@ -2168,8 +2327,16 @@ end
 -- map a spelled-out (or numeric) count to a number, e.g. "two" -> 2
 function wordToCount(w)
 	local words = {
-		one = 1, two = 2, three = 3, four = 4, five = 5,
-		six = 6, seven = 7, eight = 8, nine = 9, ten = 10,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
 	}
 	return words[w] or tonumber(w)
 end
@@ -2621,6 +2788,8 @@ function playerUntap(button, playerColor, alt)
 				end
 			end
 		end
+	else
+		warnNotYours(button, playerColor)
 	end
 end
 
@@ -2637,6 +2806,8 @@ function playerDraw(button, playerColor, alt)
 				draw1(playerColor)
 			end, drawDelay, nAlt)
 		end
+	else
+		warnNotYours(button, playerColor)
 	end
 end
 
@@ -2665,6 +2836,8 @@ function playerMill(button, playerColor, alt)
 				mill1(playerColor)
 			end, drawDelay, nAlt)
 		end
+	else
+		warnNotYours(button, playerColor)
 	end
 end
 
@@ -2697,6 +2870,8 @@ function playerScry(button, playerColor, alt)
 				scry1(playerColor)
 			end, drawDelay, nAlt)
 		end
+	else
+		warnNotYours(button, playerColor)
 	end
 end
 
@@ -2779,6 +2954,29 @@ function getDeckFromZone(zone)
 		end
 	end
 	return deck
+end
+
+-- the per-player buttons that live on a token belonging to one colour
+buttonOwnerKeys = { "drawButton", "scryButton", "millButton", "untapButton", "mulliganButton", "revealButton" }
+
+-- reverse-lookup the owner colour of a per-player button object, or nil
+function buttonOwner(obj)
+	for color, pdata in pairs(data) do
+		for _, key in ipairs(buttonOwnerKeys) do
+			if pdata[key] == obj then
+				return color
+			end
+		end
+	end
+	return nil
+end
+
+-- if obj is another player's button, tell the clicker it isn't theirs
+function warnNotYours(obj, clickerColor)
+	local owner = buttonOwner(obj)
+	if owner ~= nil and owner ~= clickerColor then
+		Player[clickerColor].broadcast("That's " .. owner .. "'s button -- you can only use your own.", { 1, 0.6, 0.2 })
+	end
 end
 
 -- button press animation
@@ -2965,6 +3163,32 @@ function setCardNotepad(card, text)
 	data.note.text = text
 	enc.call("APIobjSetPropData", { obj = card, propID = "πotepad", data = data })
 	enc.call("APIrebuildButtons", { obj = card })
+end
+
+-- For a sticker card's space-separated name (e.g. "space fungus snickerdoodle"),
+-- return the word with the most unique vowels ("y" counts), lowercased with every
+-- vowel capitalised, then a space and that count -- e.g. "snIckErdOOdlE 3".
+function stickerNotepad(name)
+	local best, bestCount = nil, -1
+	for word in (name or ""):gmatch("%S+") do
+		local lower = word:lower()
+		local seen = {}
+		for ch in lower:gmatch("[aeiouy]") do
+			seen[ch] = true
+		end
+		local count = 0
+		for _ in pairs(seen) do
+			count = count + 1
+		end
+		if count > bestCount then
+			bestCount = count
+			best = lower
+		end
+	end
+	if best == nil then
+		return ""
+	end
+	return (best:gsub("[aeiouy]", string.upper)) .. " " .. bestCount
 end
 
 -- card nicknames in this mod are "<name>\n<type line> <cmc>CMC" (the importer
@@ -5025,7 +5249,11 @@ function showPatchNotes(obj, color, alt)
 	end
 	WebRequest.get(RELEASES_API, function(req)
 		if req.is_error then
-			broadcastToColor("Patch notes: couldn't reach GitHub (" .. tostring(req.error) .. ")", color, { 1, 0.4, 0.4 })
+			broadcastToColor(
+				"Patch notes: couldn't reach GitHub (" .. tostring(req.error) .. ")",
+				color,
+				{ 1, 0.4, 0.4 }
+			)
 			return
 		end
 		local releases = JSONdecode(req.text)

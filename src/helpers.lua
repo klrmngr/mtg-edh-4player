@@ -52,6 +52,32 @@ function getDeckFromZone(zone)
 	return deck
 end
 
+-- the per-player buttons that live on a token belonging to one colour
+buttonOwnerKeys = { "drawButton", "scryButton", "millButton", "untapButton", "mulliganButton", "revealButton" }
+
+-- reverse-lookup the owner colour of a per-player button object, or nil
+function buttonOwner(obj)
+	for color, pdata in pairs(data) do
+		for _, key in ipairs(buttonOwnerKeys) do
+			if pdata[key] == obj then
+				return color
+			end
+		end
+	end
+	return nil
+end
+
+-- if obj is another player's button, tell the clicker it isn't theirs
+function warnNotYours(obj, clickerColor)
+	local owner = buttonOwner(obj)
+	if owner ~= nil and owner ~= clickerColor then
+		Player[clickerColor].broadcast(
+			"That's " .. owner .. "'s button -- you can only use your own.",
+			{ 1, 0.6, 0.2 }
+		)
+	end
+end
+
 -- button press animation
 function buttonPress(button, T)
 	local posUp = button.getPosition()
@@ -236,6 +262,32 @@ function setCardNotepad(card, text)
 	data.note.text = text
 	enc.call("APIobjSetPropData", { obj = card, propID = "πotepad", data = data })
 	enc.call("APIrebuildButtons", { obj = card })
+end
+
+-- For a sticker card's space-separated name (e.g. "space fungus snickerdoodle"),
+-- return the word with the most unique vowels ("y" counts), lowercased with every
+-- vowel capitalised, then a space and that count -- e.g. "snIckErdOOdlE 3".
+function stickerNotepad(name)
+	local best, bestCount = nil, -1
+	for word in (name or ""):gmatch("%S+") do
+		local lower = word:lower()
+		local seen = {}
+		for ch in lower:gmatch("[aeiouy]") do
+			seen[ch] = true
+		end
+		local count = 0
+		for _ in pairs(seen) do
+			count = count + 1
+		end
+		if count > bestCount then
+			bestCount = count
+			best = lower
+		end
+	end
+	if best == nil then
+		return ""
+	end
+	return (best:gsub("[aeiouy]", string.upper)) .. " " .. bestCount
 end
 
 -- card nicknames in this mod are "<name>\n<type line> <cmc>CMC" (the importer

@@ -22,6 +22,7 @@ end
 
 function revealFan(button, ply, alt)
 	if button ~= data[ply]["revealButton"] then
+		warnNotYours(button, ply)
 		return
 	end
 	if alt then
@@ -59,6 +60,7 @@ end
 
 function revealStack(button, ply, alt)
 	if button ~= data[ply]["revealButton"] then
+		warnNotYours(button, ply)
 		return
 	end
 	if alt then
