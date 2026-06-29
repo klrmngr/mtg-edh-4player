@@ -11,6 +11,7 @@ SRC = \
 	src/coinflip.lua \
 	src/stickers.lua \
 	src/landtracker.lua \
+	src/restricted_abilities.lua \
 	src/fetchland.lua \
 	src/dfc.lua \
 	src/frozen.lua \
