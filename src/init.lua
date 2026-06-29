@@ -135,6 +135,16 @@ function registerObjectGUIDs()
 			end
 		end
 	end
+
+	-- Commander-damage trackers grouped by the player who *receives* the damage.
+	-- A tracker's Description is its *source* colour (the dealer), not the
+	-- recipient -- a player's own board holds one tracker per opponent, so the
+	-- recipient is the colour missing from that cluster. The GUID lists below
+	-- capture that recipient -> trackers mapping.
+	data["White"]["commanderDamage"] = { "0f6598", "6b6e1f", "b748df" }
+	data["Red"]["commanderDamage"] = { "4bfa09", "95eb63", "d5907a" }
+	data["Yellow"]["commanderDamage"] = { "45331a", "484c38", "906d4b" }
+	data["Blue"]["commanderDamage"] = { "8d172a", "bfcf4a", "f43e61" }
 end
 
 props = {
