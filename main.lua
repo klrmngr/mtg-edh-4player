@@ -2843,10 +2843,16 @@ function freezeCardUnder(token)
 	token.destruct()
 end
 ------------------------------------- UNTAP ------------------------------------
+-- when each player last pressed their own untap-all button (os.time seconds).
+-- A draw within skipDrawWindow seconds of this is treated as the turn's draw
+-- step (see playerDraw's skip-your-draw-step handling in draw.lua).
+lastUntapPress = {}
+
 -- stolen from Untapper Tool by Tipsy Hobbit//STEAM_0:1:13465982
 function playerUntap(button, playerColor, alt)
 	if button == data[playerColor]["untapButton"] then
 		buttonPress(button, drawDelay * 0.75)
+		lastUntapPress[playerColor] = os.time()
 		local playmat = data[playerColor]["playmat"]
 		local enc = Global.getVar("Encoder")
 		local ry = playmat.getRotation()
@@ -2920,10 +2926,49 @@ function playerUntap(button, playerColor, alt)
 end
 
 ------------------------------------- DRAW -------------------------------------
+-- a draw within this many seconds of pressing untap-all counts as the turn's
+-- draw step, so a "skip your draw step" card should stop it
+skipDrawWindow = 5
+
+-- the display name of a face-up card on this player's playmat that makes them
+-- skip their draw step, or nil if they control none
+function skipDrawStepCard(playerColor)
+	local mat = data[playerColor]["playmat"]
+	if mat == nil then
+		return nil
+	end
+	for _, obj in ipairs(mat.getObjects()) do
+		if obj.type == "Card" and not obj.is_face_down then
+			local desc = (obj.getDescription() or ""):lower()
+			if desc:find("skip your draw step", 1, true) or desc:find("skip your next draw step", 1, true) then
+				return mainCardName(obj.getName())
+			end
+		end
+	end
+	return nil
+end
+
 function playerDraw(button, playerColor, alt)
 	if button == data[playerColor]["drawButton"] then
 		if not alt then
 			buttonPress(button, drawDelay * 0.75)
+			-- if this draw is the turn's draw step (pressed soon after untap) and a
+			-- card forces this player to skip it, remind them instead of drawing.
+			-- the draw step is a single draw, so consume the window either way.
+			local drawStep = lastUntapPress[playerColor] ~= nil
+				and (os.time() - lastUntapPress[playerColor]) <= skipDrawWindow
+			lastUntapPress[playerColor] = nil
+			if drawStep then
+				local skipper = skipDrawStepCard(playerColor)
+				if skipper ~= nil then
+					broadcastToColor(
+						"Draw skipped: " .. skipper .. " makes you skip your draw step. (alt-click to draw anyway.)",
+						playerColor,
+						{ 0.9, 0.3, 0.3 }
+					)
+					return
+				end
+			end
 			draw1(playerColor)
 		else
 			buttonPress(button, drawDelay * nAlt)
