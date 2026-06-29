@@ -40,8 +40,8 @@
   "HideWhenFaceDown": false,
   "Hands": false,
   "CustomImage": {
-    "ImageURL": "https://cards.scryfall.io/art_crop/front/0/a/0a5718db-e67d-468a-95ba-11a08fcf9fea.jpg",
-    "ImageSecondaryURL": "https://cards.scryfall.io/art_crop/front/0/a/0a5718db-e67d-468a-95ba-11a08fcf9fea.jpg",
+    "ImageURL": "https://img.klrmngr.com/art_crop/front/0/a/0a5718db-e67d-468a-95ba-11a08fcf9fea.jpg",
+    "ImageSecondaryURL": "https://img.klrmngr.com/art_crop/front/0/a/0a5718db-e67d-468a-95ba-11a08fcf9fea.jpg",
     "ImageScalar": 1.0,
     "WidthScale": 0.0,
     "CustomTile": {

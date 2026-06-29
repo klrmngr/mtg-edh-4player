@@ -24,7 +24,7 @@ local checkUpdateTimeout = 1
 --========================================
 local globalVar = "MTGImporterDX"
 
-local DEFAULT_BACK_URL = "https://cards.scryfall.io/back.png"
+local DEFAULT_BACK_URL = "https://img.klrmngr.com/back.png"
 
 -- Scryfall batching
 local BATCH_SIZE  = 75

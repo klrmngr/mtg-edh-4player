@@ -52,7 +52,7 @@ faceDownTypes={
                             name="Cyberman",
                             cardName="[i]Cyberman[/i]\nArtifact Creature — Cyberman 0CMC",
                             cardDesc="[i](This face-down permanent is a 2/2 colorless, nameless Cyberman artifact creature.)[/i] \n[b]2/2[/b]",
-                            url='https://cards.scryfall.io/png/front/9/b/9bc273b8-05bb-4c8f-92b1-c178d4bbadb0.png',
+                            url='https://img.klrmngr.com/png/front/9/b/9bc273b8-05bb-4c8f-92b1-c178d4bbadb0.png',
                             },
                             
     mtg_faceDownCloak=      {

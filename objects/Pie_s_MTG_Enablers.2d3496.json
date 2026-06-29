@@ -151,8 +151,8 @@
           "SidewaysCard": false,
           "CustomDeck": {
             "118136": {
-              "FaceURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/4/74177b51-a300-49d9-8ea7-557b19cf80c7.jpg",
-              "BackURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/4/74177b51-a300-49d9-8ea7-557b19cf80c7.jpg",
+              "FaceURL": "https://img.klrmngr.com/art_crop/front/7/4/74177b51-a300-49d9-8ea7-557b19cf80c7.jpg",
+              "BackURL": "https://img.klrmngr.com/art_crop/front/7/4/74177b51-a300-49d9-8ea7-557b19cf80c7.jpg",
               "NumWidth": 1,
               "NumHeight": 1,
               "BackIsHidden": true,
@@ -206,7 +206,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://cards.scryfall.io/png/front/5/2/52942a5c-0552-4a9b-9c0f-7a9ffd04d0af.png?1664344308",
+            "ImageURL": "https://img.klrmngr.com/png/front/5/2/52942a5c-0552-4a9b-9c0f-7a9ffd04d0af.png",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -263,7 +263,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/f/9/f953fad3-0cd1-48aa-8ed9-d7d2e293e6e2.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/f/9/f953fad3-0cd1-48aa-8ed9-d7d2e293e6e2.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -274,7 +274,7 @@
               "Stretch": true
             }
           },
-          "LuaScript": "function onLoad(savedat)\r\n  line1='at the beginning of each upkeep, if no spells were cast last turn, transform'\r\n  line2='at the beginning of each upkeep, if a player cast two or more spells last turn, transform'\r\n  if savedat and savedat~='' then\r\n    state=tonumber(savedat)\r\n  else\r\n    state=1\r\n  end\r\n  data=Global.getTable('data')\r\n  plys=Player.getAvailableColors()\r\n  enc = Global.getVar('Encoder')\r\n  makeButtons()\r\nend\r\n\r\nfunction makeButtons()\r\n  self.clearButtons()\r\n  if state==1 then\r\n    self.highlightOff()\r\n    self.highlightOn({1,1,0.5})\r\n    self.createButton({\r\n      click_function='switchState',\r\n      function_owner=self,\r\n      label='switch to [i][b]night[/b][/i]\\nhumans to [i][b]werewolves[/b][/i]',\r\n      position={0,0.1,0},\r\n      scale={0.5,0.5,0.5},\r\n      width=2200,\r\n      height=1000,\r\n      font_size=200,\r\n      color={0,0,0,0.7},\r\n      font_color={1,1,1,1/0.7}\r\n    })\r\n  elseif state==2 then\r\n    self.highlightOff()\r\n    self.highlightOn({0,0,0.5})\r\n    self.createButton({\r\n      click_function='switchState',\r\n      function_owner=self,\r\n      label='switch to [i][b]day[/b][/i]\\nwerewolves to [i][b]humans[/b][/i]',\r\n      position={0,0.1,0},\r\n      scale={0.5,0.5,0.5},\r\n      width=2200,\r\n      height=1000,\r\n      font_size=200,\r\n      color={0,0,0,0.7},\r\n      font_color={1,1,1,1/0.7}\r\n    })\r\n  end\r\nend\r\n\r\nfunction switchState(_,plyCol)\r\n  state=3-state\r\n  makeButtons()\r\n\r\n  if state==1 then\r\n    self.script_state = '1'\r\n    for _,ply in pairs(plys) do\r\n      for _,card in pairs(data[ply].playmat.getObjects()) do\r\n        if card.type=='Card' and card.getName()~='[b]Day[/b]' and (card.getDescription():lower():match('nightbound') or ( card.getDescription():lower():match(line2)) and ply==plyCol ) then\r\n          card=card.setState(1)\r\n          enc.call(\"APIencodeObject\",{obj=card})\r\n          enc.call(\"APIobjEnableProp\",{obj=card, propID = \"_MTG_Simplified_UNIFIED\"})\r\n          enc.call(\"APIrebuildButtons\",{obj=card})\r\n          pcall(function() Wait.time(function() card.highlightOn({1,1,0.5},0.1) end,0.2,5) end)\r\n        end\r\n      end\r\n    end\r\n    dat=self.getCustomObject()\r\n    dat.image='https://c1.scryfall.com/file/scryfall-cards/art_crop/front/f/9/f953fad3-0cd1-48aa-8ed9-d7d2e293e6e2.jpg'\r\n    self.setCustomObject(dat)\r\n    self.reload()\r\n\r\n  elseif state==2 then\r\n    self.script_state = '2'\r\n    for _,ply in pairs(plys) do\r\n      for _,card in pairs(data[ply].playmat.getObjects()) do\r\n        if card.type=='Card' and card.getName()~='[b]Night[/b]' and (card.getDescription():lower():match('daybound') or ( card.getDescription():lower():match(line1)) and ply==plyCol ) then\r\n          card=card.setState(2)\r\n          enc.call(\"APIencodeObject\",{obj=card})\r\n          enc.call(\"APIobjEnableProp\",{obj=card, propID = \"_MTG_Simplified_UNIFIED\"})\r\n          enc.call(\"APIrebuildButtons\",{obj=card})\r\n          pcall(function() Wait.time(function() card.highlightOn({0,0,0.5},0.1) end,0.2,5) end)\r\n        end\r\n      end\r\n    end\r\n    dat=self.getCustomObject()\r\n    dat.image='https://c1.scryfall.com/file/scryfall-cards/art_crop/back/f/9/f953fad3-0cd1-48aa-8ed9-d7d2e293e6e2.jpg'\r\n    self.setCustomObject(dat)\r\n    self.reload()\r\n  end\r\n\r\nend\r\n",
+          "LuaScript": "function onLoad(savedat)\r\n  line1='at the beginning of each upkeep, if no spells were cast last turn, transform'\r\n  line2='at the beginning of each upkeep, if a player cast two or more spells last turn, transform'\r\n  if savedat and savedat~='' then\r\n    state=tonumber(savedat)\r\n  else\r\n    state=1\r\n  end\r\n  data=Global.getTable('data')\r\n  plys=Player.getAvailableColors()\r\n  enc = Global.getVar('Encoder')\r\n  makeButtons()\r\nend\r\n\r\nfunction makeButtons()\r\n  self.clearButtons()\r\n  if state==1 then\r\n    self.highlightOff()\r\n    self.highlightOn({1,1,0.5})\r\n    self.createButton({\r\n      click_function='switchState',\r\n      function_owner=self,\r\n      label='switch to [i][b]night[/b][/i]\\nhumans to [i][b]werewolves[/b][/i]',\r\n      position={0,0.1,0},\r\n      scale={0.5,0.5,0.5},\r\n      width=2200,\r\n      height=1000,\r\n      font_size=200,\r\n      color={0,0,0,0.7},\r\n      font_color={1,1,1,1/0.7}\r\n    })\r\n  elseif state==2 then\r\n    self.highlightOff()\r\n    self.highlightOn({0,0,0.5})\r\n    self.createButton({\r\n      click_function='switchState',\r\n      function_owner=self,\r\n      label='switch to [i][b]day[/b][/i]\\nwerewolves to [i][b]humans[/b][/i]',\r\n      position={0,0.1,0},\r\n      scale={0.5,0.5,0.5},\r\n      width=2200,\r\n      height=1000,\r\n      font_size=200,\r\n      color={0,0,0,0.7},\r\n      font_color={1,1,1,1/0.7}\r\n    })\r\n  end\r\nend\r\n\r\nfunction switchState(_,plyCol)\r\n  state=3-state\r\n  makeButtons()\r\n\r\n  if state==1 then\r\n    self.script_state = '1'\r\n    for _,ply in pairs(plys) do\r\n      for _,card in pairs(data[ply].playmat.getObjects()) do\r\n        if card.type=='Card' and card.getName()~='[b]Day[/b]' and (card.getDescription():lower():match('nightbound') or ( card.getDescription():lower():match(line2)) and ply==plyCol ) then\r\n          card=card.setState(1)\r\n          enc.call(\"APIencodeObject\",{obj=card})\r\n          enc.call(\"APIobjEnableProp\",{obj=card, propID = \"_MTG_Simplified_UNIFIED\"})\r\n          enc.call(\"APIrebuildButtons\",{obj=card})\r\n          pcall(function() Wait.time(function() card.highlightOn({1,1,0.5},0.1) end,0.2,5) end)\r\n        end\r\n      end\r\n    end\r\n    dat=self.getCustomObject()\r\n    dat.image='https://img.klrmngr.com/art_crop/front/f/9/f953fad3-0cd1-48aa-8ed9-d7d2e293e6e2.jpg'\r\n    self.setCustomObject(dat)\r\n    self.reload()\r\n\r\n  elseif state==2 then\r\n    self.script_state = '2'\r\n    for _,ply in pairs(plys) do\r\n      for _,card in pairs(data[ply].playmat.getObjects()) do\r\n        if card.type=='Card' and card.getName()~='[b]Night[/b]' and (card.getDescription():lower():match('daybound') or ( card.getDescription():lower():match(line1)) and ply==plyCol ) then\r\n          card=card.setState(2)\r\n          enc.call(\"APIencodeObject\",{obj=card})\r\n          enc.call(\"APIobjEnableProp\",{obj=card, propID = \"_MTG_Simplified_UNIFIED\"})\r\n          enc.call(\"APIrebuildButtons\",{obj=card})\r\n          pcall(function() Wait.time(function() card.highlightOn({0,0,0.5},0.1) end,0.2,5) end)\r\n        end\r\n      end\r\n    end\r\n    dat=self.getCustomObject()\r\n    dat.image='https://img.klrmngr.com/art_crop/back/f/9/f953fad3-0cd1-48aa-8ed9-d7d2e293e6e2.jpg'\r\n    self.setCustomObject(dat)\r\n    self.reload()\r\n  end\r\n\r\nend\r\n",
           "LuaScriptState": "1",
           "XmlUI": ""
         },
@@ -320,7 +320,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/3/b/3bdbc231-5316-4abd-9d8d-d87cff2c9847.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/3/b/3bdbc231-5316-4abd-9d8d-d87cff2c9847.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -377,7 +377,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/a/4/a48c3a2f-678b-4e70-a53f-258457d88d29.jpg?1604194056",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/a/4/a48c3a2f-678b-4e70-a53f-258457d88d29.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -434,7 +434,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/e/4/e4b1aa1e-b4e3-4346-8937-76b312501c70.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/e/4/e4b1aa1e-b4e3-4346-8937-76b312501c70.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -491,7 +491,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/e/d/edd00e45-2ae1-4cd0-92a1-155c95f8dc72.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/e/d/edd00e45-2ae1-4cd0-92a1-155c95f8dc72.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -548,7 +548,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/f/6/f6aa473b-85cd-431d-844b-218368fe955e.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/f/6/f6aa473b-85cd-431d-844b-218368fe955e.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -605,7 +605,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/6/2/62ff0730-6dd9-42d2-be0d-655d04adf229.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/6/2/62ff0730-6dd9-42d2-be0d-655d04adf229.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -662,7 +662,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/8/a/8afceb13-877a-4256-9ba6-851b6924ffd9.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/8/a/8afceb13-877a-4256-9ba6-851b6924ffd9.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -719,7 +719,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://cards.scryfall.io/art_crop/front/9/d/9dad6b50-c415-4c55-8eac-bbc9d656c2fc.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/9/d/9dad6b50-c415-4c55-8eac-bbc9d656c2fc.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -776,7 +776,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/f/0/f0b22a3e-90b0-4dde-8a63-789bab92ba01.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/f/0/f0b22a3e-90b0-4dde-8a63-789bab92ba01.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -833,7 +833,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/e/a/ea476ee1-67d9-4dd8-a5ac-f68a155eb18b.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/e/a/ea476ee1-67d9-4dd8-a5ac-f68a155eb18b.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -890,7 +890,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/b/1/b1ce11c3-61bc-4391-b316-945661cfeaa9.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/b/1/b1ce11c3-61bc-4391-b316-945661cfeaa9.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -947,7 +947,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/5/a/5a108064-8143-4b20-a5a2-eeb3b80af82f.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/5/a/5a108064-8143-4b20-a5a2-eeb3b80af82f.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -1004,7 +1004,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/8/5/858aa831-b491-4f1e-bb56-33eeca14771d.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/8/5/858aa831-b491-4f1e-bb56-33eeca14771d.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -1061,7 +1061,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/2/b/2b61fa9d-3f69-4632-be0e-09924ca88501.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/2/b/2b61fa9d-3f69-4632-be0e-09924ca88501.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -1118,7 +1118,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/0/c/0ccc79f7-2f35-4daf-a0c2-775f5fa6c249.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/0/c/0ccc79f7-2f35-4daf-a0c2-775f5fa6c249.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -1175,7 +1175,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://cards.scryfall.io/art_crop/front/c/b/cb6b98f9-5317-4fd9-944e-c1fd5e7f6d3f.jpg?1696637404",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/c/b/cb6b98f9-5317-4fd9-944e-c1fd5e7f6d3f.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -1232,7 +1232,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://cards.scryfall.io/art_crop/front/6/8/68a144f1-df18-4dc5-81c3-dff2af27527f.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/6/8/68a144f1-df18-4dc5-81c3-dff2af27527f.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -1289,7 +1289,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://cards.scryfall.io/art_crop/front/5/6/56ae2eb8-5090-412a-ad72-46ec4861d599.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/5/6/56ae2eb8-5090-412a-ad72-46ec4861d599.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
@@ -1405,7 +1405,7 @@
           "HideWhenFaceDown": false,
           "Hands": false,
           "CustomImage": {
-            "ImageURL": "https://cards.scryfall.io/art_crop/front/9/d/9dad6b50-c415-4c55-8eac-bbc9d656c2fc.jpg",
+            "ImageURL": "https://img.klrmngr.com/art_crop/front/9/d/9dad6b50-c415-4c55-8eac-bbc9d656c2fc.jpg",
             "ImageSecondaryURL": "",
             "ImageScalar": 1.0,
             "WidthScale": 0.0,
