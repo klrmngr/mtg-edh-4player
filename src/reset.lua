@@ -5,7 +5,8 @@
 -- command zone. Double-clicking Reset destroys that player's Card/Deck objects
 -- across their library, hand, battlefield (playmat), graveyard, command zone, and
 -- exile, then respawns the snapshot deck + commander(s) and re-shuffles the
--- library.
+-- library. It also restores the player's life to 40 and zeroes the commander
+-- damage they've taken from each colour.
 --
 -- Limitations: cards sitting outside every tracked zone (loose on the table, or
 -- taken by another player) and token creatures (Custom_Token) are not destroyed.
@@ -122,5 +123,56 @@ function doBoardReset(color)
 		end
 	end, 1)
 
+	-- 4. restore life to 40 and zero the commander damage taken from each colour
+	resetLifeAndCommanderDamage(color)
+
+	-- 5. reset the mulligan counter back to 0
+	resetMulliganCount(color)
+
 	Player[color].broadcast("Board reset to game-start state.")
+end
+
+-- restore a player's life to 40 and reset every Commander Damage tracker that
+-- records damage dealt *to* them (one per opposing colour) back to 0
+function resetLifeAndCommanderDamage(color)
+	local tracker = data[color] and data[color]["lifeTracker"]
+	if tracker ~= nil then
+		pcall(function()
+			tracker.call("resetLife")
+		end)
+	end
+
+	local trackers = data[color] and data[color]["commanderDamage"]
+	if trackers ~= nil then
+		for _, guid in ipairs(trackers) do
+			local obj = getObjectFromGUID(guid)
+			if obj ~= nil then
+				pcall(function()
+					obj.call("reset_val")
+				end)
+			end
+		end
+	end
+end
+
+-- Called by a Commander Damage tracker when its value changes (clicks or typed
+-- input). Find the player whose board that tracker belongs to and apply the
+-- change to their life: a positive delta is damage taken (lose that much life),
+-- a negative delta is a correction (gain it back). Tracker resets don't call
+-- this, so a board reset's separate life-to-40 step isn't double-counted.
+function commanderDamageDealt(params)
+	if params == nil or params.guid == nil or params.delta == nil then
+		return
+	end
+	for color, pdata in pairs(data) do
+		local trackers = pdata["commanderDamage"]
+		if trackers ~= nil then
+			for _, guid in ipairs(trackers) do
+				if guid == params.guid then
+					loseLife(color, params.delta)
+					return
+				end
+			end
+		end
+	end
 end

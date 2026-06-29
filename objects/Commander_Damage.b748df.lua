@@ -128,10 +128,20 @@ function add_subtract(_obj, _color, alt_click)
   mod = alt_click and -1 or 1
   new_value = math.min(math.max(val + mod, MIN_VALUE), MAX_VALUE)
   if val ~= new_value then
+    local delta = new_value - val
     val = new_value
     updateVal()
     updateSave()
+    reportDamage(delta)
   end
+end
+
+-- mirror a commander-damage change onto the recipient's life: taking damage
+-- costs that much life (and lowering the counter gives it back). The Global
+-- script maps this tracker's GUID to the player who receives the damage.
+function reportDamage(delta)
+  if delta == nil or delta == 0 then return end
+  Global.call("commanderDamageDealt", { guid = self.getGUID(), delta = delta })
 end
 
 function updateVal()
@@ -167,9 +177,11 @@ end
 
 self.max_typed_number=99
 function onNumberTyped(col,int)
+  local delta = int - val
   val = int
   updateVal()
   updateSave()
+  reportDamage(delta)
 end
 
 function null()
