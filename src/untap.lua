@@ -1,8 +1,14 @@
 ------------------------------------- UNTAP ------------------------------------
+-- when each player last pressed their own untap-all button (os.time seconds).
+-- A draw within skipDrawWindow seconds of this is treated as the turn's draw
+-- step (see playerDraw's skip-your-draw-step handling in draw.lua).
+lastUntapPress = {}
+
 -- stolen from Untapper Tool by Tipsy Hobbit//STEAM_0:1:13465982
 function playerUntap(button, playerColor, alt)
 	if button == data[playerColor]["untapButton"] then
 		buttonPress(button, drawDelay * 0.75)
+		lastUntapPress[playerColor] = os.time()
 		local playmat = data[playerColor]["playmat"]
 		local enc = Global.getVar("Encoder")
 		local ry = playmat.getRotation()
