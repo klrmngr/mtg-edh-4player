@@ -1,0 +1,59 @@
+{
+  "GUID": "aea3f4",
+  "Name": "CardCustom",
+  "Transform": {
+    "posX": -50.5,
+    "posY": 0.978828251,
+    "posZ": 14.0,
+    "rotX": 2.38157369e-08,
+    "rotY": 0.00572321238,
+    "rotZ": -1.47945824e-08,
+    "scaleX": 2.42342281,
+    "scaleY": 1.0,
+    "scaleZ": 2.42342281
+  },
+  "Nickname": "Turn Order",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": true,
+  "Hands": true,
+  "CardID": 11812700,
+  "SidewaysCard": false,
+  "CustomDeck": {
+    "118127": {
+      "FaceURL": "https://steamusercontent-a.akamaihd.net/ugc/1631947915473831041/A7B8E0E487FBF47A6685CF7FE755572F0400121B/",
+      "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/1631947915473833280/CEB9227AD5C35A1561B0F3F8AE6975656A0B066E/",
+      "NumWidth": 1,
+      "NumHeight": 1,
+      "BackIsHidden": true,
+      "UniqueBack": false,
+      "Type": 1
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

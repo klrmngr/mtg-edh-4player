@@ -2327,16 +2327,8 @@ end
 -- map a spelled-out (or numeric) count to a number, e.g. "two" -> 2
 function wordToCount(w)
 	local words = {
-		one = 1,
-		two = 2,
-		three = 3,
-		four = 4,
-		five = 5,
-		six = 6,
-		seven = 7,
-		eight = 8,
-		nine = 9,
-		ten = 10,
+		one = 1, two = 2, three = 3, four = 4, five = 5,
+		six = 6, seven = 7, eight = 8, nine = 9, ten = 10,
 	}
 	return words[w] or tonumber(w)
 end
@@ -2975,7 +2967,10 @@ end
 function warnNotYours(obj, clickerColor)
 	local owner = buttonOwner(obj)
 	if owner ~= nil and owner ~= clickerColor then
-		Player[clickerColor].broadcast("That's " .. owner .. "'s button -- you can only use your own.", { 1, 0.6, 0.2 })
+		Player[clickerColor].broadcast(
+			"That's " .. owner .. "'s button -- you can only use your own.",
+			{ 1, 0.6, 0.2 }
+		)
 	end
 end
 
@@ -5136,7 +5131,7 @@ end
 
 -------------------------------- PATCH NOTES -----------------------------------
 -- Version currently deployed. Bump this when cutting a new release.
-VERSION = "v0.1.5"
+VERSION = "v0.2.0"
 
 local PATCH_NOTES_TAG = "patchNotesButton"
 local RELEASES_API = "https://api.github.com/repos/klrmngr/mtg-edh-4player/releases"
@@ -5249,11 +5244,7 @@ function showPatchNotes(obj, color, alt)
 	end
 	WebRequest.get(RELEASES_API, function(req)
 		if req.is_error then
-			broadcastToColor(
-				"Patch notes: couldn't reach GitHub (" .. tostring(req.error) .. ")",
-				color,
-				{ 1, 0.4, 0.4 }
-			)
+			broadcastToColor("Patch notes: couldn't reach GitHub (" .. tostring(req.error) .. ")", color, { 1, 0.4, 0.4 })
 			return
 		end
 		local releases = JSONdecode(req.text)

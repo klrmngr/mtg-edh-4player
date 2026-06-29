@@ -1,0 +1,177 @@
+{
+  "GUID": "080e23",
+  "Name": "Custom_Model_Infinite_Bag",
+  "Transform": {
+    "posX": 53.815,
+    "posY": 1.03621769,
+    "posZ": -16.4700012,
+    "rotX": 3.27017574e-07,
+    "rotY": 269.983521,
+    "rotZ": -1.11301794e-07,
+    "scaleX": 1.5,
+    "scaleY": 0.150000334,
+    "scaleZ": 1.5
+  },
+  "Nickname": "Blue Commander Damage",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "CustomMesh": {
+    "MeshURL": "https://steamusercontent-a.akamaihd.net/ugc/1666858152071990826/9AD455F2CBAEC01B2CBCDDB8B6DC4CE48D14B545/",
+    "DiffuseURL": "",
+    "NormalURL": "",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 0,
+    "TypeIndex": 7,
+    "CastShadows": true
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "f54af9",
+      "Name": "Custom_Token",
+      "Transform": {
+        "posX": -53.0,
+        "posY": 1.17094791,
+        "posZ": 17.9399986,
+        "rotX": -3.410786e-07,
+        "rotY": 0.0113654351,
+        "rotZ": 4.832361e-06,
+        "scaleX": 0.4,
+        "scaleY": 1.0,
+        "scaleZ": 0.4
+      },
+      "Nickname": "Blue Commander Damage",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.117992125,
+        "g": 0.53,
+        "b": 1.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomImage": {
+        "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1009313481328783631/DDCC83524ED154C1F937AC5319E4903077E4A335/",
+        "ImageSecondaryURL": "",
+        "ImageScalar": 1.0,
+        "WidthScale": 0.0,
+        "CustomToken": {
+          "Thickness": 0.1,
+          "MergeDistancePixels": 15.0,
+          "StandUp": false,
+          "Stackable": false
+        }
+      },
+      "LuaScript": "MIN_VALUE = 0\r\nMAX_VALUE = 21\r\nfunction onload(saved_data)\r\n  self.interactable = true\r\n  val = 0\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    val = loaded_data[1]\r\n  end\r\n  colStr=self.getName():gsub('[ ].*','')\r\n  self.setColorTint(Color.fromString(colStr))\r\n  createAll()\r\nend\r\n\r\nfunction updateSave()\r\n  local data_to_save = {val}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\n\r\nfunction createAll()\r\n    s_color = {0.1, 0.1, 0.1, 95}\r\n    f_color = {1,1,1,100}\r\n\r\n    if tooltip_show then\r\n        ttText = \"     \" .. val .. \"\\n\" .. self.getName()\r\n    else\r\n        ttText = self.getName()\r\n    end\r\n\r\n    self.createButton({\r\n      label='[R]',\r\n      tooltip='Reset',\r\n      click_function=\"reset_val\",\r\n      function_owner=self,\r\n      position={0-0.04,0.05,1.3+0.04},\r\n      rotation={0,0,0},\r\n      height=0,\r\n      width=0,\r\n      scale={x=0.5, y=0.5, z=0.5},\r\n      font_size=600,\r\n      font_color=s_color,\r\n      color={0,0,0,0}\r\n    })\r\n\r\n    for i=-1,1 do\r\n      for j=-1,1 do\r\n        self.createButton({\r\n          label='[R]',\r\n          tooltip='Reset',\r\n          click_function=\"reset_val\",\r\n          function_owner=self,\r\n          position={0+i*0.025,0.1,1.3+j*0.025},\r\n          rotation={0,0,0},\r\n          height=0,\r\n          width=0,\r\n          scale={x=0.5, y=0.5, z=0.5},\r\n          font_size=600,\r\n          font_color={0,0,0,100},\r\n          color={0,0,0,0}\r\n        })\r\n      end\r\n    end\r\n\r\n    self.createButton({\r\n      label='[R]',\r\n      tooltip='Reset',\r\n      click_function=\"reset_val\",\r\n      function_owner=self,\r\n      position={0,0.1,1.3},\r\n      rotation={0,0,0},\r\n      height=400,\r\n      width=600,\r\n      scale={x=0.5, y=0.5, z=0.5},\r\n      font_size=600,\r\n      font_color=f_color,\r\n      color={0,0,0,0}\r\n    })\r\n\r\n  \tself.createButton({\r\n      label=tostring(val),\r\n      click_function=\"null\",\r\n      tooltip=ttText,\r\n      function_owner=self,\r\n      position={0-0.1,0.05,0+0.1},\r\n      height=0,\r\n      width=0,\r\n      scale={1.65, 1.65, 1.65},\r\n      font_size=800,\r\n      font_color=s_color,\r\n      color={0,0,0,0}\r\n      })\r\n\r\n    for i=-1,1 do\r\n      for j=-1,1 do\r\n        self.createButton({\r\n          label=tostring(val),\r\n          click_function=\"null\",\r\n          tooltip=ttText,\r\n          function_owner=self,\r\n          position={0+i*0.1,0.18,0+j*0.1},\r\n          height=0,\r\n          width= 0,\r\n          scale={1.65, 1.65, 1.65},\r\n          font_size=800,\r\n          font_color={0,0,0,100},\r\n          color={0,0,0,0}\r\n          })\r\n      end\r\n    end\r\n\r\n    self.createButton({\r\n      label=tostring(val),\r\n      click_function=\"add_subtract\",\r\n      tooltip=ttText,\r\n      function_owner=self,\r\n      position={0,0.18,0},\r\n      height=500,\r\n      width= 500,\r\n      scale={1.65, 1.65, 1.65},\r\n      font_size=800,\r\n      font_color=f_color,\r\n      color={0,0,0,0}\r\n      })\r\nend\r\n\r\nfunction add_subtract(_obj, _color, alt_click)\r\n  mod = alt_click and -1 or 1\r\n  new_value = math.min(math.max(val + mod, MIN_VALUE), MAX_VALUE)\r\n  if val ~= new_value then\r\n    val = new_value\r\n    updateVal()\r\n    updateSave()\r\n  end\r\nend\r\n\r\nfunction updateVal()\r\n  if tooltip_show then\r\n    ttText = \"     \" .. val .. \"\\n\" .. self.getName()\r\n  else\r\n    ttText = self.getName()\r\n  end\r\n\r\n  for ind=11,21 do\r\n    self.editButton({\r\n      index = ind,\r\n      label = tostring(val),\r\n      tooltip = ttText\r\n    })\r\n  end\r\n\r\nend\r\n\r\nfunction reset_val()\r\n  val = 0\r\n  updateVal()\r\n  updateSave()\r\n  self.reload()\r\nend\r\n\r\nself.max_typed_number=99\r\nfunction onNumberTyped(col,int)\r\n  val = int\r\n  updateVal()\r\n  updateSave()\r\nend\r\n\r\nfunction null()\r\nend\r\n",
+      "LuaScriptState": "[0]",
+      "XmlUI": ""
+    }
+  ],
+  "ChildObjects": [
+    {
+      "GUID": "31f571",
+      "Name": "Custom_Token",
+      "Transform": {
+        "posX": -7.40850055e-07,
+        "posY": 0.0249765571,
+        "posZ": -0.0109446654,
+        "rotX": -1.500331e-10,
+        "rotY": -4.11253768e-06,
+        "rotZ": 8.33763336e-10,
+        "scaleX": 0.2784434,
+        "scaleY": 6.666652,
+        "scaleZ": 0.261884123
+      },
+      "Nickname": "Blue Commander Damage",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.117992409,
+        "g": 0.53,
+        "b": 1.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": true,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomImage": {
+        "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1009313481328783631/DDCC83524ED154C1F937AC5319E4903077E4A335/",
+        "ImageSecondaryURL": "",
+        "ImageScalar": 1.0,
+        "WidthScale": 0.0,
+        "CustomToken": {
+          "Thickness": 0.1,
+          "MergeDistancePixels": 15.0,
+          "StandUp": false,
+          "Stackable": false
+        }
+      },
+      "LuaScript": "MIN_VALUE = 0\r\nMAX_VALUE = 21\r\n\r\nfunction updateSave()\r\n    local data_to_save = {light_mode, val, tooltip_show}\r\n    saved_data = JSON.encode(data_to_save)\r\n    self.script_state = saved_data\r\nend\r\n\r\n\r\nfunction onSave()\r\n local data_to_save = {saved_count = count}\r\n saved_data = JSON.encode(data_to_save)\r\n return saved_data\r\nend\r\n\r\nfunction onload(saved_data)\n count = 0\n generateButtonParamiters()\r\n if saved_data != '' then\r\n     local loaded_data = JSON.decode(saved_data)\r\n     count = loaded_data.saved_count\r\n     else\r\n     count = 0\r\nend\r\n\nself.createButton(b_display)\r\nself.createButton(b_plus5)\r\nself.createButton(b_reset)\r\nend\r\n\r\nfunction increase5()\r\n count = count + 5\r\n updateDisplay()\r\nend\r\n\r\nfunction reset()\r\n count = 0\r\n updateDisplay()\r\nend\r\n\r\nfunction add_subtract(_obj, _color, alt_click)\r\n mod = alt_click and -1 or 1\r\n new_value = math.min(math.max(count + mod, MIN_VALUE), MAX_VALUE)\r\n if count ~= new_value then\r\n count = new_value\r\n updateDisplay()\r\n updateSave()\r\n end\r\nend\r\n\r\nfunction updateDisplay()\r\n if count >= 21 then\r\n count = 21\r\nend\r\n\r\nb_display.label = tostring(count)\r\n self.editButton(b_display)\nend\r\n\r\nfunction generateButtonParamiters()\r\nb_display = {\r\n index = 0,\r\n click_function = 'add_subtract',\r\n function_owner = self,\r\n label = tostring(count),\r\n font_color = {255, 255, 255, 1}, \r\n color= {0, 0, 0, 1}, \r\n position = {0.0,0.1,-0.1},\r\n tooltip=\"Commander DMG\",\r\n width = 880,\r\n height = 810,\r\n font_size = 1000\r\n}\r\nb_plus5 = {\r\n click_function = 'increase5', \r\n function_owner = self, label =  '+5',\r\n position = {0.6,0.1,1.30},\r\n tooltip=\"+5 Dmg\",\r\n font_color = {255, 255, 255, 1},\r\n color= {0, 0, 0, 1},\r\n width = 510,\r\n height = 420,\r\n font_size = 420\r\n}\r\nb_reset = {\r\n click_function = 'reset',\r\n function_owner = self,\r\n label =  '{R}',\r\n position = {-0.7,0.1,1.30},\r\n tooltip=\"Reset DMG\",\r\n font_color = {255, 255, 255, 1},\r\n color= {0, 0, 0, 1},\r\n width = 450,\r\n height = 380,\r\n font_size = 340\r\n}\r\nend",
+      "LuaScriptState": "{\"saved_count\":0}",
+      "XmlUI": ""
+    }
+  ]
+}

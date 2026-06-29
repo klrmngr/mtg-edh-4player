@@ -1,0 +1,118 @@
+{
+  "GUID": "8c31d2",
+  "Name": "Custom_Model_Infinite_Bag",
+  "Transform": {
+    "posX": -47.5,
+    "posY": 1.1,
+    "posZ": 7.000001,
+    "rotX": -2.53482563e-06,
+    "rotY": -0.000126035811,
+    "rotZ": 3.252956e-07,
+    "scaleX": 0.6,
+    "scaleY": 0.6,
+    "scaleZ": 0.6
+  },
+  "Nickname": "Loyalty Counter",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "CustomMesh": {
+    "MeshURL": "https://steamusercontent-a.akamaihd.net/ugc/1646593864316002009/B0582AB1A0AB0FEAF9FE1F53B3840D95399AF0E7/",
+    "DiffuseURL": "https://steamusercontent-a.akamaihd.net/ugc/1646592995368357491/B8766542D62F8D16AC41D83B4E34C004DE61BBFE/",
+    "NormalURL": "",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 0,
+    "TypeIndex": 7,
+    "CastShadows": true
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "3aad21",
+      "Name": "Custom_Token",
+      "Transform": {
+        "posX": -47.704998,
+        "posY": 1.15572464,
+        "posZ": 6.75000048,
+        "rotX": 6.56920065e-06,
+        "rotY": 89.9936752,
+        "rotZ": 2.68206986e-06,
+        "scaleX": 0.283224255,
+        "scaleY": 1.0,
+        "scaleZ": 0.283224255
+      },
+      "Nickname": "Loyality Counter",
+      "Description": "Left click - Increase\nRight click - Decrease",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomImage": {
+        "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1681520857670507709/E57D321C64268F8F9E69CBBD1CFE9FD08E3D4F71/",
+        "ImageSecondaryURL": "",
+        "ImageScalar": 1.0,
+        "WidthScale": 0.0,
+        "CustomToken": {
+          "Thickness": 0.1,
+          "MergeDistancePixels": 5.0,
+          "StandUp": false,
+          "Stackable": false
+        }
+      },
+      "LuaScript": "MIN_VALUE = 0\r\nMAX_VALUE = 99\r\n\r\nfunction onload(saved_data)\r\n    light_mode = false\r\n    tooltip_show = true\r\n    val = 0\r\n\r\n    if saved_data ~= \"\" then\r\n        local loaded_data = JSON.decode(saved_data)\r\n        light_mode = loaded_data[1]\r\n        val = loaded_data[2]\r\n        tooltip_show = loaded_data[3]\r\n    end\r\n\r\n    createAll()\r\nend\r\n\r\nfunction updateSave()\r\n    local data_to_save = {light_mode, val, tooltip_show}\r\n    saved_data = JSON.encode(data_to_save)\r\n    self.script_state = saved_data\r\nend\r\n\r\nfunction createAll()\r\n    s_color = {0.5, 0.5, 0.5, 95}\r\n\r\n    if light_mode then\r\n        f_color = {0.9,0.9,0.9,95}\r\n    else\r\n        f_color = {0.1,0.1,0.1,100}\r\n    end\r\n\r\n    if tooltip_show then\r\n        ttText = \"     \" .. val .. \"\\n\" .. self.getName()\r\n    else\r\n        ttText = self.getName()\r\n    end\r\n\r\n\tself.createButton({\r\n      label=tostring(val),\r\n      click_function=\"null\",\r\n      tooltip=ttText,\r\n      function_owner=self,\r\n      position={0,0.05,0.2},\r\n      height=5,\r\n      width=5,\r\n      alignment = 3,\r\n      scale={x=1.5*1.1, y=1.5*1.1, z=1.5*1.1},\r\n      font_size=800,\r\n      font_color={1-f_color[1],1-f_color[2],1-f_color[3],100},\r\n      color={0,0,0,0}\r\n      })\r\n\r\n    self.createButton({\r\n      label=tostring(val),\r\n      click_function=\"null\",\r\n      tooltip=ttText,\r\n      function_owner=self,\r\n      position={0,0.05,0.2},\r\n      height=5,\r\n      width=5,\r\n      alignment = 3,\r\n      scale={x=1.5*0.9, y=1.5*0.9, z=1.5*0.9},\r\n      font_size=800,\r\n      font_color={1-f_color[1],1-f_color[2],1-f_color[3],100},\r\n      color={0,0,0,0}\r\n      })\r\n\r\n    self.createButton({\r\n      label=tostring(val),\r\n      click_function=\"add_subtract\",\r\n      tooltip=ttText,\r\n      function_owner=self,\r\n      position={0,0.05,0.2},\r\n      height=600,\r\n      width= 600,\r\n      alignment = 3,\r\n      scale={x=1.5, y=1.5, z=1.5},\r\n      font_size=800,\r\n      font_color=f_color,\r\n      color={0,0,0,0}\r\n      })\r\n\r\n\tlightButtonText = \"swap text color\"\r\n    self.createButton({\r\n        label=lightButtonText,\r\n        tooltip='',\r\n        click_function=\"swap_fcolor\",\r\n        function_owner=self,\r\n        position={0,-0.05,-0.5},\r\n        rotation={180,180,0},\r\n        height=150,\r\n        width=1200,\r\n        scale={x=1, y=1, z=1},\r\n        font_size=150,\r\n        font_color=s_color,\r\n        color={0,0,0,0}\r\n        })\r\n\r\n\r\n    self.createButton({\r\n        label='reset',\r\n        tooltip='',\r\n        click_function=\"reset_val\",\r\n        function_owner=self,\r\n        position={0,-0.05,0.5},\r\n        rotation={180,180,0},\r\n        height=250,\r\n        width=1200,\r\n        scale={x=1, y=1, z=1},\r\n        font_size=250,\r\n        font_color=s_color,\r\n        color={0,0,0,0}\r\n        })\r\n\r\n    setTooltips()\r\nend\r\n\r\nfunction removeAll()\r\n    self.removeButton(0)\r\n    self.removeButton(1)\r\n    self.removeButton(2)\r\n    self.removeButton(3)\r\n\tself.removeButton(4)\r\nend\r\n\r\nfunction reloadAll()\r\n    removeAll()\r\n    createAll()\r\n    setTooltips()\r\n    updateSave()\r\nend\r\n\r\nfunction swap_fcolor(_obj, _color, alt_click)\r\n    light_mode = not light_mode\r\n    reloadAll()\r\nend\r\n\r\nfunction swap_align(_obj, _color, alt_click)\r\n    center_mode = not center_mode\r\n    reloadAll()\r\nend\r\n\r\nfunction editName(_obj, _string, value)\r\n    self.setName(value)\r\n    setTooltips()\r\nend\r\n\r\nfunction add_subtract(_obj, _color, alt_click)\r\n    mod = alt_click and -1 or 1\r\n    new_value = math.min(math.max(val + mod, MIN_VALUE), MAX_VALUE)\r\n    if val ~= new_value then\r\n        val = new_value\r\n        updateVal()\r\n        updateSave()\r\n    end\r\nend\r\n\r\nfunction updateVal()\r\n    if tooltip_show then\r\n        ttText = \"     \" .. val .. \"\\n\" .. self.getName()\r\n    else\r\n        ttText = self.getName()\r\n    end\r\n\r\n    self.editButton({\r\n        index = 0,\r\n        label = tostring(val),\r\n        tooltip = ttText\r\n        })\r\n\r\n\tself.editButton({\r\n\t\tindex = 1,\r\n\t\tlabel = tostring(val),\r\n\t\ttooltip = ttText\r\n\t\t})\r\n\r\n\tself.editButton({\r\n\t\tindex = 2,\r\n\t\tlabel = tostring(val),\r\n\t\ttooltip = ttText\r\n\t\t})\r\nend\r\n\r\nfunction reset_val()\r\n    val = 0\r\n    updateVal()\r\n    updateSave()\r\nend\r\n\r\nfunction setTooltips()\r\n    if tooltip_show then\r\n        ttText = \"     \" .. val .. \"\\n\" .. self.getName()\r\n    else\r\n        ttText = self.getName()\r\n    end\r\n\r\n    self.editButton({\r\n        index = 0,\r\n        value = tostring(val),\r\n        tooltip = ttText\r\n        })\r\nend\r\n\r\nfunction null()\r\nend\r\n\r\nself.max_typed_number=999\r\nfunction onNumberTyped(col,int)\r\n  val = int\r\n  updateVal()\r\n  updateSave()\r\nend",
+      "LuaScriptState": "[true,0]",
+      "XmlUI": ""
+    }
+  ]
+}

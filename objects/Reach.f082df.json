@@ -1,0 +1,109 @@
+{
+  "GUID": "f082df",
+  "Name": "Custom_Assetbundle_Infinite_Bag",
+  "Transform": {
+    "posX": -49.5,
+    "posY": 1.02987039,
+    "posZ": -7.0,
+    "rotX": 1.13916449e-05,
+    "rotY": 90.014534,
+    "rotZ": 7.955784e-06,
+    "scaleX": 1.89999807,
+    "scaleY": 1.89999807,
+    "scaleZ": 1.89999807
+  },
+  "Nickname": "Reach",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 0.9893046,
+    "b": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "CustomAssetbundle": {
+    "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/1467562289870852827/1F7579F5E3A38001F7FC01876D63D2169268D537/",
+    "AssetbundleSecondaryURL": "",
+    "MaterialIndex": 3,
+    "TypeIndex": 7,
+    "LoopingEffectIndex": 0
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "5ec848",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": -46.4000053,
+        "posY": 1.22098494,
+        "posZ": -1.4999969,
+        "rotX": 0.000973064045,
+        "rotY": 0.0003210233,
+        "rotZ": 0.0005251454,
+        "scaleX": 0.9750002,
+        "scaleY": 0.9750002,
+        "scaleZ": 0.9750002
+      },
+      "Nickname": "Reach",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 1.0,
+        "g": 0.9893046,
+        "b": 0.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/1467562289870852827/1F7579F5E3A38001F7FC01876D63D2169268D537/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 3,
+        "TypeIndex": 0,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    }
+  ]
+}

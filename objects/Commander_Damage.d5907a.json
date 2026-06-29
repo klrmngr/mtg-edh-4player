@@ -1,0 +1,58 @@
+{
+  "GUID": "d5907a",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": -6.78696442,
+    "posY": 0.9,
+    "posZ": -1.35,
+    "rotX": -7.93399449e-05,
+    "rotY": 180.0,
+    "rotZ": 9.16521549e-06,
+    "scaleX": 0.32064873,
+    "scaleY": 1.0,
+    "scaleZ": 0.32064873
+  },
+  "Nickname": "Commander Damage",
+  "Description": "Yellow",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.905,
+    "g": 0.898,
+    "b": 0.171995223
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1009313481328783631/DDCC83524ED154C1F937AC5319E4903077E4A335/",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomToken": {
+      "Thickness": 0.1,
+      "MergeDistancePixels": 15.0,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "[0]",
+  "XmlUI": ""
+}

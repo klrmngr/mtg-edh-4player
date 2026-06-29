@@ -1,0 +1,118 @@
+{
+  "GUID": "195243",
+  "Name": "Custom_Model_Infinite_Bag",
+  "Transform": {
+    "posX": 45.4999771,
+    "posY": 1.1,
+    "posZ": -1.00000012,
+    "rotX": -0.005426176,
+    "rotY": 180.014252,
+    "rotZ": 359.9895,
+    "scaleX": 0.65,
+    "scaleY": 0.65,
+    "scaleZ": 0.65
+  },
+  "Nickname": "Notecard",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "CustomMesh": {
+    "MeshURL": "https://steamusercontent-a.akamaihd.net/ugc/1646593864316002009/B0582AB1A0AB0FEAF9FE1F53B3840D95399AF0E7/",
+    "DiffuseURL": "https://steamusercontent-a.akamaihd.net/ugc/1646592995368357491/B8766542D62F8D16AC41D83B4E34C004DE61BBFE/",
+    "NormalURL": "",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 0,
+    "TypeIndex": 7,
+    "CastShadows": true
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "1b86d3",
+      "Name": "Custom_Token",
+      "Transform": {
+        "posX": -45.5990639,
+        "posY": 1.173833,
+        "posZ": 2.49999022,
+        "rotX": 0.730154634,
+        "rotY": 90.00163,
+        "rotZ": 0.00211467524,
+        "scaleX": 0.7602123,
+        "scaleY": 1.0,
+        "scaleZ": 0.7602123
+      },
+      "Nickname": "Notecard",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.258821458,
+        "g": 0.258821458,
+        "b": 0.258821458
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomImage": {
+        "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1647720478675890768/9C57B6CE1CEEB57FEC07B86DEB680336457DCB72/",
+        "ImageSecondaryURL": "",
+        "ImageScalar": 1.0,
+        "WidthScale": 0.0,
+        "CustomToken": {
+          "Thickness": 0.1,
+          "MergeDistancePixels": 5.0,
+          "StandUp": false,
+          "Stackable": false
+        }
+      },
+      "LuaScript": "function onload(saved_data)\r\n    f_size = 300\r\n    light_mode = true\r\n    center_mode = true\r\n    tooltip_show = true\r\n    if saved_data ~= \"\" then\r\n        local loaded_data = JSON.decode(saved_data)\r\n        light_mode = loaded_data[1]\r\n        center_mode = loaded_data[2]\r\n        tooltip_show = loaded_data[3]\r\n        f_size = loaded_data[4]\r\n    end\r\n    createAll()\r\nend\r\n\r\nfunction updateSave()\r\n    local data_to_save = {light_mode, center_mode, tooltip_show, f_size}\r\n    saved_data = JSON.encode(data_to_save)\r\n    self.script_state = saved_data\r\nend\r\n\r\nfunction createAll()\r\n    s_color = {0.5, 0.5, 0.5, 95}\r\n\r\n    if light_mode then\r\n        f_color = {1,1,1,95}\r\n    else\r\n        f_color = {0,0,0,95}\r\n    end\r\n\r\n    if center_mode then\r\n        f_align = 3\r\n    else\r\n        f_align = 1\r\n    end\r\n\r\n    if tooltip_show then\r\n        ttText = self.getName() .. \"\\n----------\\n\" .. self.getDescription()\r\n    else\r\n        ttText = \"\"\r\n    end\r\n\r\n    self.createButton({\r\n        label=\"+\",\r\n        tooltip=\"increase font size\",\r\n        click_function=\"upFontSize\",\r\n        function_owner=self,\r\n        position={2.1,0.06,-1.35},\r\n        rotation={0,0,0},\r\n        height=200,\r\n        width=200,\r\n        scale={x=1, y=1, z=1},\r\n        font_size=300,\r\n        font_color={f_color[1],f_color[2],f_color[1],25},\r\n        color={0,0,0,0},\r\n        hover_color={0,0,0,1/25}\r\n    })\r\n    self.createButton({\r\n        label=\"-\",\r\n        tooltip=\"decrease font size\",\r\n        click_function=\"downFontSize\",\r\n        function_owner=self,\r\n        position={2.1,0.06,-1},\r\n        rotation={0,0,0},\r\n        height=200,\r\n        width=200,\r\n        scale={x=1, y=1, z=1},\r\n        font_size=300,\r\n        font_color={f_color[1],f_color[2],f_color[1],25},\r\n        color={0,0,0,0},\r\n        hover_color={0,0,0,1/25}\r\n    })\r\n\r\n    self.createInput({\r\n        value = self.getDescription(),\r\n        label = \"\\ntype here\\n[sub](flip for settings)[/sub]\",\r\n        input_function = \"editDesc\",\r\n        function_owner = self,\r\n        alignment = f_align,\r\n        position = {0,0.05,0},\r\n        width = 1900,\r\n        height = 1300,\r\n        font_size = f_size,\r\n        scale={x=1, y=1, z=1},\r\n        font_color=f_color,\r\n        color = {0,0,0,0},\r\n        tooltip = ttText\r\n        })\r\n\r\n    self.createButton({\r\n        label=\"- Notecard Settings -\",\r\n        tooltip=\"- Notecard Settings -\",\r\n        click_function=\"null\",\r\n        function_owner=self,\r\n        position={0,-0.05,-1.1},\r\n        rotation={180,180,0},\r\n        height=300,\r\n        width=800,\r\n        scale={x=1, y=1, z=1},\r\n        font_size=140,\r\n        font_color=s_color,\r\n        color={0,0,0,0}\r\n    })\r\n\r\n    self.createButton({\r\n        label='[ Reset ]',\r\n        tooltip='[ Reset ]',\r\n        click_function=\"reset\",\r\n        function_owner=self,\r\n        position={0,-0.05,-0.7},\r\n        rotation={180,180,0},\r\n        height=250,\r\n        width=600,\r\n        scale={x=1, y=1, z=1},\r\n        font_size=100,\r\n        font_color=s_color,\r\n        color={0,0,0,0}\r\n    })\r\n\r\n    if light_mode then\r\n        lightButtonText = \"[ Set dark text ]\"\r\n    else\r\n        lightButtonText = \"[ Set light text ]\"\r\n    end\r\n    self.createButton({\r\n        label=lightButtonText,\r\n        tooltip=lightButtonText,\r\n        click_function=\"swap_fcolor\",\r\n        function_owner=self,\r\n        position={0,-0.05,-0.3},\r\n        rotation={180,180,0},\r\n        height=250,\r\n        width=800,\r\n        scale={x=1, y=1, z=1},\r\n        font_size=100,\r\n        font_color=s_color,\r\n        color={0,0,0,0}\r\n    })\r\n\r\n    if center_mode then\r\n        centerButtonText = \"[ Set left align ]\"\r\n    else\r\n        centerButtonText = \"[ Set center align ]\"\r\n    end\r\n    self.createButton({\r\n        label=centerButtonText,\r\n        tooltip=centerButtonText,\r\n        click_function=\"swap_align\",\r\n        function_owner=self,\r\n        position={0,-0.05,0.1},\r\n        rotation={180,180,0},\r\n        height=250,\r\n        width=800,\r\n        scale={x=1, y=1, z=1},\r\n        font_size=100,\r\n        font_color=s_color,\r\n        color={0,0,0,0}\r\n        })\r\n\r\n    if tooltip_show then\r\n        tooltipShowText = \"[ Hide description in tooltip ]\"\r\n    else\r\n        tooltipShowText = \"[ Show description in tooltip ]\"\r\n    end\r\n    self.createButton({\r\n        label=tooltipShowText,\r\n        tooltip=tooltipShowText,\r\n        click_function=\"swap_tooltip\",\r\n        function_owner=self,\r\n        position={0,-0.05,0.5},\r\n        rotation={180,180,0},\r\n        height=250,\r\n        width=800,\r\n        scale={x=1, y=1, z=1},\r\n        font_size=100,\r\n        font_color=s_color,\r\n        color={0,0,0,0}\r\n        })\r\n\r\n    self.createButton({\r\n        label = \"Sample\",\r\n        click_function = \"null\",\r\n        function_owner = self,\r\n        alignment = f_align,\r\n        position={0,-0.05,1},\r\n        rotation={180,180,0},\r\n        width = 0,\r\n        height = 0,\r\n        font_size = f_size,\r\n        scale={x=1, y=1, z=1},\r\n        font_color=f_color,\r\n        color = {0,0,0,0}\r\n        })\r\n\r\n    setTooltips()\r\nend\r\n\r\nfunction null()\r\nend\r\n\r\nfunction removeAll()\r\n    self.removeInput(0)\r\n    for ind=0,7 do\r\n      self.removeButton(ind)\r\n    end\r\nend\r\n\r\nfunction reloadAll()\r\n    removeAll()\r\n    createAll()\r\n    setTooltips()\r\n    updateSave()\r\nend\r\n\r\nfunction reset()\r\n  f_size = 300\r\n  light_mode = true\r\n  center_mode = true\r\n  tooltip_show = true\r\n  reloadAll()\r\nend\r\n\r\nfunction upFontSize()\r\n  f_size = math.ceil(f_size*4/3)\r\n  reloadAll()\r\nend\r\nfunction downFontSize()\r\n  f_size = math.ceil(f_size*3/4)\r\n  reloadAll()\r\nend\r\n\r\nfunction swap_fcolor(_obj, _color, alt_click)\r\n    light_mode = not light_mode\r\n    reloadAll()\r\nend\r\n\r\nfunction swap_align(_obj, _color, alt_click)\r\n    center_mode = not center_mode\r\n    reloadAll()\r\nend\r\n\r\nfunction swap_tooltip(_obj, _color, alt_click)\r\n    tooltip_show = not tooltip_show\r\n    reloadAll()\r\n    setTooltips()\r\nend\r\n\r\nfunction editName(_obj, _string, value)\r\n    self.setName(value)\r\n    setTooltips()\r\nend\r\n\r\nfunction editDesc(_obj, _string, value)\r\n    self.setDescription(value)\r\n    setTooltips()\r\nend\r\n\r\nfunction setTooltips()\r\n    title = self.getName()\r\n    if title == \"\" then\r\n        title = \"Notecard\"\r\n    end\r\n    desc = self.getDescription()\r\n\r\n    if tooltip_show then\r\n        ttText = desc\r\n    else\r\n        ttText = \"\"\r\n    end\r\n\r\n    self.editInput({\r\n        index = 0,\r\n        value = self.getDescription(),\r\n        tooltip = ttText\r\n        })\r\nend\r\n\r\nfunction null()\r\nend\r\n\r\nfunction keepSample(_obj, _string, value)\r\n    reloadAll()\r\nend\r\n",
+      "LuaScriptState": "[true,true,true,300]",
+      "XmlUI": ""
+    }
+  ]
+}

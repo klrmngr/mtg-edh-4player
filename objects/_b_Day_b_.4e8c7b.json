@@ -1,0 +1,120 @@
+{
+  "GUID": "4e8c7b",
+  "Name": "Card",
+  "Transform": {
+    "posX": -49.585,
+    "posY": 0.9788278,
+    "posZ": 24.5700016,
+    "rotX": -2.877109e-09,
+    "rotY": 90.03148,
+    "rotZ": 7.008377e-09,
+    "scaleX": 1.0,
+    "scaleY": 1.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "[b]Day[/b]",
+  "Description": "(If it becomes day or night or if a daybound permanent enters the battlefield, track day/night for the rest of the game.)\nAs it becomes day, transform all nightbound permanents.\nIf a player casts no spells during their own turn, it becomes night next turn.",
+  "GMNotes": "",
+  "Memo": "84142407-ba98-497d-bbc8-39176aa67c02",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.713235259,
+    "g": 0.713235259,
+    "b": 0.713235259
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": false,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": true,
+  "Hands": true,
+  "CardID": 11821900,
+  "SidewaysCard": false,
+  "CustomDeck": {
+    "118219": {
+      "FaceURL": "https://c1.scryfall.com/file/scryfall-cards/large/front/9/c/9c0f7843-4cbb-4d0f-8887-ec823a9238da.jpg?982021",
+      "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/1647720103762682461/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+      "NumWidth": 1,
+      "NumHeight": 1,
+      "BackIsHidden": true,
+      "UniqueBack": false,
+      "Type": 0
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "States": {
+    "2": {
+      "GUID": "cdf2d2",
+      "Name": "Card",
+      "Transform": {
+        "posX": -49.91746,
+        "posY": 0.978828251,
+        "posZ": 26.3752155,
+        "rotX": 2.3099993e-07,
+        "rotY": 89.99998,
+        "rotZ": -2.69812915e-07,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "[b]Night[/b]",
+      "Description": "As it becomes night, transform all daybound permanents.\nPermanents enter the battlefield nightbound.\nIf a player casts at least two spells during their own turn, it becomes day next turn.",
+      "GMNotes": "",
+      "Memo": "84142407-ba98-497d-bbc8-39176aa67c02",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.713235259,
+        "g": 0.713235259,
+        "b": 0.713235259
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": true,
+      "Hands": true,
+      "CardID": 300,
+      "SidewaysCard": false,
+      "CustomDeck": {
+        "3": {
+          "FaceURL": "https://c1.scryfall.com/file/scryfall-cards/large/back/9/c/9c0f7843-4cbb-4d0f-8887-ec823a9238da.jpg?982021",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/1647720103762682461/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        }
+      },
+      "LuaScript": "function onLoad()\r\n  data=Global.getTable('data')\r\n  plys=Player.getAvailableColors()\r\n  enc = Global.getVar('Encoder')\r\n  noencode=true\r\n  self.createButton({\r\n    click_function='switchState',\r\n    function_owner=self,\r\n    label='switch to [b]day[/b]',\r\n    position={0,0.28,-0.5},\r\n    scale={0.5,0.5,0.5},\r\n    width=1600,\r\n    height=400,\r\n    font_size=200,\r\n    color={0,0,0,0.7},\r\n    font_color={1,1,1,1/0.7}\r\n  })\r\nend\r\n\r\nfunction switchState()\r\n  self.setState(1)\r\nend\r\n\r\nfunction onStateChange()\r\n  for _,ply in pairs(plys) do\r\n    for _,card in pairs(data[ply].playmat.getObjects()) do\r\n      if card~=self and card.getName()~='[b]Night[/b]' and card.type=='Card' and card.getDescription():lower():match('daybound') then\r\n        states=card.getStates()\r\n        for _,state in pairs(states) do\r\n          if state.description:lower():match('nightbound') then\r\n            card=card.setState(state.id)\r\n            enc.call(\"APIencodeObject\",{obj=card})\r\n            enc.call(\"APIrebuildButtons\",{obj=card})\r\n            Wait.time(function() card.highlightOn({0,0,0.5},0.1) end,0.2,5)\r\n          end\r\n        end\r\n      end\r\n    end\r\n  end\r\nend",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    }
+  }
+}

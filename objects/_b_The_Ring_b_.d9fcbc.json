@@ -1,0 +1,59 @@
+{
+  "GUID": "d9fcbc",
+  "Name": "Card",
+  "Transform": {
+    "posX": -49.5849571,
+    "posY": 0.9788278,
+    "posZ": 27.27024,
+    "rotX": -4.229052e-09,
+    "rotY": 89.97547,
+    "rotZ": -1.97207122e-08,
+    "scaleX": 1.0,
+    "scaleY": 1.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "[b]The Ring[/b]",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "1",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.713235259,
+    "g": 0.713235259,
+    "b": 0.713235259
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": false,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": true,
+  "Hands": true,
+  "CardID": 100,
+  "SidewaysCard": false,
+  "CustomDeck": {
+    "1": {
+      "FaceURL": "https://cards.scryfall.io/large/front/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg",
+      "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/1647720103762682461/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+      "NumWidth": 1,
+      "NumHeight": 1,
+      "BackIsHidden": true,
+      "UniqueBack": false,
+      "Type": 0
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "{\"object\":\"list\",\"total_cards\":1,\"data\":[{\"object\":\"card\",\"id\":\"7215460e-8c06-47d0-94e5-d1832d0218af\",\"oracle_id\":\"98737456-ac2a-420d-aa0e-778ba3a22cec\",\"name\":\"The Ring // The Ring Tempts You\",\"lang\":\"en\",\"released_at\":\"2023-06-23\",\"uri\":\"https://api.scryfall.com/cards/7215460e-8c06-47d0-94e5-d1832d0218af\",\"scryfall_uri\":\"https://scryfall.com/card/tltr/H13/the-ring-the-ring-tempts-you?utm_source=api\",\"layout\":\"double_faced_token\",\"highres_image\":true,\"image_status\":\"highres_scan\",\"cmc\":0.0,\"type_line\":\"Emblem // Card\",\"card_faces\":[{\"object\":\"card_face\",\"name\":\"The Ring\",\"mana_cost\":\"\",\"type_line\":\"Emblem\",\"oracle_text\":\"Your Ring-bearer is legendary and can't be blocked by creatures with greater power.\\nWhenever your Ring-bearer attacks, draw a card, then discard a card.\\nWhenever your Ring-bearer becomes blocked by a creature, that creature's controller sacrifices it at end of combat.\\nWhenever your Ring-bearer deals combat damage to a player, each opponent loses 3 life.\",\"artist\":\"Viko Menezes\",\"artist_id\":\"92dfef2a-d0fa-42fd-bdd6-bc4c9286cb56\",\"illustration_id\":\"5586c035-4934-4384-92f3-c765228cfff2\",\"image_uris\":{\"small\":\"https://cards.scryfall.io/small/front/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg?1688215133\",\"normal\":\"https://cards.scryfall.io/normal/front/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg?1688215133\",\"large\":\"https://cards.scryfall.io/large/front/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg?1688215133\",\"png\":\"https://cards.scryfall.io/png/front/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.png?1688215133\",\"art_crop\":\"https://cards.scryfall.io/art_crop/front/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg?1688215133\",\"border_crop\":\"https://cards.scryfall.io/border_crop/front/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg?1688215133\"}},{\"object\":\"card_face\",\"name\":\"The Ring Tempts You\",\"flavor_name\":\"\",\"mana_cost\":\"\",\"type_line\":\"Card\",\"oracle_text\":\"As the Ring tempts you, you get an emblem named The Ring if you don't have one. Then your emblem gains its next ability and you choose a creature you control to become or remain your Ring-bearer.\\n• The Ring can tempt you even if you don't control a creature.\\n• The Ring gains its abilities in order from top to bottom. Once it gains an ability, it has that ability for the rest of the game.\\n• Each time the Ring tempts you, you must choose a creature if you control one.\\n• Each player can have only one emblem named The Ring and only one Ring-bearer at a time.\",\"colors\":[],\"artist\":\"Viko Menezes\",\"artist_id\":\"92dfef2a-d0fa-42fd-bdd6-bc4c9286cb56\",\"illustration_id\":\"9c8bc3e5-8c90-4995-810c-3ac59d1db6ce\",\"image_uris\":{\"small\":\"https://cards.scryfall.io/small/back/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg?1688215133\",\"normal\":\"https://cards.scryfall.io/normal/back/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg?1688215133\",\"large\":\"https://cards.scryfall.io/large/back/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg?1688215133\",\"png\":\"https://cards.scryfall.io/png/back/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.png?1688215133\",\"art_crop\":\"https://cards.scryfall.io/art_crop/back/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg?1688215133\",\"border_crop\":\"https://cards.scryfall.io/border_crop/back/7/2/7215460e-8c06-47d0-94e5-d1832d0218af.jpg?1688215133\"}}],\"reserved\":false,\"foil\":true,\"nonfoil\":true,\"finishes\":[\"nonfoil\",\"foil\"],\"oversized\":false,\"promo\":false,\"reprint\":false,\"variation\":false,\"set_id\":\"f6267b1d-21e9-4a7f-a5b3-7c2af4fc958b\",\"set\":\"tltr\",\"set_name\":\"Tales of Middle-earth Tokens\",\"set_type\":\"token\",\"set_uri\":\"https://api.scryfall.com/sets/f6267b1d-21e9-4a7f-a5b3-7c2af4fc958b\",\"set_search_uri\":\"https://api.scryfall.com/cards/search?order=set\\u0026q=e%3Atltr\\u0026unique=prints\",\"scryfall_set_uri\":\"https://scryfall.com/sets/tltr?utm_source=api\",\"rulings_uri\":\"https://api.scryfall.com/cards/7215460e-8c06-47d0-94e5-d1832d0218af/rulings\",\"prints_search_uri\":\"https://api.scryfall.com/cards/search?order=released\\u0026q=oracleid%3A98737456-ac2a-420d-aa0e-778ba3a22cec\\u0026unique=prints\",\"collector_number\":\"H13\",\"digital\":false,\"rarity\":\"common\",\"artist\":\"Viko Menezes\",\"border_color\":\"black\",\"frame\":\"2015\",\"security_stamp\":\"triangle\",\"full_art\":false,\"textless\":false,\"booster\":false,\"story_spotlight\":false}]}",
+  "XmlUI": ""
+}

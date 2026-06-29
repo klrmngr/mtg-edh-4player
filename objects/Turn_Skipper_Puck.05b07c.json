@@ -1,0 +1,114 @@
+{
+  "GUID": "05b07c",
+  "Name": "Custom_Assetbundle_Infinite_Bag",
+  "Transform": {
+    "posX": 46.2951279,
+    "posY": 1.08621716,
+    "posZ": -14.31,
+    "rotX": 1.30239243e-07,
+    "rotY": -1.36603785e-05,
+    "rotZ": 180.0,
+    "scaleX": 1.0,
+    "scaleY": 1.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "Turn Skipper Puck",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "Tags": [
+    "Turn Skipper"
+  ],
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": true,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "CustomAssetbundle": {
+    "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/2307596441912307196/E61413D9348C25E4C24761F4093EEC5792323592/",
+    "AssetbundleSecondaryURL": "",
+    "MaterialIndex": 0,
+    "TypeIndex": 7,
+    "LoopingEffectIndex": 0
+  },
+  "LuaScript": "",
+  "LuaScriptState": "{\"turnSkipPlayer\":\"White\"}",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "62e99d",
+      "Name": "Custom_Assetbundle",
+      "Transform": {
+        "posX": 14.6751842,
+        "posY": 1.36086655,
+        "posZ": -13.2300005,
+        "rotX": 0.014238772,
+        "rotY": 0.000185032142,
+        "rotZ": 0.33894372,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "Turn Skipper",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      },
+      "Tags": [
+        "Turn Skipper"
+      ],
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": true,
+      "CustomAssetbundle": {
+        "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/2307596441912307196/E61413D9348C25E4C24761F4093EEC5792323592/",
+        "AssetbundleSecondaryURL": "",
+        "MaterialIndex": 0,
+        "TypeIndex": 0,
+        "LoopingEffectIndex": 0
+      },
+      "LuaScript": "local turnSkipPlayer\r\n\r\nfunction onLoad()\r\n  turnSkipPlayer = nil\r\n  self.setColorTint({0.5, 0.5, 0.5})\r\nend\r\n\r\nfunction assignColor(color)\r\n  if color~=nil and Player[color].seated then\r\n    self.setColorTint(color)\r\n    turnSkipPlayer = color\r\n  end\r\nend\r\n\r\nfunction onPickUp(color)\r\n  assignColor(color)\r\nend\r\n\r\nfunction onObjectEnterZone(zone, object)\r\n  if object~=self then return end\r\n  local hZones=Hands.getHands()\r\n  for _,hzone in pairs(hZones) do\r\n    if zone==hzone then\r\n      assignColor(hzone.getValue())\r\n    end\r\n  end\r\n  pcall(function()\r\n    data=Global.getTable('data')\r\n    if data~=nil then\r\n      for _,color in pairs(Player.getAvailableColors()) do\r\n        if zone==data[color]['playmat'] then\r\n          assignColor(color)\r\n        end\r\n      end\r\n    end\r\n  end)\r\nend\r\n\r\nfunction onDrop(color)\r\n  Wait.condition(function()\r\n    if turnSkipPlayer==color and Turns.turn_color==color and self.is_face_down then\r\n      broadcastToAll(\"Skipping \" .. Player[color].steam_name .. \"'s turn.\", color.color)\r\n      nextPlayer=Turns.getNextTurnColor()\r\n      Wait.frames(function() Turns.turn_color=nextPlayer end, 2)\r\n    end\r\n  end,function() return self.resting end)\r\nend\r\n\r\n-- If it's turnSkipPlayer's turn and the token is flipped, skip their turn\r\nfunction onPlayerTurn(player)\r\n  if turnSkipPlayer==player.color and self.is_face_down then\r\n    broadcastToAll(\"Skipping \" .. player.steam_name .. \"'s turn.\", player.color)\r\n    nextPlayer=Turns.getNextTurnColor()\r\n    Wait.frames(function() Turns.turn_color=nextPlayer end, 2)\r\n  end\r\nend",
+      "LuaScriptState": "{\"turnSkipPlayer\":\"White\"}",
+      "XmlUI": ""
+    }
+  ]
+}

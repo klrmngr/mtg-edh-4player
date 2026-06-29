@@ -1,0 +1,59 @@
+{
+  "GUID": "d1ae7b",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": 22.3407383,
+    "posY": 0.92,
+    "posZ": -15.4302473,
+    "rotX": 0.0,
+    "rotY": 3.86357932e-08,
+    "rotZ": 0.00163234933,
+    "scaleX": 11.45,
+    "scaleY": 1.0,
+    "scaleZ": 5.55
+  },
+  "Nickname": "Highlight Mat",
+  "Description": "White",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": false,
+  "Snap": false,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1646592995368357491/B8766542D62F8D16AC41D83B4E34C004DE61BBFE/",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomToken": {
+      "Thickness": 0.1,
+      "MergeDistancePixels": 5.0,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

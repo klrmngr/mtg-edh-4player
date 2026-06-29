@@ -1,0 +1,53 @@
+{
+  "GUID": "540e21",
+  "Name": "Custom_Assetbundle",
+  "Transform": {
+    "posX": -60.0,
+    "posY": 0.7316065,
+    "posZ": 1.67494818e-05,
+    "rotX": 1.03605521e-06,
+    "rotY": 90.00226,
+    "rotZ": -0.002331742,
+    "scaleX": 2.0,
+    "scaleY": 2.0,
+    "scaleZ": 2.0
+  },
+  "Nickname": "Pirate Cannon",
+  "Description": "Power: 60",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.8,
+    "g": 0.8,
+    "b": 0.8
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomAssetbundle": {
+    "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/853850382731374838/D7F2147428782DDB0D00D4B51C75AC583D64A133/",
+    "AssetbundleSecondaryURL": "",
+    "MaterialIndex": 2,
+    "TypeIndex": 0,
+    "LoopingEffectIndex": 0
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

@@ -1,0 +1,154 @@
+{
+  "GUID": "ddf5de",
+  "Name": "Custom_Tile",
+  "Transform": {
+    "posX": -48.1953545,
+    "posY": 0.9652232,
+    "posZ": -12.6900005,
+    "rotX": 3.663733e-08,
+    "rotY": 90.01625,
+    "rotZ": 8.44182849e-11,
+    "scaleX": 2.69385338,
+    "scaleY": 1.0,
+    "scaleZ": 2.69385338
+  },
+  "Nickname": "                 [b]rikrassen's[/b]\nMTG Deck/Draft/Cube Importer",
+  "Description": "https://steamcommunity.com/sharedfiles/filedetails/?id=2265064081",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://cards.scryfall.io/art_crop/front/0/a/0a5718db-e67d-468a-95ba-11a08fcf9fea.jpg",
+    "ImageSecondaryURL": "https://cards.scryfall.io/art_crop/front/0/a/0a5718db-e67d-468a-95ba-11a08fcf9fea.jpg",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomTile": {
+      "Type": 3,
+      "Thickness": 0.1,
+      "Stackable": false,
+      "Stretch": true
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "CustomUIAssets": [
+    {
+      "Type": 0,
+      "Name": "deck_tab",
+      "URL": "https://importer-static.rikrassen.xyz/deck_tab_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "deck_tab_button",
+      "URL": "https://importer-static.rikrassen.xyz/deck_tab_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "deck_tab_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/deck_tab_button_hover.png"
+    },
+    {
+      "Type": 0,
+      "Name": "draft_tab",
+      "URL": "https://importer-static.rikrassen.xyz/draft_tab_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "draft_tab_button",
+      "URL": "https://importer-static.rikrassen.xyz/draft_tab_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "draft_tab_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/draft_tab_button_hover.png"
+    },
+    {
+      "Type": 0,
+      "Name": "cube_tab",
+      "URL": "https://importer-static.rikrassen.xyz/cube_tab_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "cube_tab_button",
+      "URL": "https://importer-static.rikrassen.xyz/cube_tab_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "cube_tab_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/cube_tab_button_hover.png"
+    },
+    {
+      "Type": 0,
+      "Name": "close_button",
+      "URL": "https://importer-static.rikrassen.xyz/close_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "close_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/close_button_hover.png"
+    },
+    {
+      "Type": 0,
+      "Name": "submit_button",
+      "URL": "https://importer-static.rikrassen.xyz/submit_button_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "submit_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/submit_button_hover_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "settings_button",
+      "URL": "https://importer-static.rikrassen.xyz/settings_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "settings_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/settings_button_hover.png"
+    },
+    {
+      "Type": 0,
+      "Name": "settings_tab",
+      "URL": "https://importer-static.rikrassen.xyz/settings_tab_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "question_button",
+      "URL": "https://importer-static.rikrassen.xyz/question_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "buy_me_a_coffee",
+      "URL": "https://importer-static.rikrassen.xyz/buy_me_a_coffee.png"
+    },
+    {
+      "Type": 1,
+      "Name": "Roboto",
+      "URL": "https://importer-static.rikrassen.xyz/roboto.unity3d"
+    }
+  ]
+}

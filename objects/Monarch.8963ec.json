@@ -1,0 +1,66 @@
+{
+  "GUID": "8963ec",
+  "Name": "Custom_Model",
+  "Transform": {
+    "posX": -49.5863724,
+    "posY": 0.978359,
+    "posZ": 19.15553,
+    "rotX": 0.002087288,
+    "rotY": 90.07808,
+    "rotZ": 359.987,
+    "scaleX": 0.6000007,
+    "scaleY": 0.6000007,
+    "scaleZ": 0.6000007
+  },
+  "Nickname": "Monarch",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.9982578,
+    "g": 0.8349743,
+    "b": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": false,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomMesh": {
+    "MeshURL": "http://pastebin.com/raw/L0ue6kWv",
+    "DiffuseURL": "http://i.imgur.com/4aVXw6F.png",
+    "NormalURL": "",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 0,
+    "TypeIndex": 0,
+    "CustomShader": {
+      "SpecularColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      },
+      "SpecularIntensity": 0.5,
+      "SpecularSharpness": 8.0,
+      "FresnelStrength": 0.4
+    },
+    "CastShadows": true
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

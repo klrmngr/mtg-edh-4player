@@ -1,0 +1,58 @@
+{
+  "GUID": "7071ce",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": -45.49997,
+    "posY": 1.01522577,
+    "posZ": 6.999988,
+    "rotX": 7.568368e-05,
+    "rotY": 89.98341,
+    "rotZ": 0.000143943689,
+    "scaleX": 0.5,
+    "scaleY": 1.0,
+    "scaleZ": 0.5
+  },
+  "Nickname": "[b]Drop-On-Card Counter[/b]",
+  "Description": "[b]Drop onto a card to add the counter to it.[/b]\nYou can left/right click the number to increase/decrease OR [i]type the desired number while hovering over the card.[/i]",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.5019608
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1753559193952057135/51A3E2F2B1F58D1595A2AF239DFA24CE707D1BA7/",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomToken": {
+      "Thickness": 0.1,
+      "MergeDistancePixels": 5.0,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

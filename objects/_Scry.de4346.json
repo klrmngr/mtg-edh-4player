@@ -1,0 +1,68 @@
+{
+  "GUID": "de4346",
+  "Name": "PiecePack_Arms",
+  "Transform": {
+    "posX": -46.75,
+    "posY": -5.75,
+    "posZ": 2.0,
+    "rotX": 90.0,
+    "rotY": 270.0,
+    "rotZ": 0.0,
+    "scaleX": 0.629999757,
+    "scaleY": 0.629999757,
+    "scaleZ": 0.629999757
+  },
+  "Nickname": "πScry",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MeshIndex": 1,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "AttachedDecals": [
+    {
+      "Transform": {
+        "posX": 0.0,
+        "posY": 0.083,
+        "posZ": -0.35,
+        "rotX": 90.0,
+        "rotY": 180.0,
+        "rotZ": 0.0,
+        "scaleX": 1.75,
+        "scaleY": 1.75,
+        "scaleZ": 1.75
+      },
+      "CustomDecal": {
+        "Name": "pi",
+        "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1661232230975361286/3CF5E2DD99194550D4F60636711E73363BA610F9/",
+        "Size": 1.0
+      },
+      "OwnerSteamID": 0
+    }
+  ]
+}

@@ -1,0 +1,295 @@
+{
+  "GUID": "098c38",
+  "Name": "Bag",
+  "Transform": {
+    "posX": 53.345,
+    "posY": 0.8501961,
+    "posZ": 9.450001,
+    "rotX": 3.77768351e-15,
+    "rotY": 180.0,
+    "rotZ": -6.67010553e-08,
+    "scaleX": 0.6000004,
+    "scaleY": 0.6000004,
+    "scaleZ": 0.6000004
+  },
+  "Nickname": "Drafting tools",
+  "Description": "by Tobii and Spheniscine",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.905882359,
+    "g": 0.8980392,
+    "b": 0.1725375
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "Bag": {
+    "Order": 0
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "f85b39",
+      "Name": "Custom_Model",
+      "Transform": {
+        "posX": 0.3582772,
+        "posY": 3.11052012,
+        "posZ": 5.904693,
+        "rotX": 359.4346,
+        "rotY": 179.978333,
+        "rotZ": 180.2972,
+        "scaleX": 1.92499864,
+        "scaleY": 1.92499864,
+        "scaleZ": 1.92499864
+      },
+      "Nickname": "Ready?",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.9999998,
+        "g": 0.992160261,
+        "b": 0.9999998
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "Hands": false,
+      "CustomMesh": {
+        "MeshURL": "http://pastebin.com/raw/00YWZ28Y",
+        "DiffuseURL": "http://i.imgur.com/LSBlZZX.png",
+        "NormalURL": "",
+        "ColliderURL": "",
+        "Convex": true,
+        "MaterialIndex": 3,
+        "TypeIndex": 0,
+        "CastShadows": true
+      },
+      "LuaScript": "tobiiDraftTools_isReadyToken = true",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "f598ea",
+      "Name": "BlockSquare",
+      "Transform": {
+        "posX": 0.435255378,
+        "posY": 4.28072834,
+        "posZ": 5.800063,
+        "rotX": 359.7965,
+        "rotY": 179.999329,
+        "rotZ": 0.220927447,
+        "scaleX": 2.49999833,
+        "scaleY": 2.49999833,
+        "scaleZ": 2.49999833
+      },
+      "Nickname": "Reset Readiness Tokens",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.117999904,
+        "g": 0.53,
+        "b": 1.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "LuaScript": "function onload()\r\n    local button_parameters = {}\r\n    button_parameters.click_function = \"onClick_RotateHands\"\r\n    button_parameters.function_owner = self\r\n    button_parameters.label = \"Reset\\nReady\\nTokens\"\r\n    button_parameters.position = {0, 0.5, 0}\r\n    --button_parameters.rotation = {float x, float y, float z} ???Optional\r\n    button_parameters.width = 400\r\n    button_parameters.height = 400\r\n    button_parameters.font_size = 100\r\n    self.createButton(button_parameters)\r\nend\r\n\r\nfunction onClick_RotateHands()\r\n    for i,obj in ipairs(getAllObjects()) do\n        if obj.getVar('tobiiDraftTools_isReadyToken')\n        then \n            cur = obj.getRotation()\n            obj.setRotation({cur.x,cur.y,180})\n        end\n    end\r\nend\r\n\r\n",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "e69660",
+      "Name": "BlockSquare",
+      "Transform": {
+        "posX": -0.410761356,
+        "posY": 3.96743131,
+        "posZ": 5.24184752,
+        "rotX": -6.024854e-06,
+        "rotY": 180.004562,
+        "rotZ": -2.22820086e-06,
+        "scaleX": 2.49999833,
+        "scaleY": 2.49999833,
+        "scaleZ": 2.49999833
+      },
+      "Nickname": "Rotate Hands (Right)",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.5440271,
+        "g": 0.140977561,
+        "b": 0.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "Hands": false,
+      "LuaScript": "function onload()\r\n    local button_parameters = {}\r\n    button_parameters.click_function = \"onClick_RotateHands\"\r\n    button_parameters.function_owner = self\r\n    button_parameters.label = \"Rotate\\nHands\\n(Right)\"\r\n    button_parameters.position = {0, 0.5, 0}\r\n    --button_parameters.rotation = {float x, float y, float z} ???Optional\r\n    button_parameters.width = 400\r\n    button_parameters.height = 400\r\n    button_parameters.font_size = 100\r\n    self.createButton(button_parameters)\r\nend\r\n\r\nfunction onClick_RotateHands()\r\n    local players = getRealSeatedPlayers()\r\n    local playersCounterClockwise = playersCounterClockwise(players)\r\n    --print(\"DEBUG: Number of seated players: \" .. #players)\r\n    --print(\"DEBUG: Number of players clockwise: \" .. #playersClockwise)\r\n    --for i,player in ipairs(playersClockwise) do\r\n    --    print(\"DEBUG: \" .. i .. \" : \" .. player.color)\r\n    --end\r\n    for i, player in ipairs(playersCounterClockwise) do\r\n        local moveToIndex = 1\r\n        if i == #players\r\n        then\r\n            moveToIndex = 1\r\n        else\r\n            moveToIndex = i + 1\r\n        end\r\n        local moveToPlayer = playersCounterClockwise[moveToIndex]\r\n        --print(\"DEBUG: Moving cards from \" .. i .. \" : \" .. player.color ..\r\n        --    \" to \" .. moveToIndex .. \" : \" .. moveToPlayer.color)\r\n        for i,card in ipairs(player.getHandObjects()) do\r\n            hand = moveToPlayer.getPlayerHand()\r\n            card.setPosition({hand.pos_x, hand.pos_y, hand.pos_z})\r\n            card.setRotation({hand.rot_x, hand.rot_y+180, hand.rot_z})\r\n        end\r\n    end\n\n    for i,obj in ipairs(getAllObjects()) do\n        if obj.getVar('tobiiDraftTools_isReadyToken')\n        then\n            cur = obj.getRotation()\n            obj.setRotation({cur.x,cur.y,180})\n        end\n    end\r\nend\r\n\r\n-- getSeatedPlayers() doesn't return the actual Player objects.\r\n-- This function will instead return the 'real' Player objects.\r\nfunction getRealSeatedPlayers()\r\n    local playerColors = getSeatedPlayers()\r\n    local players = {}\r\n    local newI = 1\r\n    for i, playerColor in pairs(playerColors) do\r\n        if Player[playerColor].getPlayerHand() != nil\r\n        then\r\n            players[newI] = Player[playerColor]\r\n            newI = newI + 1\r\n        end\r\n    end\r\n    return players\r\nend\r\n\r\n-- Returns a Table with player angles (in radians) as the keys\r\nfunction playerAngles(players)\r\n    local angles = {}\r\n    for i, player in pairs(players) do\r\n        angles[getPlayerAngle(player)] = player\r\n    end\r\n    return angles\r\nend\r\n\r\nfunction playersCounterClockwise(players)\r\n    local newPlayers = {}\r\n    local newI = 1\r\n    for i, player in pairsByKeys(playerAngles(players)) do\r\n        newPlayers[newI] = player\r\n        newI = newI + 1\r\n    end\r\n    return newPlayers\r\nend\r\n\r\nfunction playersClockwise(players)\r\n    local newPlayers = {}\r\n    local newI = #players\r\n    for i, player in pairsByKeys(playerAngles(players)) do\r\n        newPlayers[newI] = player\r\n        newI = newI - 1\r\n    end\r\n    return newPlayers\r\nend\r\n\r\nfunction getPlayerAngle(player)\r\n    local hand = player.getPlayerHand()\r\n    --print(\"DEBUG: Player color: \" .. player.color)\r\n    return math.atan2(hand.pos_z, hand.pos_x)\r\nend\r\n\r\n-- Copied from LUA docs... returns iterator in order of keys\r\nfunction pairsByKeys (t, f)\r\n    local a = {}\r\n    for n in pairs(t) do table.insert(a, n) end\r\n        table.sort(a, f)\r\n        local i = 0      -- iterator variable\r\n        local iter = function ()   -- iterator function\r\n        i = i + 1\r\n        if a[i] == nil then return nil\r\n            else return a[i], t[a[i]]\r\n        end\r\n    end\r\n    return iter\r\nend\r\n\r\nfunction reverseArray(tbl)\r\n  for i=1, math.floor(#tbl / 2) do\r\n    local tmp = tbl[i]\r\n    tbl[i] = tbl[#tbl - i + 1]\r\n    tbl[#tbl - i + 1] = tmp\r\n  end\r\nend\r\n",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "17bafe",
+      "Name": "BlockSquare",
+      "Transform": {
+        "posX": 53.8213463,
+        "posY": 3.45281672,
+        "posZ": 12.1501017,
+        "rotX": 0.0197063275,
+        "rotY": 180.002747,
+        "rotZ": 0.6843464,
+        "scaleX": 2.49999833,
+        "scaleY": 2.49999833,
+        "scaleZ": 2.49999833
+      },
+      "Nickname": "Rotate Hands (Left)",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.5440271,
+        "g": 0.140977383,
+        "b": 0.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "LuaScript": "function onload()\r\n    local button_parameters = {}\r\n    button_parameters.click_function = \"onClick_RotateHands\"\r\n    button_parameters.function_owner = self\r\n    button_parameters.label = \"Rotate\\nHands\\n(Left)\"\r\n    button_parameters.position = {0, 0.5, 0}\r\n    --button_parameters.rotation = {float x, float y, float z} ???Optional\r\n    button_parameters.width = 400\r\n    button_parameters.height = 400\r\n    button_parameters.font_size = 100\r\n    self.createButton(button_parameters)\r\nend\r\n\r\nfunction onClick_RotateHands()\r\n    local players = getRealSeatedPlayers()\r\n    local playersClockwise = playersClockwise(players)\r\n    --print(\"DEBUG: Number of seated players: \" .. #players)\r\n    --print(\"DEBUG: Number of players clockwise: \" .. #playersClockwise)\r\n    --for i,player in ipairs(playersClockwise) do\r\n    --    print(\"DEBUG: \" .. i .. \" : \" .. player.color)\r\n    --end\r\n    for i, player in ipairs(playersClockwise) do\r\n        local moveToIndex = 1\r\n        if i == #players\r\n        then\r\n            moveToIndex = 1\r\n        else\r\n            moveToIndex = i + 1\r\n        end\r\n        local moveToPlayer = playersClockwise[moveToIndex]\r\n        --print(\"DEBUG: Moving cards from \" .. i .. \" : \" .. player.color ..\r\n        --    \" to \" .. moveToIndex .. \" : \" .. moveToPlayer.color)\r\n        for i,card in ipairs(player.getHandObjects()) do\r\n            hand = moveToPlayer.getPlayerHand()\r\n            card.setPosition({hand.pos_x, hand.pos_y, hand.pos_z})\r\n            card.setRotation({hand.rot_x, hand.rot_y+180, hand.rot_z})\r\n        end\r\n    end\n\n    for i,obj in ipairs(getAllObjects()) do\n        if obj.getVar('tobiiDraftTools_isReadyToken')\n        then\n            cur = obj.getRotation()\n            obj.setRotation({cur.x,cur.y,180})\n        end\n    end\r\nend\r\n\r\n-- getSeatedPlayers() doesn't return the actual Player objects.\r\n-- This function will instead return the 'real' Player objects.\r\nfunction getRealSeatedPlayers()\r\n    local playerColors = getSeatedPlayers()\r\n    local players = {}\r\n    local newI = 1\r\n    for i, playerColor in pairs(playerColors) do\r\n        if Player[playerColor].getPlayerHand() != nil\r\n        then\r\n            players[newI] = Player[playerColor]\r\n            newI = newI + 1\r\n        end\r\n    end\r\n    return players\r\nend\r\n\r\n-- Returns a Table with player angles (in radians) as the keys\r\nfunction playerAngles(players)\r\n    local angles = {}\r\n    for i, player in pairs(players) do\r\n        angles[getPlayerAngle(player)] = player\r\n    end\r\n    return angles\r\nend\r\n\r\nfunction playersCounterClockwise(players)\r\n    local newPlayers = {}\r\n    local newI = 1\r\n    for i, player in pairsByKeys(playerAngles(players)) do\r\n        newPlayers[newI] = player\r\n        newI = newI + 1\r\n    end\r\n    return newPlayers\r\nend\r\n\r\nfunction playersClockwise(players)\r\n    local newPlayers = {}\r\n    local newI = #players\r\n    for i, player in pairsByKeys(playerAngles(players)) do\r\n        newPlayers[newI] = player\r\n        newI = newI - 1\r\n    end\r\n    return newPlayers\r\nend\r\n\r\nfunction getPlayerAngle(player)\r\n    local hand = player.getPlayerHand()\r\n    --print(\"DEBUG: Player color: \" .. player.color)\r\n    return math.atan2(hand.pos_z, hand.pos_x)\r\nend\r\n\r\n-- Copied from LUA docs... returns iterator in order of keys\r\nfunction pairsByKeys (t, f)\r\n    local a = {}\r\n    for n in pairs(t) do table.insert(a, n) end\r\n        table.sort(a, f)\r\n        local i = 0      -- iterator variable\r\n        local iter = function ()   -- iterator function\r\n        i = i + 1\r\n        if a[i] == nil then return nil\r\n            else return a[i], t[a[i]]\r\n        end\r\n    end\r\n    return iter\r\nend\r\n\r\nfunction reverseArray(tbl)\r\n  for i=1, math.floor(#tbl / 2) do\r\n    local tmp = tbl[i]\r\n    tbl[i] = tbl[#tbl - i + 1]\r\n    tbl[#tbl - i + 1] = tmp\r\n  end\r\nend\r\n",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    },
+    {
+      "GUID": "b7e70c",
+      "Name": "Custom_Token",
+      "Transform": {
+        "posX": 53.33768,
+        "posY": 2.25566983,
+        "posZ": 11.6325941,
+        "rotX": 0.311308235,
+        "rotY": 180.000015,
+        "rotZ": -0.00213750661,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "hand rotator",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.256093353,
+        "g": 0.256093353,
+        "b": 0.256093353
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomImage": {
+        "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/958597478463059274/DE73B64E1B5C6F272EA3BEE5EF458E73E48FF03D/",
+        "ImageSecondaryURL": "",
+        "ImageScalar": 1.0,
+        "WidthScale": 0.0,
+        "CustomToken": {
+          "Thickness": 0.1,
+          "MergeDistancePixels": 5.0,
+          "StandUp": false,
+          "Stackable": false
+        }
+      },
+      "LuaScript": "function onLoad(saved_data)\r\n\r\n\tallHands = true\r\n\tcounterclock = true\r\n\r\n\tif saved_data ~= \"\" then\r\n\t\tlocal loaded_data = JSON.decode(saved_data)\r\n\t\tallHands = loaded_data[1]\r\n\t\tcounterclock = loaded_data[2]\r\n\tend\r\n  self.script_state = JSON.encode({allHands, counterclock})\r\n\r\n\tcreateButtons()\r\n\r\nend\r\n\r\n\r\nfunction createButtons()\r\n\tself.clearButtons()\r\n\r\n\tlab='↻'\r\n  ttip = 'click to rotate hands [b]clockwise[/b]\\n(right-click to switch direction)'\r\n\tif counterclock then\r\n\t\tlab='↺'\r\n    ttip = 'click to rotate hands [b]counter-clockwise[/b]\\n      (right-click to switch direction)'\r\n\tend\r\n\tfun = 'rotateHands'\r\n\tcol = {.9,.9,.9,100}\r\n\r\n\tif rotating then\r\n\t\tfun = 'doNothing'\r\n\t\tttip = 'rotating...'\r\n\t\tcol = {.4,.4,.4,100}\r\n\tend\r\n\r\n\tself.createButton({\r\n\t\tclick_function = fun,\r\n\t\tfunction_owner = self,\r\n\t\tlabel = lab,\r\n    tooltip = ttip,\r\n\t\tposition = {0,0.5,.2},\r\n\t\trotation = {0,0,0},\r\n\t\twidth = 600,\r\n\t\theight = 600,\r\n    scale = {1.5,1.5,1.5},\r\n\t\tfont_size = 1000,\r\n    font_color = col,\r\n    color = {0,0,0,0},\r\n    hover_color={0,0,0,.1},\r\n\t})\r\n\r\n\tif allHands then\r\n\t\tlab2 = 'all hands'\r\n\telse\r\n\t\tlab2 = 'only seated'\r\n\tend\r\n\r\n\tself.createButton({\r\n\t\tclick_function = 'swapPlayerList',\r\n\t\tfunction_owner = self,\r\n\t\tlabel = lab2,\r\n\t\ttooltip = '   swap whether or not to\\nonly include seated players',\r\n\t\tposition = {0,-0.5,0},\r\n\t\trotation = {0,0,180},\r\n\t\twidth = 800,\r\n\t\theight = 300,\r\n\t\tfont_size = 200,\r\n\t\tfont_color = {.9,.9,.9,100},\r\n\t\tcolor = {0,0,0,0},\r\n\t})\r\n\r\nend\r\n\r\n\r\nfunction rotateHands(obj,ply,alt)\r\n\r\n  if alt then\r\n    counterclock = not counterclock\r\n    self.script_state = JSON.encode({allHands, counterclock})\r\n    createButtons()\r\n    return\r\n  end\r\n\r\n\trotating=true\r\n\tcreateButtons()\r\n\tWait.condition(function()\r\n\t\tcreateButtons()\r\n\tend,function() return not(rotating) end)\r\n\r\n\tactivePlayers={}\r\n\tallObjs={}\r\n\r\n\tif allHands then\r\n\t\tplys=Player.getAvailableColors()\r\n\telse\r\n\t\tplys=getSeatedPlayers()\r\n\tend\r\n\r\n\tfor i,ply in pairs(plys) do\r\n\t\tnum=#Player[ply].getHandObjects(1)\r\n\t\tif num>0 then\r\n\t\t\ttable.insert(activePlayers,ply)\r\n\t\tend\r\n\tend\r\n\r\n\tfor i,ply in pairs(activePlayers) do\r\n\t\tif counterclock then\r\n\t\t\tiMoveTo = (i-1) % (#activePlayers)\r\n\t\telse\r\n\t\t\tiMoveTo = (i+1) % (#activePlayers)\r\n\t\tend\r\n\t\tif iMoveTo==0 then iMoveTo=#activePlayers end\r\n\r\n\t\tlocal objs=Player[ply].getHandObjects()\r\n\t\tfor _,obj in ipairs(objs) do\r\n\t\t\tallObjs[obj]=activePlayers[iMoveTo]\r\n\t\tend\r\n\tend\r\n\r\n\tk=0\r\n\tfor obj,ply in pairs(allObjs) do\r\n\t\tk=k+1\r\n\t\tlastObj=obj\r\n\t\tWait.frames(function()\r\n\t\t\tobj.deal(1,ply)\r\n\t\t\tWait.time(function()\r\n\t\t\t\tcheckMoveSuccess(obj,ply)\r\n\t\t\tend,1)\r\n\t\tend,k*2)\r\n\tend\r\n\r\n\tWait.frames(function()\r\n\t\tWait.condition(function()\r\n\t\t\trotating = false\r\n\t\tend,function()\r\n\t\t\treturn not(lastObj.isSmoothMoving())\r\n\t\tend)\r\n\tend,k*2+5)\r\n\r\nend\r\n\r\n\r\nfunction checkMoveSuccess(obj,ply)\r\n\r\n  if obj==nil then\r\n    return\r\n  end\r\n\r\n\tdidNotMakeIt=true\r\n\tfor _,o in pairs(Player[ply].getHandObjects()) do\r\n\t\tif obj==o then\r\n\t\t\tdidNotMakeIt=false\r\n\t\t\tbreak\r\n\t\tend\r\n\tend\r\n\r\n  if didNotMakeIt then\r\n\t\tlocal target=Player[ply].getHandTransform(1)\r\n\t\ttarget.rotation.y=target.rotation.y+180\r\n    obj.setPosition(target.position)\r\n\t\tobj.setRotation(target.rotation)\r\n\t\t-- Wait.time(function() obj.highlightOn(ply,0.1) end,0.2,3)\r\n  end\r\n\r\nend\r\n\r\n\r\nfunction swapPlayerList()\r\n\tallHands = not allHands\r\n\tself.script_state = JSON.encode({allHands, counterclock})\r\n\tcreateButtons()\r\n\treturn\r\nend\r\n\r\nfunction doNothing() end\r\n",
+      "LuaScriptState": "[false,false]",
+      "XmlUI": ""
+    }
+  ]
+}

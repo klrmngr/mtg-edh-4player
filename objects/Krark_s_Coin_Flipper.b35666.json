@@ -1,0 +1,107 @@
+{
+  "GUID": "b35666",
+  "Name": "Infinite_Bag",
+  "Transform": {
+    "posX": -53.5,
+    "posY": 0.9507735,
+    "posZ": 5.0,
+    "rotX": -1.77922033e-07,
+    "rotY": 270.014435,
+    "rotZ": 6.35056153e-07,
+    "scaleX": 0.850000143,
+    "scaleY": 0.850000143,
+    "scaleZ": 0.850000143
+  },
+  "Nickname": "Krark's Coin Flipper",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.5,
+    "g": 0.5,
+    "b": 0.5
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "2477ad",
+      "Name": "Custom_Tile",
+      "Transform": {
+        "posX": -53.40238,
+        "posY": 2.55119371,
+        "posZ": 5.0273304,
+        "rotX": 349.856079,
+        "rotY": 179.151215,
+        "rotZ": 352.512451,
+        "scaleX": 2.5,
+        "scaleY": 1.0,
+        "scaleZ": 2.5
+      },
+      "Nickname": "Krark's Coin Flipper",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomImage": {
+        "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/f/7f267de8-2849-4abd-834e-11bbd82dccf5.jpg",
+        "ImageSecondaryURL": "",
+        "ImageScalar": 1.0,
+        "WidthScale": 0.0,
+        "CustomTile": {
+          "Type": 3,
+          "Thickness": 0.2,
+          "Stackable": false,
+          "Stretch": true
+        }
+      },
+      "LuaScript": "function onLoad()\r\n\r\n    math.randomseed(os.time())\r\n    thumbOFFline = \"Krark's Thumb? [i][b]No[/b][/i]\"\r\n    thumbONline = \"Krark's Thumb? [i][b]Yes[/b][/i]\"\r\n\r\n    thumbToggle = thumbOFFline\r\n\r\n    coinStr = {[2]='[008000]✓[-]',\r\n               [1]='[ff0000]✗[-]'}\r\n    coinLine = ''\r\n\r\n    X = nil\r\n\r\n    self.createButton({\r\n      label=\"Flip a Coin\",\r\n      click_function=\"oneCoin\",\r\n      function_owner=self,\r\n      position={-0.2,0.2,-0.7},\r\n      scale={0.75,0.75,0.75},\r\n      color={0.1,0.1,0.1},\r\n      font_color={1,1,1},\r\n      height=225,\r\n      width=900,\r\n      alignment = 3,\r\n    })\r\n    self.createButton({\r\n      label=\"Flip X Coins\",\r\n      click_function=\"xCoin\",\r\n      function_owner=self,\r\n      position={-0.2,0.2,-0.35},\r\n      scale={0.75,0.75,0.75},\r\n      color={0.1,0.1,0.1},\r\n      font_color={1,1,1},\r\n      height=225,\r\n      width=900,\r\n      alignment = 3,\r\n    })\r\n    self.createInput({\r\n      value = self.getDescription(),\r\n      input_function = \"null\",\r\n      label = \"X=?\",\r\n      function_owner = self,\r\n      position={0.9,0.2,-0.35},\r\n      scale={0.75,0.75,0.75},\r\n      color={0.1,0.1,0.1},\r\n      font_color={1,1,1},\r\n      height=174,\r\n      width=300,\r\n      font_size=150,\r\n      alignment = 3,\r\n      validation= 2\r\n    })\r\n    self.createButton({\r\n      label=\"Flip 'til Fail\",\r\n      click_function=\"manyCoin\",\r\n      function_owner=self,\r\n      position={-0.2,0.2,0},\r\n      scale={0.75,0.75,0.75},\r\n      color={0.1,0.1,0.1},\r\n      font_color={1,1,1},\r\n      height=225,\r\n      width=900,\r\n      alignment = 3,\r\n    })\r\n    self.createButton({\r\n      label=\"Flip 'til Success\",\r\n      click_function=\"manyCoin2\",\r\n      function_owner=self,\r\n      position={-0.2,0.2,0.35},\r\n      scale={0.75,0.75,0.75},\r\n      color={0.1,0.1,0.1},\r\n      font_color={1,1,1},\r\n      height=225,\r\n      width=900,\r\n      alignment = 3,\r\n    })\r\n    self.createButton({\r\n      label=thumbToggle,\r\n      click_function=\"toggle\",\r\n      function_owner=self,\r\n      position={-0.2,0.2,0.7},\r\n      scale={0.75,0.75,0.75},\r\n      color={0.1,0.1,0.1},\r\n      font_color={1,1,1},\r\n      tooltip='[b]Yes[/b]: flips 2 coins and auto-picks \"success\"',\r\n      height=225,\r\n      width=900,\r\n      alignment = 3,\r\n    })\r\n\r\nend\r\n\r\nfunction toggle()\r\n    if thumbToggle == thumbOFFline then\r\n        thumbToggle = thumbONline\r\n    else\r\n        thumbToggle = thumbOFFline\r\n    end\r\n    self.editButton({\r\n        index = 4,\r\n        label=thumbToggle\r\n    })\r\nend\r\n\r\nfunction flip()\r\n    coin = math.random(1,2)\r\n    coinLine = coinLine..coinStr[coin]\r\nend\r\n\r\nfunction thumb()\r\n    coin1 = math.random(1,2)\r\n    coin2 = math.random(1,2)\r\n    coinLine = coinLine..'['..coinStr[coin1]..coinStr[coin2]..']'\r\n    if coin1 == 2 or coin2 == 2 then\r\n        coin = 2\r\n    else\r\n        coin = 1\r\n    end\r\nend\r\n\r\nfunction printCoin()\r\n    msg = \"Successes: \"..succ..\" | Fails: \"..fail\r\n    rgb = {r=1, g=1, b=1}\r\n    broadcastToAll(coinLine..'\\n'..msg, rgb)\r\n    coinLine = ''\r\nend\r\n\r\nfunction xCoin()\r\n    succ = 0\r\n    fail = 0\r\n    X=tonumber(self.getInputs()[1].value)\r\n    if X==nil then\r\n        msg = \"X must be a number\"\r\n        rgb = {r=1, g=1, b=1}\r\n        broadcastToAll(msg, rgb)\r\n        return\r\n    else\r\n        for i=1, X, 1 do\r\n            if thumbToggle == thumbOFFline then\r\n                flip()\r\n            else\r\n                thumb()\r\n            end\r\n            if coin == 2 then\r\n                succ = succ+1\r\n            else\r\n                fail = fail+1\r\n            end\r\n            i = i + 1\r\n        end\r\n        printCoin()\r\n    end\r\nend\r\n\r\nfunction oneCoin()\r\n    succ = 0\r\n    fail = 0\r\n    if thumbToggle == thumbOFFline then\r\n        flip()\r\n    else\r\n        thumb()\r\n    end\r\n    if coin == 2 then\r\n        succ = 1\r\n    else\r\n        fail = 1\r\n    end\r\n    printCoin()\r\nend\r\n\r\nfunction manyCoin()\r\n    succ = 0\r\n    fail = 0\r\n    y = 0\r\n    repeat\r\n        if thumbToggle == thumbOFFline then\r\n            flip()\r\n        else\r\n            thumb()\r\n        end\r\n        if coin == 2 then\r\n            succ = succ+1\r\n        else\r\n            fail = fail+1\r\n        end\r\n    until(coin == 1)\r\n    printCoin()\r\nend\r\n\r\nfunction manyCoin2()\r\n    succ = 0\r\n    fail = 0\r\n    y = 0\r\n    repeat\r\n        if thumbToggle == thumbOFFline then\r\n            flip()\r\n        else\r\n            thumb()\r\n        end\r\n        if coin == 2 then\r\n            succ = succ+1\r\n        else\r\n            fail = fail+1\r\n        end\r\n    until(coin == 2)\r\n    printCoin()\r\nend\r\n\r\nfunction null() end\r\n",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    }
+  ]
+}

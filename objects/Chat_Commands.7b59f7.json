@@ -1,0 +1,57 @@
+{
+  "GUID": "7b59f7",
+  "Name": "Custom_Tile",
+  "Transform": {
+    "posX": 31.0,
+    "posY": 22.0,
+    "posZ": 111.5,
+    "rotX": 82.90005,
+    "rotY": 180.0,
+    "rotZ": 0.0,
+    "scaleX": 25.0,
+    "scaleY": 1.0,
+    "scaleZ": 25.0
+  },
+  "Nickname": "Chat Commands",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1752434823003894372/DEE0A3275404714CEC0125D8C158334BD5D11373/",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomTile": {
+      "Type": 3,
+      "Thickness": 0.1,
+      "Stackable": false,
+      "Stretch": true
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

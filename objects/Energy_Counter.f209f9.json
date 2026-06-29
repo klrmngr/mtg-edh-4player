@@ -1,0 +1,58 @@
+{
+  "GUID": "f209f9",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": 45.4999924,
+    "posY": 1.01121616,
+    "posZ": 3.00002217,
+    "rotX": 0.000146317776,
+    "rotY": 270.013947,
+    "rotZ": 6.661975e-05,
+    "scaleX": 0.461601079,
+    "scaleY": 1.0,
+    "scaleZ": 0.461601079
+  },
+  "Nickname": "Energy Counter",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/png/front/a/4/a446b9f8-cb22-408a-93ff-bee44a0dccc0.png?1604831723",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomToken": {
+      "Thickness": 0.1,
+      "MergeDistancePixels": 5.0,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "[true,0,false]",
+  "XmlUI": ""
+}

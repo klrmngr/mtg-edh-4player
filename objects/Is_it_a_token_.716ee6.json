@@ -1,0 +1,47 @@
+{
+  "GUID": "716ee6",
+  "Name": "PiecePack_Arms",
+  "Transform": {
+    "posX": -46.75,
+    "posY": -5.75,
+    "posZ": -6.5,
+    "rotX": 90.0,
+    "rotY": 270.0,
+    "rotZ": 0.0,
+    "scaleX": 0.6315745,
+    "scaleY": 0.6315745,
+    "scaleZ": 0.6315745
+  },
+  "Nickname": "Is it a token?",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MeshIndex": 1,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

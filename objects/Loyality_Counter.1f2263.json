@@ -1,0 +1,58 @@
+{
+  "GUID": "1f2263",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": -47.5,
+    "posY": 1.0152235,
+    "posZ": 7.00000048,
+    "rotX": -2.60101228e-06,
+    "rotY": 90.0067444,
+    "rotZ": 2.82065162e-06,
+    "scaleX": 0.377141833,
+    "scaleY": 1.0,
+    "scaleZ": 0.377141833
+  },
+  "Nickname": "Loyality Counter",
+  "Description": "Left click - Increase\nRight click - Decrease",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1681520857670507709/E57D321C64268F8F9E69CBBD1CFE9FD08E3D4F71/",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomToken": {
+      "Thickness": 0.1,
+      "MergeDistancePixels": 5.0,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "[true,0]",
+  "XmlUI": ""
+}

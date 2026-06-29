@@ -1,0 +1,57 @@
+{
+  "GUID": "222541",
+  "Name": "Custom_Tile",
+  "Transform": {
+    "posX": 48.2,
+    "posY": 0.9612172,
+    "posZ": 12.6900005,
+    "rotX": 2.76063918e-08,
+    "rotY": 270.0,
+    "rotZ": -8.458833e-09,
+    "scaleX": 2.69385338,
+    "scaleY": 1.0,
+    "scaleZ": 2.69385338
+  },
+  "Nickname": "                 [b]rikrassen's[/b]\nMTG Deck/Draft/Cube Importer",
+  "Description": "https://steamcommunity.com/sharedfiles/filedetails/?id=2265064081",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://cards.scryfall.io/art_crop/front/0/a/0a5718db-e67d-468a-95ba-11a08fcf9fea.jpg",
+    "ImageSecondaryURL": "https://cards.scryfall.io/art_crop/front/0/a/0a5718db-e67d-468a-95ba-11a08fcf9fea.jpg",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomTile": {
+      "Type": 3,
+      "Thickness": 0.1,
+      "Stackable": false,
+      "Stretch": true
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

@@ -1,0 +1,126 @@
+{
+  "GUID": "9cf532",
+  "Name": "Infinite_Bag",
+  "Transform": {
+    "posX": 53.5,
+    "posY": 0.946767449,
+    "posZ": -5.0,
+    "rotX": -4.57407232e-08,
+    "rotY": 89.98566,
+    "rotZ": 7.93231e-08,
+    "scaleX": 0.850000143,
+    "scaleY": 0.850000143,
+    "scaleZ": 0.850000143
+  },
+  "Nickname": "d2",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.5,
+    "g": 0.5,
+    "b": 0.5
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "227d07",
+      "Name": "Quarter",
+      "Transform": {
+        "posX": 52.86056,
+        "posY": 2.81382155,
+        "posZ": -5.13289165,
+        "rotX": 353.6101,
+        "rotY": 0.08923862,
+        "rotZ": 178.660843,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "LuaScript": "function onObjectRandomize(obj)\r\n  if obj==self then\r\n\r\n    local launchSpin = 180\r\n    local spin = {}\r\n\t\tspin.x = math.random() * launchSpin\r\n\t\tspin.y = math.random() * (launchSpin - spin.x)\r\n\t\tspin.z = (launchSpin - spin.x - spin.y)\r\n\r\n\t\t--randomly invert some of the axes\r\n\t\tspin.x = spin.x * (math.random(0,1)*2-1)\r\n\t\tspin.y = spin.y * (math.random(0,1)*2-1)\r\n\t\tspin.z = spin.z * (math.random(0,1)*2-1)\r\n\r\n    success = pcall(function() pow=tonumber(self.getDescription()) end)\r\n    if not(success) or pow==nil then\r\n      pow=30\r\n    end\r\n    launchVelocity={0,pow,0}\r\n\r\n    --Use setVelocity so that mass can be ignored\r\n    obj.setVelocity(launchVelocity)\r\n    obj.setAngularVelocity(spin)\r\n\r\n  end\r\nend\r\n",
+      "LuaScriptState": "",
+      "XmlUI": "",
+      "PhysicsMaterial": {
+        "StaticFriction": 1.0,
+        "DynamicFriction": 0.7,
+        "Bounciness": 1.0,
+        "FrictionCombine": 0,
+        "BounceCombine": 0
+      },
+      "Rigidbody": {
+        "Mass": 1.0,
+        "Drag": 0.1,
+        "AngularDrag": 0.1,
+        "UseGravity": true
+      },
+      "RotationValues": [
+        {
+          "Value": "Heads",
+          "Rotation": {
+            "x": 0.0,
+            "y": 90.0,
+            "z": 180.0
+          }
+        },
+        {
+          "Value": "Tails",
+          "Rotation": {
+            "x": 0.0,
+            "y": -90.0,
+            "z": 0.0
+          }
+        }
+      ]
+    }
+  ]
+}

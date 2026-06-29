@@ -1,0 +1,45 @@
+{
+  "GUID": "809133",
+  "Name": "BlockSquare",
+  "Transform": {
+    "posX": 42.065,
+    "posY": 0.0,
+    "posZ": -4.0,
+    "rotX": -1.36603785e-05,
+    "rotY": 180.0,
+    "rotZ": -4.928687e-07,
+    "scaleX": 1.0,
+    "scaleY": 1.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "Timer",
+  "Description": "White",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.9264706,
+    "g": 0.0,
+    "b": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "LuaScript": "",
+  "LuaScriptState": "[1,12]",
+  "XmlUI": ""
+}

@@ -1,0 +1,55 @@
+{
+  "GUID": "5006a4",
+  "Name": "BlockSquare",
+  "Transform": {
+    "posX": -52.405,
+    "posY": 1.065223,
+    "posZ": -19.71,
+    "rotX": -2.5000201e-08,
+    "rotY": 90.00168,
+    "rotZ": -1.89542835e-08,
+    "scaleX": 2.3,
+    "scaleY": 0.2,
+    "scaleZ": 3.2
+  },
+  "Nickname": "Deck Lister",
+  "Description": "[b]Instructions to re-import your deck:[/b]\n1. Place your deck here\n2. Press the button below\n3. Type [b]scryfall deck[/b] into chat and the deck will spawn at your mouse cursor",
+  "GMNotes": "68c849",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.117599107,
+    "g": 0.117599107,
+    "b": 0.196032971
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "AttachedSnapPoints": [
+    {
+      "Position": {
+        "x": 2.32195774e-07,
+        "y": 0.5000001,
+        "z": 1.25119172e-07
+      }
+    }
+  ]
+}

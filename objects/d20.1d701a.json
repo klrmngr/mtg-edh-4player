@@ -1,0 +1,258 @@
+{
+  "GUID": "1d701a",
+  "Name": "Infinite_Bag",
+  "Transform": {
+    "posX": -53.5,
+    "posY": 0.950773537,
+    "posZ": -7.0,
+    "rotX": 3.51710327e-07,
+    "rotY": 270.014435,
+    "rotZ": 1.97916734e-07,
+    "scaleX": 0.850000143,
+    "scaleY": 0.850000143,
+    "scaleZ": 0.850000143
+  },
+  "Nickname": "d20",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.5,
+    "g": 0.5,
+    "b": 0.5
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "8f8d5d",
+      "Name": "Die_20",
+      "Transform": {
+        "posX": 11.1956358,
+        "posY": 3.31811857,
+        "posZ": 8.893874,
+        "rotX": 10.2221231,
+        "rotY": 270.9477,
+        "rotZ": 341.813263,
+        "scaleX": 1.39999974,
+        "scaleY": 1.39999974,
+        "scaleZ": 1.39999974
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.0,
+        "g": 0.0,
+        "b": 0.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": false,
+      "Snap": false,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 0,
+      "LuaScript": "function onLoad()\n\tlifespan     = 3 \n\tspin_speed   = 3 \n\trise_speed   = 1 \n\tgrow_speed   = 2 \n\tfont_size    = 3 \n\tflash_max    = true \n\tsound_max    = true \n\tsound_min    = true \n\tlog_chat     = true \n\tparent_guid  = \"2391b9\" \n\troll_active  = false\n\trv = self.getRotationValues() or false\nend\nfunction onDrop(a)trigger(a)end;function onRandomize(a)trigger(a)end;function trigger(a)if roll_active then return false end;roll_active=true;Wait.condition(function()roll_active=false;local b=self.getRotationValue()or false;if not b or not rv then log(\"Dice \"..self.guid..\" does not have a valid rotation value set! Unable to show roll value.\")return false end;local c=self.getPosition()+Vector({0,1+font_size/5,0})local d=spawnObject({type=\"3DText\",position=c,sound=true})d.TextTool.setValue(tostring(b))d.TextTool.setFontColor(self.getColorTint())d.TextTool.setFontSize(font_size*24)Wait.frames(function()d.interactable=false;d.auto_raise=false;rise(d,c)spin(d,{0,spin_speed*18,0})grow(d,font_size*24)log(\"Score is \"..b)if log_chat then local e=a;if self.getName()and self.getName()~=\"\"then e=e..\" | \"..self.getName()end;printToAll(\"[\"..e..\"] \"..Player[a].steam_name..\" rolled a \"..b,a)end;if(sound_max or flash_max)and b==rv[#rv].value then if flash_max then flash(self)flash(d)end;if sound_max and getObjectFromGUID(parent_guid)then getObjectFromGUID(parent_guid).AssetBundle.playTriggerEffect(0)end end;if b==1 and sound_min and getObjectFromGUID(parent_guid)then getObjectFromGUID(parent_guid).AssetBundle.playTriggerEffect(1)end;Wait.time(function()d.destruct()end,lifespan)end,1)end,function()return self.resting end,30,function()log(\"Timeout exceeded waiting for dice to come to a stop\")roll_active=false end)end;function rise(d,c)if not getObjectFromGUID(d.guid)then return false end;d.setPosition(c)c[2]=c[2]+rise_speed/100;Wait.frames(function()rise(d,c)end,1)end;function spin(d,f)if not getObjectFromGUID(d.guid)then return false end;d.setRotationSmooth(f,false,true)f[2]=f[2]+spin_speed*5;Wait.time(function()spin(d,f)end,0.5)end;function grow(d,font_size)if not getObjectFromGUID(d.guid)then return false end;d.TextTool.setFontSize(font_size)Wait.time(function()grow(d,font_size*(grow_speed+100)/100)end,0.1)end;function flash(d,g)if not getObjectFromGUID(d.guid)or g and g>20 then return false end;local a=g or 1;local h=self.getColorTint()if a%2==0 then h=randomColor()end;if d.type==\"3D Text\"then d.TextTool.setFontColor(h)else d.highlightOn(h,0.1)end;Wait.time(function()flash(d,a+1)end,0.2)end;function randomColor()local i=math.random;return{i(255)/255,i(255)/255,i(255)/255}end\n",
+      "LuaScriptState": "",
+      "XmlUI": "",
+      "RotationValues": [
+        {
+          "Value": "1",
+          "Rotation": {
+            "x": -11.0,
+            "y": 60.0,
+            "z": 17.0
+          }
+        },
+        {
+          "Value": "2",
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": -17.0
+          }
+        },
+        {
+          "Value": "3",
+          "Rotation": {
+            "x": -11.0,
+            "y": -180.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": "4",
+          "Rotation": {
+            "x": -11.0,
+            "y": -180.0,
+            "z": 162.0
+          }
+        },
+        {
+          "Value": "5",
+          "Rotation": {
+            "x": -11.0,
+            "y": -60.0,
+            "z": 234.0
+          }
+        },
+        {
+          "Value": "6",
+          "Rotation": {
+            "x": -11.0,
+            "y": -180.0,
+            "z": 306.0
+          }
+        },
+        {
+          "Value": "7",
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": 55.0
+          }
+        },
+        {
+          "Value": "8",
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": 198.0
+          }
+        },
+        {
+          "Value": "9",
+          "Rotation": {
+            "x": 52.0,
+            "y": -60.0,
+            "z": 127.0
+          }
+        },
+        {
+          "Value": "10",
+          "Rotation": {
+            "x": 52.0,
+            "y": -180.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": "11",
+          "Rotation": {
+            "x": 308.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": "12",
+          "Rotation": {
+            "x": 306.0,
+            "y": -240.0,
+            "z": -52.0
+          }
+        },
+        {
+          "Value": "13",
+          "Rotation": {
+            "x": -52.0,
+            "y": -240.0,
+            "z": 18.0
+          }
+        },
+        {
+          "Value": "14",
+          "Rotation": {
+            "x": 307.0,
+            "y": 120.0,
+            "z": 233.0
+          }
+        },
+        {
+          "Value": "15",
+          "Rotation": {
+            "x": 11.0,
+            "y": 120.0,
+            "z": -234.0
+          }
+        },
+        {
+          "Value": "16",
+          "Rotation": {
+            "x": 11.0,
+            "y": 0.0,
+            "z": 54.0
+          }
+        },
+        {
+          "Value": "17",
+          "Rotation": {
+            "x": 11.0,
+            "y": -120.0,
+            "z": -17.0
+          }
+        },
+        {
+          "Value": "18",
+          "Rotation": {
+            "x": 11.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": "19",
+          "Rotation": {
+            "x": -52.0,
+            "y": -240.0,
+            "z": -198.0
+          }
+        },
+        {
+          "Value": "20",
+          "Rotation": {
+            "x": 11.0,
+            "y": 0.0,
+            "z": -162.0
+          }
+        }
+      ]
+    }
+  ]
+}

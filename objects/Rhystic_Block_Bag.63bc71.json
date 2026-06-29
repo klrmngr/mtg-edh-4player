@@ -1,0 +1,177 @@
+{
+  "GUID": "63bc71",
+  "Name": "Custom_Model_Infinite_Bag",
+  "Transform": {
+    "posX": 53.5,
+    "posY": 1.8,
+    "posZ": -7.0,
+    "rotX": -1.87650551e-06,
+    "rotY": 269.999969,
+    "rotZ": 6.45414559e-07,
+    "scaleX": 1.5,
+    "scaleY": 2.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "Rhystic Block Bag",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "CustomMesh": {
+    "MeshURL": "https://steamusercontent-a.akamaihd.net/ugc/1666858152071990826/9AD455F2CBAEC01B2CBCDDB8B6DC4CE48D14B545/",
+    "DiffuseURL": "",
+    "NormalURL": "",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 0,
+    "TypeIndex": 7,
+    "CastShadows": true
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "1fc1e0",
+      "Name": "Custom_Token",
+      "Transform": {
+        "posX": -51.25,
+        "posY": 4.38474131,
+        "posZ": -18.25,
+        "rotX": -1.0488151e-05,
+        "rotY": 359.870972,
+        "rotZ": -1.29005111e-05,
+        "scaleX": 0.5000222,
+        "scaleY": 0.6820138,
+        "scaleZ": 1.00004435
+      },
+      "Nickname": "Rhystic Block 1",
+      "Description": "Black",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.24999997,
+        "g": 0.24999997,
+        "b": 0.24999997
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomImage": {
+        "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/910171009333415956/876EC79F715B88D1FAEEEDBB0E30FE63FEC13F80/",
+        "ImageSecondaryURL": "",
+        "ImageScalar": 1.0,
+        "WidthScale": 0.0,
+        "CustomToken": {
+          "Thickness": 1.0,
+          "MergeDistancePixels": 15.0,
+          "StandUp": true,
+          "Stackable": false
+        }
+      },
+      "LuaScript": "--By Amuzet\r\nmod_name,version='Rhystic Block',1\r\nauthor = '76561198045776458'\r\nself.setName(mod_name..' '..version)\r\ncount=1\r\nB=setmetatable({function_owner=self,position={0,1.95,0},scale={1,1,0.5},color={0,0,0},font_color={1,1,1},width=1600,height=800,font_size=900,alignment=3,validation=2,value=0},\r\n    {__call=function(b,l,t,p,f)b.position,b.label,b.tooltip,b.click_function=p or b.position,l,t or'',f or'none'self.createButton(b)end})\r\n--function none(o,c,a)if \r\n--function onPlayerTurn(p)self.setDescription(p.color)end\r\nfunction onPickedUp(player_color)self.setDescription(player_color)end\r\nfunction onSave()self.script_state=JSON.encode({count})end\r\nfunction onLoad(s)\r\n  if s~=''then count=JSON.decode(s)[1]end\r\n  B(count,'Increase Number\\nRight Click\\nDecrease Number',nil,'cng')\r\nend\r\nfunction onDrop(c)\r\n  local color = self.getDescription()\r\n  self.setColorTint(color)\r\n  --Player[color].broadcast\r\n  broadcastToAll(string.format('Did You Pay %d?',count),stringColorToRGB(c))\r\nend\r\nfunction cng(o,c,a)\r\n  if a then count=count-1 else count=count+1 end\r\n  self.editButton({index=0,label=count})\r\nend",
+      "LuaScriptState": "[1]",
+      "XmlUI": ""
+    }
+  ],
+  "ChildObjects": [
+    {
+      "GUID": "1fc1e0",
+      "Name": "Custom_Token",
+      "Transform": {
+        "posX": 2.09606069e-10,
+        "posY": 0.044823043,
+        "posZ": -2.99080316e-09,
+        "rotX": 8.2818765e-15,
+        "rotY": 5.247923e-06,
+        "rotZ": -1.272222e-13,
+        "scaleX": 0.267047673,
+        "scaleY": 0.258441567,
+        "scaleZ": 1.0
+      },
+      "Nickname": "Rhystic Block 1",
+      "Description": "White",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": true,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomImage": {
+        "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/910171009333415956/876EC79F715B88D1FAEEEDBB0E30FE63FEC13F80/",
+        "ImageSecondaryURL": "",
+        "ImageScalar": 1.0,
+        "WidthScale": 0.0,
+        "CustomToken": {
+          "Thickness": 1.0,
+          "MergeDistancePixels": 15.0,
+          "StandUp": true,
+          "Stackable": false
+        }
+      },
+      "LuaScript": "--By Amuzet\r\nmod_name,version='Rhystic Block',1\r\nauthor = '76561198045776458'\r\nself.setName(mod_name..' '..version)\r\ncount=1\r\nB=setmetatable({function_owner=self,position={0,2,0},scale={1,1,0.5},width=1600,height=800,font_size=900,alignment=3,validation=2,value=0},\r\n    {__call=function(b,l,t,p,f)b.position,b.label,b.tooltip,b.click_function=p or b.position,l,t or'',f or'none'self.createButton(b)end})\r\n--function none(o,c,a)if \r\n--function onPlayerTurn(p)self.setDescription(p.color)end\nfunction onPickedUp(player_color)self.setDescription(player_color)end\r\nfunction onSave()self.script_state=JSON.encode({count})end\r\nfunction onLoad(s)\r\n  if s~=''then count=JSON.decode(s)[1]end\r\n  B(count,'Increase Number\\nRight Click\\nDecrease Number',nil,'cng')\r\nend\r\nfunction onDrop(c)\r\n  local color = self.getDescription()\r\n  self.setColorTint(color)\r\n  --Player[color].broadcast\n  broadcastToAll(string.format('Did You Pay %d?',count),stringColorToRGB(c))\r\nend\r\nfunction cng(o,c,a)\r\n  if a then count=count-1 else count=count+1 end\r\n  self.editButton({index=0,label=count})\r\nend",
+      "LuaScriptState": "[1]",
+      "XmlUI": ""
+    }
+  ]
+}

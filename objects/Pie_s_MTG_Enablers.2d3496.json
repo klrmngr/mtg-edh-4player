@@ -1,0 +1,1731 @@
+{
+  "GUID": "2d3496",
+  "Name": "Infinite_Bag",
+  "Transform": {
+    "posX": -53.5,
+    "posY": 0.95162344,
+    "posZ": -9.25,
+    "rotX": -7.34633829e-07,
+    "rotY": 270.0,
+    "rotZ": -8.275878e-08,
+    "scaleX": 0.8,
+    "scaleY": 0.8,
+    "scaleZ": 0.8
+  },
+  "Nickname": "Pie's MTG Enablers",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.29185918,
+    "g": 0.29185918,
+    "b": 0.29185918
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "4f3387",
+      "Name": "Custom_Model_Bag",
+      "Transform": {
+        "posX": -53.345295,
+        "posY": 2.71944451,
+        "posZ": -9.449607,
+        "rotX": 0.918331861,
+        "rotY": 270.005157,
+        "rotZ": 0.684037745,
+        "scaleX": 2.57985687,
+        "scaleY": 0.17445612,
+        "scaleZ": 2.5895195
+      },
+      "Nickname": "Pie's MTG Enablers",
+      "Description": "These are experimental!\n\neach tile makes makes it easier to enact the ability of its corresponding card\n\nmost tiles = drop a [i]copy[/i] of it onto your library to perform the ability\n\nsome tiles = press the button on the tile to do the thing\n\npossibility storm = adds a context menu option when right clicking any card",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": -1,
+      "MeshIndex": -1,
+      "CustomMesh": {
+        "MeshURL": "https://steamusercontent-a.akamaihd.net/ugc/1666858152071991282/5C391C2599AE5F6972D6EFA7BFC04B41D6E821E3/",
+        "DiffuseURL": "",
+        "NormalURL": "",
+        "ColliderURL": "",
+        "Convex": true,
+        "MaterialIndex": 0,
+        "TypeIndex": 6,
+        "CastShadows": true
+      },
+      "Bag": {
+        "Order": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": "",
+      "ContainedObjects": [
+        {
+          "GUID": "997547",
+          "Name": "CardCustom",
+          "Transform": {
+            "posX": -9.371036,
+            "posY": 1.99360478,
+            "posZ": -14.5641947,
+            "rotX": 1.58675547e-07,
+            "rotY": 179.999985,
+            "rotZ": -1.7394278e-07,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "",
+          "Description": "",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 11813600,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "118136": {
+              "FaceURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/4/74177b51-a300-49d9-8ea7-557b19cf80c7.jpg",
+              "BackURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/7/4/74177b51-a300-49d9-8ea7-557b19cf80c7.jpg",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "function onLoad(saved_data)\r\n  owner=nil\r\n  locked=true\r\n  noencode=true\r\n  picounter=0\r\n  createButtons()\r\nend\r\n\r\nfunction onObjectEnterZone(zone,obj)\r\n  if obj~=self then return end\r\n  for _,hand in pairs(Hands.getHands()) do\r\n    if zone==hand then\r\n      if hand.getValue()~=nil then\r\n        locked=false\r\n        picounter=0\r\n        owner=hand.getValue()\r\n        createButtons()\r\n      end\r\n    end\r\n  end\r\nend\r\n\r\nfunction onObjectLeaveZone(zone,obj)\r\n  if obj~=self then return end\r\n  for _,hand in pairs(Hands.getHands()) do\r\n    if zone==hand then\r\n      if hand.getValue()~=nil then\r\n        locked=true\r\n        owner=hand.getValue()\r\n        createButtons()\r\n      end\r\n    end\r\n  end\r\nend\r\n\r\nfunction createButtons()\r\n  self.clearButtons()\r\n  if owner~=nil then\r\n    self.createButton({\r\n      click_function='null',\r\n      function_owner=self,\r\n      label=tostring(Player[owner].steam_name),\r\n      position=Vector(0,1,-1.8),\r\n      rotation=Vector(0,0,0),\r\n      width=0,\r\n      height=0,\r\n      font_size=1000,\r\n      scale={0.2,1,0.4},\r\n      color={0,0,0,1},\r\n      hover_color={0,0,0,1},\r\n      font_color=Color.fromString(owner),\r\n    })\r\n  end\r\n\r\n  pos = Vector(0,1.5,0.1)\r\n  bpars={\r\n    click_function='null',\r\n    function_owner=self,\r\n    label=tostring(picounter),\r\n    position=pos,\r\n    rotation=Vector(0,0,0),\r\n    width=0,\r\n    height=0,\r\n    font_size=1000,\r\n    scale={0.75,1,1.5},\r\n    color={0,0,0,0},\r\n    hover_color={0,0,0,0},\r\n    font_color={0,0,0,100},\r\n  }\r\n  for i=-1,1,1 do         -- outline\r\n    for j=-1,1,1 do\r\n      opars=bpars\r\n      opars.position=pos+Vector(0.02*i,0,0.02*j)\r\n      self.createButton(opars)\r\n    end\r\n  end\r\n  bpars.position=Vector(-0.1,0.3,0.2)\r\n  bpars.font_color={0.1,0.1,0.1,90}\r\n  self.createButton(bpars)    -- shadow\r\n  bpars.click_function='add_subtract'\r\n  bpars.position=pos\r\n  bpars.width=600\r\n  bpars.height=600\r\n  bpars.font_color={1,1,1,100}\r\n  if locked then\r\n    bpars.tooltip='[b]number locked in[/b]\\nyou can only edit number while in hand'\r\n  else\r\n    bpars.tooltip='left/right click or type number'\r\n  end\r\n  self.createButton(bpars)    -- the button\r\nend\r\n\r\nfunction add_subtract(obj,ply,alt)\r\n  if not locked and ply==owner then\r\n    new_value = math.min(math.max(picounter + (alt and -1 or 1), 0), 999)\r\n    if picounter ~= new_value then\r\n      picounter = new_value\r\n      createButtons()\r\n    end\r\n  end\r\nend\r\n\r\nself.max_typed_number=999\r\nfunction onNumberTyped(ply, int)\r\n  if not locked and ply==owner then\r\n    picounter=int\r\n    createButtons()\r\n  end\r\n  return true\r\nend\r\n\r\nfunction null()\r\nend\r\n",
+          "LuaScriptState": "[1]",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "30f3c2",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": -7.074728,
+            "posY": 2.055001,
+            "posZ": -14.2804031,
+            "rotX": -3.84152827e-06,
+            "rotY": 179.989258,
+            "rotZ": 4.802834e-06,
+            "scaleX": 0.5770445,
+            "scaleY": 1.0,
+            "scaleZ": 0.58
+          },
+          "Nickname": "Tickets",
+          "Description": "Left click - Increase\nRight click - Decrease",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": false,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://cards.scryfall.io/png/front/5/2/52942a5c-0552-4a9b-9c0f-7a9ffd04d0af.png?1664344308",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "MIN_VALUE = 0\r\nMAX_VALUE = 99\r\n\r\nfunction onload(saved_data)\r\n  light_mode = true\r\n  tooltip_show = false\r\n  val = 0\r\n\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    light_mode = loaded_data[1]\r\n    val = loaded_data[2]\r\n    tooltip_show = loaded_data[3]\r\n  end\r\n\r\n  createAll()\r\nend\r\n\r\nfunction updateSave()\r\n  local data_to_save = {light_mode, val, tooltip_show}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\n\r\nfunction createAll()\r\n    s_color = {0.5, 0.5, 0.5, 95}\r\n\r\n    if light_mode then\r\n        f_color = {0.9,0.9,0.9,100}\r\n    else\r\n        f_color = {0.1,0.1,0.1,100}\r\n    end\r\n\r\n    if tooltip_show then\r\n        ttText = \"     \" .. val .. \"\\n\" .. self.getName()\r\n    else\r\n        ttText = self.getName()\r\n    end\r\n\r\n\tself.createButton({\r\n    label=tostring(val),\r\n    click_function=\"null\",\r\n    tooltip=ttText,\r\n    function_owner=self,\r\n    position={0-0.1,0.1,0.2+0.1},\r\n    height=0,\r\n    width=0,\r\n    alignment = 3,\r\n    scale={x=1.5, y=1.5, z=1.5},\r\n    font_size=800,\r\n    font_color={1-f_color[1],1-f_color[2],1-f_color[3],95},\r\n    color={0,0,0,0}\r\n    })\r\n\r\n  self.createButton({\r\n    label=tostring(val),\r\n    click_function=\"add_subtract\",\r\n    tooltip=ttText,\r\n    function_owner=self,\r\n    position={0,0.15,0.2},\r\n    height=600,\r\n    width= 600,\r\n    alignment = 3,\r\n    scale={x=1.5, y=1.5, z=1.5},\r\n    font_size=800,\r\n    font_color=f_color,\r\n    color={0,0,0,0}\r\n    })\r\n\r\n  lightButtonText = \"swap text color\"\r\n  self.createButton({\r\n    label=lightButtonText,\r\n    tooltip='',\r\n    click_function=\"swap_fcolor\",\r\n    function_owner=self,\r\n    position={0,-0.075,-0.25},\r\n    rotation={180,180,0},\r\n    height=150,\r\n    width=1200,\r\n    scale={x=1, y=1, z=1},\r\n    font_size=150,\r\n    font_color=s_color,\r\n    color={0,0,0,0}\r\n  })\r\n\r\n\r\n  self.createButton({\r\n    label='reset',\r\n    tooltip='',\r\n    click_function=\"reset_val\",\r\n    function_owner=self,\r\n    position={0,-0.075,0.25},\r\n    rotation={180,180,0},\r\n    height=250,\r\n    width=1200,\r\n    scale={x=1, y=1, z=1},\r\n    font_size=250,\r\n    font_color=s_color,\r\n    color={0,0,0,0}\r\n  })\r\n\r\n  setTooltips()\r\nend\r\n\r\nfunction removeAll()\r\n  self.removeButton(0)\r\n  self.removeButton(1)\r\n  self.removeButton(2)\r\n  self.removeButton(3)\r\nend\r\n\r\nfunction reloadAll()\r\n  removeAll()\r\n  createAll()\r\n  setTooltips()\r\n  updateSave()\r\nend\r\n\r\nfunction swap_fcolor(_obj, _color, alt_click)\r\n  light_mode = not light_mode\r\n  reloadAll()\r\nend\r\n\r\nfunction swap_align(_obj, _color, alt_click)\r\n  center_mode = not center_mode\r\n  reloadAll()\r\nend\r\n\r\nfunction editName(_obj, _string, value)\r\n  self.setName(value)\r\n  setTooltips()\r\nend\r\n\r\nfunction add_subtract(_obj, _color, alt_click)\r\n  mod = alt_click and -1 or 1\r\n  new_value = math.min(math.max(val + mod, MIN_VALUE), MAX_VALUE)\r\n  if val ~= new_value then\r\n    val = new_value\r\n    updateVal()\r\n    updateSave()\r\n  end\r\nend\r\n\r\nfunction updateVal()\r\n  if tooltip_show then\r\n    ttText = \"     \" .. val .. \"\\n\" .. self.getName()\r\n  else\r\n    ttText = self.getName()\r\n  end\r\n\r\n  self.editButton({\r\n    index = 0,\r\n    label = tostring(val),\r\n    tooltip = ttText\r\n  })\r\n\r\n  self.editButton({\r\n  \tindex = 1,\r\n  \tlabel = tostring(val),\r\n  \ttooltip = ttText\r\n\t})\r\n\r\nend\r\n\r\nfunction reset_val()\r\n  val = 0\r\n  updateVal()\r\n  updateSave()\r\nend\r\n\r\nfunction setTooltips()\r\n  if tooltip_show then\r\n    ttText = \"     \" .. val .. \"\\n\" .. self.getName()\r\n  else\r\n    ttText = self.getName()\r\n  end\r\n\r\n  self.editButton({\r\n    index = 0,\r\n    value = tostring(val),\r\n    tooltip = ttText\r\n    })\r\nend\r\n\r\nfunction null()\r\nend\r\n\r\nself.max_typed_number=999\r\nfunction onNumberTyped(col,int)\r\n  val = int\r\n  updateVal()\r\n  updateSave()\r\nend",
+          "LuaScriptState": "[true,2]",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "512015",
+          "Name": "Custom_Tile",
+          "Transform": {
+            "posX": -33.135,
+            "posY": 1.19238842,
+            "posZ": -8.910002,
+            "rotX": -0.00142266345,
+            "rotY": 180.005478,
+            "rotZ": -0.000411725428,
+            "scaleX": 1.42055011,
+            "scaleY": 1.0,
+            "scaleZ": 1.42055011
+          },
+          "Nickname": "Tovoloar Trigger",
+          "Description": "",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.0,
+            "g": 0.0,
+            "b": 0.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/f/9/f953fad3-0cd1-48aa-8ed9-d7d2e293e6e2.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomTile": {
+              "Type": 3,
+              "Thickness": 0.1,
+              "Stackable": false,
+              "Stretch": true
+            }
+          },
+          "LuaScript": "function onLoad(savedat)\r\n  line1='at the beginning of each upkeep, if no spells were cast last turn, transform'\r\n  line2='at the beginning of each upkeep, if a player cast two or more spells last turn, transform'\r\n  if savedat and savedat~='' then\r\n    state=tonumber(savedat)\r\n  else\r\n    state=1\r\n  end\r\n  data=Global.getTable('data')\r\n  plys=Player.getAvailableColors()\r\n  enc = Global.getVar('Encoder')\r\n  makeButtons()\r\nend\r\n\r\nfunction makeButtons()\r\n  self.clearButtons()\r\n  if state==1 then\r\n    self.highlightOff()\r\n    self.highlightOn({1,1,0.5})\r\n    self.createButton({\r\n      click_function='switchState',\r\n      function_owner=self,\r\n      label='switch to [i][b]night[/b][/i]\\nhumans to [i][b]werewolves[/b][/i]',\r\n      position={0,0.1,0},\r\n      scale={0.5,0.5,0.5},\r\n      width=2200,\r\n      height=1000,\r\n      font_size=200,\r\n      color={0,0,0,0.7},\r\n      font_color={1,1,1,1/0.7}\r\n    })\r\n  elseif state==2 then\r\n    self.highlightOff()\r\n    self.highlightOn({0,0,0.5})\r\n    self.createButton({\r\n      click_function='switchState',\r\n      function_owner=self,\r\n      label='switch to [i][b]day[/b][/i]\\nwerewolves to [i][b]humans[/b][/i]',\r\n      position={0,0.1,0},\r\n      scale={0.5,0.5,0.5},\r\n      width=2200,\r\n      height=1000,\r\n      font_size=200,\r\n      color={0,0,0,0.7},\r\n      font_color={1,1,1,1/0.7}\r\n    })\r\n  end\r\nend\r\n\r\nfunction switchState(_,plyCol)\r\n  state=3-state\r\n  makeButtons()\r\n\r\n  if state==1 then\r\n    self.script_state = '1'\r\n    for _,ply in pairs(plys) do\r\n      for _,card in pairs(data[ply].playmat.getObjects()) do\r\n        if card.type=='Card' and card.getName()~='[b]Day[/b]' and (card.getDescription():lower():match('nightbound') or ( card.getDescription():lower():match(line2)) and ply==plyCol ) then\r\n          card=card.setState(1)\r\n          enc.call(\"APIencodeObject\",{obj=card})\r\n          enc.call(\"APIobjEnableProp\",{obj=card, propID = \"_MTG_Simplified_UNIFIED\"})\r\n          enc.call(\"APIrebuildButtons\",{obj=card})\r\n          pcall(function() Wait.time(function() card.highlightOn({1,1,0.5},0.1) end,0.2,5) end)\r\n        end\r\n      end\r\n    end\r\n    dat=self.getCustomObject()\r\n    dat.image='https://c1.scryfall.com/file/scryfall-cards/art_crop/front/f/9/f953fad3-0cd1-48aa-8ed9-d7d2e293e6e2.jpg'\r\n    self.setCustomObject(dat)\r\n    self.reload()\r\n\r\n  elseif state==2 then\r\n    self.script_state = '2'\r\n    for _,ply in pairs(plys) do\r\n      for _,card in pairs(data[ply].playmat.getObjects()) do\r\n        if card.type=='Card' and card.getName()~='[b]Night[/b]' and (card.getDescription():lower():match('daybound') or ( card.getDescription():lower():match(line1)) and ply==plyCol ) then\r\n          card=card.setState(2)\r\n          enc.call(\"APIencodeObject\",{obj=card})\r\n          enc.call(\"APIobjEnableProp\",{obj=card, propID = \"_MTG_Simplified_UNIFIED\"})\r\n          enc.call(\"APIrebuildButtons\",{obj=card})\r\n          pcall(function() Wait.time(function() card.highlightOn({0,0,0.5},0.1) end,0.2,5) end)\r\n        end\r\n      end\r\n    end\r\n    dat=self.getCustomObject()\r\n    dat.image='https://c1.scryfall.com/file/scryfall-cards/art_crop/back/f/9/f953fad3-0cd1-48aa-8ed9-d7d2e293e6e2.jpg'\r\n    self.setCustomObject(dat)\r\n    self.reload()\r\n  end\r\n\r\nend\r\n",
+          "LuaScriptState": "1",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "9106c4",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 13.5,
+            "posY": 1.24385345,
+            "posZ": 3.0,
+            "rotX": -0.00289968657,
+            "rotY": 179.994949,
+            "rotZ": 0.0648641139,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Tutor",
+          "Description": "",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/3/b/3bdbc231-5316-4abd-9d8d-d87cff2c9847.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onLoad(saved_data)\r\n\tsearchTerm = ''\r\n\tdeckDir=-1\r\n\tif saved_data ~= \"\" then\r\n\t\tlocal loaded_data = JSON.decode(saved_data)\r\n\t\tsearchTerm = loaded_data[1]\r\n\t\tdeckDir = loaded_data[2]\r\n\tend\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.createButton({\r\n\t\tlabel=lab,\r\n\t\ttooltip=tip,\r\n\t\tclick_function=\"changeDeckDir\",\r\n\t\tfunction_owner=self,\r\n\t\tposition={-1.6,0.1,-1.3},\r\n\t\theight=200,\r\n\t\twidth=400,\r\n\t\tfont_size=500,\r\n\t\tfont_color={1,1,1,90},\r\n\t\tcolor={0,0,0,0},\r\n\t})\r\n\tself.createInput({\r\n\t\tinput_function='getSearch',\r\n\t\tfunction_owner=self,\r\n\t\tlabel='enter search',\r\n\t\tvalue=searchTerm,\r\n\t\tposition={0,0.1,0},\r\n\t\twidth=1900,\r\n\t\theight=321,\r\n\t\tfont_size=300,\r\n\t\tfont_color={1,1,1,1/0.75},\r\n\t\tcolor={0,0,0,0.75},\r\n\t\ttooltip='enter search-term here',\r\n\t\talignment=3\r\n\t})\r\nend\r\nfunction getSearch(obj,ply,val)\r\n\tsearchTerm=val\r\n\tupdateSave()\r\nend\r\nfunction changeDeckDir()\r\n\tdeckDir=deckDir*-1\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.editButton({index=0,label=lab,tooltip=tip})\r\n  updateSave()\r\nend\r\nfunction updateSave()\r\n  local data_to_save = {searchTerm,deckDir}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    nTake=1\r\n    nTaken=0\r\n    for i,card in ipairs(deck.getObjects()) do\r\n      cname=card.name:lower():gsub('%p','')\r\n      if cname:match(searchTerm) then\r\n        nTaken=nTaken+1\r\n        rot=deck.getRotation()\r\n        pos=deck.getPosition()\r\n        rig=deck.getTransformRight()\r\n        rot[3]=0\r\n        pos=pos+rig:scale(deckDir*2.4+deckDir*(nTaken-1)*1.5)\r\n        pos[2]=pos[2]+nTaken*0.1\r\n        deck.takeObject({index=i-nTaken,position=pos,rotation=rot})\r\n        if nTaken==tonumber(nTake) then\r\n          break\r\n        end\r\n      end\r\n    end\r\n    Wait.time(function() deck.shuffle() end, 0.1, 5)\r\n\r\n    self.destruct()\r\n\tend\r\nend",
+          "LuaScriptState": "[\"\",-1]",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "5912cf",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 13.5,
+            "posY": 1.2463,
+            "posZ": 3.0,
+            "rotX": 0.0105548482,
+            "rotY": 180.0077,
+            "rotZ": 0.00393874664,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "get deck data",
+          "Description": "[i]drop onto a deck to perform the following[/i]:\n[sub]query scryfall using the cards' names and redo card name and desciption, getting card type, cmc, oracle, power, toughness, loyalty[/sub]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/a/4/a48c3a2f-678b-4e70-a53f-258457d88d29.jpg?1604194056",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n\t\tfixDeckText(deck)\r\n\t\tself.destruct()\r\n\tend\r\nend\r\n\r\nfunction onPickUp(ply)\r\n\tpickUpPlayer=ply\r\nend\r\n\r\nfunction fixDeckText(deck)\r\n\tif pickUpPlayer~=nil then\r\n\t\tply=pickUpPlayer\r\n\telse\r\n\t\tply='Black'\r\n\tend\r\n  local col=stringColorToRGB(ply)\r\n  col[4]=100\r\n  local colHex='['..Color[ply]:toHex()..']'\r\n  deckData = deck.getData()\r\n  deck.interactable=false\r\n  deck.hide_when_face_down=false\r\n  local bpars={click_function='null',label='fetching data\\nfrom scryfall',\r\n    width=0,height=0,scale={0.3,0.3,0.3},font_size=500,\r\n    position={0,0.5,0},rotation={0,0,0},color={0,0,0,0},font_color={1,1,1,100}}\r\n  deck.createButton(bpars)\r\n\tbpars.position={0,-0.5,0}\r\n\tbpars.rotation={0,0,180}\r\n\tdeck.createButton(bpars)\r\n\r\n  ncards=0\r\n  npross=0\r\n\tfor i,card in ipairs(deckData.ContainedObjects) do\r\n    ncards=ncards+1\r\n    if card.Nickname == nil or card.Nickname == \"\" then\r\n      Player[ply].broadcast(\"error for card #\"..i..\": \"..' [i]no name on card = no way to fetch data[/i]',{1,0.6,0.6})\r\n      npross=npross+1\r\n    elseif card.Nickname ~= nil and card.Nickname ~= \"\" then\r\n\t\t\tlocal name = card.Nickname:gsub('\\n.*',''):gsub('%[.-%]','')\r\n\t\t\tlocal requestBaseUrl = \"https://api.scryfall.com/cards/named?fuzzy=\"\r\n\t\t\tlocal requestUrl = requestBaseUrl .. encodeString(name)\r\n\t\t\tWebRequest.get(requestUrl, function(webReturn) fixText(webReturn,i,name,ply) end)\r\n\t\telse\r\n      npross=npross+1\r\n    end\r\n\tend\r\n\r\n  Wait.condition(\r\n    function()\r\n\t\t\tPlayer[ply].broadcast('Scryfall data fetch for [i]'..colHex..deck.getName():gsub('\\n',' | ')..'[/i][-] deck complete.',{0.6,0.6,0.6})\r\n      deck.destruct()\r\n      spawnObjectData({data = deckData})\r\n    end, function() return ncards==npross end, 10,\r\n    function()\r\n      Player[ply].broadcast('Scryfall data fetch timed out :(',{0.6,0.6,0.6})\r\n      deck.interactable=true\r\n      deck.hide_when_face_down=true\r\n      deck.clearButtons()\r\n    end)\r\nend\r\n\r\nfunction fixText(webReturn,i,name,ply)\r\n  if webReturn.is_error then\r\n    Player[ply].broadcast(\"error for card #\"..i..\": \"..name,{1,0.6,0.6})\r\n    errorJson(webReturn.text, ply)\r\n  else\r\n    local object = string.match(webReturn.text, '\"object\":\"(.-)\"')\r\n    if object == nil then\r\n      Player[ply].broadcast(\"error for card #\"..i..\": \"..name,{1,0.6,0.6})\r\n      errorJson(webReturn.text, ply)\r\n    else\r\n      local cardDat=deckData.ContainedObjects[i]\r\n      local faceName = cardDat.Nickname:gsub('\\n.*',''):gsub('%[.-%]','')\r\n      local cardName,oracle,oracleID=getCardText(webReturn.text,faceName)\r\n      cardDat.Nickname=cardName\r\n      cardDat.Description=oracle\r\n      cardDat.Memo=oracleID\r\n      if cardDat.States then\r\n        for i,state in pairs(cardDat.States) do\r\n          local backName=state.Nickname:gsub('\\n.*',''):gsub('%[.-%]','')\r\n          local cardName,oracle,oracleID=getCardText(webReturn.text,backName)\r\n          state.Nickname=cardName\r\n          state.Description=oracle\r\n          state.Memo=oracleID\r\n        end\r\n      end\r\n      deckData.ContainedObjects[i]=cardDat\r\n    end\r\n  end\r\n  npross=npross+1\r\nend\r\n\r\nfunction getCardText(json,name)\r\n  local c = JSONdecode(json)\r\n  c.oracle=''\r\n  if c.card_faces then\r\n    if c.card_faces[2].name:lower():gsub('%W','')==name:lower():gsub('%W','') then\r\n      c.name=c.card_faces[2].name:gsub('\"','')..'\\n'..c.card_faces[2].type_line..' '..c.cmc..'CMC'\r\n      c.oracle=setOracle(c.card_faces[2])\r\n    else\r\n      c.name=c.card_faces[1].name:gsub('\"','')..'\\n'..c.card_faces[1].type_line..' '..c.cmc..'CMC'\r\n      c.oracle=setOracle(c.card_faces[1])\r\n    end\r\n  else\r\n    c.name=c.name:gsub('\"','')..'\\n'..c.type_line..' '..c.cmc..'CMC'\r\n    c.oracle=setOracle(c)\r\n  end\r\n  return c.name,c.oracle,c.oracle_id\r\nend\r\n\r\nfunction setOracle(c)\r\n  if c.power then\r\n    c.oracle_text=c.oracle_text..'\\n[b]'..c.power..'/'..c.toughness..'[/b]'\r\n  elseif c.loyalty then\r\n    c.oracle_text=c.oracle_text..'\\n[b]'..tostring(c.loyalty)..'[/b]'\r\n  end\r\n  return c.oracle_text:gsub('\\\\\"','\"')\r\nend\r\n\r\nfunction errorJson(json, player)\r\n\tlocal json = JSON.decode(json)\r\n\tif json.status == 404 then\r\n\t\tPlayer[player].broadcast(\"Card name not found in scryfall database.\",{1,0.6,0.6})\r\n\telse\r\n\t\tPlayer[player].broadcast(json.details,{1,0.6,0.6})\r\n\tend\r\nend\r\n\r\nfunction encodeString(str)\r\n\tlocal output, t = string.gsub(str,\"[^%w]\",encodeChar)\r\n\treturn output\r\nend\r\n\r\nfunction encodeChar(chr)\r\n\treturn string.format(\"%%%X\",string.byte(chr))\r\nend\r\n\r\n\r\n\r\n--------------------------------------------------------------------------------\r\n-- pie's manual \"JSONdecode\" for scryfall's \"object\":\"card\"\r\n--------------------------------------------------------------------------------\r\n\r\nnormal_card_keys={\r\n  'object',\r\n  'id',\r\n  'oracle_id',\r\n  'name',\r\n  'lang',\r\n  'layout',\r\n  'image_uris',\r\n  'mana_cost',\r\n  'cmc',\r\n  'type_line',\r\n  'oracle_text',\r\n  'loyalty',\r\n  'power',\r\n  'toughness',\r\n  'loyalty',\r\n  'legalities',\r\n  'set',\r\n  'rulings_uri',\r\n  'prints_search_uri',\r\n  'collector_number'\r\n}\r\n\r\nimage_uris_keys={    -- \"image_uris\":{\r\n  'small',\r\n  'normal',\r\n  'large',\r\n  'png',\r\n  'art_crop',\r\n  'border_crop',\r\n}\r\n\r\nlegalities_keys={    -- \"legalities\":{\r\n  'standard',\r\n  'future',\r\n  'historic',\r\n  'gladiator',\r\n  'pioneer',\r\n  'modern',\r\n  'legacy',\r\n  'pauper',\r\n  'vintage',\r\n  'penny',\r\n  'commander',\r\n  'brawl',\r\n  'duel',\r\n  'oldschool',\r\n  'premodern',\r\n}\r\n\r\nrelated_card_keys={     -- \"all_parts\":[{\"object\":\"related_card\",\r\n  'id',\r\n  'component',\r\n  'name',\r\n  'uri',\r\n}\r\n\r\ncard_face_keys={        -- \"card_faces\":[{\"object\":\"card_face\",\r\n  'name',\r\n  'mana_cost',\r\n  'type_line',\r\n  'oracle_text',\r\n  'power',\r\n  'toughness',\r\n  'loyalty',\r\n  'image_uris',\r\n}\r\n\r\n--------------------------------------------------------------------------------\r\n--------------------------------------------------------------------------------\r\nfunction JSONdecode(txt)\r\n  local txtBeginning = txt:sub(1,16)\r\n  local jsonType = txtBeginning:match('{\"object\":\"(%w+)\"')\r\n\r\n  -- not scryfall? use normal JSON.decode\r\n  if not(jsonType=='card' or jsonType=='list') then\r\n    return JSON.decode(txt)\r\n  end\r\n\r\n  ------------------------------------------------------------------------------\r\n  -- parse list: extract each card, and parse it separately\r\n  -- used when one wants to decode a whole list\r\n  if jsonType=='list' then\r\n    local txtBeginning = txt:sub(1,80)\r\n    local nCards=txtBeginning:match('\"total_cards\":(%d+)')\r\n    local cardEnd=0\r\n    local cardDats = {}\r\n    for i=1,nCards do     -- could insert max number cards to parse here\r\n      local cardStart=string.find(txt,'{\"object\":\"card\"',cardEnd+1)\r\n      local cardEnd = findClosingBracket(txt,cardStart)\r\n      local cardDat = JSONdecode(txt:sub(cardStart,cardEnd))\r\n      table.insert(cardDats,cardDat)\r\n    end\r\n    local dat = {object=\"list\",total_cards=nCards,data=cardDats}    --ignoring hast_more...\r\n    return dat\r\n  end\r\n\r\n  ------------------------------------------------------------------------------\r\n  -- parse card\r\n\r\n  txt=txt:gsub('}',',}')    -- comma helps parsing last element in an array\r\n\r\n  local cardDat={}\r\n  local all_parts_i=string.find(txt,'\"all_parts\":')\r\n  local card_faces_i=string.find(txt,'\"card_faces\":')\r\n\r\n  -- if all_parts exist\r\n  if all_parts_i~=nil then\r\n    local st=string.find(txt,'%[',all_parts_i)\r\n    local en=findClosingBracket(txt,st)\r\n    local all_parts_txt = txt:sub(all_parts_i,en)\r\n    local all_parts={}\r\n    -- remove all_parts snip from the main text\r\n    txt=txt:sub(1,all_parts_i-1)..txt:sub(en+2,-1)\r\n    -- parse all_parts_txt for each related_card\r\n    st=1\r\n    local cardN=0\r\n    while st~=nil do\r\n      st=string.find(all_parts_txt,'{\"object\":\"related_card\"',st)\r\n      if st~=nil then\r\n        cardN=cardN+1\r\n        en=findClosingBracket(all_parts_txt,st)\r\n        local related_card_txt=all_parts_txt:sub(st,en)\r\n        st=en\r\n        local s,e=1,1\r\n        local related_card={}\r\n        for i,key in ipairs(related_card_keys) do\r\n          val,s=getKeyValue(related_card_txt,key,s)\r\n          related_card[key]=val\r\n        end\r\n        table.insert(all_parts,related_card)\r\n        if cardN>30 then break end   -- avoid inf loop if something goes strange\r\n      end\r\n      cardDat.all_parts=all_parts\r\n    end\r\n  end\r\n\r\n  -- if card_faces exist\r\n  if card_faces_i~=nil then\r\n    local st=string.find(txt,'%[',card_faces_i)\r\n    local en=findClosingBracket(txt,st)\r\n    local card_faces_txt = txt:sub(card_faces_i,en)\r\n    local card_faces={}\r\n    -- remove card_faces snip from the main text\r\n    txt=txt:sub(1,card_faces_i-1)..txt:sub(en+2,-1)\r\n\r\n    -- parse card_faces_txt for each card_face\r\n    st=1\r\n    local cardN=0\r\n    while st~=nil do\r\n      st=string.find(card_faces_txt,'{\"object\":\"card_face\"',st)\r\n      if st~=nil then\r\n        cardN=cardN+1\r\n        en=findClosingBracket(card_faces_txt,st)\r\n        local card_face_txt=card_faces_txt:sub(st,en)\r\n        st=en\r\n        local s,e=1,1\r\n        local card_face={}\r\n        for i,key in ipairs(card_face_keys) do\r\n          val,s=getKeyValue(card_face_txt,key,s)\r\n          card_face[key]=val\r\n        end\r\n        table.insert(card_faces,card_face)\r\n        if cardN>4 then break end   -- avoid inf loop if something goes strange\r\n      end\r\n      cardDat.card_faces=card_faces\r\n    end\r\n  end\r\n\r\n  -- normal card (or what's left of it after removing card_faces and all_parts)\r\n  st=1\r\n  for i,key in ipairs(normal_card_keys) do\r\n    val,st=getKeyValue(txt,key,st)\r\n    cardDat[key]=val\r\n  end\r\n\r\n  return cardDat\r\nend\r\n\r\n--------------------------------------------------------------------------------\r\n-- returns data for one card at a time from a scryfall's \"object\":\"list\"\r\nfunction getNextCardDatFromList(txt,startHere)\r\n\r\n  if startHere==nil then\r\n    startHere=1\r\n  end\r\n\r\n  local cardStart=string.find(txt,'{\"object\":\"card\"',startHere)\r\n  if cardStart==nil then\r\n    print('error: no more cards in list')\r\n    startHere=nil\r\n    return nil,nil,nil\r\n  end\r\n\r\n  local cardEnd = findClosingBracket(txt,cardStart)\r\n  if cardEnd==nil then\r\n    print('error: no more cards in list')\r\n    startHere=nil\r\n    return nil,nil,nil\r\n  end\r\n\r\n  -- startHere is not a local variable, so it's possible to just do:\r\n  -- getNextCardFromList(txt) and it will keep giving the next card or nil if there's no more\r\n  startHere=cardEnd+1\r\n\r\n  local cardDat = JSONdecode(txt:sub(cardStart,cardEnd))\r\n\r\n  return cardDat,cardStart,cardEnd\r\nend\r\n\r\n--------------------------------------------------------------------------------\r\nfunction findClosingBracket(txt,st)   -- find paired {} or []\r\n  local ob,cb='{','}'\r\n  local pattern='[{}]'\r\n  if txt:sub(st,st)=='[' then\r\n    ob,cb='[',']'\r\n    pattern='[%[%]]'\r\n  end\r\n  local txti=st\r\n  local nopen=1\r\n  while nopen>0 do\r\n    if txti==nil then return nil end\r\n    txti=string.find(txt,pattern,txti+1)\r\n    if txt:sub(txti,txti)==ob then\r\n      nopen=nopen+1\r\n    elseif txt:sub(txti,txti)==cb then\r\n      nopen=nopen-1\r\n    end\r\n  end\r\n  return txti\r\nend\r\n\r\n--------------------------------------------------------------------------------\r\nfunction getKeyValue(txt,key,st)\r\n  local str='\"'..key..'\":'\r\n  local st=string.find(txt,str,st)\r\n  local en=nil\r\n  local value=nil\r\n  if st~=nil then\r\n    if key=='image_uris' then     -- special case for scryfall's image_uris table\r\n      value={}\r\n      local s=st\r\n      for i,k in ipairs(image_uris_keys) do\r\n        local val,s=getKeyValue(txt,k,s)\r\n        value[k]=val\r\n      end\r\n      en=s\r\n    elseif txt:sub(st+#str,st+#str)~='\"' then      -- not a string\r\n      en=string.find(txt,',\"',st+#str+1)\r\n      value=tonumber(txt:sub(st+#str,en-1))\r\n    else                                           -- a string\r\n      en=string.find(txt,'\",',st+#str+1)\r\n      value=txt:sub(st+#str+1,en-1):gsub('\\\\\"','\"'):gsub('\\\\n','\\n'):gsub('(\\\\u....)','')\r\n    end\r\n  end\r\n  if type(value)=='string' then\r\n    value=value:gsub(',}','}')    -- get rid of the previously inserted comma\r\n  end\r\n  return value,en\r\nend",
+          "LuaScriptState": "-1",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "fd2638",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": -23.2649364,
+            "posY": 1.23699892,
+            "posZ": -14.309845,
+            "rotX": 359.949829,
+            "rotY": 179.98735,
+            "rotZ": 359.991119,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Jodah Enabler",
+          "Description": "[i]drop onto a deck to perform the following[/i]:\n[sup]\nExile cards from the top of library until you exile a [b]legendary[/b] nonland card whose mana value is [b]equal or less[/b] than the [b]input amount[/b] (1 lower than the mana value of the [b]cast spell[/b]). You may cast that card without paying its mana cost. Then put all other cards exiled this way on the bottom of your library in a random order.[/sup]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/e/4/e4b1aa1e-b4e3-4346-8937-76b312501c70.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onload(saved_data)\r\n  CascadeCMC = 5\r\n  deckDir=-1\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    CascadeCMC = loaded_data[1]\r\n    deckDir = loaded_data[2]\r\n  end\r\n  self.createButton({\r\n    label=tostring(CascadeCMC),\r\n    click_function=\"add_subtract\",\r\n    tooltip=ttText,\r\n    function_owner=self,\r\n    position={0,0.2,0.15},\r\n    height=450,\r\n    width=450,\r\n    scale={1.5,1.5,1.5},\r\n    font_size=800,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n    tooltip='         CMC value to cascade for\\ntype # or left/right click to change'\r\n  })\r\n  Encoder=Global.getVar('Encoder')\r\n  keepGoing1=false\r\n  keepGoing2=false\r\n  cDeck=nil\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.createButton({\r\n    label=lab,\r\n    tooltip=tip,\r\n    click_function=\"changeDeckDir\",\r\n    function_owner=self,\r\n    position={-1.6,0.1,-1.3},\r\n    height=200,\r\n    width=400,\r\n    font_size=500,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n  })\r\nend\r\n\r\n\r\nfunction changeDeckDir()\r\n  if deckDir==nil then deckDir=-1 end\r\n  deckDir=deckDir*-1\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.editButton({index=1,label=lab,tooltip=tip})\r\n  updateSave()\r\nend\r\nfunction updateSave()\r\n  local data_to_save = {CascadeCMC,deckDir}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\nfunction add_subtract(_obj, _color, alt_click)\r\n  mod = alt_click and -1 or 1\r\n  new_value = math.min(math.max(CascadeCMC + mod, 0), 99)\r\n  if CascadeCMC ~= new_value then\r\n    CascadeCMC = new_value\r\n    updateVal()\r\n    updateSave()\r\n  end\r\nend\r\nfunction updateVal()\r\n  self.editButton({\r\n    index = 0,\r\n    label = tostring(CascadeCMC),\r\n    })\r\nend\r\nself.max_typed_number=99\r\nfunction onNumberTyped(col,int)\r\n  CascadeCMC = int\r\n  updateVal()\r\n  updateSave()\r\nend\r\n\r\n\r\nfunction groupCards(c)\r\n  if cDeck==nil then\r\n    cDeck=c\r\n  else\r\n    cDeck=cDeck.putObject(c)\r\n  end\r\n  keepGoing2=true\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    nCards=0\r\n    for _,card in pairs(deck.getObjects()) do\r\n      nCards=nCards+1\r\n      cname=card.name:lower():gsub('%p','')\r\n      cdesc=card.description\r\n      cmc=getCMC(cname,cdesc)\r\n      isLegend=cname:lower():match('legendary')\r\n      if cmc~=nil and tonumber(cmc)<=CascadeCMC and isLegend then\r\n        cardInd=i\r\n        break\r\n      end\r\n    end\r\n\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*3.6)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {4,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n    for i=1,nCards do\r\n      Wait.time(function()\r\n        if i<nCards then\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n          cpos[2]=cpos[2]+0.1*i\r\n          deck.takeObject({position=cpos,rotation=crot,callback_function=groupCards})\r\n        else\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*4.8)\r\n          finalCard=deck.takeObject({position=cpos,rotation=crot})\r\n          Wait.frames(function() finalCard.highlightOn('Red',5) end, 1)\r\n          Wait.time(function() keepGoing1=true end, 1)\r\n        end\r\n      end,i*0.1)\r\n    end\r\n\r\n    Wait.condition(function()\r\n      Wait.time(function()\r\n        if cDeck==nil then return end\r\n        dpos=deck.getPosition()\r\n        dpos[2]=1\r\n        drot=deck.getRotation()\r\n        drot[3]=180\r\n        cDeck.shuffle()\r\n        Wait.time(function()\r\n          cDeck.setRotationSmooth(drot,false,true)\r\n          cDeck.setPositionSmooth(dpos,false,true)\r\n        end,0.1)\r\n        deck.setPositionSmooth(deck.getPosition()+vector(0,2,0),false,true)\r\n      end,0.5)\r\n    end, function() return keepGoing1 and keepGoing2 end)\r\n\r\n    self.destruct()\r\n\tend\r\nend\r\n\r\nfunction moveCDeckToBot(cDeck)\r\n  if cDeck==nil then return end\r\n  dpos=deck.getPosition()\r\n  dpos[2]=1\r\n  drot=deck.getRotation()\r\n  drot[3]=180\r\n  cDeck.shuffle()\r\n  Wait.time(function()\r\n    cDeck.setRotationSmooth(drot,false,true)\r\n    cDeck.setPositionSmooth(dpos,false,true)\r\n  end,0.1)\r\n  deck.setPositionSmooth(deck.getPosition()+vector(0,2,0),false,true)\r\nend\r\n\r\nfunction onObjectEnterContainer(container, enter_object)\r\n  if enter_object==cDeck then\r\n    cDeck=container\r\n  end\r\nend\r\nfunction getCMC(name,desc)\r\n  cmc=name:lower():match('(%d+) ?cmc')\r\n  if cmc==nil then\r\n    cmc=name:lower():match('cmc ?(%d+)')\r\n  end\r\n  if cmc==nil then\r\n    cmc=desc:lower():match('(%d+) ?cmc')\r\n  end\r\n  if cmc==nil then\r\n    cmc=desc:lower():match('cmc ?(%d+)')\r\n  end\r\n  isLand=name:lower():match('land')\r\n  if (cmc==nil or cmc=='0') and isLand then\r\n    cmc=nil\r\n  end\r\n  return cmc\r\nend",
+          "LuaScriptState": "[4,-1]",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "a0464f",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 14.0,
+            "posY": 1.24385178,
+            "posZ": 3.0,
+            "rotX": 359.993744,
+            "rotY": 179.97287,
+            "rotZ": 0.000149396437,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Indomitable Creativity Enabler",
+          "Description": "[i]drop onto a deck to perform the following[/i]:\n[sup]\nFor X permanent destroyed by Indomitable Creativity, their controller reveals cards from the top of their library until an [b]artifact or creature[/b] card is revealed and exiles that card. Put the exiled cards onto the battlefield, then shuffle the library.[/sup]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/e/d/edd00e45-2ae1-4cd0-92a1-155c95f8dc72.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onload(saved_data)\r\n  searchTerm1='creature'\r\n  searchTerm2='artifact'\r\n  keepGoing=false\r\n  cDeck=nil\r\n  deck=nil\r\n  nReps = 1\r\n  deckDir = -1\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    nReps = loaded_data[1]\r\n    deckDir = loaded_data[2]\r\n  end\r\n  self.createButton({\r\n    label=tostring(nReps),\r\n    click_function=\"add_subtract\",\r\n    tooltip=ttText,\r\n    function_owner=self,\r\n    position={0,0.2,0.15},\r\n    height=450,\r\n    width=450,\r\n    scale={1.5,1.5,1.5},\r\n    font_size=800,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n    tooltip='   number of permanents to extract\\ntype # or left/right click to change'\r\n  })\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.createButton({\r\n\t\tlabel=lab,\r\n\t\ttooltip=tip,\r\n\t\tclick_function=\"changeDeckDir\",\r\n\t\tfunction_owner=self,\r\n\t\tposition={-1.6,0.1,-1.3},\r\n\t\theight=200,\r\n\t\twidth=400,\r\n\t\tfont_size=500,\r\n\t\tfont_color={1,1,1,90},\r\n\t\tcolor={0,0,0,0},\r\n\t\t})\r\nend\r\nfunction changeDeckDir()\r\n  if deckDir==nil then deckDir=-1 end\r\n\tdeckDir=deckDir*-1\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.editButton({index=1,label=lab,tooltip=tip})\r\n  updateSave()\r\nend\r\nfunction updateSave()\r\n  local data_to_save = {nReps,deckDir}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\nfunction add_subtract(_obj, _color, alt_click)\r\n  mod = alt_click and -1 or 1\r\n  new_value = math.min(math.max(nReps + mod, 0), 99)\r\n  if nReps ~= new_value then\r\n    nReps = new_value\r\n    updateVal()\r\n    updateSave()\r\n  end\r\nend\r\nfunction updateVal()\r\n  self.editButton({\r\n    index = 0,\r\n    label = tostring(nReps),\r\n    })\r\nend\r\nself.max_typed_number=99\r\nfunction onNumberTyped(col,int)\r\n  nReps = int\r\n  updateVal()\r\n  updateSave()\r\nend\r\n\r\n\r\n\r\n\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tcollobj = co.collision_object\r\n\r\n\tif collobj.type == \"Deck\" then\r\n    deck=collobj\r\n    deck.interactable=false\r\n\r\n    nFound=0\r\n    foundInds={}\r\n    nCards=0\r\n    cardFound=false\r\n    for _,card in pairs(deck.getObjects()) do\r\n      nCards=nCards+1\r\n      cname=card.name:lower():gsub('%p','')\r\n      if cname:match(searchTerm1) or cname:match(searchTerm2) then\r\n        nFound=nFound+1\r\n        foundInds[nFound]=nCards\r\n        cardFound=true\r\n        if nFound==nReps then\r\n          break\r\n        end\r\n      end\r\n    end\r\n    if cardFound==false then\r\n      printToAll('could not find any valid cards')\r\n      return\r\n    end\r\n\r\n    foundN=0\r\n\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*3.6)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {4,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n    for i=1,nCards do\r\n      Wait.time(function()\r\n        if i==foundInds[foundN+1] then\r\n          foundN=foundN+1\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*4.8+deckDir*(foundN-1)*1.5)\r\n          finalCard=deck.takeObject({position=cpos,rotation=crot})\r\n          finalCard.highlightOn('Red',3)\r\n          if foundN==#foundInds then\r\n            Wait.frames(function()\r\n              Wait.condition(function() keepGoing=true end, function() return finalCard==nil or finalCard.resting end)\r\n            end,2)\r\n          end\r\n        else\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n          cpos[2]=cpos[2]\r\n          deck.takeObject({position=cpos,rotation=crot,callback_function=groupCards})\r\n        end\r\n      end,i*0.1)\r\n    end\r\n\r\n    Wait.condition(function()\r\n      Wait.time(function()\r\n        if cDeck~=nil then\r\n          local dpos=deck.getPosition()\r\n          local drot=deck.getRotation()\r\n          cDeck.setRotation(drot,false,true)\r\n          Wait.frames(function()\r\n            Wait.condition(function()\r\n              dpos[2]=0.95\r\n              cDeck.setPositionSmooth(dpos,false,true)\r\n              deck.setPositionSmooth(deck.getPosition()+vector(0,2,0),false,true)\r\n              if cDeck.type=='Deck' then deck=cDeck end\r\n              Wait.time(function() deck.shuffle() deck.interactable=true end,0.1,10)\r\n            end,function() return not(cDeck.isSmoothMoving()) end)\r\n          end,2)\r\n        end\r\n      end,0.5)\r\n    end, function() return keepGoing end)\r\n\r\n    self.destruct()\r\n\tend\r\nend\r\n\r\nfunction groupCards(c)\r\n  if cDeck==nil then\r\n    cDeck=c\r\n  else\r\n    cDeck=cDeck.putObject(c)\r\n  end\r\nend\r\n\r\nfunction onObjectEnterContainer(container, enter_object)\r\n  if enter_object==cDeck then\r\n    cDeck=container\r\n  end\r\n  if enter_object==deck then\r\n    deck=container\r\n  end\r\nend",
+          "LuaScriptState": "[3,-1]",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "5e98cd",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 13.5,
+            "posY": 1.24385345,
+            "posZ": 3.0,
+            "rotX": -0.00287152943,
+            "rotY": 179.977936,
+            "rotZ": 0.06487072,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Atla Palani Enabler",
+          "Description": "[i]drop onto a deck to perform the following[/i]:\n[sup]\nWhenever an Egg you control dies, reveal cards from the top of your library until you reveal a [b]creature[/b] card. Put that card onto the battlefield and the rest on the bottom of your library in a random order.[/sup]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/f/6/f6aa473b-85cd-431d-844b-218368fe955e.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onload(saved_data)\r\n  searchTerm1='creature'\r\n  searchTerm2='creature'\r\n  keepGoing=false\r\n  cDeck=nil\r\n  deck=nil\r\n  nReps = 1\r\n  deckDir = -1\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    nReps = loaded_data[1]\r\n    deckDir = loaded_data[2]\r\n  end\r\n  self.createButton({\r\n    label=tostring(nReps),\r\n    click_function=\"add_subtract\",\r\n    tooltip=ttText,\r\n    function_owner=self,\r\n    position={0,0.2,0.15},\r\n    height=450,\r\n    width=450,\r\n    scale={1.5,1.5,1.5},\r\n    font_size=800,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n    tooltip='   number of creatures to extract\\ntype # or left/right click to change'\r\n  })\r\n  if deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.createButton({\r\n\t\tlabel=lab,\r\n\t\ttooltip=tip,\r\n\t\tclick_function=\"changeDeckDir\",\r\n\t\tfunction_owner=self,\r\n\t\tposition={-1.6,0.1,-1.3},\r\n\t\theight=200,\r\n\t\twidth=400,\r\n\t\tfont_size=500,\r\n\t\tfont_color={1,1,1,90},\r\n\t\tcolor={0,0,0,0},\r\n\t\t})\r\nend\r\nfunction changeDeckDir()\r\n  if deckDir==nil then deckDir=-1 end\r\n\tdeckDir=deckDir*-1\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.editButton({index=1,label=lab,tooltip=tip})\r\n  updateSave()\r\nend\r\nfunction updateSave()\r\n  local data_to_save = {nReps,deckDir}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\nfunction add_subtract(_obj, _color, alt_click)\r\n  mod = alt_click and -1 or 1\r\n  new_value = math.min(math.max(nReps + mod, 0), 99)\r\n  if nReps ~= new_value then\r\n    nReps = new_value\r\n    updateVal()\r\n    updateSave()\r\n  end\r\nend\r\nfunction updateVal()\r\n  self.editButton({\r\n    index = 0,\r\n    label = tostring(nReps),\r\n    })\r\nend\r\nself.max_typed_number=99\r\nfunction onNumberTyped(col,int)\r\n  nReps = int\r\n  updateVal()\r\n  updateSave()\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tcollobj = co.collision_object\r\n\r\n\tif collobj.type == \"Deck\" then\r\n    deck=collobj\r\n    deck.interactable=false\r\n\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*3.6)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {4,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n\r\n    runningRep=0\r\n    for nRep=1,nReps do\r\n\r\n      repsDone={}\r\n      repsDone[nRep]=false\r\n\r\n      Wait.condition(function()\r\n\r\n        runningRep=runningRep+1\r\n\r\n        nCards=0\r\n        cardFound=false\r\n        for _,card in pairs(deck.getObjects()) do\r\n          nCards=nCards+1\r\n          cname=card.name:lower():gsub('%p','')\r\n          if cname:match(searchTerm1) or cname:match(searchTerm2) then\r\n            cardFound=true\r\n            break\r\n          end\r\n        end\r\n        if cardFound==false then\r\n          printToAll('could not find any valid cards')\r\n          return\r\n        end\r\n        for i=1,nCards do\r\n          Wait.time(function()\r\n            if i<nCards then\r\n              crot=deck.getRotation()\r\n              crot[3]=0\r\n              cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n              cpos[2]=cpos[2]\r\n              deck.takeObject({position=cpos,rotation=crot,callback_function=groupCards})\r\n            else\r\n              crot=deck.getRotation()\r\n              crot[3]=0\r\n              cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*4.8+deckDir*(runningRep-1)*1.5)\r\n              finalCard=deck.takeObject({position=cpos,rotation=crot})\r\n              Wait.frames(function()\r\n                Wait.condition(function()\r\n                  if finalCard then\r\n                    finalCard.highlightOn('Red',3)\r\n                  end\r\n                  keepGoing=true\r\n                end, function() return finalCard==nil or finalCard.resting end)\r\n              end,1)\r\n            end\r\n          end,i*0.1)\r\n        end\r\n\r\n        Wait.condition(function()\r\n          waitT=0.1\r\n          if cDeck~=nil then\r\n            waitT=1\r\n            cDeck.shuffle()\r\n            local dpos=deck.getPosition()\r\n            local drot=deck.getRotation()\r\n            cDeck.setRotation(drot,false,true)\r\n            Wait.frames(function()\r\n              Wait.condition(function()\r\n                dpos[2]=0.95\r\n                cDeck.shuffle()\r\n                cDeck.setPositionSmooth(dpos,false,true)\r\n                deck.setPositionSmooth(deck.getPosition()+vector(0,2,0),false,true)\r\n                if cDeck.type=='Deck' then deck=cDeck end\r\n              end,function() return not(cDeck.isSmoothMoving()) end)\r\n            end,2)\r\n          end\r\n          if runningRep==nReps then\r\n            deck.interactable=true\r\n            return\r\n          end\r\n          Wait.time(function()\r\n            repsDone[runningRep]=true\r\n            keepGoing=false\r\n            cDeck=nil\r\n          end, waitT)\r\n        end, function() return keepGoing and deck.resting end)\r\n\r\n      end,function()\r\n        return (nRep-1==0 or repsDone[nRep-1]==true)\r\n      end)\r\n    end\r\n\r\n    self.destruct()\r\n\tend\r\nend\r\n\r\nfunction groupCards(c)\r\n  if cDeck==nil then\r\n    cDeck=c\r\n  else\r\n    cDeck=cDeck.putObject(c)\r\n  end\r\nend\r\n\r\nfunction onObjectEnterContainer(container, enter_object)\r\n  if enter_object==cDeck then\r\n    cDeck=container\r\n  end\r\n  if enter_object==deck then\r\n    deck=container\r\n  end\r\nend",
+          "LuaScriptState": "[1,-1]",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "1ba507",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 13.5,
+            "posY": 1.24385345,
+            "posZ": 3.0,
+            "rotX": -0.00296106515,
+            "rotY": 180.023148,
+            "rotZ": 0.06487467,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Chaos Wand Enabler",
+          "Description": "[i]drop onto a deck to perform the following[/i]:\n[sup]\nExile cards from the top of library until an [b]instant or sorcery[/b] card. You may cast that card without paying its mana cost. Then put the exiled cards that weren’t cast this way on the bottom of that library in a random order.[/sup]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/6/2/62ff0730-6dd9-42d2-be0d-655d04adf229.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onLoad(saved_data)\r\n  searchTerm1='instant'\r\n  searchTerm2='sorcery'\r\n  keepGoing1=false\r\n  keepGoing2=false\r\n  cDeck=nil\r\n\tif saved_data~='' then\r\n\t\tdeckDir=tonumber(saved_data)\r\n\telse\r\n\t\tdeckDir=-1\r\n\tend\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.createButton({\r\n\t\tlabel=lab,\r\n\t\ttooltip=tip,\r\n\t\tclick_function=\"changeDeckDir\",\r\n\t\tfunction_owner=self,\r\n\t\tposition={-1.6,0.1,-1.3},\r\n\t\theight=200,\r\n\t\twidth=400,\r\n\t\tfont_size=500,\r\n\t\tfont_color={1,1,1,90},\r\n\t\tcolor={0,0,0,0},\r\n\t\t})\r\nend\r\nfunction changeDeckDir()\r\n\tdeckDir=deckDir*-1\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.editButton({index=0,label=lab,tooltip=tip})\r\n  self.script_state = deckDir\r\nend\r\n\r\nfunction groupCards(c)\r\n  if cDeck==nil then\r\n    cDeck=c\r\n  else\r\n    cDeck=cDeck.putObject(c)\r\n  end\r\n  keepGoing2=true\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    nCards=0\r\n    for _,card in pairs(deck.getObjects()) do\r\n      nCards=nCards+1\r\n      cname=card.name:lower():gsub('%p','')\r\n      if cname:match(searchTerm1) or cname:match(searchTerm2) then\r\n        cardInd=i\r\n        break\r\n      end\r\n    end\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {1,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n    for i=1,nCards do\r\n      Wait.time(function()\r\n        if i<nCards then\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n          cpos[2]=cpos[2]+0.1*i\r\n          deck.takeObject({position=cpos,rotation=crot,callback_function=groupCards})\r\n        else\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*4.8)\r\n          finalCard=deck.takeObject({position=cpos,rotation=crot})\r\n          Wait.frames(function() finalCard.highlightOn('Red',5) end, 1)\r\n          Wait.time(function() keepGoing1=true end, 1)\r\n        end\r\n      end,i*0.1)\r\n    end\r\n\r\n    Wait.condition(function()\r\n      Wait.time(function()\r\n        if cDeck==nil then return end\r\n        dpos=deck.getPosition()\r\n        dpos[2]=1\r\n        drot=deck.getRotation()\r\n        drot[3]=180\r\n        cDeck.shuffle()\r\n        Wait.time(function()\r\n          cDeck.setRotationSmooth(drot,false,true)\r\n          cDeck.setPositionSmooth(dpos,false,true)\r\n        end,0.1)\r\n        deck.setPositionSmooth(deck.getPosition()+vector(0,2,0),false,true)\r\n      end,0.5)\r\n    end, function() return keepGoing1 and keepGoing2 end)\r\n\r\n    self.destruct()\r\n\tend\r\nend\r\n\r\nfunction onObjectEnterContainer(container, enter_object)\r\n  if enter_object==cDeck then\r\n    cDeck=container\r\n  end\r\nend",
+          "LuaScriptState": "-1",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "c012f6",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 13.5,
+            "posY": 1.24385345,
+            "posZ": 3.0,
+            "rotX": -0.0028769928,
+            "rotY": 179.982819,
+            "rotZ": 0.06488094,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Cascade Enabler",
+          "Description": "[i]drop onto a deck to perform the following[/i]:\n[sup]\nExile cards from the top of library until you exile a nonland card whose converted mana cost is [b]equal or less[/b] than the [b]input amount[/b] (1 lower than the mana value of the spell with [i]Cascade[/i]). You may cast that card without paying its mana cost. Then put all cards exiled this way that weren't cast on the bottom of your library in a random order.[/sup]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/8/a/8afceb13-877a-4256-9ba6-851b6924ffd9.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onload(saved_data)\r\n  CascadeCMC = 5\r\n  deckDir=-1\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    CascadeCMC = loaded_data[1]\r\n    deckDir = loaded_data[2]\r\n  end\r\n  self.createButton({\r\n    label=tostring(CascadeCMC),\r\n    click_function=\"add_subtract\",\r\n    tooltip=ttText,\r\n    function_owner=self,\r\n    position={0,0.2,0.15},\r\n    height=450,\r\n    width=450,\r\n    scale={1.5,1.5,1.5},\r\n    font_size=800,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n    tooltip='         CMC value to cascade for\\ntype # or left/right click to change'\r\n  })\r\n  Encoder=Global.getVar('Encoder')\r\n  keepGoing1=false\r\n  keepGoing2=false\r\n  cDeck=nil\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.createButton({\r\n    label=lab,\r\n    tooltip=tip,\r\n    click_function=\"changeDeckDir\",\r\n    function_owner=self,\r\n    position={-1.6,0.1,-1.3},\r\n    height=200,\r\n    width=400,\r\n    font_size=500,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n  })\r\nend\r\n\r\n\r\nfunction changeDeckDir()\r\n  if deckDir==nil then deckDir=-1 end\r\n  deckDir=deckDir*-1\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.editButton({index=1,label=lab,tooltip=tip})\r\n  updateSave()\r\nend\r\nfunction updateSave()\r\n  local data_to_save = {CascadeCMC,deckDir}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\nfunction add_subtract(_obj, _color, alt_click)\r\n  mod = alt_click and -1 or 1\r\n  new_value = math.min(math.max(CascadeCMC + mod, 0), 99)\r\n  if CascadeCMC ~= new_value then\r\n    CascadeCMC = new_value\r\n    updateVal()\r\n    updateSave()\r\n  end\r\nend\r\nfunction updateVal()\r\n  self.editButton({\r\n    index = 0,\r\n    label = tostring(CascadeCMC),\r\n    })\r\nend\r\nself.max_typed_number=99\r\nfunction onNumberTyped(col,int)\r\n  CascadeCMC = int\r\n  updateVal()\r\n  updateSave()\r\nend\r\n\r\n\r\nfunction groupCards(c)\r\n  if cDeck==nil then\r\n    cDeck=c\r\n  else\r\n    cDeck=cDeck.putObject(c)\r\n  end\r\n  keepGoing2=true\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    nCards=0\r\n    for _,card in pairs(deck.getObjects()) do\r\n      nCards=nCards+1\r\n      cname=card.name:lower():gsub('%p','')\r\n      cdesc=card.description\r\n      cmc=getCMC(cname,cdesc)\r\n      if cmc~=nil and tonumber(cmc)<=CascadeCMC then\r\n        cardInd=i\r\n        break\r\n      end\r\n    end\r\n\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*3.6)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {4,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n    cascadingNow=true\r\n    for i=1,nCards do\r\n      Wait.time(function()\r\n        if i<nCards then\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n          cpos[2]=2\r\n          deck.takeObject({position=cpos,rotation=crot,callback_function=groupCards})\r\n        else\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*4.8)\r\n          cpos[2]=2\r\n          finalCard=deck.takeObject({position=cpos,rotation=crot})\r\n          Wait.condition(function()\r\n            cascadingNow=false\r\n            if finalCard==nil then return end\r\n            finalCard.highlightOn('Red',5)\r\n            -- reset encoder object data\r\n            if Encoder then\r\n              Encoder.call('APIencodeObject',{obj=finalCard})\r\n              Encoder.call('APIdisableEncoding',{obj=finalCard})\r\n            end\r\n            -- create buttons on card to accept or decline casting it\r\n            -- decline\r\n            local backpars={    -- background frame\r\n              label='', tooltip='', click_function = 'null',\r\n              position = {-0.5, 0.2, 2}, width = 500, height = 400, font_size = 400,\r\n              scale = {0.75,0.75,0.75}, rotation = {0,0,180},\r\n              color = {0.7,0.7,0.7}, font_color = {1, 1, 1}}\r\n            finalCard.createButton(backpars)\r\n            local forgpars=backpars\r\n            forgpars.label='✗'\r\n            forgpars.tooltip='[b]DO NOT CAST THE CARD[/b]\\nmove all the cascaded\\n'..\r\n                             'cards to the bottom of the\\nlibrary in random order'\r\n            forgpars.click_function='declineCascade'\r\n            forgpars.function_owner=self\r\n            forgpars.rotation = {0,0,0}\r\n            forgpars.font_color = {0.8,0,0}\r\n            forgpars.color = {0.16,0.16,0.16}\r\n            forgpars.hover_color = {0.4,0.4,0.4}\r\n            forgpars.scale = {0.67,0.67,0.67}\r\n            finalCard.createButton(forgpars)\r\n            -- accept\r\n            local backpars={    -- background frame\r\n              label='', tooltip='', click_function = 'null',\r\n              position = {0.5, 0.2, 2}, width = 500, height = 400, font_size = 400,\r\n              scale = {0.75,0.75,0.75}, rotation = {0,0,180},\r\n              color = {0.7,0.7,0.7}, font_color = {1, 1, 1}}\r\n            finalCard.createButton(backpars)\r\n            local forgpars=backpars\r\n            forgpars.label='✓'\r\n            forgpars.tooltip='[b]CAST THE CARD[/b]\\nmove all the other cascaded\\n'..\r\n                             'cards to the bottom of the\\nlibrary in random order'\r\n            forgpars.click_function='acceptCascade'\r\n            forgpars.function_owner=self\r\n            forgpars.rotation = {0,0,0}\r\n            forgpars.font_color = {0,0.6,0}\r\n            forgpars.color = {0.16,0.16,0.16}\r\n            forgpars.hover_color = {0.4,0.4,0.4}\r\n            forgpars.scale = {0.67,0.67,0.67}\r\n            finalCard.createButton(forgpars)\r\n          end, function() return finalCard==nil or finalCard.resting end)\r\n        end\r\n      end,i*0.1)\r\n    end\r\n    self.setPosition({0,0,500})\r\n    self.setLock(true)\r\n    Wait.time(function()\r\n      if self then\r\n        Wait.frames(function() self.destruct() end,1)\r\n      end\r\n      if finalCard then\r\n        acceptCascade(finalCard)\r\n      end\r\n    end,10)\r\n\tend\r\nend\r\n\r\nfunction acceptCascade(card)\r\n  finalCard=nil\r\n  if Encoder then\r\n    if Encoder.call('APIobjectExists',{obj=card}) then\r\n      Encoder.call('APIenableEncoding',{obj=card})\r\n    end\r\n  end\r\n  card.setGMNotes('')\r\n  card.clearButtons()\r\n  if cDeck then     -- put any other cascaded cards onto libBot\r\n    moveCDeckToBot(cDeck)\r\n  end\r\n  self.destruct()\r\nend\r\n\r\nfunction declineCascade(card)\r\n  finalCard=nil\r\n  if Encoder then\r\n    if Encoder.call('APIobjectExists',{obj=card}) then\r\n      Encoder.call('APIenableEncoding',{obj=card})\r\n    end\r\n  end\r\n  card.setGMNotes('')\r\n  card.clearButtons()\r\n  if cDeck then       -- add the card to other cascaded cards and then put all on libBot\r\n    card.setPositionSmooth(cDeck.getPosition()+vector(0,0.05,0),false,true)\r\n    Wait.frames(function() cDeck.putObject(card) end, 1)\r\n    Wait.time(function() moveCDeckToBot(cDeck) end, 1)\r\n  else                -- move just the one cards on libBot\r\n    local pos=deck.getPosition()\r\n    pos.y=0.96\r\n    local rot=card.getRotation()\r\n    rot.z=180\r\n    card.setRotationSmooth(rot,false,true)\r\n    Wait.time(function() card.setPositionSmooth(pos,false,true) end, 0.25)\r\n  end\r\n  self.destruct()\r\nend\r\n\r\nfunction moveCDeckToBot(cDeck)\r\n  if cDeck==nil then return end\r\n  dpos=deck.getPosition()\r\n  dpos[2]=1\r\n  drot=deck.getRotation()\r\n  drot[3]=180\r\n  cDeck.shuffle()\r\n  Wait.time(function()\r\n    cDeck.setRotationSmooth(drot,false,true)\r\n    cDeck.setPositionSmooth(dpos,false,true)\r\n  end,0.1)\r\n  deck.setPositionSmooth(deck.getPosition()+vector(0,2,0),false,true)\r\nend\r\n\r\nfunction onObjectEnterContainer(container, enter_object)\r\n  if cascadingNow and enter_object==cDeck then\r\n    cDeck=container\r\n  end\r\nend\r\nfunction getCMC(name,desc)\r\n  cmc=name:lower():match('(%d+) ?cmc')\r\n  if cmc==nil then\r\n    cmc=name:lower():match('cmc ?(%d+)')\r\n  end\r\n  if cmc==nil then\r\n    cmc=desc:lower():match('(%d+) ?cmc')\r\n  end\r\n  if cmc==nil then\r\n    cmc=desc:lower():match('cmc ?(%d+)')\r\n  end\r\n  isLand=name:lower():match('land')\r\n  if (cmc==nil or cmc=='0') and isLand then\r\n    cmc=nil\r\n  end\r\n  return cmc\r\nend",
+          "LuaScriptState": "[4,-1]",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "e1af73",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 13.5,
+            "posY": 1.24385285,
+            "posZ": 3.0,
+            "rotX": 359.994232,
+            "rotY": 180.024338,
+            "rotZ": -9.389617e-05,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Planar Bridge Enabler",
+          "Description": "[i]drop onto a deck to perform the following[/i]:\n[sup]\nReveal cards from the top of your library until you reveal a [b]creature or planeswalker[/b] card. Put that card onto the battlefield and the rest on the bottom of your library in a random order.[/sup]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://cards.scryfall.io/art_crop/front/9/d/9dad6b50-c415-4c55-8eac-bbc9d656c2fc.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onLoad(saved_data)\r\n  searchTerm1='creature'\r\n  searchTerm2='planeswalker'\r\n  keepGoing1=false\r\n  keepGoing2=false\r\n  cDeck=nil\r\n\tif saved_data~='' then\r\n\t\tdeckDir=tonumber(saved_data)\r\n\telse\r\n\t\tdeckDir=-1\r\n\tend\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.createButton({\r\n\t\tlabel=lab,\r\n\t\ttooltip=tip,\r\n\t\tclick_function=\"changeDeckDir\",\r\n\t\tfunction_owner=self,\r\n\t\tposition={-1.6,0.1,-1.3},\r\n\t\theight=200,\r\n\t\twidth=400,\r\n\t\tfont_size=500,\r\n\t\tfont_color={1,1,1,90},\r\n\t\tcolor={0,0,0,0},\r\n\t\t})\r\nend\r\nfunction changeDeckDir()\r\n\tdeckDir=deckDir*-1\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.editButton({index=0,label=lab,tooltip=tip})\r\n  self.script_state = deckDir\r\nend\r\n\r\nfunction groupCards(c)\r\n  if cDeck==nil then\r\n    cDeck=c\r\n  else\r\n    cDeck=cDeck.putObject(c)\r\n  end\r\n  keepGoing2=true\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    nCards=0\r\n    for _,card in pairs(deck.getObjects()) do\r\n      nCards=nCards+1\r\n      cname=card.name:lower():gsub('%p','')\r\n      if cname:match(searchTerm1) or cname:match(searchTerm2) then\r\n        cardInd=i\r\n        break\r\n      end\r\n    end\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {1,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n    for i=1,nCards do\r\n      Wait.time(function()\r\n        if i<nCards then\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n          cpos[2]=cpos[2]+0.1*i\r\n          deck.takeObject({position=cpos,rotation=crot,callback_function=groupCards})\r\n        else\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*4.8)\r\n          finalCard=deck.takeObject({position=cpos,rotation=crot})\r\n          Wait.frames(function() finalCard.highlightOn('Red',5) end, 1)\r\n          Wait.time(function() keepGoing1=true end, 1)\r\n        end\r\n      end,i*0.1)\r\n    end\r\n\r\n    Wait.condition(function()\r\n      Wait.time(function()\r\n        if cDeck==nil then return end\r\n        dpos=deck.getPosition()\r\n        dpos[2]=1\r\n        drot=deck.getRotation()\r\n        drot[3]=180\r\n        cDeck.shuffle()\r\n        Wait.time(function()\r\n          cDeck.setRotationSmooth(drot,false,true)\r\n          cDeck.setPositionSmooth(dpos,false,true)\r\n        end,0.1)\r\n        deck.setPositionSmooth(deck.getPosition()+vector(0,2,0),false,true)\r\n      end,0.5)\r\n    end, function() return keepGoing1 and keepGoing2 end)\r\n\r\n    self.destruct()\r\n\tend\r\nend\r\n\r\nfunction onObjectEnterContainer(container, enter_object)\r\n  if enter_object==cDeck then\r\n    cDeck=container\r\n  end\r\nend",
+          "LuaScriptState": "-1",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "01298d",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": -31.725,
+            "posY": 1.2484051,
+            "posZ": -10.5300007,
+            "rotX": -0.000190807332,
+            "rotY": 179.9828,
+            "rotZ": -0.000501308765,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Bag of Tricks",
+          "Description": "[i]drop onto a deck to perform the following[/i]:\r\n[sup]\r\nRoll a d8. Reveal cards from the top of your library until you reveal a creature card with mana value equal to the result. Put that card onto the battlefield and the rest on the bottom of your library in a random order.[/sup]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/f/0/f0b22a3e-90b0-4dde-8a63-789bab92ba01.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onload(saved_data)\r\n  CascadeCMC = 5\r\n  deckDir=-1\r\n  searchTerm1='instant'\r\n  searchTerm2='sorcery'\r\n  keepGoing1=false\r\n  keepGoing2=false\r\n  cDeck=nil\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    CascadeCMC = loaded_data[1]\r\n    deckDir = loaded_data[2]\r\n  end\r\n  self.createButton({\r\n    label=tostring(CascadeCMC),\r\n    click_function=\"add_subtract\",\r\n    tooltip=ttText,\r\n    function_owner=self,\r\n    position={0,0.2,0.15},\r\n    height=450,\r\n    width=450,\r\n    scale={1.5,1.5,1.5},\r\n    font_size=800,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n    tooltip='          max CMC of valid spell\\ntype # or left/right click to change'\r\n  })\r\n  Encoder=Global.getVar('Encoder')\r\n  keepGoing1=false\r\n  keepGoing2=false\r\n  cDeck=nil\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.createButton({\r\n    label=lab,\r\n    tooltip=tip,\r\n    click_function=\"changeDeckDir\",\r\n    function_owner=self,\r\n    position={-1.6,0.1,-1.3},\r\n    height=200,\r\n    width=400,\r\n    font_size=500,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n  })\r\nend\r\nfunction changeDeckDir()\r\n  if deckDir==nil then deckDir=-1 end\r\n  deckDir=deckDir*-1\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.editButton({index=1,label=lab,tooltip=tip})\r\n  updateSave()\r\nend\r\nfunction updateSave()\r\n  local data_to_save = {CascadeCMC,deckDir}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\nfunction add_subtract(_obj, _color, alt_click)\r\n  mod = alt_click and -1 or 1\r\n  new_value = math.min(math.max(CascadeCMC + mod, 0), 99)\r\n  if CascadeCMC ~= new_value then\r\n    CascadeCMC = new_value\r\n    updateVal()\r\n    updateSave()\r\n  end\r\nend\r\nfunction updateVal()\r\n  self.editButton({\r\n    index = 0,\r\n    label = tostring(CascadeCMC),\r\n    })\r\nend\r\nself.max_typed_number=99\r\nfunction onNumberTyped(col,int)\r\n  CascadeCMC = int\r\n  updateVal()\r\n  updateSave()\r\nend\r\n\r\nfunction groupCards(c)\r\n  if cDeck==nil then\r\n    cDeck=c\r\n  else\r\n    cDeck=cDeck.putObject(c)\r\n  end\r\n  keepGoing2=true\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    nCards=0\r\n    for _,card in pairs(deck.getObjects()) do\r\n      nCards=nCards+1\r\n      cname=card.name:lower():gsub('%p','')\r\n      cmc=getCMC(card.name,card.description)\r\n      if cmc~=nil and tonumber(cmc)<=CascadeCMC and (cname:match(searchTerm1) or cname:match(searchTerm2)) then\r\n        cardInd=i\r\n        break\r\n      end\r\n    end\r\n\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {1,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n    for i=1,nCards do\r\n      Wait.time(function()\r\n        if i<nCards then\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n          cpos[2]=cpos[2]+0.1*i\r\n          deck.takeObject({position=cpos,rotation=crot,callback_function=groupCards})\r\n        else\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*4.8)\r\n          finalCard=deck.takeObject({position=cpos,rotation=crot})\r\n          Wait.frames(function() finalCard.highlightOn('Red',5) end, 1)\r\n          Wait.time(function() keepGoing1=true end, 1)\r\n        end\r\n      end,i*0.1)\r\n    end\r\n\r\n    Wait.condition(function()\r\n      Wait.time(function()\r\n        if cDeck==nil then return end\r\n        dpos=deck.getPosition()\r\n        dpos[2]=1\r\n        drot=deck.getRotation()\r\n        drot[3]=180\r\n        cDeck.shuffle()\r\n        Wait.time(function()\r\n          cDeck.setRotationSmooth(drot,false,true)\r\n          cDeck.setPositionSmooth(dpos,false,true)\r\n        end,0.1)\r\n        deck.setPositionSmooth(deck.getPosition()+vector(0,2,0),false,true)\r\n      end,0.5)\r\n    end, function() return keepGoing1 and keepGoing2 end)\r\n\r\n    self.destruct()\r\n\tend\r\nend\r\n\r\nfunction onObjectEnterContainer(container, enter_object)\r\n  if enter_object==cDeck then\r\n    cDeck=container\r\n  end\r\nend\r\n\r\nfunction getCMC(name,desc)\r\n  cmc=name:lower():match('(%d+) ?cmc')\r\n  if cmc==nil then\r\n    cmc=name:lower():match('cmc ?(%d+)')\r\n  end\r\n  if cmc==nil then\r\n    cmc=desc:lower():match('(%d+) ?cmc')\r\n  end\r\n  if cmc==nil then\r\n    cmc=desc:lower():match('cmc ?(%d+)')\r\n  end\r\n  isLand=name:lower():match('land')\r\n  if (cmc==nil or cmc=='0') and isLand then\r\n    cmc=nil\r\n  end\r\n  return cmc\r\nend\r\n",
+          "LuaScriptState": "[2,-1]",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "01298d",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 14.0,
+            "posY": 1.24385178,
+            "posZ": 3.0,
+            "rotX": 359.993744,
+            "rotY": 179.982819,
+            "rotZ": 0.000148529391,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Codie Enabler",
+          "Description": "[i]drop onto a deck to perform the following[/i]:\n[sup]\nWhen you cast your next spell this turn, exile cards from the top of your library until you exile an instant or sorcery card with lesser mana value. Until end of turn, you may cast that card without paying its mana cost. Put each other card exiled this way on the bottom of your library in a random order.[/sup]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/e/a/ea476ee1-67d9-4dd8-a5ac-f68a155eb18b.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onload(saved_data)\r\n  CascadeCMC = 5\r\n  deckDir=-1\r\n  searchTerm1='instant'\r\n  searchTerm2='sorcery'\r\n  keepGoing1=false\r\n  keepGoing2=false\r\n  cDeck=nil\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    CascadeCMC = loaded_data[1]\r\n    deckDir = loaded_data[2]\r\n  end\r\n  self.createButton({\r\n    label=tostring(CascadeCMC),\r\n    click_function=\"add_subtract\",\r\n    tooltip=ttText,\r\n    function_owner=self,\r\n    position={0,0.2,0.15},\r\n    height=450,\r\n    width=450,\r\n    scale={1.5,1.5,1.5},\r\n    font_size=800,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n    tooltip='          max CMC of valid spell\\ntype # or left/right click to change'\r\n  })\r\n  Encoder=Global.getVar('Encoder')\r\n  keepGoing1=false\r\n  keepGoing2=false\r\n  cDeck=nil\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.createButton({\r\n    label=lab,\r\n    tooltip=tip,\r\n    click_function=\"changeDeckDir\",\r\n    function_owner=self,\r\n    position={-1.6,0.1,-1.3},\r\n    height=200,\r\n    width=400,\r\n    font_size=500,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n  })\r\nend\r\nfunction changeDeckDir()\r\n  if deckDir==nil then deckDir=-1 end\r\n  deckDir=deckDir*-1\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.editButton({index=1,label=lab,tooltip=tip})\r\n  updateSave()\r\nend\r\nfunction updateSave()\r\n  local data_to_save = {CascadeCMC,deckDir}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\nfunction add_subtract(_obj, _color, alt_click)\r\n  mod = alt_click and -1 or 1\r\n  new_value = math.min(math.max(CascadeCMC + mod, 0), 99)\r\n  if CascadeCMC ~= new_value then\r\n    CascadeCMC = new_value\r\n    updateVal()\r\n    updateSave()\r\n  end\r\nend\r\nfunction updateVal()\r\n  self.editButton({\r\n    index = 0,\r\n    label = tostring(CascadeCMC),\r\n    })\r\nend\r\nself.max_typed_number=99\r\nfunction onNumberTyped(col,int)\r\n  CascadeCMC = int\r\n  updateVal()\r\n  updateSave()\r\nend\r\n\r\nfunction groupCards(c)\r\n  if cDeck==nil then\r\n    cDeck=c\r\n  else\r\n    cDeck=cDeck.putObject(c)\r\n  end\r\n  keepGoing2=true\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    nCards=0\r\n    for _,card in pairs(deck.getObjects()) do\r\n      nCards=nCards+1\r\n      cname=card.name:lower():gsub('%p','')\r\n      cmc=getCMC(card.name,card.description)\r\n      if cmc~=nil and tonumber(cmc)<=CascadeCMC and (cname:match(searchTerm1) or cname:match(searchTerm2)) then\r\n        cardInd=i\r\n        break\r\n      end\r\n    end\r\n\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {1,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n    for i=1,nCards do\r\n      Wait.time(function()\r\n        if i<nCards then\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n          cpos[2]=cpos[2]+0.1*i\r\n          deck.takeObject({position=cpos,rotation=crot,callback_function=groupCards})\r\n        else\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*4.8)\r\n          finalCard=deck.takeObject({position=cpos,rotation=crot})\r\n          Wait.frames(function() finalCard.highlightOn('Red',5) end, 1)\r\n          Wait.time(function() keepGoing1=true end, 1)\r\n        end\r\n      end,i*0.1)\r\n    end\r\n\r\n    Wait.condition(function()\r\n      Wait.time(function()\r\n        if cDeck==nil then return end\r\n        dpos=deck.getPosition()\r\n        dpos[2]=1\r\n        drot=deck.getRotation()\r\n        drot[3]=180\r\n        cDeck.shuffle()\r\n        Wait.time(function()\r\n          cDeck.setRotationSmooth(drot,false,true)\r\n          cDeck.setPositionSmooth(dpos,false,true)\r\n        end,0.1)\r\n        deck.setPositionSmooth(deck.getPosition()+vector(0,2,0),false,true)\r\n      end,0.5)\r\n    end, function() return keepGoing1 and keepGoing2 end)\r\n\r\n    self.destruct()\r\n\tend\r\nend\r\n\r\nfunction onObjectEnterContainer(container, enter_object)\r\n  if enter_object==cDeck then\r\n    cDeck=container\r\n  end\r\nend\r\n\r\nfunction getCMC(name,desc)\r\n  cmc=name:lower():match('(%d+) ?cmc')\r\n  if cmc==nil then\r\n    cmc=name:lower():match('cmc ?(%d+)')\r\n  end\r\n  if cmc==nil then\r\n    cmc=desc:lower():match('(%d+) ?cmc')\r\n  end\r\n  if cmc==nil then\r\n    cmc=desc:lower():match('cmc ?(%d+)')\r\n  end\r\n  isLand=name:lower():match('land')\r\n  if (cmc==nil or cmc=='0') and isLand then\r\n    cmc=nil\r\n  end\r\n  return cmc\r\nend\r\n",
+          "LuaScriptState": "[2,-1]",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "01805a",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 13.5,
+            "posY": 1.24385345,
+            "posZ": 3.0,
+            "rotX": -0.00293837069,
+            "rotY": 180.020935,
+            "rotZ": 0.06504114,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "get non-basic land",
+          "Description": "",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/b/1/b1ce11c3-61bc-4391-b316-945661cfeaa9.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onLoad(saved_data)\r\n\tif saved_data~='' then\r\n\t\tdeckDir=tonumber(saved_data)\r\n\telse\r\n\t\tdeckDir=-1\r\n\tend\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.createButton({\r\n\t\tlabel=lab,\r\n\t\ttooltip=tip,\r\n\t\tclick_function=\"changeDeckDir\",\r\n\t\tfunction_owner=self,\r\n\t\tposition={-1.6,0.1,-1.3},\r\n\t\theight=200,\r\n\t\twidth=400,\r\n\t\tfont_size=500,\r\n\t\tfont_color={1,1,1,90},\r\n\t\tcolor={0,0,0,0},\r\n\t\t})\r\nend\r\nfunction changeDeckDir()\r\n\tdeckDir=deckDir*-1\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.editButton({index=0,label=lab,tooltip=tip})\r\n  self.script_state = deckDir\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    desc=self.getDescription()\r\n    nTake=desc:match('%d+')\r\n    if nTake==nil then nTake=1 end\r\n    desc=desc:gsub('%d',''):gsub('%p','')\r\n    searchTerm=desc\r\n    if searchTerm==nil then searchTerm='' end\r\n    nTaken=0\r\n\r\n    for i,card in ipairs(deck.getObjects()) do\r\n      cname=card.name:lower():gsub('%p','')\r\n      if not(cname:match('basic')) and cname:match('land') and cname:match(searchTerm) then\r\n        nTaken=nTaken+1\r\n        rot=deck.getRotation()\r\n        pos=deck.getPosition()\r\n        rig=deck.getTransformRight()\r\n        rot[3]=0\r\n        pos=pos+rig:scale(deckDir*2.4+deckDir*(nTaken-1)*1.5)\r\n        pos[2]=pos[2]+nTaken*0.1\r\n        deck.takeObject({index=i-nTaken,position=pos,rotation=rot})\r\n        if nTaken==tonumber(nTake) then\r\n          break\r\n        end\r\n      end\r\n    end\r\n    Wait.time(function() deck.shuffle() end, 0.1, 5)\r\n\r\n    self.destruct()\r\n\tend\r\nend",
+          "LuaScriptState": "-1",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "cdd2cc",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 13.5,
+            "posY": 1.2466625,
+            "posZ": 3.0,
+            "rotX": 0.0465787761,
+            "rotY": 179.968445,
+            "rotZ": 0.0009631557,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "get basic land",
+          "Description": "",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/5/a/5a108064-8143-4b20-a5a2-eeb3b80af82f.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onLoad(saved_data)\r\n\tif saved_data~='' then\r\n\t\tdeckDir=tonumber(saved_data)\r\n\telse\r\n\t\tdeckDir=-1\r\n\tend\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.createButton({\r\n\t\tlabel=lab,\r\n\t\ttooltip=tip,\r\n\t\tclick_function=\"changeDeckDir\",\r\n\t\tfunction_owner=self,\r\n\t\tposition={-1.6,0.1,-1.3},\r\n\t\theight=200,\r\n\t\twidth=400,\r\n\t\tfont_size=500,\r\n\t\tfont_color={1,1,1,90},\r\n\t\tcolor={0,0,0,0},\r\n\t\t})\r\nend\r\nfunction changeDeckDir()\r\n\tdeckDir=deckDir*-1\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.editButton({index=0,label=lab,tooltip=tip})\r\n  self.script_state = deckDir\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    desc=self.getDescription()\r\n    nTake=desc:match('%d+')\r\n    if nTake==nil then nTake=1 end\r\n    desc=desc:gsub('%d',''):gsub('%p','')\r\n    searchTerm=desc\r\n    if searchTerm==nil then searchTerm='' end\r\n    nTaken=0\r\n\r\n    for i,card in ipairs(deck.getObjects()) do\r\n      cname=card.name:lower():gsub('%p','')\r\n      if cname:match('basic') and cname:match('land') and cname:match(searchTerm) then\r\n        nTaken=nTaken+1\r\n        rot=deck.getRotation()\r\n        pos=deck.getPosition()\r\n        rig=deck.getTransformRight()\r\n        rot[3]=0\r\n        pos=pos+rig:scale(deckDir*2.4+deckDir*(nTaken-1)*1.5)\r\n        pos[2]=pos[2]+nTaken*0.1\r\n        deck.takeObject({index=i-nTaken,position=pos,rotation=rot})\r\n        if nTaken==tonumber(nTake) then\r\n          break\r\n        end\r\n      end\r\n    end\r\n    Wait.time(function() deck.shuffle() end, 0.1, 5)\r\n    self.destruct()\r\n\tend\r\nend",
+          "LuaScriptState": "-1",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "65f205",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 13.5,
+            "posY": 1.243853,
+            "posZ": 3.0,
+            "rotX": -0.00572593464,
+            "rotY": 179.983246,
+            "rotZ": -9.17152e-05,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Possibility Storm\r\n[sub][i]enables context menu option on cards at the table[/i][/sub]",
+          "Description": "Whenever a player casts a spell from their hand, that player exiles it, then exiles cards from the top of their library until they exile a card that shares a card type with it. That player may cast that card without paying its mana cost. Then they put all cards exiled with Possibility Storm on the bottom of their library in a random order.",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/8/5/858aa831-b491-4f1e-bb56-33eeca14771d.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onLoad()\r\n  data=Global.getTable('data')\r\n  deckDirs=Global.getTable('deckDirs')\r\n  types={'land','creature','artifact','enchantment','planeswalker','instant','sorcery'}\r\n  for _,obj in pairs(Global.getObjects()) do\r\n    if obj.type=='Card' then\r\n      obj.addContextMenuItem('Possibility Storm',possibility)\r\n    end\r\n  end\r\nend\r\n\r\nfunction onDrop()\r\n  broadcastToAll('[i]Possibility Storm[/i] initiated.\\nRight click a card and select the option to simplify the procedure.',{1,0,0})\r\nend\r\n\r\nfunction onObjectEnterScriptingZone(zone,obj)\r\n  Wait.frames(function()\r\n    if obj==nil then return end\r\n    if obj.type=='Card' then\r\n      obj.addContextMenuItem('Possibility Storm',possibility)\r\n    end\r\n  end,1)\r\nend\r\n\r\nfunction onObjectExitScriptingZone(zone,obj)\r\n  Wait.frames(function()\r\n    if obj==nil then return end\r\n    if obj.type=='Card' then\r\n      obj.addContextMenuItem('Possibility Storm',possibility)\r\n    end\r\n  end,1)\r\nend\r\n\r\nfunction possibility(ply)\r\n\r\n  if data==nil or deckDirs==nil then\r\n    broadcastToAll(\"this one only works on Pie's MTG tables\")\r\n  end\r\n\r\n  keepGoing=false\r\n  cardInd=nil\r\n  local deck = getDeckFromZone(data[ply][\"libraryZone\"])\r\n  local objs = Player[ply].getSelectedObjects()\r\n  local castCard = objs[1]\r\n  Player[ply].clearSelectedObjects()\r\n  if castCard.type~='Card' then return end\r\n  if deck==nil then return end\r\n\r\n  local searchTypes={}\r\n  for _,type in pairs(types) do\r\n    if castCard.getName():lower():find(type) then\r\n      table.insert(searchTypes,type)\r\n    end\r\n  end\r\n\r\n  local nCards=0\r\n  for i,card in pairs(deck.getObjects()) do\r\n    nCards=nCards+1\r\n    local cname=card.name:lower():gsub('%p','')\r\n    for _,type in pairs(searchTypes) do\r\n      if cname:find(type) then\r\n        cardInd=i\r\n        foundCard=card.name\r\n        break\r\n      end\r\n    end\r\n    if cardInd~=nil then break end\r\n  end\r\n\r\n  local deckDir=deckDirs[ply]\r\n  local castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*3.6)\r\n  local targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n  local castPars={\r\n    origin=castPos,\r\n    direction = vector(0,0,1),\r\n    type = 3,\r\n    size = {3,4,2},\r\n    max_distance=0,\r\n  }\r\n  local castOutput = Physics.cast(castPars)\r\n  for _,castO in pairs(castOutput) do\r\n    local hitObj = castO.hit_object\r\n    if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n      local hitObjPos=hitObj.getPosition()\r\n      local newObjPos=hitObjPos\r\n      newObjPos[3]=targPos[3]\r\n      hitObj.setPositionSmooth(newObjPos,false,true)\r\n    end\r\n  end\r\n\r\n  local cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n  local crot=deck.getRotation()\r\n  crot[3]=0\r\n  castCard.setPositionSmooth(cpos,false,true)\r\n  castCard.setRotationSmooth(crot,false,true)\r\n  cDeck=castCard\r\n\r\n  for i=1,nCards do\r\n    Wait.time(function()\r\n      if i<nCards then\r\n        crot=deck.getRotation()\r\n        crot[3]=0\r\n        cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n        cpos[2]=cpos[2]+0.1*i\r\n        deck.takeObject({position=cpos,rotation=crot,callback_function=groupCards})\r\n      else\r\n        crot=deck.getRotation()\r\n        crot[3]=0\r\n        cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*4.8)\r\n        finalCard=deck.takeObject({position=cpos,rotation=crot})\r\n        Wait.frames(function() finalCard.highlightOn('Red',5) end, 1)\r\n        broadcastToAll(Player[ply].steam_name..' wanted to cast [i]'..castCard.getName():gsub('\\n.*','')..\r\n                        '[/i] but got [i]'..foundCard:gsub('\\n.*','')..'[/i] instead',Color.fromString(ply))\r\n        Wait.time(function() keepGoing=true end, 1)\r\n      end\r\n    end,i*0.1)\r\n  end\r\n\r\n  Wait.condition(function()\r\n    Wait.time(function()\r\n      if cDeck==nil then return end\r\n      dpos=deck.getPosition()\r\n      dpos[2]=1\r\n      drot=deck.getRotation()\r\n      drot[3]=180\r\n      cDeck.shuffle()\r\n      Wait.time(function()\r\n        cDeck.setRotationSmooth(drot,false,true)\r\n        cDeck.setPositionSmooth(dpos,false,true)\r\n        cDeck=nil\r\n      end,0.1)\r\n      deck.setPositionSmooth(deck.getPosition()+vector(0,2,0),false,true)\r\n    end,0.5)\r\n  end, function() return keepGoing end)\r\n\r\nend\r\n\r\nfunction groupCards(c)\r\n  if cDeck==nil then\r\n    cDeck=c\r\n  else\r\n    cDeck=cDeck.putObject(c)\r\n  end\r\nend\r\n\r\nfunction onObjectEnterContainer(container, enter_object)\r\n  if enter_object==cDeck then\r\n    cDeck=container\r\n  end\r\nend\r\n\r\nfunction getDeckFromZone(zone)\r\n  local deck = nil\r\n  local objects = zone.getObjects()\r\n  for i,obj in pairs(objects) do\r\n    if obj.type=='Deck' then\r\n      deck = obj\r\n      return deck\r\n    end\r\n  end\r\n  return deck\r\nend",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "d468e2",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 13.5,
+            "posY": 1.24385345,
+            "posZ": 3.0,
+            "rotX": -0.00285739335,
+            "rotY": 179.983246,
+            "rotZ": 0.065043,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Scrambleverse",
+          "Description": "For each nonland permanent, choose a player at random. Then each player gains control of each permanent for which they were chosen. Untap those permanents.",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/2/b/2b61fa9d-3f69-4632-be0e-09924ca88501.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onLoad()\r\n  self.createButton({\r\n    click_function='scramble',\r\n    function_owner=self,\r\n    position={0,0.1,0},\r\n    width=1200,\r\n    height=900,\r\n    color={0.1,0.1,0.1,0.85},\r\n\t\thover_color={0.1,0.1,0.1,0.9},\r\n    tooltip='assign non-land permanents randomly\\nto players seated at the table'\r\n  })\r\n  data=Global.getTable('data')\r\n  deckDats={}\r\n  trackDraw={}\r\n  for _,ply in pairs(Player.getAvailableColors()) do\r\n    if data~=nil and data[ply][\"libraryZone\"] then\r\n      useDeckZones=true\r\n    else\r\n      useDeckZones=false\r\n      deckDats[ply]=nil\r\n    end\r\n  end\r\nend\r\n\r\nfunction scramble(obj,ply,alt)\r\n  for _, player in ipairs(Player.getPlayers()) do\r\n    color=player.color\r\n    if data==nil or data[color]==nil or data[color][\"playmat\"]==nil then\r\n      broadcastToAll(\"this one only works on Pie's MTG tables\")\r\n      return\r\n    end\r\n  end\r\n\r\n  if nClicks==nil then nClicks=0 end\r\n  if lastClick==nil then lastClick=os.time()-10 end\r\n  if (os.time()-lastClick)>0.5 then\r\n    nClicks=0\r\n  end\r\n  lastClick=os.time()\r\n  nClicks=nClicks+1\r\n\r\n  wid=Wait.time(function()\r\n    if nClicks==1 and not(announceOff) then\r\n      broadcastToAll('Scambleverse!',{0.8,0,0})\r\n      Wait.time(function()\r\n        broadcastToAll(\"All individual cards within each player's zone will be redistributed. Cards that are stacked into decks will not be affected.\",{0.55,0.55,0.55})\r\n      end,1)\r\n      Wait.time(function()\r\n        broadcastToAll('Cards with counters representing multiple copies need to be split-up/copied into individual cards.',{0.7,0.7,0.7})\r\n      end,2)\r\n      Wait.time(function()\r\n        broadcastToAll('Cards need to have the [i]type[/i] in the namefield (otherwise it will also redistribute the lands).',{0.85,0.85,0.85})\r\n      end,3)\r\n      Wait.time(function()\r\n        broadcastToAll('Any player out of the game needs to have a [i]Skip Turn[/i] puck or be a specator (Grey/Black) or not have any cards in their playzone.',{1,1,1})\r\n      end,4)\r\n      Wait.time(function()\r\n        broadcastToAll('[b]Double-click[/b] the button to Scrambleverse.',{1,0,0})\r\n      end,5)\r\n      announceOff=true\r\n      Wait.time(function() announceOff=false end,10)\r\n      return\r\n    end\r\n  end,1)\r\n\r\n  if nClicks<2 then return end\r\n\r\n  if wid then\r\n    Wait.stop(wid)\r\n  end\r\n\r\n  broadcastToAll('Enacting Scambleverse!',{0.8,0,0})\r\n  printToAll('For each nonland permanent, choose a player at random. Then each player gains '..\r\n      'control of each permanent for which they were chosen. Untap those permanents.',{1,0,0})\r\n\r\n  math.randomseed( os.time() )\r\n  for i=1,100+math.random(100) do\r\n    math.random()\r\n  end\r\n  seatedColors={}\r\n  nCol={}\r\n  for _, player in ipairs(Player.getPlayers()) do\r\n    if player.seated then\r\n      table.insert(seatedColors,player.color)\r\n      nCol[player.color]=0\r\n    end\r\n  end\r\n\r\n  skipColors={}\r\n  for _, obj in pairs(Global.getObjects()) do\r\n    if obj.getName()=='Turn Skipper' and obj.is_face_down then\r\n      local skipCol=obj.getColorTint()\r\n      print('skipping ',skipCol)\r\n      for i,seatCol in ipairs(seatedColors) do\r\n        print(Color.fromString(seatCol))\r\n        print(Color.fromString(seatCol)==skipCol)\r\n        if Color.fromString(seatCol)==skipCol then\r\n          table.remove(seatedColors,i)\r\n        end\r\n      end\r\n    end\r\n  end\r\n\r\n  -- seatedColors={'Blue','White'}\r\n  -- nCol={Blue=0,White=0}\r\n\r\n  for _,color in ipairs(seatedColors) do\r\n    if color~='Grey' and color~='Black' then\r\n      cardAssign={}\r\n      nCard=0\r\n      for _,card in pairs(data[color][\"playmat\"].getObjects()) do\r\n        if card.type=='Card' and not(card.getName():lower():find('land')) then\r\n          nCard=nCard+1\r\n          Wait.time(function()\r\n            local selCol=seatedColors[math.random(#seatedColors)]\r\n            card.highlightOn(Color.fromString(color))\r\n            local nDown=math.floor(nCol[selCol]/10)\r\n            local nRight=nCol[selCol]-nDown*10\r\n            nCol[selCol]=nCol[selCol]+1\r\n            local targPos=data[selCol][\"playmat\"].getPosition()+data[selCol][\"playmat\"].getTransformRight():scale(nRight*(-2.4)+10.75)+data[selCol][\"playmat\"].getTransformForward():scale(nDown*3.2-8)\r\n            local rotDiff=data[selCol][\"playmat\"].getRotation()-data[color][\"playmat\"].getRotation()\r\n            local targRot=card.getRotation()+rotDiff\r\n            targPos.y=1\r\n            card.setPositionSmooth(targPos,false,false)\r\n            card.setRotationSmooth(targRot,false,false)\r\n          end,0.05*nCard)\r\n        end\r\n      end\r\n    end\r\n  end\r\n\r\n\r\nend\r\n",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "cbec15",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 14.5000525,
+            "posY": 1.24383509,
+            "posZ": 3.00000238,
+            "rotX": -0.002608903,
+            "rotY": 179.983246,
+            "rotZ": 0.0670893043,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Mindmoil Enabler",
+          "Description": "Click the button to put the cards in your hand on the bottom of your library in a random order, then draw that many cards.",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/art_crop/front/0/c/0ccc79f7-2f35-4daf-a0c2-775f5fa6c249.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onLoad()\r\n  self.createButton({\r\n    click_function='mindmoil',\r\n    function_owner=self,\r\n    position={0,0.1,0},\r\n    width=1200,\r\n    height=900,\r\n    color={0.1,0.1,0.1,0.85},\r\n\t\thover_color={0.1,0.1,0.1,0.9},\r\n    tooltip='put hand on bottom of library\\n         draw same # cards'\r\n  })\r\n  data=Global.getTable('data')\r\n  deckDats={}\r\n  trackDraw={}\r\n  for _,ply in pairs(Player.getAvailableColors()) do\r\n    if data~=nil and data[ply][\"libraryZone\"] then\r\n      useDeckZones=true\r\n    else\r\n      useDeckZones=false\r\n      deckDats[ply]=nil\r\n    end\r\n  end\r\nend\r\n\r\nfunction mindmoil(obj,ply,alt)\r\n  local deck = getDeck(ply)\r\n  if deck==nil then\r\n    if useDeckZones then\r\n      Player[ply].broadcast('Could not find your deck.\\nMake sure there is a deck in the designated library zone.')\r\n    else\r\n      Player[ply].broadcast('Could not find your deck.\\nPick your deck up briefly to register it and then press the button again.')\r\n      deckSearch=ply\r\n    end\r\n    return\r\n  end\r\n  local objs=Player[ply].getHandObjects(1)\r\n  local cards={}\r\n  for _,obj in pairs(objs) do\r\n    if obj.type=='Card' or obj.type=='Deck' then\r\n      local rot=obj.getRotation()\r\n      rot[3]=180\r\n      obj.setRotationSmooth(rot,false,true)\r\n      table.insert(cards,obj)\r\n    end\r\n  end\r\n  local nCards=#cards\r\n  Wait.time(function()\r\n\tlocal gr\r\n    if nCards>1 then\r\n      gr=group(cards)\r\n\t     gr=gr[1]\r\n    else\r\n      gr=cards[1]\r\n    end\r\n    if gr==nil then return end\r\n    gr.use_gravity=false\r\n    gr.interactable=false\r\n    gr.shuffle()\r\n    Wait.time(function()\r\n      if gr.type=='Card' then\r\n        handTrigger(gr)\r\n      end\r\n      gr.use_gravity=true\r\n      gr.interactable=true\r\n      gr.shuffle()\r\n      if deck~=nil then\r\n        local pos=deck.getPosition()\r\n        pos[2]=1\r\n        gr.setPositionSmooth(pos,false,true)\r\n        gr.setRotationSmooth(deck.getRotation(),false,true)\r\n        deck.setPositionSmooth(deck.getPosition()+Vector(0,2,0),false,true)\r\n      else\r\n        local rot = gr.getRotation()\r\n        rot.z=180\r\n        local pos = data[ply][\"libraryZone\"].getPosition()\r\n        pos[2]=1\r\n        gr.setRotationSmooth(rot,false,true)\r\n        gr.setPositionSmooth(pos,false,true)\r\n      end\r\n      Wait.time(function()\r\n        deck = getDeck(ply)\r\n        deck.deal(nCards,ply,1)\r\n      end,1)\r\n    end, 1)\r\n  end, 0.5)\r\nend\r\n\r\nfunction onObjectLeaveContainer(deck,card)\r\n  if useDeckZones then return end\r\n  if card.type=='Card' and deck.type=='Deck' then\r\n    Wait.frames(function()\r\n      Wait.condition(function()\r\n        if card==nil then return end\r\n        for _,ply in pairs(Player.getAvailableColors()) do\r\n          for _,obj in pairs(Player[ply].getHandObjects(1)) do\r\n            if obj==card then\r\n              if trackDraw[deck.getGUID()]==nil then trackDraw[deck.getGUID()]=0 end\r\n              trackDraw[deck.getGUID()]=trackDraw[deck.getGUID()]+1\r\n              if trackDraw[deck.getGUID()]>=7 then\r\n                deckDats[ply]=deck\r\n                -- print(deckDats[ply].getGUID())\r\n              end\r\n              return\r\n            end\r\n          end\r\n        end\r\n      end,function() return card==nil or card.resting end)\r\n    end,2)\r\n  end\r\nend\r\n\r\nfunction onObjectEnterContainer(container,enter_object)\r\n  if useDeckZones then return end\r\n  for _,ply in pairs(Player.getAvailableColors()) do\r\n    if enter_object==deckDats[ply] then\r\n      deckDats[ply]=container\r\n      -- print(deckDats[ply].getGUID())\r\n    end\r\n  end\r\nend\r\n\r\nfunction onObjectPickUp(ply, obj)\r\n  if obj.type~='Deck' then return end\r\n  if deckSearch~=ply then return end\r\n  deckDats[ply]=obj\r\n  Player[ply].broadcast('Deck '..obj.getName():gsub('\\n',' | ')..' registered to '..Player[ply].steam_name)\r\n  deckSearch=nil\r\nend\r\n\r\nfunction getDeck(ply)\r\n  local deck\r\n  if useDeckZones then\r\n    deck = getDeckFromZone(data[ply][\"libraryZone\"])\r\n    if deck==nil then\r\n      deck = getCardFromZone(data[ply][\"libraryZone\"])\r\n    end\r\n  else\r\n    deck = deckDats[ply]\r\n  end\r\n  return deck\r\nend\r\n\r\nfunction getCardFromZone(zone)\r\n  local card = nil\r\n  local highY = 0\r\n  local highObj = nil\r\n  local objects = zone.getObjects()\r\n  for i,obj in pairs(objects) do\r\n    if obj.type=='Deck' or (obj.type=='Card' and obj.use_gravity) then\r\n      if obj.getPosition().y>highY then\r\n        highY=obj.getPosition().y\r\n        highObj=obj\r\n      end\r\n    end\r\n  end\r\n  if highObj~=nil then\r\n    if highObj.type=='Deck' then     -- pull one card from the top of the deck\r\n      local deck = highObj\r\n      local cardPresent, card = pcall(deck.takeObject)\r\n      if cardPresent and card.type=='Card' then\r\n        deck.setLock(true)\r\n        Wait.frames(function() deck.setLock(false) end, 1)\r\n        card.use_hands = true\r\n        gravityTrigger(card)\r\n        return card\r\n      end\r\n    elseif highObj.type=='Card' then\r\n      local card=highObj\r\n      card.use_hands = true\r\n      gravityTrigger(card)\r\n      return card\r\n    end\r\n  end\r\n  return card   -- if nil?\r\nend\r\n\r\nfunction getDeckFromZone(zone)\r\n  local deck = nil\r\n  local objects = zone.getObjects()\r\n  for i,obj in pairs(objects) do\r\n    if obj.type=='Deck' then\r\n      deck = obj\r\n      return deck\r\n    end\r\n  end\r\n  return deck\r\nend\r\n\r\nfunction handTrigger(obj)\r\n  if obj~=nil then\r\n    obj.use_hands=false\r\n    Wait.time(function() handOn(obj) end, 0.1)\r\n  end\r\nend\r\nfunction handOn(obj)\r\n  if obj~=nil then\r\n    obj.use_hands=true\r\n  end\r\nend",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "b5797b",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": -12.3422756,
+            "posY": 2.02113485,
+            "posZ": 2.717051,
+            "rotX": -1.36929975e-06,
+            "rotY": 179.999619,
+            "rotZ": -1.52623e-06,
+            "scaleX": 0.41,
+            "scaleY": 1.0,
+            "scaleZ": 0.41
+          },
+          "Nickname": "[i]River Sol Enabler[/i]",
+          "Description": "(draw from bottom)",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://cards.scryfall.io/art_crop/front/c/b/cb6b98f9-5317-4fd9-944e-c1fd5e7f6d3f.jpg?1696637404",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onLoad()\r\n  self.createButton({\r\n    click_function='drawBottom',\r\n    function_owner=self,\r\n    position={0,0.1,0},\r\n    width=1200,\r\n    height=900,\r\n    color={0.1,0.1,0.1,0.85},\r\n\t\thover_color={0.1,0.1,0.1,0.9},\r\n    tooltip='draw from bottom'\r\n  })\r\n  data=Global.getTable('data')\r\n  deckDats={}\r\n  trackDraw={}\r\n  for _,ply in pairs(Player.getAvailableColors()) do\r\n    if data~=nil and data[ply][\"libraryZone\"] then\r\n      useDeckZones=true\r\n    else\r\n      useDeckZones=false\r\n      deckDats[ply]=nil\r\n    end\r\n  end\r\nend\r\n\r\nfunction drawBottom(obj,ply,alt)\r\n  local deck = getDeck(ply)\r\n  if deck==nil then\r\n    if useDeckZones then\r\n      Player[ply].broadcast('Could not find your deck.\\nMake sure there is a deck in the designated library zone.')\r\n    else\r\n      Player[ply].broadcast('Could not find your deck.\\nPick your deck up briefly to register it and then press the button again.')\r\n      deckSearch=ply\r\n    end\r\n    return\r\n  end\r\n\r\n  local dpos = deck.getPosition()\r\n  dpos.y = 2\r\n  deck.setPositionSmooth(dpos,false,true)\r\n\r\n  local bpos = deck.getPosition()+deck.getTransformForward()\r\n  bpos.y=0.98\r\n\r\n  local card=deck.takeObject({\r\n    position=bpos,\r\n    smooth=false,\r\n    top=false\r\n  })\r\n\r\n  Wait.condition(function() card.deal(1,ply,1) end,\r\n                 function() return not(card.spawning) end)\r\n\r\nend\r\n\r\nfunction getDeck(ply)\r\n  local deck\r\n  if useDeckZones then\r\n    deck = getDeckFromZone(data[ply][\"libraryZone\"])\r\n  else\r\n    deck = deckDats[ply]\r\n  end\r\n  return deck\r\nend\r\n\r\nfunction getDeckFromZone(zone)\r\n  local deck = nil\r\n  local objects = zone.getObjects()\r\n  for i,obj in pairs(objects) do\r\n    if obj.type=='Deck' then\r\n      deck = obj\r\n      return deck\r\n    end\r\n  end\r\n  return deck\r\nend\r\n\r\nfunction onObjectPickUp(ply, obj)\r\n  if obj.type~='Deck' then return end\r\n  if deckSearch~=ply then return end\r\n  deckDats[ply]=obj\r\n  Player[ply].broadcast('Deck '..obj.getName():gsub('\\n',' | ')..' registered to '..Player[ply].steam_name)\r\n  deckSearch=nil\r\nend\r\n",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "ca0e60",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 21.8392029,
+            "posY": 2.03003049,
+            "posZ": 19.9323559,
+            "rotX": 3.9067455e-08,
+            "rotY": 179.99469,
+            "rotZ": 9.43098755e-08,
+            "scaleX": 0.9486144,
+            "scaleY": 1.0,
+            "scaleZ": 0.9486144
+          },
+          "Nickname": "Mass Face Down Tool",
+          "Description": "Select any number of cards and click which type of face-down permanent they'll all be (or face up)",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://cards.scryfall.io/art_crop/front/6/8/68a144f1-df18-4dc5-81c3-dff2af27527f.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 25.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "--DXHHH101\r\n\r\nfunction onload(saved_data)\r\n\r\n\tif saved_data ~= \"\" then\r\n\t\tlocal loaded_data = JSON.decode(saved_data)\r\n\tend\r\n\r\n\t\r\n\tself.createButton({\r\n        click_function = \"massMorph\",\r\n        function_owner = self,\r\n        label = \"Morph\",\r\n        position = {-1.1, 0.06, -1.2},\r\n        width = 1000, height = 300,\r\n        font_size = 160, color = {0, 0, 0, 0.9}, font_color = {1, 1, 1, 1}\r\n    })\r\n\t\r\n\tself.createButton({\r\n        click_function = \"massManifest\",\r\n        function_owner = self,\r\n        label = \"Manifest\",\r\n        position = {1.1, 0.06, -1.2},\r\n        width = 1000, height = 300,\r\n        font_size = 160, color = {0, 0, 0, 0.9}, font_color = {1, 1, 1, 1}\r\n    })\r\n\t\r\n\tself.createButton({\r\n        click_function = \"massDisguise\",\r\n        function_owner = self,\r\n        label = \"Disguise\",\r\n        position = {-1.1, 0.06, -0.4},\r\n        width = 1000, height = 300,\r\n        font_size = 160, color = {0, 0, 0, 0.95}, font_color = {1, 1, 1, 1}\r\n    })\r\n\t\r\n\tself.createButton({\r\n        click_function = \"massCloak\",\r\n        function_owner = self,\r\n        label = \"Cloak\",\r\n        position = {1.1, 0.06, -0.4},\r\n        width = 1000, height = 300,\r\n        font_size = 160, color = {0, 0, 0, 0.95}, font_color = {1, 1, 1, 1}\r\n    })\r\n\t\r\n\tself.createButton({\r\n        click_function = \"massCyberman\",\r\n        function_owner = self,\r\n        label = \"Cyberman\",\r\n        position = {-1.1, 0.06, 0.4},\r\n        width = 1000, height = 300,\r\n        font_size = 160, color = {0, 0, 0, 0.95}, font_color = {1, 1, 1, 1}\r\n    })\r\n\t\r\n\tself.createButton({\r\n        click_function = \"massCreature\",\r\n        function_owner = self,\r\n        label = \"Creature\",\r\n        tooltip = \"For face-down permanents with no innate ability to flip over (Ixidron)\",\r\n        position = {1.1, 0.06, 0.4},\r\n        width = 1000, height = 300,\r\n        font_size = 160, color = {0, 0, 0, 0.95}, font_color = {1, 1, 1, 1}\r\n    })\r\n\t\r\n\tself.createButton({\r\n        click_function = \"massForest\",\r\n        function_owner = self,\r\n        label = \"Forest\",\r\n        tooltip = \"For Yedora, Grave Gardener\",\r\n        position = {-1.1, 0.06, 1.2},\r\n        width = 1000, height = 300,\r\n        font_size = 160, color = {0, 0, 0, 0.95}, font_color = {1, 1, 1, 1}\r\n    })\r\n\t\r\n\tself.createButton({\r\n        click_function = \"massFaceUp\",\r\n        function_owner = self,\r\n        label = \"Face Up\",\r\n        position = {1.1, 0.06, 1.2},\r\n        width = 1000, height = 300,\r\n        font_size = 160, color = {0, 0, 0, 0.95}, font_color = {1, 1, 1, 1}\r\n    })\r\n\t\r\n\t\r\n\tEncoder=Global.getVar('Encoder')\r\n\r\nend\r\n\r\nfunction massFaceDown(color, faceDownTechnicalName)\r\n    MorphinTime = Global.getVar(\"MorphinTime\")\r\n    \r\n    selectedObjects = Player[color].getSelectedObjects()\r\n    \r\n    if Encoder ~= nil and MorphinTime ~= nil and selectedObjects ~= nil then\r\n    \r\n        for _,card in pairs(selectedObjects) do\r\n            if card.type == \"Card\" then --skip if not card\r\n                Encoder.call(\"APIencodeObject\",{obj=card}) --make sure it's encoded\r\n\r\n                if not Encoder.call(\"APIobjIsPropEnabled\",{obj=card,propID=\"MorphinTime\"}) then\r\n                    --If Morphin Time isn't enabled, enable it with a specific mode\r\n                    MorphinTime.call(\"genericFlip\", {card, faceDownTechnicalName})\r\n                else\r\n                    --If Morphin Time is enabled, just change the mode\r\n                    MorphinTime.call(\"genericChangeMode\", {card, faceDownTechnicalName})\r\n                end\r\n            end\r\n        end\r\n   \r\n    end\r\nend\r\n\r\nfunction massFaceUp(_obj, color, _alt_click)\r\n    MorphinTime = Global.getVar(\"MorphinTime\")\r\n    \r\n    selectedObjects = Player[color].getSelectedObjects()\r\n    \r\n    if Encoder ~= nil and MorphinTime ~= nil and selectedObjects ~= nil then\r\n    \r\n        for _,card in pairs(selectedObjects) do\r\n            if card.type == \"Card\" then --skip if not card\r\n                Encoder.call(\"APIencodeObject\",{obj=card}) --make sure it's encoded\r\n\r\n                if Encoder.call(\"APIobjIsPropEnabled\",{obj=card,propID=\"MorphinTime\"}) then\r\n                    --If Morphin Time is enabled, turn it off, otherwise do nothing\r\n                    MorphinTime.call(\"genericFlipUp\", card)\r\n                end\r\n            end\r\n        end\r\n   \r\n    end\r\nend\r\n\r\nfunction massMorph(_obj, color, _alt_click)\r\n    massFaceDown(color, \"mtg_faceDownMorph\")\r\nend\r\n\r\nfunction massManifest(_obj, color, _alt_click)\r\n    massFaceDown(color, \"mtg_faceDownManifest\")\r\nend\r\n\r\nfunction massDisguise(_obj, color, _alt_click)\r\n    massFaceDown(color, \"mtg_faceDownDisguise\")\r\nend\r\n\r\nfunction massCloak(_obj, color, _alt_click)\r\n    massFaceDown(color, \"mtg_faceDownCloak\")\r\nend\r\n\r\nfunction massCyberman(_obj, color, _alt_click)\r\n    massFaceDown(color, \"mtg_faceDownCyberman\")\r\nend\r\n\r\nfunction massCreature(_obj, color, _alt_click)\r\n    massFaceDown(color, \"mtg_faceDownCreature\")\r\nend\r\n\r\nfunction massForest(_obj, color, _alt_click)\r\n    massFaceDown(color, \"mtg_faceDownForest\")\r\nend",
+          "LuaScriptState": "[4,-1]",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "f1ee95",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 56.45026,
+            "posY": 2.02113485,
+            "posZ": 37.6209373,
+            "rotX": -2.13427313e-07,
+            "rotY": 179.9827,
+            "rotZ": 1.06753923e-07,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Manifest/Cloak Enabler",
+          "Description": "[i]Drop onto a deck to manifest the top card of your library[/i]:\n[sup]\nClick the button in the middle to switch to Cloak[/sup]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://cards.scryfall.io/art_crop/front/5/6/56ae2eb8-5090-412a-ad72-46ec4861d599.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onload(saved_data)\r\n  obj = getObjectFromGUID(self.guid)\r\n  \r\n  \r\n  otherStates = obj.getStates()\r\n  for k,v in pairs(otherStates) do\r\n    table.insert(otherStateData, v.lua_script_state)\r\n  end\r\n\r\n\r\n  deckDir=-1\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    deckDir = loaded_data[1]\r\n    \r\n\r\n    if otherStateData[1] ~= \"\" then\r\n        decodedOtherStateData = JSON.decode(otherStateData[1])\r\n        deckDir = decodedOtherStateData[1]\r\n        updateSave()\r\n    end\r\n  end\r\n\r\n  stateId = obj.getStateId()\r\n  \r\n  buttonLabel = \"Error\"\r\n  if stateId ~= -1 then\r\n    buttonLabel = faceDownTypes[stateId].name\r\n  end\r\n  \r\n  self.createButton({\r\n    label=buttonLabel,\r\n    click_function=\"toggleState\",\r\n    tooltip=ttText,\r\n    function_owner=self,\r\n    position={0,0.2,0.15},\r\n    height=450,\r\n    width=450,\r\n    scale={1.5,1.5,1.5},\r\n    font_size=300,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n    tooltip='Change between Manifest and Cloak'\r\n  })\r\n  Encoder=Global.getVar('Encoder')\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.createButton({\r\n    label=lab,\r\n    tooltip=tip,\r\n    click_function=\"changeDeckDir\",\r\n    function_owner=self,\r\n    position={-1.6,0.1,-1.3},\r\n    height=200,\r\n    width=400,\r\n    font_size=500,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n  })\r\nend\r\n\r\notherStateData = {}\r\n\r\nfaceDownTypes={\r\n    {\r\n        name=\"Manifest\",\r\n        technicalName=\"mtg_faceDownManifest\"\r\n    },\r\n    \r\n    {\r\n        name=\"Cloak\",\r\n        technicalName=\"mtg_faceDownCloak\"\r\n    }\r\n}\r\n\r\nfunction changeDeckDir()\r\n  if deckDir==nil then deckDir=-1 end\r\n  deckDir=deckDir*-1\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.editButton({index=1,label=lab,tooltip=tip})\r\n  updateSave()\r\nend\r\nfunction updateSave()\r\n  local data_to_save = {deckDir}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\nfunction toggleState(obj, _color, alt_click)\r\n    states = obj.getStates()\r\n\r\n    if states[1] ~= nil then\r\n        obj.setState(states[1].id)\r\n    else\r\n        print(\"Error, this object is missing states, please reload it.\")\r\n    end\r\nend\r\n\r\n\r\nfunction morphCard(card)\r\n    MorphinTime = Global.getVar(\"MorphinTime\")\r\n    if Encoder ~= nil and MorphinTime ~= nil then\r\n        Encoder.call(\"APIencodeObject\",{obj=card})\r\n\r\n        technicalName = faceDownTypes[getObjectFromGUID(self.guid).getStateId()].technicalName\r\n        \r\n        MorphinTime.call(\"genericFlip\", {card, technicalName})\r\n    end\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    nCards=1\r\n\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*3.6)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {4,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n    for i=1,nCards do\r\n      Wait.time(function()\r\n      crot=deck.getRotation()\r\n      crot[3]=180\r\n      cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n      cpos[2]=2\r\n      deck.takeObject({position=cpos,rotation=crot,callback_function=morphCard})\r\n\r\n      end,i*0.1)\r\n    end\r\n    self.setPosition({0,0,500})\r\n    self.setLock(true)\r\n    Wait.time(function()\r\n      if self then\r\n        Wait.frames(function() self.destruct() end,1)\r\n      end\r\n    end,10)\r\n\tend\r\nend",
+          "LuaScriptState": "[-1]",
+          "XmlUI": "",
+          "States": {
+            "2": {
+              "GUID": "174475",
+              "Name": "Custom_Token",
+              "Transform": {
+                "posX": 28.435,
+                "posY": 1.02017367,
+                "posZ": -12.6900005,
+                "rotX": -2.942682e-07,
+                "rotY": 179.982391,
+                "rotZ": -0.00163233886,
+                "scaleX": 0.4068285,
+                "scaleY": 1.0,
+                "scaleZ": 0.4068285
+              },
+              "Nickname": "Cloak/Manifest Enabler",
+              "Description": "[i]Drop onto a deck to cloak the top card of your library[/i]:\n[sup]\nClick the button in the middle to switch to Manifest[/sup]",
+              "GMNotes": "",
+              "AltLookAngle": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "ColorDiffuse": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0
+              },
+              "LayoutGroupSortIndex": 0,
+              "Value": 0,
+              "Locked": false,
+              "Grid": true,
+              "Snap": true,
+              "IgnoreFoW": false,
+              "MeasureMovement": false,
+              "DragSelectable": true,
+              "Autoraise": true,
+              "Sticky": true,
+              "Tooltip": true,
+              "GridProjection": false,
+              "HideWhenFaceDown": false,
+              "Hands": false,
+              "CustomImage": {
+                "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/2350385077298422731/DE5BE1E404165DBC170BB836D83DB5442E67DC64/",
+                "ImageSecondaryURL": "",
+                "ImageScalar": 1.0,
+                "WidthScale": 0.0,
+                "CustomToken": {
+                  "Thickness": 0.1,
+                  "MergeDistancePixels": 5.0,
+                  "StandUp": false,
+                  "Stackable": false
+                }
+              },
+              "LuaScript": "function onload(saved_data)\r\n  obj = getObjectFromGUID(self.guid)\r\n  \r\n  \r\n  otherStates = obj.getStates()\r\n  for k,v in pairs(otherStates) do\r\n    table.insert(otherStateData, v.lua_script_state)\r\n  end\r\n\r\n\r\n  deckDir=-1\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    deckDir = loaded_data[1]\r\n    \r\n\r\n    if otherStateData[1] ~= \"\" then\r\n        decodedOtherStateData = JSON.decode(otherStateData[1])\r\n        deckDir = decodedOtherStateData[1]\r\n        updateSave()\r\n    end\r\n  end\r\n\r\n  stateId = obj.getStateId()\r\n  \r\n  buttonLabel = \"Error\"\r\n  if stateId ~= -1 then\r\n    buttonLabel = faceDownTypes[stateId].name\r\n  end\r\n  \r\n  self.createButton({\r\n    label=buttonLabel,\r\n    click_function=\"toggleState\",\r\n    tooltip=ttText,\r\n    function_owner=self,\r\n    position={0,0.2,0.15},\r\n    height=450,\r\n    width=450,\r\n    scale={1.5,1.5,1.5},\r\n    font_size=300,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n    tooltip='Change between Manifest and Cloak'\r\n  })\r\n  Encoder=Global.getVar('Encoder')\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.createButton({\r\n    label=lab,\r\n    tooltip=tip,\r\n    click_function=\"changeDeckDir\",\r\n    function_owner=self,\r\n    position={-1.6,0.1,-1.3},\r\n    height=200,\r\n    width=400,\r\n    font_size=500,\r\n    font_color={1,1,1,90},\r\n    color={0,0,0,0},\r\n  })\r\nend\r\n\r\notherStateData = {}\r\n\r\nfaceDownTypes={\r\n    {\r\n        name=\"Manifest\",\r\n        technicalName=\"mtg_faceDownManifest\"\r\n    },\r\n    \r\n    {\r\n        name=\"Cloak\",\r\n        technicalName=\"mtg_faceDownCloak\"\r\n    }\r\n}\r\n\r\nfunction changeDeckDir()\r\n  if deckDir==nil then deckDir=-1 end\r\n  deckDir=deckDir*-1\r\n  if deckDir==1 then\r\n    lab='→'\r\n    tip='card extraction: [b]right[/b]'\r\n  else\r\n    lab='←'\r\n    tip='card extraction: [b]left[/b]'\r\n  end\r\n  self.editButton({index=1,label=lab,tooltip=tip})\r\n  updateSave()\r\nend\r\nfunction updateSave()\r\n  local data_to_save = {deckDir}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\nfunction toggleState(obj, _color, alt_click)\r\n    states = obj.getStates()\r\n\r\n    if states[1] ~= nil then\r\n        obj.setState(states[1].id)\r\n    else\r\n        print(\"Error, this object is missing states, please reload it.\")\r\n    end\r\nend\r\n\r\n\r\nfunction morphCard(card)\r\n    MorphinTime = Global.getVar(\"MorphinTime\")\r\n    if Encoder ~= nil and MorphinTime ~= nil then\r\n        Encoder.call(\"APIencodeObject\",{obj=card})\r\n\r\n        technicalName = faceDownTypes[getObjectFromGUID(self.guid).getStateId()].technicalName\r\n        \r\n        MorphinTime.call(\"genericFlip\", {card, technicalName})\r\n    end\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    nCards=1\r\n\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*3.6)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {4,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n    for i=1,nCards do\r\n      Wait.time(function()\r\n      crot=deck.getRotation()\r\n      crot[3]=180\r\n      cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n      cpos[2]=2\r\n      deck.takeObject({position=cpos,rotation=crot,callback_function=morphCard})\r\n\r\n      end,i*0.1)\r\n    end\r\n    self.setPosition({0,0,500})\r\n    self.setLock(true)\r\n    Wait.time(function()\r\n      if self then\r\n        Wait.frames(function() self.destruct() end,1)\r\n      end\r\n    end,10)\r\n\tend\r\nend",
+              "LuaScriptState": "[-1]",
+              "XmlUI": ""
+            }
+          }
+        },
+        {
+          "GUID": "d83b34",
+          "Name": "Custom_Token",
+          "Transform": {
+            "posX": 14.80472,
+            "posY": 1.24674535,
+            "posZ": -8.909995,
+            "rotX": 0.0139523065,
+            "rotY": 180.027435,
+            "rotZ": 359.952271,
+            "scaleX": 0.4068285,
+            "scaleY": 1.0,
+            "scaleZ": 0.4068285
+          },
+          "Nickname": "Oath of Druids Enabler",
+          "Description": "[i]drop onto a deck to perform the following[/i]:\r\n[sup]\r\nReveal cards from the top of your library until revealing a [b]creature[/b] card. Put that card onto the battlefield and all other cards revealed this way into their graveyard.[/sup]",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomImage": {
+            "ImageURL": "https://cards.scryfall.io/art_crop/front/9/d/9dad6b50-c415-4c55-8eac-bbc9d656c2fc.jpg",
+            "ImageSecondaryURL": "",
+            "ImageScalar": 1.0,
+            "WidthScale": 0.0,
+            "CustomToken": {
+              "Thickness": 0.1,
+              "MergeDistancePixels": 5.0,
+              "StandUp": false,
+              "Stackable": false
+            }
+          },
+          "LuaScript": "function onLoad(saved_data)\r\n  searchTerm1='creature'\r\n  searchTerm2='creature'\r\n  keepGoing1=false\r\n  keepGoing2=false\r\n  cDeck=nil\r\n  \r\n  gravFor=Global.getVar('gravFor')\r\n  if gravFor==nil then\r\n    gravFor=-4.14\r\n  end\r\n  \r\n  if saved_data~='' then\r\n\tdeckDir=tonumber(saved_data)\r\n  else\r\n\tdeckDir=-1\r\n  end\r\n  if deckDir==1 then\r\n\tlab='→'\r\n\ttip='card extraction: [b]right[/b]'\r\n  else\r\n\tlab='←'\r\n\ttip='card extraction: [b]left[/b]'\r\n  end\r\n  self.createButton({\r\n\tlabel=lab,\r\n\ttooltip=tip,\r\n\tclick_function=\"changeDeckDir\",\r\n\tfunction_owner=self,\r\n\tposition={-1.6,0.1,-1.3},\r\n\theight=200,\r\n\twidth=400,\r\n\tfont_size=500,\r\n\tfont_color={1,1,1,90},\r\n\tcolor={0,0,0,0},\r\n\t})\r\nend\r\n\r\nfunction changeDeckDir()\r\n\tdeckDir=deckDir*-1\r\n\tif deckDir==1 then\r\n\t\tlab='→'\r\n\t\ttip='card extraction: [b]right[/b]'\r\n\telse\r\n\t\tlab='←'\r\n\t\ttip='card extraction: [b]left[/b]'\r\n\tend\r\n\tself.editButton({index=0,label=lab,tooltip=tip})\r\n  self.script_state = deckDir\r\nend\r\n\r\nfunction groupCards(c)\r\n  if cDeck==nil then\r\n    cDeck=c\r\n  else\r\n    cDeck=cDeck.putObject(c)\r\n  end\r\n  keepGoing2=true\r\nend\r\n\r\nfunction onCollisionEnter(co)\r\n\tnowt=os.time()\r\n\tif prevt==nil then prevt=0 end\r\n\tif nowt-prevt<1 then return end\r\n\tprevt=nowt\r\n\tdeck = co.collision_object\r\n\tif deck.type == \"Deck\" then\r\n    nCards=0\r\n    for _,card in pairs(deck.getObjects()) do\r\n      nCards=nCards+1\r\n      cname=card.name:lower():gsub('%p','')\r\n      if cname:match(searchTerm1) or cname:match(searchTerm2) then\r\n        cardInd=i\r\n        break\r\n      end\r\n    end\r\n    castPos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n    targPos=deck.getPosition()+deck.getTransformForward():scale(-3.4)\r\n    local castPars={\r\n      origin=castPos,\r\n      direction = vector(0,0,1),\r\n      type = 3,\r\n      size = {1,4,2},\r\n      max_distance=0,\r\n    }\r\n    local castOutput = Physics.cast(castPars)\r\n    for _,castO in pairs(castOutput) do\r\n      local hitObj = castO.hit_object\r\n      if hitObj.type=='Card' or hitObj.type=='Deck' then\r\n        local hitObjPos=hitObj.getPosition()\r\n        local newObjPos=hitObjPos\r\n        newObjPos[3]=targPos[3]\r\n        hitObj.setPositionSmooth(newObjPos,false,true)\r\n      end\r\n    end\r\n    for i=1,nCards do\r\n      Wait.time(function()\r\n        if i<nCards then\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*2.4)\r\n          cpos[2]=cpos[2]+0.1*i\r\n          deck.takeObject({position=cpos,rotation=crot,callback_function=groupCards})\r\n        else\r\n          crot=deck.getRotation()\r\n          crot[3]=0\r\n          cpos=deck.getPosition()+deck.getTransformRight():scale(deckDir*4.8)\r\n          finalCard=deck.takeObject({position=cpos,rotation=crot})\r\n          Wait.frames(function() finalCard.highlightOn('Red',5) end, 1)\r\n          Wait.time(function() keepGoing1=true end, 1)\r\n        end\r\n      end,i*0.1)\r\n    end\r\n\r\n    Wait.condition(function()\r\n      Wait.time(function()\r\n        if cDeck==nil then return end\r\n\t\tcDeck.interactable=false\r\n\t\tcDeck.use_gravity=false\r\n\t\tWait.time(function()\r\n\t\t  cDeck.interactable=true\r\n\t\t  cDeck.use_gravity=true\r\n          local rot = cDeck.getRotation()\r\n          local pos = deck.getPosition() - deck.getTransformForward():scale(gravFor)\r\n\t\t  rot.z=0\r\n          pos[2]=3\r\n          cDeck.setRotationSmooth(rot,false,true)\r\n          cDeck.setPositionSmooth(pos,false,true)\r\n        end, 1)\r\n      end,0.5)\r\n    end, function() return keepGoing1 and keepGoing2 end)\r\n\r\n    self.destruct()\r\n\tend\r\nend\r\n\r\nfunction onObjectEnterContainer(container, enter_object)\r\n  if enter_object==cDeck then\r\n    cDeck=container\r\n  end\r\nend",
+          "LuaScriptState": "-1",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "9c48a1",
+          "Name": "PiecePack_Suns",
+          "Transform": {
+            "posX": -32.9424973,
+            "posY": 1.2377243,
+            "posZ": -12.3351021,
+            "rotX": 0.00130331819,
+            "rotY": 179.993744,
+            "rotZ": -0.002677803,
+            "scaleX": 0.5,
+            "scaleY": 0.5,
+            "scaleZ": 0.5
+          },
+          "Nickname": "[i]Card Stamp Tool[/i]",
+          "Description": "https://steamusercontent-a.akamaihd.net/ugc/1911241191687748599/0ECF8D676D8B13133DEB3D8E482BDBA9901AFB83/",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": false,
+          "Snap": false,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": false,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "MeshIndex": 0,
+          "LuaScript": "function onLoad()\r\n\tupdateSelf()\r\n  prevt=0\r\nend\r\n\r\n-- keep a track of the last player interacting with the stamp tool\r\n-- get image url from object's description field when hovered over\r\nfunction onHover(ply)\r\n  held_color = ply\r\n\tupdateSelf()\r\nend\r\nfunction onDrop(ply)\r\n  held_color = ply\r\n  updateSelf()\r\nend\r\nfunction onPickUp(ply)\r\n  held_color = ply\r\n  updateSelf()\r\nend\r\n\r\n-- get image url from object's description field\r\nfunction updateSelf()\r\n\tstampName = self.getName()\r\n\tstampUrl  = self.getDescription()\r\n\r\n\tself.highlightOff({r=1,g=0,b=0})\r\n  local sc = 2\r\n\r\n  if stampUrl==nil or stampUrl=='' then\r\n\t\tstampUrl='https://steamusercontent-a.akamaihd.net/ugc/1889849524252081898/B50CED50DC70BDB5FF2B7858256AA6F5062CBDB2/'\r\n\t\tWait.time(function() self.highlightOn({r=1,g=0,b=0},0.1) end,0.2,5)\r\n    sc = 1.5\r\n  end\r\n\r\n\tself.setDecals({{\r\n                name     = 'stampImage',\r\n                url      = stampUrl,\r\n                position = {0, self.getBoundsNormalized().size[2], 0},\r\n                rotation = {90, 180, 0},\r\n                scale    = {sc, sc, 1},\r\n  }})\r\n\r\nend\r\n\r\n-- lock cards that are being hovered over while the stamp tool is being held\r\n-- (allows to right click while holding stamp tool without picking up the card)\r\nfunction onObjectHover(ply, obj)\r\n\t\tif obj==nil or obj.locked or obj.type~=\"Card\" then return end\r\n\t\tif self.held_by_color == ply then\r\n\t\t\tobj.setLock(true)\r\n\t\t\tWait.condition(\r\n\t\t\tfunction() obj.setLock(false) end,\r\n\t\t\tfunction() return Player[ply].getHoverObject()~=obj end,\r\n\t\t\t3,\r\n\t\t\tfunction() obj.setLock(false) end\r\n\t\t\t)\r\n\t\tend\r\nend\r\n\r\n-- apply decal upon collision of stamp object with a card\r\nfunction onCollisionEnter(co)\r\n\r\n  if prevt==nil then prevt=0 end\r\n  local nowt=os.time()\r\n\r\n\tif nowt-prevt<1 then return end     -- run the script once per second (at most)\r\n\r\n  local stampUrl = self.getDescription()\r\n\tif stampUrl==nil or stampUrl=='' then return end\r\n\r\n  if co.collision_object.type ~= \"Card\" then return end\r\n  prevt=os.time()\r\n\r\n\tlocal card = co.collision_object\r\n  local contact = co.contact_points\r\n\r\n  -- get mean position of all the contact points\r\n  local pos = {x=0,y=0,z=0}\r\n  for i,p in pairs(contact) do\r\n    count=i;\r\n    pos.x=pos.x+p[1]\r\n    pos.y=pos.y+p[2]\r\n    pos.z=pos.z+p[3]\r\n  end\r\n  pos.x=pos.x/count\r\n  pos.y=pos.y/count\r\n  pos.z=pos.z/count\r\n\r\n\t-- is the card flipped or not\r\n\tlocal flip = 1\r\n\tif card.getRotation().z>90 and card.getRotation().z<270 then\r\n\t\tflip=-1\r\n\tend\r\n\r\n  -- convert contact position to be local to the card\r\n  local decalPos = card.positionToLocal(pos)\r\n  decalPos.y = flip\r\n\r\n\t-- decal rotations in TTS are super weird but this does the trick\r\n\tlocal decalRot = {x=180-flip*90, y=90+flip*(90+self.getRotation().y - card.getRotation().y), z=0}\r\n\r\n\t-- decal scale\r\n\tlocal decalScale = {x=1,y=1,z=1}\r\n\tdecalScale.x = self.getScale().x / card.getScale().x * 2\r\n\tdecalScale.y = self.getScale().z / card.getScale().z * 2\r\n\r\n\t-- prepare decal parameters\r\n  if stampName==nil or stampName=='' then\r\n    stampName='stamp'\r\n  end\r\n\tlocal newDecal = {\r\n\t\t\t\t\t\t\t\tname     = stampName,\r\n\t\t\t\t\t\t\t\turl      = stampUrl,\r\n\t\t\t\t\t\t\t\tposition = decalPos,\r\n\t\t\t\t\t\t\t\trotation = decalRot,\r\n\t\t\t\t\t\t\t\tscale    = decalScale ,\r\n\t}\r\n\r\n\t-- check for pre-existing decals on the card\r\n  local decals = card.getDecals()\r\n\r\n  if decals~=nil then\r\n    table.insert(decals,newDecal)\r\n  else\r\n    decals={newDecal}\r\n  end\r\n\r\n\t-- apply updated decals\r\n  success=pcall(\r\n    function()\r\n      card.setDecals(decals)\r\n    end\r\n  )\r\n\r\n  if held_color~=nil then\r\n    broadcastToColor('decal applied to card, use the decal tool (F9) to remove it',held_color)\r\n  end\r\n\r\nend\r\n",
+          "LuaScriptState": "",
+          "XmlUI": "",
+          "AttachedDecals": [
+            {
+              "Transform": {
+                "posX": 0.0,
+                "posY": 0.09763527,
+                "posZ": 0.0,
+                "rotX": 90.0,
+                "rotY": 180.0,
+                "rotZ": 0.0,
+                "scaleX": 2.0,
+                "scaleY": 2.0,
+                "scaleZ": 1.0
+              },
+              "CustomDecal": {
+                "Name": "stampImage",
+                "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1911241191687748599/0ECF8D676D8B13133DEB3D8E482BDBA9901AFB83/",
+                "Size": 1.0
+              },
+              "OwnerSteamID": 0
+            }
+          ]
+        },
+        {
+          "GUID": "d1d8be",
+          "Name": "PiecePack_Suns",
+          "Transform": {
+            "posX": -24.205,
+            "posY": 1.2953614,
+            "posZ": -1.8900001,
+            "rotX": -0.004893289,
+            "rotY": 359.966461,
+            "rotZ": 0.00125939329,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Card Size Multiplier",
+          "Description": "when this puck is out on the table, cards get bigger whenever places within someone's playmat",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "MeshIndex": 0,
+          "LuaScript": "function onLoad()\r\n  scaleMultiplier=2\r\n  data=Global.getTable('data')\r\n  playmats={}\r\n  for i,col in ipairs(Player.getAvailableColors()) do\r\n    playmats[i]=data[col][\"playmat\"]\r\n  end\r\nend\r\n\r\nfunction onObjectEnterScriptingZone(zone, obj)\r\n    if obj==nil or not(obj.type=='Card') then return end\r\n\r\n    local isPlayZone=false\r\n    for _,playmat in pairs(playmats) do\r\n      if zone==playmat then\r\n        isPlayZone=true\r\n      end\r\n    end\r\n\r\n    if isPlayZone then\r\n      obj.setScale({scaleMultiplier,1,scaleMultiplier})\r\n    end\r\n\r\nend\r\n\r\nfunction onObjectLeaveScriptingZone(zone, obj)\r\n\r\n  if obj==nil or not(obj.type=='Card') then return end\r\n\r\n  local isPlayZone=false\r\n  for _,oZone in pairs(obj.getZones()) do\r\n    for _,playmat in pairs(playmats) do\r\n      if oZone==playmat and not(oZone==zone) then\r\n        isPlayZone=true\r\n      end\r\n    end\r\n  end\r\n\r\n  if isPlayZone then\r\n    obj.setScale({scaleMultiplier,1,scaleMultiplier})\r\n  else\r\n    obj.setScale({1,1,1})\r\n  end\r\n\r\nend\r\n",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "33c58f",
+          "Name": "PiecePack_Suns",
+          "Transform": {
+            "posX": -32.665,
+            "posY": 1.24533594,
+            "posZ": -11.6100016,
+            "rotX": -0.0004106283,
+            "rotY": 180.0,
+            "rotZ": -0.000587691669,
+            "scaleX": 1.5,
+            "scaleY": 0.5,
+            "scaleZ": 1.5
+          },
+          "Nickname": "turn phase announcer",
+          "Description": "",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "MeshIndex": 0,
+          "LuaScript": "function onLoad()\r\n  phases={'untap','upkeep','draw','1st main','combat','2nd main','end turn','clean up'}\r\n  i=1\r\n  self.addContextMenuItem('untap', pha1)\r\n  self.addContextMenuItem('upkeep', pha2)\r\n  self.addContextMenuItem('draw', pha3)\r\n  self.addContextMenuItem('1st main', pha4)\r\n  self.addContextMenuItem('combat', pha5)\r\n  self.addContextMenuItem('2nd main', pha6)\r\n  self.addContextMenuItem('end turn', pha7)\r\n  self.addContextMenuItem('clean up', pha8)\r\n  createButtons()\r\nend\r\n\r\nfunction pha1(ply)\r\n  i=1\r\n  announceAndButtons(ply)\r\nend\r\nfunction pha2(ply)\r\n  i=2\r\n  announceAndButtons(ply)\r\nend\r\nfunction pha3(ply)\r\n  i=3\r\n  announceAndButtons(ply)\r\nend\r\nfunction pha4(ply)\r\n  i=4\r\n  announceAndButtons(ply)\r\nend\r\nfunction pha5(ply)\r\n  i=5\r\n  announceAndButtons(ply)\r\nend\r\nfunction pha6(ply)\r\n  i=6\r\n  announceAndButtons(ply)\r\nend\r\nfunction pha7(ply)\r\n  i=7\r\n  announceAndButtons(ply)\r\nend\r\nfunction pha8(ply)\r\n  i=8\r\n  announceAndButtons(ply)\r\nend\r\n\r\nfunction announceAndButtons(ply)\r\n  broadcastToAll(phases[i],ply)\r\n  createButtons()\r\nend\r\n\r\nfunction createButtons()\r\n  self.clearButtons()\r\n  self.createButton({\r\n    click_function='nextPhase',\r\n    function_owner=self,\r\n    label=phases[i],\r\n    position={0,0.28,0},\r\n    scale={1,1,1},\r\n    width=1000,\r\n    height=400,\r\n    font_size=200,\r\n    color={0,0,0,0.7},\r\n    font_color={1,1,1,1/0.7}\r\n  })\r\nend\r\n\r\nfunction nextPhase(obj,ply,alt)\r\n  if alt then\r\n    i=i-1\r\n  else\r\n    i=i+1\r\n  end\r\n  if i<1 then\r\n    i=8\r\n  end\r\n  if i>8 then\r\n    i=1\r\n  end\r\n  announceAndButtons(ply)\r\nend\r\n\r\nfunction onPlayerTurnStart()\r\n  i=1\r\n  createButtons()\r\nend\r\n",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "430f58",
+          "Name": "PiecePack_Suns",
+          "Transform": {
+            "posX": -27.0250187,
+            "posY": 1.29523981,
+            "posZ": -10.529994,
+            "rotX": 0.00267784786,
+            "rotY": -0.0004406525,
+            "rotZ": 0.0001356588,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Upkeep Reminders",
+          "Description": "",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "MeshIndex": 0,
+          "LuaScript": "function onLoad()\r\n  data=Global.getTable('data')\r\nend\r\n\r\nfunction onDrop()\r\n  if Turns.enable then\r\n    ply=Turns.turn_color\r\n    onPlayerTurn(Player[ply])\r\n  end\r\nend\r\n\r\nfunction onPlayerTurn(ply)\r\n\r\n  if ply then\r\n\r\n    local t={u=0,U='[b]Upkeep Triggers: [/b]',\r\n      d=0,D='[b]Upkeep Damage: %d [/b]',\r\n      c=1,C='[b]Draw Step: %d [/b]',\r\n      l=1,L='[b]Land Drop: %d [/b]'}\r\n\r\n    local nodraw=false\r\n\r\n    for _,p in pairs(Player.getAvailableColors()) do\r\n      for _,o in pairs(data[p].playmat.getObjects()) do\r\n        if o.tag=='Card'and not o.is_face_down then\r\n\r\n          local m=o.getName():gsub('\\n.*','')\r\n          local d=o.getDescription()\r\n          local n=m:lower():gsub('%A','')\r\n\r\n          local flash=false\r\n\r\n          if d~='' then\r\n\r\n            -- land drops\r\n            if d:find('Each player may play %w+ additional land%w? on each of') or d:find('Each player may play %w+ additional land%w? during each of') then\r\n              t.l=t.l+1\r\n              flash=true\r\n            end\r\n\r\n            if (d:find('You may play %w+ additional land%w? on each of your turns.') or d:find('You may play %w+ additional land%w? during each of your turns.')) and p==ply.color then\r\n              if d:find(' two ') then\r\n                t.l=t.l+2\r\n                flash=true\r\n              else\r\n                t.l=t.l+1\r\n                flash=true\r\n              end\r\n            end\r\n\r\n            -- draw\r\n            if d:find('Players can\\'t draw cards') then\r\n              nodraw=true\r\n            end\r\n\r\n            if d:find('At the beginning of each[^u\\n]+draw step, ([^\\n]+)') then\r\n              local check=d:match('At the beginning of each[^u\\n]+draw step, ([^\\n]+)')\r\n              if n=='wellofideas' and p==ply.color then\r\n                t.c=t.c+2\r\n                flash=true\r\n              elseif check:find('an additional card') then\r\n                t.c=t.c+1\r\n                flash=true\r\n              elseif check:find('two additional cards') then\r\n                t.c=t.c+2\r\n                flash=true\r\n              else t.C=t.C..m\r\n                flash=true\r\n              end\r\n            end\r\n\r\n            -- upkeep\r\n            if d:find('At the beginning of your[^u\\n]+upkeep,') and p==ply.color then\r\n              t.U=t.U..' ['..Color[p]:toHex()..']['..m..'][-] '\r\n              t.u=t.u+1\r\n              flash=true\r\n            end\r\n\r\n            if d:find('At the beginning of each[^u\\n]+upkeep,') then\r\n\r\n              -- local check=d:match('At the beginning of each[^u\\n]+upkeep, ([^\\n]+)')\r\n              --\r\n              -- if check:find('%d+ damage to that player') and not(n:match('mogisgodof')) then\r\n              --   if d:find(\"opponent's upkeep\") and p~=ply.color then\r\n              --     t.d=t.d+tonumber(check:match('(%d+) damage to that player'))\r\n              --   elseif d:find(\"player's upkeep\") then\r\n              --     t.d=t.d+tonumber(check:match('(%d+) damage to that player'))\r\n              --   end\r\n              -- else\r\n                if d:find(\"opponent's upkeep\") and p~=ply.color then\r\n                  if p~=ply.color then\r\n                    t.U=t.U..' ['..Color[p]:toHex()..']['..m..'][-] '\r\n                    t.u=t.u+1\r\n                    flash=true\r\n                  end\r\n                elseif d:find(\"player's upkeep\") then\r\n                  t.U=t.U..' ['..Color[p]:toHex()..']['..m..'][-] '\r\n                  t.u=t.u+1\r\n                  flash=true\r\n                end\r\n              -- end\r\n\r\n            end\r\n          end\r\n\r\n          if flash then\r\n            pcall(function()\r\n              Wait.time(function() o.highlightOn(p,0.1) end, 0.2, 5)\r\n              Wait.time(function() o.highlightOn(p,10) end, 1.2)\r\n            end)\r\n          end\r\n\r\n        end\r\n      end\r\n    end\r\n\r\n    t.D=t.D:format(t.d)\r\n    t.C=t.C:format(t.c)\r\n    t.L=t.L:format(t.l)\r\n    local c=stringColorToRGB(ply.color)\r\n\r\n    if nodraw then\r\n      t.c=5\r\n      t.C=\"[b]Players can't draw cards![/b]\"\r\n    end\r\n\r\n    if t.d>0 then\r\n      ply.broadcast(t.D)\r\n    end\r\n    if t.c>1 then\r\n      ply.broadcast(t.C)\r\n    end\r\n    if t.l>1 then\r\n      ply.broadcast(t.L)\r\n    end\r\n    if t.u>0 then\r\n      ply.broadcast(t.U)\r\n    end\r\n\r\n  end\r\nend\r\n",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "7deec9",
+          "Name": "PiecePack_Moons",
+          "Transform": {
+            "posX": -33.13503,
+            "posY": 1.29514265,
+            "posZ": -6.75002861,
+            "rotX": -4.085815e-05,
+            "rotY": 0.000385834777,
+            "rotZ": -0.00189141382,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "moon-mtg-equip",
+          "Description": "manages equipment/enchantments - stack cards into a group, then click the \"equip all to top\" context menu button\n\nawawa!\nmade by stella + Lilith\nstella.lifeless.space",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "MeshIndex": 1,
+          "LuaScript": "--[[--\n\nmoon-mtg-equip\n\nhandles equipment attaching\n\nawawa!\nmade by stella + Lilith\nstella.lifeless.space\n\n--]]--\n\nprop_id = \"moon-mtg-equip\"\nversion = \"1.0.0\"\n\n--[[--\nfeel free to copy this snippet, it's *really* useful for encoder api stuff\n\ntranslates enc.doXYZ(args) into enc.call(\"doXYZ\", args)\n--]]--\nlocal encoder\ndo\n\tlocal mt = {\n\t\t__index = function(self, index)\n\t\t\treturn function(args) return rawget(self, \"object\").call(\"API\" .. index, args) end\n\t\tend\n\t}\n\n\tencoder = function()\n\t\tlocal object = Global.getVar(\"Encoder\")\n\t\treturn object ~= nil and setmetatable({ object = object }, mt) or nil\n\tend\nend\n\n-- logic\n\nlocal function register_module()\n\tlocal enc = encoder()\n\tif enc == nil then return end\n\n\tif tonumber(enc.object.getVar(\"version\"):match(\"%d+%.%d+\")) < 4.4 then\n\t\tbroadcastToAll(\"encoder version must be >=4.4\", { 1, 0, 0, 1 })\n\t\terror(\"bad encoder version\")\n\tend\n\n\tenc.registerProperty {\n\t\tpropID = prop_id,\n\t\tname = \"Manage Equipment\",\n\t\tvalues = { \"moon_mtg_equip\" },\n\t\ttags = \"basic,counter\",\n\t\tvisible = false,\n\t\tvisible_in_hand = 0,\n\n\t\tfuncOwner = self,\n\t\tactivateFunc = \"\",\n\t}\n\n\tenc.registerValue {\n\t\tvalueID = \"moon_mtg_equip\",\n\t\tvalidType = \"nil\",\n\t\tdesc = \"who up describing they values (when are these ever used)\",\n\t\tdefault = {},\n\t}\nend\n\nlocal function init_card(card)\n\tif card.tag ~= \"Card\" then return end\n\tif card.getVar('noencode') ~= nil and card.getVar('noencode') == true then return end\n\n\tlocal enc = encoder()\n\tif enc == nil then return end\n\n\tif not enc.objectExists { obj = card } then enc.encodeObject { obj = card } end\n\n\tif not enc.propertyExists { propID = prop_id } then return end\n\n\tif not enc.objIsPropEnabled { obj = card, propID = prop_id } then\n\t\tenc.objEnableProp { obj = card, propID = prop_id }\n\n\t\tenc.rebuildButtons { obj = card }\n\tend\nend\n\nlocal function equipped_offset(i)\n\tlocal col = math.floor(i / 3)\n\tlocal row = i % 3\n\treturn Vector(-1.65 - 1.15 * col, 0.05 + row * (-0.05 / 3), -0.75 + row * (2.2 / 3))\nend\n\nlocal function equip_to(deck, to)\n\tlocal enc = encoder()\n\tif enc == nil then return end\n\n\tlocal data = enc.objGetPropData { obj = to, propID = prop_id }\n\tlocal origin, angles = to.getPosition(), to.getRotation()\n\n\twhile deck ~= nil and (deck.tag == \"Card\" or #deck.getObjects() > 0) do\n\t\tlocal card\n\t\tif deck.tag == \"Card\" then\n\t\t\tcard = deck\n\t\t\tdeck = nil\n\t\telse\n\t\t\tcard = deck.takeObject {\n\t\t\t\tposition = deck.getPosition(),\n\t\t\t\ttop = true,\n\t\t\t\tsmooth = false,\n\t\t\t}\n\t\t\tdeck = deck.remainder or deck\n\t\tend\n\n\t\tcard.setPosition(to.positionToWorld(equipped_offset(#data.moon_mtg_equip)))\n\t\tcard.setRotation(angles, false, false)\n\t\tcard.setScale({ 0.475, 0.475, 0.475 })\n\t\tcard.locked = true\n\t\tto.addAttachment(card)\n\n\t\ttable.insert(data.moon_mtg_equip, #to.getAttachments())\n\tend\n\n    enc.objSetPropData { obj = to, propID = prop_id, data = data }\nend\n\n-- a little odd way to ensure deduplication\n-- but hey, it works :tm:\nlocal function setup_deck_ctx(obj, force)\n\tif obj.getVar(\"moon-mtg-equip-ctx\") and not force then return end\n\n\tobj.addContextMenuItem(\"equip all to top\", function(plycol, objpos, deck)\n\t\tif deck.tag ~= \"Deck\" then return end\n\n\t\tlocal card = deck.takeObject {\n\t\t\tposition = deck.getPosition() + Vector(0, 1, 0),\n\t\t\ttop = true,\n\t\t}\n\t\tdeck = deck.remainder or deck\n\n\t\tinit_card(card)\n\t\tequip_to(deck, card)\n\tend)\n\n\tobj.setVar(\"moon-mtg-equip-ctx\", true)\nend\n\n-- api calls\n\nfunction createButtons(params)\n\tlocal enc = encoder()\n\tif enc == nil then return end\n\n\tlocal flip = enc.getFlip { obj = params.obj } or 1\n\tif flip == -1 then return end\n\n\tlocal equipped = enc.objGetPropData { obj = params.obj, propID = prop_id }\n\tif #equipped.moon_mtg_equip == 0 then return end\n\n\tparams.obj.createButton {\n\t\tlabel = \"unequip all\",\n\n\t\tposition = { 0, 0.28, 0 },\n\t\trotation = { 0, 0, 0 },\n\t\tscale = { 0.5, 0.5, 0.5 },\n\t\twidth = 800,\n\t\theight = 300,\n\n\t\tfont_size = 125,\n\t\tfont_color = { 1, 1, 1 },\n\t\tcolor = { 0.1, 0.1, 0.1 },\n\n\t\ttooltip = \"unequip all\",\n\n\t\tclick_function = 'unequip_all',\n\t\tfunction_owner = self,\n\t}\nend\n\nfunction unequip_all(obj, ply)\n\tlocal enc = encoder()\n\tif enc == nil then return end\n\n\tlocal equipped = enc.objGetPropData { obj = obj, propID = prop_id }\n\tif #equipped.moon_mtg_equip == 0 then return end\n\n\tlocal origin = obj.getPosition()\n\tobj.setPosition(origin + Vector(0, #equipped.moon_mtg_equip + 1, 0))\n\n\tfor i = #equipped.moon_mtg_equip, 1, -1 do\n\t\tlocal new = obj.removeAttachment(equipped.moon_mtg_equip[i] - 1)\n\t\tnew.setPosition(origin + Vector(0, #equipped.moon_mtg_equip - i + 1, 0))\n\t\tnew.setScale({ 1, 1, 1 })\n\t\tnew.locked = false\n\tend\n\n\tenc.objSetPropData { obj = obj, propID = prop_id, data = { moon_mtg_equip = {} } }\nend\n\n-- events\n\nfunction onload()\n\tself.addContextMenuItem(\"Register Module\", register_module)\n\tWait.condition(register_module, function() return Global.getVar(\"Encoder\") ~= nil end, 30)\n\n\tfor _, obj in pairs(getObjects()) do\n\t\tif obj.tag == \"Deck\" then\n\t\t\tsetup_deck_ctx(obj, true)\n\t\tend\n\tend\nend\n\nfunction onObjectDropped(ply, obj)\n\tinit_card(obj)\nend\n\nfunction onObjectSpawn(obj)\n\tif obj.tag ~= \"Card\" then return end\n\n\tWait.frames(function() setup_deck_ctx(obj, true) end, 10)\nend\n\nfunction onObjectEnterContainer(container, obj)\n\tif container.tag ~= \"Deck\" or obj.tag ~= \"Card\" then return end\n\n\tsetup_deck_ctx(container)\nend\n\nfunction onObjectEnterZone(zone,obj)\n\tif obj == nil or not (obj.tag == \"Card\" or obj.tag == \"Deck\") then return end\n\tif obj.getName():lower():find('planechase') then return end\n\n\tif obj.tag == \"Deck\" then\n\t\tWait.frames(function() setup_deck_ctx(obj, true) end, 10)\n\tend\nend\n\nfunction onObjectLeaveZone(zone, obj)\n\tif obj == nil or not (obj.tag == \"Card\" or obj.tag == \"Deck\") then return end\n\tif obj.getName():lower():find('planechase') then return end\n\n\tif obj.tag == \"Deck\" then\n\t\tWait.frames(function() setup_deck_ctx(obj, true) end, 10)\n\tend\nend",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        }
+      ],
+      "ChildObjects": [
+        {
+          "GUID": "3ce1ed",
+          "Name": "Custom_Assetbundle",
+          "Transform": {
+            "posX": 0.008199972,
+            "posY": 0.0376752876,
+            "posZ": -0.005680713,
+            "rotX": 2.40388741e-19,
+            "rotY": -4.16881668e-10,
+            "rotZ": 6.60775541e-08,
+            "scaleX": 0.3876184,
+            "scaleY": 5.73209953,
+            "scaleZ": 0.386172026
+          },
+          "Nickname": "",
+          "Description": "",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": true,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": false,
+          "Hands": false,
+          "CustomAssetbundle": {
+            "AssetbundleURL": "https://steamusercontent-a.akamaihd.net/ugc/1895480122096795742/F61A29504C37BB7806688239AAA12370CF4DF4F8/",
+            "AssetbundleSecondaryURL": "",
+            "MaterialIndex": 0,
+            "TypeIndex": 0,
+            "LoopingEffectIndex": 0
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        }
+      ]
+    }
+  ]
+}

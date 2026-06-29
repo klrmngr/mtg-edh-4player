@@ -37,6 +37,21 @@ check:
 		&& echo "main.lua is in sync with src/" \
 		|| { echo "ERROR: main.lua differs from src/ build -- commit the rebuild"; exit 1; }
 
+# Reassemble save.template.json + objects/*.json + main.lua + ui.xml into a
+# full, loadable TTS save named "MTG EDH 4-player (χ) <version>-<timestamp>.json".
+# By default it writes to SAVE_DIR from .env; override the directory with
+# SAVE_OUT, e.g. make save SAVE_OUT="$HOME/.local/share/Tabletop Simulator/Saves"
+SAVE_OUT ?=
+.PHONY: save
+save: main.lua
+	python3 tts_save.py build $(if $(SAVE_OUT),--out-dir "$(SAVE_OUT)")
+
+# Decompose a TTS save back into per-object JSON + save.template.json.
+# Defaults to the most-recently-modified TS_Save; override with SAVE=path.
+.PHONY: split
+split:
+	python3 tts_save.py split $(SAVE)
+
 .PHONY: clean
 clean:
 	rm -f main.lua

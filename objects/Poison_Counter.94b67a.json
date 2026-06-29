@@ -1,0 +1,58 @@
+{
+  "GUID": "94b67a",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": -45.5,
+    "posY": 1.01522362,
+    "posZ": -6.99999666,
+    "rotX": -7.658274e-06,
+    "rotY": 90.0000458,
+    "rotZ": 1.07296064e-05,
+    "scaleX": 0.4617456,
+    "scaleY": 1.0,
+    "scaleZ": 0.464110583
+  },
+  "Nickname": "Poison Counter",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://c1.scryfall.com/file/scryfall-cards/png/front/4/7/470618f6-f67f-44c6-a086-285632508915.png?1561757039",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomToken": {
+      "Thickness": 0.1,
+      "MergeDistancePixels": 5.0,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "[true,0]",
+  "XmlUI": ""
+}

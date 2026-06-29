@@ -1,0 +1,58 @@
+{
+  "GUID": "56a44e",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": -45.5,
+    "posY": 1.01522338,
+    "posZ": 1.0,
+    "rotX": -2.354323e-06,
+    "rotY": 89.99988,
+    "rotZ": 4.97959763e-06,
+    "scaleX": 0.4,
+    "scaleY": 1.0,
+    "scaleZ": 0.4
+  },
+  "Nickname": "Notecard",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.258786,
+    "g": 0.258786,
+    "b": 0.258786
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1647720478675890768/9C57B6CE1CEEB57FEC07B86DEB680336457DCB72/",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomToken": {
+      "Thickness": 0.1,
+      "MergeDistancePixels": 5.0,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "[true,true,false]",
+  "XmlUI": ""
+}

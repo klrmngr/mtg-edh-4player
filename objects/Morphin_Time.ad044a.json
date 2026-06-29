@@ -1,0 +1,66 @@
+{
+  "GUID": "ad044a",
+  "Name": "PiecePack_Moons",
+  "Transform": {
+    "posX": -46.75,
+    "posY": -5.0,
+    "posZ": -2.0,
+    "rotX": 90.0,
+    "rotY": 270.0,
+    "rotZ": 0.0,
+    "scaleX": 0.625000358,
+    "scaleY": 0.625000358,
+    "scaleZ": 0.625000358
+  },
+  "Nickname": "Morphin' Time",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MeshIndex": 1,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "AttachedDecals": [
+    {
+      "Transform": {
+        "posX": -0.000204467724,
+        "posY": 0.08741169,
+        "posZ": 0.00258636335,
+        "rotX": 90.0,
+        "rotY": 180.0,
+        "rotZ": 0.0,
+        "scaleX": 1.4079988,
+        "scaleY": 1.40800178,
+        "scaleZ": 1.08307755
+      },
+      "CustomDecal": {
+        "Name": "Module Icon",
+        "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/2350384442402440199/255F80AA7F4BD3D2098B32B3C4D72E21A823CF24/",
+        "Size": 1.0
+      },
+      "OwnerSteamID": 0
+    }
+  ]
+}

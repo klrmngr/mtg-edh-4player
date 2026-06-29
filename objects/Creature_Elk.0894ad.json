@@ -1,0 +1,58 @@
+{
+  "GUID": "0894ad",
+  "Name": "CardCustom",
+  "Transform": {
+    "posX": -50.9941635,
+    "posY": 0.9787463,
+    "posZ": 21.87124,
+    "rotX": 0.0007884287,
+    "rotY": 90.03208,
+    "rotZ": 180.005341,
+    "scaleX": 1.0,
+    "scaleY": 1.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "Creature — Elk",
+  "Description": "\n[b]3/3[/b]",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.713235259,
+    "g": 0.713235259,
+    "b": 0.713235259
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": false,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": false,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": true,
+  "CardID": 11813400,
+  "SidewaysCard": false,
+  "CustomDeck": {
+    "118134": {
+      "FaceURL": "https://steamusercontent-a.akamaihd.net/ugc/1653349506595621057/B60A83208D943AB7CF27D6156CC23A196B59C8BC/",
+      "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/1009311275108366286/C2732B947E07D1A6B3ED5E56A14A4FFBA046BC63/",
+      "NumWidth": 1,
+      "NumHeight": 1,
+      "BackIsHidden": true,
+      "UniqueBack": false,
+      "Type": 0
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

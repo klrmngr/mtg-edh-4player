@@ -1,0 +1,58 @@
+{
+  "GUID": "37e533",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": -3.49989772,
+    "posY": 0.894,
+    "posZ": 2.62011385,
+    "rotX": -6.645653e-07,
+    "rotY": 0.023812281,
+    "rotZ": -4.288724e-06,
+    "scaleX": 1.25768793,
+    "scaleY": 1.0,
+    "scaleZ": 1.25768793
+  },
+  "Nickname": "Life Tracker",
+  "Description": "Yellow",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.905,
+    "g": 0.898,
+    "b": 0.171996266
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": false,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1752456562860446073/96DDF0C24B26F2ECB42AF82135CF2DC526A6EE64/",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomToken": {
+      "Thickness": 0.1,
+      "MergeDistancePixels": 5.0,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "{\"c\":40}",
+  "XmlUI": ""
+}

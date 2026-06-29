@@ -1,0 +1,699 @@
+{
+  "SaveName": "MTG EDH 4-player (X) v0.1.6 wip",
+  "EpochTime": 1782539431,
+  "Date": "6/27/2026 12:50:31 AM",
+  "VersionNumber": "v14.2.1",
+  "GameMode": "MTG EDH 4-player (π)",
+  "GameType": "Game",
+  "GameComplexity": "Low Complexity",
+  "PlayingTime": [
+    0,
+    180
+  ],
+  "PlayerCounts": [
+    0,
+    4
+  ],
+  "Tags": [
+    "Card Games",
+    "Strategy Games",
+    "Scripting: Automated",
+    "Cards",
+    "Scripting",
+    "MTG",
+    "Magic the Gathering",
+    "Magic",
+    "EDH",
+    "Commander"
+  ],
+  "Gravity": 1.0,
+  "PlayArea": 0.2,
+  "Table": "Table_Custom",
+  "TableURL": "https://steamusercontent-a.akamaihd.net/ugc/1838031787126517045/64747740208D526D8746B4F1E93A537879CF3D48/",
+  "Sky": "Sky_Regal",
+  "SkyURL": "https://steamusercontent-a.akamaihd.net/ugc/861734447427622808/DB9EEA3B7977B0D4912A0C4C3A76E36FC3A6062E/",
+  "Note": "",
+  "TabStates": {
+    "6": {
+      "title": "White",
+      "body": "",
+      "color": "White",
+      "visibleColor": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      },
+      "id": 6
+    },
+    "1": {
+      "title": "Red",
+      "body": "",
+      "color": "Red",
+      "visibleColor": {
+        "r": 0.856,
+        "g": 0.1,
+        "b": 0.094
+      },
+      "id": 1
+    },
+    "2": {
+      "title": "Yellow",
+      "body": "",
+      "color": "Yellow",
+      "visibleColor": {
+        "r": 0.905,
+        "g": 0.898,
+        "b": 0.172
+      },
+      "id": 2
+    },
+    "3": {
+      "title": "Blue",
+      "body": "",
+      "color": "Blue",
+      "visibleColor": {
+        "r": 0.118,
+        "g": 0.53,
+        "b": 1.0
+      },
+      "id": 3
+    },
+    "7": {
+      "title": "SHelp",
+      "body": "",
+      "color": "Grey",
+      "visibleColor": {
+        "r": 0.5,
+        "g": 0.5,
+        "b": 0.5
+      },
+      "id": 7
+    }
+  },
+  "MusicPlayer": {
+    "RepeatSong": false,
+    "PlaylistEntry": 1,
+    "CurrentAudioTitle": "Deadpool dmx",
+    "CurrentAudioURL": "https://steamusercontent-a.akamaihd.net/ugc/775104608736933501/B218119400AE0694B5152325F224465F40992012/",
+    "AudioLibrary": [
+      {
+        "Item1": "https://steamusercontent-a.akamaihd.net/ugc/775104608736311614/429CE83CDC52DA1CD47C8B0BF098AA7DF853B20C/",
+        "Item2": "Simian zoo"
+      },
+      {
+        "Item1": "https://steamusercontent-a.akamaihd.net/ugc/775104608736933501/B218119400AE0694B5152325F224465F40992012/",
+        "Item2": "Deadpool dmx"
+      }
+    ]
+  },
+  "Grid": {
+    "Type": 0,
+    "Lines": false,
+    "Color": {
+      "r": 0.0,
+      "g": 0.0,
+      "b": 0.0
+    },
+    "Opacity": 0.75,
+    "ThickLines": false,
+    "Snapping": false,
+    "Offset": true,
+    "BothSnapping": false,
+    "xSize": 0.47,
+    "ySize": 0.54,
+    "PosOffset": {
+      "x": 0.0,
+      "y": 1.0,
+      "z": 0.0
+    }
+  },
+  "Lighting": {
+    "LightIntensity": 0.54,
+    "LightColor": {
+      "r": 1.0,
+      "g": 0.9804,
+      "b": 0.8902
+    },
+    "AmbientIntensity": 1.3,
+    "AmbientType": 0,
+    "AmbientSkyColor": {
+      "r": 0.5,
+      "g": 0.5,
+      "b": 0.5
+    },
+    "AmbientEquatorColor": {
+      "r": 0.5,
+      "g": 0.5,
+      "b": 0.5
+    },
+    "AmbientGroundColor": {
+      "r": 0.5,
+      "g": 0.5,
+      "b": 0.5
+    },
+    "ReflectionIntensity": 0.223466918,
+    "LutIndex": 0,
+    "LutContribution": 1.0,
+    "LutURL": ""
+  },
+  "Hands": {
+    "Enable": true,
+    "DisableUnused": false,
+    "Hiding": 0
+  },
+  "ComponentTags": {
+    "labels": [
+      {
+        "displayed": "Turn Skipper",
+        "normalized": "turn_skipper"
+      },
+      {
+        "displayed": "ExtraBoard",
+        "normalized": "extraboard"
+      },
+      {
+        "displayed": "frozenToken",
+        "normalized": "frozentoken"
+      },
+      {
+        "displayed": "FetchPreview",
+        "normalized": "fetchpreview"
+      }
+    ]
+  },
+  "Turns": {
+    "Enable": false,
+    "Type": 0,
+    "TurnOrder": [],
+    "Reverse": false,
+    "SkipEmpty": false,
+    "DisableInteractions": false,
+    "PassTurns": false,
+    "TurnColor": ""
+  },
+  "CameraStates": [
+    null,
+    {
+      "Position": {
+        "x": 22.0,
+        "y": -2.5,
+        "z": -15.0
+      },
+      "Rotation": {
+        "x": 90.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Distance": 30.0,
+      "Zoomed": false,
+      "AbsolutePosition": {
+        "x": 22.0,
+        "y": 30.0,
+        "z": -15.0
+      }
+    },
+    {
+      "Position": {
+        "x": -22.0,
+        "y": -2.5,
+        "z": -15.0
+      },
+      "Rotation": {
+        "x": 90.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "Distance": 30.0,
+      "Zoomed": false,
+      "AbsolutePosition": {
+        "x": -22.0,
+        "y": 30.0,
+        "z": -15.0
+      }
+    },
+    {
+      "Position": {
+        "x": -22.0,
+        "y": -2.5,
+        "z": 15.0
+      },
+      "Rotation": {
+        "x": 90.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      "Distance": 30.0,
+      "Zoomed": false,
+      "AbsolutePosition": {
+        "x": -22.0,
+        "y": 30.0,
+        "z": 15.0
+      }
+    },
+    {
+      "Position": {
+        "x": 22.0,
+        "y": -2.5,
+        "z": 15.0
+      },
+      "Rotation": {
+        "x": 90.0,
+        "y": 180.0,
+        "z": 0.0
+      },
+      "Distance": 30.0,
+      "Zoomed": false,
+      "AbsolutePosition": {
+        "x": 22.0,
+        "y": 30.0,
+        "z": 15.0
+      }
+    },
+    null,
+    null,
+    null,
+    null,
+    null
+  ],
+  "DecalPallet": [],
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "CustomUIAssets": [
+    {
+      "Type": 0,
+      "Name": "whiteMana",
+      "URL": "https://steamusercontent-a.akamaihd.net/ugc/956336058811933862/A729683E554439D1F9EB8ABF0EF812F76816F1A0/"
+    },
+    {
+      "Type": 0,
+      "Name": "blueMana",
+      "URL": "https://steamusercontent-a.akamaihd.net/ugc/956336058811937322/350CD587D3DBCDDD51CD2EA6ED33D6DFD2A46E1F/"
+    },
+    {
+      "Type": 0,
+      "Name": "blackMana",
+      "URL": "https://steamusercontent-a.akamaihd.net/ugc/956336058811938155/3F35A55E86DFD07B5F2D13BC8B2EC948DFC68010/"
+    },
+    {
+      "Type": 0,
+      "Name": "greenMana",
+      "URL": "https://steamusercontent-a.akamaihd.net/ugc/956336058811935078/898365EEA92F9CC3DD88A55EB8143CC5FB4DF9CD/"
+    },
+    {
+      "Type": 0,
+      "Name": "redMana",
+      "URL": "https://steamusercontent-a.akamaihd.net/ugc/956336058811934432/C606B76A13D0CF9A361DB5166271B31C7C16B3FD/"
+    },
+    {
+      "Type": 0,
+      "Name": "colorlessMana",
+      "URL": "https://steamusercontent-a.akamaihd.net/ugc/956336058811936049/BF3ADB3F383965790A69B79D6E44C447F55B4FAA/"
+    },
+    {
+      "Type": 0,
+      "Name": "deck_tab",
+      "URL": "https://importer-static.rikrassen.xyz/deck_tab_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "deck_tab_button",
+      "URL": "https://importer-static.rikrassen.xyz/deck_tab_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "deck_tab_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/deck_tab_button_hover.png"
+    },
+    {
+      "Type": 0,
+      "Name": "draft_tab",
+      "URL": "https://importer-static.rikrassen.xyz/draft_tab_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "draft_tab_button",
+      "URL": "https://importer-static.rikrassen.xyz/draft_tab_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "draft_tab_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/draft_tab_button_hover.png"
+    },
+    {
+      "Type": 0,
+      "Name": "cube_tab",
+      "URL": "https://importer-static.rikrassen.xyz/cube_tab_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "cube_tab_button",
+      "URL": "https://importer-static.rikrassen.xyz/cube_tab_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "cube_tab_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/cube_tab_button_hover.png"
+    },
+    {
+      "Type": 0,
+      "Name": "close_button",
+      "URL": "https://importer-static.rikrassen.xyz/close_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "close_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/close_button_hover.png"
+    },
+    {
+      "Type": 0,
+      "Name": "submit_button",
+      "URL": "https://importer-static.rikrassen.xyz/submit_button_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "submit_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/submit_button_hover_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "settings_button",
+      "URL": "https://importer-static.rikrassen.xyz/settings_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "settings_button_hover",
+      "URL": "https://importer-static.rikrassen.xyz/settings_button_hover.png"
+    },
+    {
+      "Type": 0,
+      "Name": "settings_tab",
+      "URL": "https://importer-static.rikrassen.xyz/settings_tab_v0_10_1.png"
+    },
+    {
+      "Type": 0,
+      "Name": "question_button",
+      "URL": "https://importer-static.rikrassen.xyz/question_button.png"
+    },
+    {
+      "Type": 0,
+      "Name": "buy_me_a_coffee",
+      "URL": "https://importer-static.rikrassen.xyz/buy_me_a_coffee.png"
+    },
+    {
+      "Type": 1,
+      "Name": "Roboto",
+      "URL": "https://importer-static.rikrassen.xyz/roboto.unity3d"
+    }
+  ],
+  "SnapPoints": [
+    {
+      "Position": {
+        "x": -3.5,
+        "y": 0.9611349,
+        "z": 2.62
+      },
+      "Rotation": {
+        "x": -7.91231045e-08,
+        "y": -1.38889334e-06,
+        "z": 5.60000444e-07
+      }
+    },
+    {
+      "Position": {
+        "x": -3.5,
+        "y": 0.9611349,
+        "z": -2.62
+      },
+      "Rotation": {
+        "x": -1.74476111e-06,
+        "y": 179.989426,
+        "z": 1.57844511e-06
+      }
+    },
+    {
+      "Position": {
+        "x": 3.5,
+        "y": 0.9611349,
+        "z": -2.61999965
+      },
+      "Rotation": {
+        "x": 9.487078e-07,
+        "y": 179.989426,
+        "z": 7.6191634e-07
+      }
+    },
+    {
+      "Position": {
+        "x": 3.5,
+        "y": 0.9611349,
+        "z": 2.62
+      },
+      "Rotation": {
+        "x": -2.012327e-07,
+        "y": 1.30972688e-09,
+        "z": -3.508003e-07
+      }
+    },
+    {
+      "Position": {
+        "x": 40.7799644,
+        "y": 0.9611349,
+        "z": -22.9053783
+      },
+      "Rotation": {
+        "x": 9.041875e-07,
+        "y": 179.999985,
+        "z": -5.4452903e-06
+      }
+    },
+    {
+      "Position": {
+        "x": 40.78,
+        "y": 0.9611349,
+        "z": -14.6075687
+      },
+      "Rotation": {
+        "x": 1.01680115e-07,
+        "y": 180.0,
+        "z": -5.21927234e-07
+      }
+    },
+    {
+      "Position": {
+        "x": -40.73848,
+        "y": 0.9611349,
+        "z": -14.6006327
+      },
+      "Rotation": {
+        "x": -1.10092749e-07,
+        "y": 179.999985,
+        "z": 5.222167e-07
+      }
+    },
+    {
+      "Position": {
+        "x": -40.7384758,
+        "y": 0.9611349,
+        "z": -22.8984432
+      },
+      "Rotation": {
+        "x": 7.21592457e-08,
+        "y": 179.999954,
+        "z": 3.07576073e-07
+      }
+    },
+    {
+      "Position": {
+        "x": -40.7618523,
+        "y": 0.9611349,
+        "z": 22.8880844
+      },
+      "Rotation": {
+        "x": -1.28587729e-07,
+        "y": 0.010685374,
+        "z": 2.20943107e-07
+      }
+    },
+    {
+      "Position": {
+        "x": -40.7618523,
+        "y": 0.9611349,
+        "z": 14.5902758
+      },
+      "Rotation": {
+        "x": -6.85715e-08,
+        "y": 0.0106841223,
+        "z": -3.829745e-08
+      }
+    },
+    {
+      "Position": {
+        "x": 40.76082,
+        "y": 0.9611349,
+        "z": 22.88504
+      },
+      "Rotation": {
+        "x": -7.363613e-07,
+        "y": 0.0107270144,
+        "z": 3.61786965e-06
+      }
+    },
+    {
+      "Position": {
+        "x": 40.76084,
+        "y": 0.9611349,
+        "z": 14.5872316
+      },
+      "Rotation": {
+        "x": -6.6296667e-07,
+        "y": 0.0107075693,
+        "z": 3.5437638e-06
+      }
+    },
+    {
+      "Position": {
+        "x": 39.5047379,
+        "y": 0.9611349,
+        "z": -8.350001
+      },
+      "Rotation": {
+        "x": -2.83841047e-07,
+        "y": 179.999481,
+        "z": -4.40695374e-07
+      }
+    },
+    {
+      "Position": {
+        "x": 42.0522881,
+        "y": 0.9611349,
+        "z": -8.350001
+      },
+      "Rotation": {
+        "x": 3.6995803e-07,
+        "y": 179.999481,
+        "z": -1.046225e-06
+      }
+    },
+    {
+      "Position": {
+        "x": 39.4885254,
+        "y": 0.9611349,
+        "z": 8.329665
+      },
+      "Rotation": {
+        "x": -3.028006e-07,
+        "y": 0.0106790308,
+        "z": 1.65914537e-06
+      }
+    },
+    {
+      "Position": {
+        "x": 42.0360641,
+        "y": 0.9611349,
+        "z": 8.329665
+      },
+      "Rotation": {
+        "x": -7.99558734e-07,
+        "y": 0.0107127512,
+        "z": 3.33865319e-06
+      }
+    },
+    {
+      "Position": {
+        "x": -39.48659,
+        "y": 0.9611349,
+        "z": 8.332708
+      },
+      "Rotation": {
+        "x": 5.63722665e-07,
+        "y": 0.0106543936,
+        "z": 4.874436e-06
+      }
+    },
+    {
+      "Position": {
+        "x": -42.03415,
+        "y": 0.9611349,
+        "z": 8.33271
+      },
+      "Rotation": {
+        "x": -5.19615e-07,
+        "y": 0.0107040517,
+        "z": 7.31468333e-07
+      }
+    },
+    {
+      "Position": {
+        "x": -42.01374,
+        "y": 0.9611349,
+        "z": -8.343065
+      },
+      "Rotation": {
+        "x": 1.60217581e-07,
+        "y": 179.999481,
+        "z": -3.9777828e-07
+      }
+    },
+    {
+      "Position": {
+        "x": -39.4661751,
+        "y": 0.9611349,
+        "z": -8.343066
+      },
+      "Rotation": {
+        "x": 1.937132e-07,
+        "y": 179.999481,
+        "z": -3.41555534e-07
+      }
+    },
+    {
+      "Position": {
+        "x": -40.74,
+        "y": 0.961135,
+        "z": -18.755
+      },
+      "Rotation": {
+        "x": -5.111552e-07,
+        "y": 180.000015,
+        "z": 180.0
+      }
+    },
+    {
+      "Position": {
+        "x": 40.78,
+        "y": 0.961135,
+        "z": -18.755
+      },
+      "Rotation": {
+        "x": -3.29435579e-07,
+        "y": 180.000015,
+        "z": 180.0
+      }
+    },
+    {
+      "Position": {
+        "x": -40.7609673,
+        "y": 0.961135,
+        "z": 18.74
+      },
+      "Rotation": {
+        "x": 1.323346e-07,
+        "y": 0.0120572243,
+        "z": 180.0
+      }
+    },
+    {
+      "Position": {
+        "x": 40.7608032,
+        "y": 0.961135,
+        "z": 18.74
+      },
+      "Rotation": {
+        "x": -2.31337552e-07,
+        "y": 0.0119687282,
+        "z": 180.0
+      }
+    }
+  ]
+}

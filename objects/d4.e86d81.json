@@ -1,0 +1,162 @@
+{
+  "GUID": "e86d81",
+  "Name": "Infinite_Bag",
+  "Transform": {
+    "posX": -53.5,
+    "posY": 0.9507734,
+    "posZ": 3.00000119,
+    "rotX": -1.35951851e-07,
+    "rotY": 270.0144,
+    "rotZ": 9.420457e-07,
+    "scaleX": 0.850000143,
+    "scaleY": 0.850000143,
+    "scaleZ": 0.850000143
+  },
+  "Nickname": "d4",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.5,
+    "g": 0.5,
+    "b": 0.5
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "8a5799",
+      "Name": "Custom_Model",
+      "Transform": {
+        "posX": -53.5144424,
+        "posY": 3.16835,
+        "posZ": 4.24124861,
+        "rotX": 0.252847224,
+        "rotY": 0.965585649,
+        "rotZ": 117.411789,
+        "scaleX": 3.09999824,
+        "scaleY": 3.09999824,
+        "scaleZ": 3.09999824
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": false,
+      "Snap": false,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomMesh": {
+        "MeshURL": "https://pastebin.com/raw/x1Z8dxv8",
+        "DiffuseURL": "https://steamusercontent-a.akamaihd.net/ugc/943964865033556333/DA7E145D56F27F7FD1CD7BBCA4799E85934F6EA8/",
+        "NormalURL": "",
+        "ColliderURL": "https://pastebin.com/raw/LUDtaCbe",
+        "Convex": true,
+        "MaterialIndex": 0,
+        "TypeIndex": 2,
+        "CustomShader": {
+          "SpecularColor": {
+            "r": 1.0,
+            "g": 1.0,
+            "b": 1.0
+          },
+          "SpecularIntensity": 0.0,
+          "SpecularSharpness": 7.0,
+          "FresnelStrength": 0.4
+        },
+        "CastShadows": true
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": "",
+      "PhysicsMaterial": {
+        "StaticFriction": 0.6,
+        "DynamicFriction": 0.6,
+        "Bounciness": 0.5,
+        "FrictionCombine": 0,
+        "BounceCombine": 0
+      },
+      "Rigidbody": {
+        "Mass": 0.1,
+        "Drag": 0.1,
+        "AngularDrag": 0.5,
+        "UseGravity": true
+      },
+      "RotationValues": [
+        {
+          "Value": "1",
+          "Rotation": {
+            "x": 293.0,
+            "y": 179.0,
+            "z": 182.0
+          }
+        },
+        {
+          "Value": "2",
+          "Rotation": {
+            "x": 359.0,
+            "y": 271.0,
+            "z": 113.0
+          }
+        },
+        {
+          "Value": "3",
+          "Rotation": {
+            "x": 1.0,
+            "y": 91.0,
+            "z": 247.0
+          }
+        },
+        {
+          "Value": "4",
+          "Rotation": {
+            "x": 67.0,
+            "y": 359.0,
+            "z": 179.0
+          }
+        }
+      ]
+    }
+  ]
+}

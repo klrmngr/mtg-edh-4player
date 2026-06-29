@@ -1,0 +1,123 @@
+{
+  "GUID": "1ffa14",
+  "Name": "Custom_Model_Infinite_Bag",
+  "Transform": {
+    "posX": 53.345,
+    "posY": 2.61299,
+    "posZ": 11.6100006,
+    "rotX": -3.94697622e-07,
+    "rotY": 270.0,
+    "rotZ": -7.678465e-08,
+    "scaleX": 0.92500025,
+    "scaleY": 0.92500025,
+    "scaleZ": 0.92500025
+  },
+  "Nickname": "Alcove Flip Deck Box (Black)",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.642857254,
+    "g": 0.642857254,
+    "b": 0.642857254
+  },
+  "Tags": [
+    "ExtraBoard"
+  ],
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "CustomMesh": {
+    "MeshURL": "https://steamusercontent-a.akamaihd.net/ugc/16294693691804414674/BADB419691AEAE37207A9B539BCA13C837DF0406/",
+    "DiffuseURL": "https://steamusercontent-a.akamaihd.net/ugc/1871804141032982956/A98AD5D941307B0C09A9078228E204C7B23D6480/",
+    "NormalURL": "",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 1,
+    "TypeIndex": 7,
+    "CastShadows": true
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "c2403e",
+      "Name": "Custom_Model_Bag",
+      "Transform": {
+        "posX": -47.67078,
+        "posY": 5.869532,
+        "posZ": 12.3214655,
+        "rotX": 0.000379799661,
+        "rotY": 1.85310586e-11,
+        "rotZ": 5.59111368e-06,
+        "scaleX": 0.92500025,
+        "scaleY": 0.92500025,
+        "scaleZ": 0.92500025
+      },
+      "Nickname": "Deck Box",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.642857254,
+        "g": 0.642857254,
+        "b": 0.642857254
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": -1,
+      "MeshIndex": -1,
+      "Number": 0,
+      "CustomMesh": {
+        "MeshURL": "https://steamusercontent-a.akamaihd.net/ugc/16294693691804414674/BADB419691AEAE37207A9B539BCA13C837DF0406/",
+        "DiffuseURL": "https://steamusercontent-a.akamaihd.net/ugc/1871804141032982956/A98AD5D941307B0C09A9078228E204C7B23D6480/",
+        "NormalURL": "",
+        "ColliderURL": "",
+        "Convex": true,
+        "MaterialIndex": 1,
+        "TypeIndex": 6,
+        "CastShadows": true
+      },
+      "Bag": {
+        "Order": 0
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": ""
+    }
+  ]
+}

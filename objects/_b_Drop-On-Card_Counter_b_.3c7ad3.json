@@ -1,0 +1,119 @@
+{
+  "GUID": "3c7ad3",
+  "Name": "Custom_Model_Infinite_Bag",
+  "Transform": {
+    "posX": -45.50001,
+    "posY": 1.1,
+    "posZ": 7.00000572,
+    "rotX": -0.0008304209,
+    "rotY": 89.9541,
+    "rotZ": 0.000491629529,
+    "scaleX": 0.8,
+    "scaleY": 0.8,
+    "scaleZ": 0.8
+  },
+  "Nickname": "[b]Drop-On-Card Counter[/b]",
+  "Description": "[b]Drop onto a card to add the counter to it.[/b]\nYou can left/right click the number to increase/decrease OR [i]type the desired number while hovering over the card.[/i]",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "CustomMesh": {
+    "MeshURL": "https://steamusercontent-a.akamaihd.net/ugc/1646593864316002009/B0582AB1A0AB0FEAF9FE1F53B3840D95399AF0E7/",
+    "DiffuseURL": "https://steamusercontent-a.akamaihd.net/ugc/1646592995368357491/B8766542D62F8D16AC41D83B4E34C004DE61BBFE/",
+    "NormalURL": "",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 0,
+    "TypeIndex": 7,
+    "CastShadows": true
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "4f684b",
+      "Name": "Custom_Token",
+      "Transform": {
+        "posX": -45.35451,
+        "posY": 1.17338133,
+        "posZ": 6.750116,
+        "rotX": 0.641791642,
+        "rotY": 0.05420528,
+        "rotZ": 9.01782e-06,
+        "scaleX": 0.7,
+        "scaleY": 1.0,
+        "scaleZ": 0.7
+      },
+      "Nickname": "[b]Drop-On-Card Counter[/b]",
+      "Description": "[b]Drop onto a card to add the counter to it.[/b]\nYou can left/right click the number to increase/decrease OR [i]type the desired number while hovering over the card.[/i]",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 0.5019608
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "CustomImage": {
+        "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1753559193952057135/51A3E2F2B1F58D1595A2AF239DFA24CE707D1BA7/",
+        "ImageSecondaryURL": "",
+        "ImageScalar": 1.0,
+        "WidthScale": 0.0,
+        "CustomToken": {
+          "Thickness": 0.1,
+          "MergeDistancePixels": 5.0,
+          "StandUp": false,
+          "Stackable": false
+        }
+      },
+      "LuaScript": "function onLoad(saved_data)\r\n  picounter=0\r\n  if saved_data ~= \"\" then\r\n    local loaded_data = JSON.decode(saved_data)\r\n    picounter = loaded_data[1]\r\n  end\r\n  createButtons()\r\n  collisionObjs={}\r\nend\r\n\r\nfunction updateSave()\r\n  local data_to_save = {picounter}\r\n  saved_data = JSON.encode(data_to_save)\r\n  self.script_state = saved_data\r\nend\r\n\r\nself.max_typed_number=999\r\nfunction onNumberTyped(ply, int)\r\n  picounter=int\r\n  updateSave()\r\n  createButtons()\r\nend\r\n\r\nfunction createButtons()\r\n  self.clearButtons()\r\n\r\n  self.createButton({\r\n    label='Drop-On-Card Counter',\r\n    click_function='null',\r\n    position={0,0.05,1.15},\r\n    width=0,\r\n    height=0,\r\n    font_size=230,\r\n    scale={0.5,0.5,0.5},\r\n    color={0,0,0,0},\r\n    font_color={0,0,0,100}\r\n  })\r\n\r\n  pos = Vector(0,0.1,-0.65)\r\n  bpars={\r\n    click_function='null',\r\n    function_owner=self,\r\n    label=tostring(picounter),\r\n    position=pos,\r\n    rotation=Vector(0,0,0),\r\n    width=0,\r\n    height=0,\r\n    font_size=1000,\r\n    scale={1.15,1.15,1.15},\r\n    color={0,0,0,0},\r\n    hover_color={0,0,0,0},\r\n    font_color={0,0,0,100},\r\n  }\r\n  for i=-1,1,1 do         -- outline\r\n    for j=-1,1,1 do\r\n      opars=bpars\r\n      opars.position=pos+Vector(0.02*i,0,0.02*j)\r\n      self.createButton(bpars)\r\n    end\r\n  end\r\n\r\n  bpars.position=Vector(-0.05,0,-0.55)\r\n  bpars.font_color={0.1,0.1,0.1,90}\r\n  self.createButton(bpars)    -- shadow\r\n\r\n  bpars.click_function='add_subtract'\r\n  bpars.position=pos\r\n  bpars.width=600\r\n  bpars.height=600\r\n  bpars.font_color={1,1,1,100}\r\n  self.createButton(bpars)    -- the button\r\nend\r\n\r\nfunction add_subtract(obj,ply,alt)\r\n  new_value = math.min(math.max(picounter + (alt and -1 or 1), 0), 999)\r\n  if picounter ~= new_value then\r\n    picounter = new_value\r\n    updateSave()\r\n    createButtons()\r\n  end\r\nend\r\n\r\nfunction null()\r\nend\r\n\r\n-- the onDrop part, finally\r\nprevGuid = nil\r\npropID = \"πCounter\"\r\nfunction onCollisionEnter(co)\r\n\tobj = co.collision_object\r\n\tif obj.tag == \"Card\" and obj.getGUID()~=prevGuid and not(obj.spawning) then\r\n    prevGuid=obj.getGUID()\r\n    table.insert(collisionObjs,co)\r\n    nRunning=0\r\n    Wait.frames(enableCounter,1)\r\n  end\r\nend\r\n\r\nfunction enableCounter()\r\n\r\n  -- only encode 1 object, the one that's closest in position to the drop-on counter\r\n  nRunning=nRunning+1\r\n  if nRunning>1 then return end\r\n  local mag=20\r\n  for _,co in pairs(collisionObjs) do\r\n    local coobj=co.collision_object\r\n    posdif=coobj.getPosition()-self.getPosition()\r\n    if posdif:magnitude()<mag then\r\n      obj=coobj\r\n      mag=posdif:magnitude()\r\n    end\r\n  end\r\n\r\n  -- encode\r\n  enc=Global.getVar('Encoder')\r\n  if enc then\r\n    if enc.call(\"APIpropertyExists\",{propID = propID}) then\r\n      toggleProp(obj)\r\n      self.destruct()\r\n    else\r\n      broadcastToAll('πCounter encoder module necessary and not found at this table')\r\n    end\r\n  else\r\n    broadcastToAll('Card Encoder necessary and not found at this table')\r\n  end\r\n\r\nend\r\n\r\nscript=\"self.max_typed_number=999 function onNumberTyped(ply, int) enc = Global.getVar('Encoder') if enc ~= nil then enc.call('APIobjSetValueData',{obj=self,valueID='picounter',data={picounter=int}}) enc.call('APIrebuildButtons',{obj=self}) return true end end\"\r\nfunction toggleProp(obj)\r\n  enc = Global.getVar('Encoder')\r\n  if enc then\r\n    enc.call(\"APIencodeObject\",{obj=obj})\r\n    local objRot=obj.getRotation()\r\n    local cardFlip=1\r\n    if objRot[3]>90 and objRot[3]<270 then cardFlip=-1 end\r\n    local encFlip = enc.call(\"APIgetFlip\",{obj=obj})\r\n    if encFlip~=cardFlip then\r\n      enc.call(\"APIFlip\",{obj=obj})\r\n    end\r\n    enc.call(\"APIobjEnableProp\",{obj=obj,propID=propID})\r\n    enc.call(\"APIobjSetValueData\",{obj=obj,valueID='picounter',data={picounter=picounter}})\r\n    obj.setLuaScript(script)\r\n    obj=obj.reload()\r\n    Wait.condition(function()\r\n      if cardFlip==-1 then obj.hide_when_face_down=false end\r\n      enc.call(\"APIobjUpdateThis\",{obj=obj})\r\n      enc.call(\"APIrebuildButtons\",{obj=obj})\r\n    end, function() return not(obj.spawning) end)\r\n  end\r\nend",
+      "LuaScriptState": "[0]",
+      "XmlUI": ""
+    }
+  ]
+}

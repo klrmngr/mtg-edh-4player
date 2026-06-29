@@ -1,0 +1,162 @@
+{
+  "GUID": "fcd8d9",
+  "Name": "Infinite_Bag",
+  "Transform": {
+    "posX": 53.5,
+    "posY": 0.94676733,
+    "posZ": 1.0,
+    "rotX": 5.88124749e-07,
+    "rotY": 89.98566,
+    "rotZ": -1.01837736e-06,
+    "scaleX": 0.850000143,
+    "scaleY": 0.850000143,
+    "scaleZ": 0.850000143
+  },
+  "Nickname": "d8",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.5,
+    "g": 0.5,
+    "b": 0.5
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "aa9563",
+      "Name": "Die_8",
+      "Transform": {
+        "posX": 53.6264343,
+        "posY": 3.075167,
+        "posZ": 0.07187469,
+        "rotX": 327.312317,
+        "rotY": 271.0454,
+        "rotZ": 87.70885,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.5647112,
+        "g": 0.08235737,
+        "b": 0.08235737
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": false,
+      "Snap": false,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": false,
+      "Hands": false,
+      "MaterialIndex": 0,
+      "LuaScript": "function onLoad()\n\tlifespan     = 3 \n\tspin_speed   = 3 \n\trise_speed   = 1 \n\tgrow_speed   = 2 \n\tfont_size    = 3 \n\tflash_max    = false \n\tsound_max    = false \n\tsound_min    = false \n\tlog_chat     = false \n\tparent_guid  = \"card01\" \n\troll_active  = false\n\trv = self.getRotationValues() or false\nend\nfunction onDrop(a)trigger(a)end;function onRandomize(a)trigger(a)end;function trigger(a)if roll_active then return false end;roll_active=true;Wait.condition(function()roll_active=false;local b=self.getRotationValue()or false;if not b or not rv then log(\"Dice \"..self.guid..\" does not have a valid rotation value set! Unable to show roll value.\")return false end;local c=self.getPosition()+Vector({0,1+font_size/5,0})local d=spawnObject({type=\"3DText\",position=c,sound=true})d.TextTool.setValue(tostring(b))d.TextTool.setFontColor(self.getColorTint())d.TextTool.setFontSize(font_size*24)Wait.frames(function()d.interactable=false;d.auto_raise=false;rise(d,c)spin(d,{0,spin_speed*18,0})grow(d,font_size*24)log(\"Score is \"..b)if log_chat then local e=a;if self.getName()and self.getName()~=\"\"then e=e..\" | \"..self.getName()end;printToAll(\"[\"..e..\"] \"..Player[a].steam_name..\" rolled a \"..b,a)end;if(sound_max or flash_max)and b==rv[#rv].value then if flash_max then flash(self)flash(d)end;if sound_max and getObjectFromGUID(parent_guid)then getObjectFromGUID(parent_guid).AssetBundle.playTriggerEffect(0)end end;if b==1 and sound_min and getObjectFromGUID(parent_guid)then getObjectFromGUID(parent_guid).AssetBundle.playTriggerEffect(1)end;Wait.time(function()d.destruct()end,lifespan)end,1)end,function()return self.resting end,30,function()log(\"Timeout exceeded waiting for dice to come to a stop\")roll_active=false end)end;function rise(d,c)if not getObjectFromGUID(d.guid)then return false end;d.setPosition(c)c[2]=c[2]+rise_speed/100;Wait.frames(function()rise(d,c)end,1)end;function spin(d,f)if not getObjectFromGUID(d.guid)then return false end;d.setRotationSmooth(f,false,true)f[2]=f[2]+spin_speed*5;Wait.time(function()spin(d,f)end,0.5)end;function grow(d,font_size)if not getObjectFromGUID(d.guid)then return false end;d.TextTool.setFontSize(font_size)Wait.time(function()grow(d,font_size*(grow_speed+100)/100)end,0.1)end;function flash(d,g)if not getObjectFromGUID(d.guid)or g and g>20 then return false end;local a=g or 1;local h=self.getColorTint()if a%2==0 then h=randomColor()end;if d.type==\"3D Text\"then d.TextTool.setFontColor(h)else d.highlightOn(h,0.1)end;Wait.time(function()flash(d,a+1)end,0.2)end;function randomColor()local i=math.random;return{i(255)/255,i(255)/255,i(255)/255}end\n",
+      "LuaScriptState": "",
+      "XmlUI": "",
+      "RotationValues": [
+        {
+          "Value": "1",
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": "2",
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": 180.0
+          }
+        },
+        {
+          "Value": "3",
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": -180.0
+          }
+        },
+        {
+          "Value": "4",
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": 90.0
+          }
+        },
+        {
+          "Value": "5",
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": -90.0
+          }
+        },
+        {
+          "Value": "6",
+          "Rotation": {
+            "x": 33.0,
+            "y": 180.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": "7",
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "Value": "8",
+          "Rotation": {
+            "x": -33.0,
+            "y": 0.0,
+            "z": -90.0
+          }
+        }
+      ]
+    }
+  ]
+}

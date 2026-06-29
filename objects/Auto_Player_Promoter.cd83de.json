@@ -1,0 +1,46 @@
+{
+  "GUID": "cd83de",
+  "Name": "PiecePack_Crowns",
+  "Transform": {
+    "posX": -46.75,
+    "posY": -5.0,
+    "posZ": 8.0,
+    "rotX": 90.0,
+    "rotY": 90.00001,
+    "rotZ": 0.0,
+    "scaleX": 1.0,
+    "scaleY": 1.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "Auto Player Promoter",
+  "Description": "This tool makes sure all players (present and future) are promoted so they have \"host\" powers: delete/spawn/copy/paste/etc.\r\n\r\nThe tool also takes care that deliberately demoted players are never automatically promoted again (such as if they drop & rejoin or if time is rewound).\r\n\r\nYou'll probably want to hide this underneath the table, disable tooltip, and disable interactivity (see script).",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MeshIndex": 1,
+  "LuaScript": "",
+  "LuaScriptState": "[]",
+  "XmlUI": ""
+}

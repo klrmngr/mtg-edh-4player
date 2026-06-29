@@ -1,0 +1,59 @@
+{
+  "GUID": "197ab6",
+  "Name": "Card",
+  "Transform": {
+    "posX": -49.58516,
+    "posY": 0.9788032,
+    "posZ": 19.1649666,
+    "rotX": 0.0002792088,
+    "rotY": 90.07264,
+    "rotZ": -0.00167905213,
+    "scaleX": 1.0,
+    "scaleY": 1.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "The Monarch\nCard 0CMC",
+  "Description": "At the beginning of your end step, draw a card.\nWhenever a creature deals combat damage to you, its controller becomes the monarch.",
+  "GMNotes": "",
+  "Memo": "7c934091-1bc7-4458-acef-fdac62ec3df1",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.713235259,
+    "g": 0.713235259,
+    "b": 0.713235259
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": false,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": true,
+  "Hands": true,
+  "CardID": 300,
+  "SidewaysCard": false,
+  "CustomDeck": {
+    "3": {
+      "FaceURL": "https://cards.scryfall.io/large/front/0/1/014627ea-1d70-4cd2-8c4e-103616e271f7.jpg",
+      "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/1647720103762682461/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+      "NumWidth": 1,
+      "NumHeight": 1,
+      "BackIsHidden": true,
+      "UniqueBack": false,
+      "Type": 0
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

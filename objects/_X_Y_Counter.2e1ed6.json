@@ -1,0 +1,58 @@
+{
+  "GUID": "2e1ed6",
+  "Name": "Custom_Token",
+  "Transform": {
+    "posX": 45.50001,
+    "posY": 1.01121378,
+    "posZ": 1.00000167,
+    "rotX": -0.000190324252,
+    "rotY": 270.014465,
+    "rotZ": 0.000304863061,
+    "scaleX": 0.35,
+    "scaleY": 1.0,
+    "scaleZ": 0.35
+  },
+  "Nickname": "+X/+Y Counter",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.258785635,
+    "g": 0.258785635,
+    "b": 0.258785635
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1646592361164255993/D90A079C42CA6BEAB308717EBA9E41B9ACA60DA8/",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomToken": {
+      "Thickness": 0.1,
+      "MergeDistancePixels": 5.0,
+      "StandUp": false,
+      "Stackable": false
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

@@ -1,0 +1,56 @@
+{
+  "GUID": "3d4319",
+  "Name": "Custom_Model",
+  "Transform": {
+    "posX": -61.0,
+    "posY": 0.3,
+    "posZ": 0.000151687214,
+    "rotX": -0.00232557533,
+    "rotY": 0.0,
+    "rotZ": 0.0,
+    "scaleX": 0.6,
+    "scaleY": 0.5,
+    "scaleZ": 0.15
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.9999998,
+    "g": 0.992160857,
+    "b": 0.9999998
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomMesh": {
+    "MeshURL": "http://pastebin.com/raw/7Fey0hJg",
+    "DiffuseURL": "https://i.imgbox.com/oXIpAvxI.png",
+    "NormalURL": "https://i.imgbox.com/djZcDM5M.png",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 1,
+    "TypeIndex": 0,
+    "CastShadows": true
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

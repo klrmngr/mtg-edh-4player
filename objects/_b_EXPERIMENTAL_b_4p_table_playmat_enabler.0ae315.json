@@ -1,0 +1,46 @@
+{
+  "GUID": "0ae315",
+  "Name": "PiecePack_Suns",
+  "Transform": {
+    "posX": -53.345,
+    "posY": 1.06285822,
+    "posZ": -14.31,
+    "rotX": 5.80195936e-09,
+    "rotY": 0.0130068045,
+    "rotZ": -8.76944739e-08,
+    "scaleX": 1.0,
+    "scaleY": 1.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "          [b]EXPERIMENTAL[/b]\r\n4p table playmat enabler",
+  "Description": "type [i]playmat imageURL[/i] into chat\n(only works when this item is out)",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MeshIndex": 0,
+  "LuaScript": "",
+  "LuaScriptState": "{\"Blue\":\"607c61\",\"Red\":\"5573f7\",\"White\":\"4cd048\"}",
+  "XmlUI": ""
+}

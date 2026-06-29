@@ -1,0 +1,47 @@
+{
+  "GUID": "c20e3f",
+  "Name": "ScriptingTrigger",
+  "Transform": {
+    "posX": -19.4,
+    "posY": 0.8,
+    "posZ": -15.4,
+    "rotX": 0.0,
+    "rotY": 179.999847,
+    "rotZ": 0.0,
+    "scaleX": 37.0,
+    "scaleY": 2.0,
+    "scaleZ": 20.75
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0,
+    "a": 0.509803951
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

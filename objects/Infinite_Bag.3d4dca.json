@@ -1,0 +1,781 @@
+{
+  "GUID": "3d4dca",
+  "Name": "Infinite_Bag",
+  "Transform": {
+    "posX": 49.115,
+    "posY": 0.944216967,
+    "posZ": 27.8100014,
+    "rotX": -1.65793168e-07,
+    "rotY": 2.28857164e-08,
+    "rotZ": 3.63566457e-08,
+    "scaleX": 1.0,
+    "scaleY": 1.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.3058885,
+    "g": 0.372555166,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "MaterialIndex": -1,
+  "MeshIndex": -1,
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "ContainedObjects": [
+    {
+      "GUID": "e57a48",
+      "Name": "Deck",
+      "Transform": {
+        "posX": 48.175,
+        "posY": 3.09177518,
+        "posZ": 30.5100021,
+        "rotX": 1.0733999,
+        "rotY": 180.028473,
+        "rotZ": 1.81023371,
+        "scaleX": 1.0,
+        "scaleY": 1.0,
+        "scaleZ": 1.0
+      },
+      "Nickname": "",
+      "Description": "",
+      "GMNotes": "",
+      "AltLookAngle": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "ColorDiffuse": {
+        "r": 0.713235259,
+        "g": 0.713235259,
+        "b": 0.713235259
+      },
+      "LayoutGroupSortIndex": 0,
+      "Value": 0,
+      "Locked": false,
+      "Grid": true,
+      "Snap": true,
+      "IgnoreFoW": false,
+      "MeasureMovement": false,
+      "DragSelectable": true,
+      "Autoraise": true,
+      "Sticky": true,
+      "Tooltip": true,
+      "GridProjection": false,
+      "HideWhenFaceDown": true,
+      "Hands": false,
+      "SidewaysCard": false,
+      "DeckIDs": [
+        11822300,
+        900,
+        1000,
+        200,
+        11822100,
+        600,
+        800,
+        11822200,
+        500,
+        11822000
+      ],
+      "CustomDeck": {
+        "118223": {
+          "FaceURL": "https://cards.scryfall.io/large/front/6/3/633f98c3-ffec-48c0-ac01-d599312fe288.jpg?1675457383",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        },
+        "9": {
+          "FaceURL": "https://cards.scryfall.io/large/front/9/5/955c33c6-0cc6-47ec-8f71-8d169c02b243.jpg?1675457392",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        },
+        "10": {
+          "FaceURL": "https://cards.scryfall.io/large/front/3/b/3bf70946-5a50-4918-bb61-23be7c2cc75a.jpg?1675457053",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        },
+        "2": {
+          "FaceURL": "https://cards.scryfall.io/large/front/b/8/b8f1abc7-1a86-4e43-8105-10c1c55e65ba.jpg?1675456946",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        },
+        "118221": {
+          "FaceURL": "https://cards.scryfall.io/large/front/e/6/e6952074-d6c2-4fbe-88ca-6d42f83c7ee7.jpg?1675456983",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        },
+        "6": {
+          "FaceURL": "https://cards.scryfall.io/large/front/c/2/c27dffce-908c-45cf-bfe5-67af12467321.jpg?1675457266",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        },
+        "8": {
+          "FaceURL": "https://cards.scryfall.io/large/front/7/9/7985d1dd-32cf-4c83-ae68-ee4961c1e6b9.jpg?1681385067",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        },
+        "118222": {
+          "FaceURL": "https://cards.scryfall.io/large/front/1/b/1b516ae7-2891-40e9-80a1-48ec62171275.jpg?1675457043",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        },
+        "5": {
+          "FaceURL": "https://cards.scryfall.io/large/front/5/d/5daeb14a-dcc5-4761-84a4-a60d22a6c944.jpg?1675457092",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        },
+        "118220": {
+          "FaceURL": "https://cards.scryfall.io/large/front/3/4/34c3979d-60e7-44b5-bb9f-1b6b0f2b70c3.jpg?1675457204",
+          "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+          "NumWidth": 1,
+          "NumHeight": 1,
+          "BackIsHidden": true,
+          "UniqueBack": false,
+          "Type": 0
+        }
+      },
+      "LuaScript": "",
+      "LuaScriptState": "",
+      "XmlUI": "",
+      "ContainedObjects": [
+        {
+          "GUID": "40c810",
+          "Name": "Card",
+          "Transform": {
+            "posX": 5.87503147,
+            "posY": 0.9831358,
+            "posZ": -7.83,
+            "rotX": 9.641488e-08,
+            "rotY": 180.002975,
+            "rotZ": -0.00163239089,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Trained Blessed Mind\nStickers 0CMC",
+          "Description": "{TK}{TK} — {T}: Exile target card from a graveyard.\n{TK}{TK}{TK} — Threshold — As long as seven or more cards are in your graveyard, this creature gets +4/+0 and has trample.\n{TK}{TK} — 4/2\n{TK}{TK}{TK}{TK}{TK} — 6/9",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 11822300,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "118223": {
+              "FaceURL": "https://cards.scryfall.io/large/front/6/3/633f98c3-ffec-48c0-ac01-d599312fe288.jpg?1675457383",
+              "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "4dc9b3",
+          "Name": "Card",
+          "Transform": {
+            "posX": 3.524933,
+            "posY": 0.983069,
+            "posZ": -7.82999945,
+            "rotX": 1.06277895e-07,
+            "rotY": 180.0029,
+            "rotZ": -0.00163235585,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Unglued Pea-Brained Dinosaur\nStickers 0CMC",
+          "Description": "{TK}{TK} — {T}: Add {2}. Spend this mana only to cast creature spells.\n{TK}{TK}{TK}{TK} — At the beginning of combat on your turn, target noncreature artifact you control becomes a 4/4 artifact creature with flying until end of turn.\n{TK}{TK} — 2/4\n{TK}{TK}{TK}{TK}{TK} — 8/6",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 900,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "9": {
+              "FaceURL": "https://cards.scryfall.io/large/front/9/5/955c33c6-0cc6-47ec-8f71-8d169c02b243.jpg?1675457392",
+              "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "f10c19",
+          "Name": "Card",
+          "Transform": {
+            "posX": 8.224971,
+            "posY": 0.983202934,
+            "posZ": -7.82999849,
+            "rotX": 9.35559541e-08,
+            "rotY": 180.0029,
+            "rotZ": -0.00163235865,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Unsanctioned Ancient Juggler\nStickers 0CMC",
+          "Description": "{TK}{TK} — Whenever this creature attacks, bolster 1. (Choose a creature with the least toughness among creatures you control and put a +1/+1 counter on it.)\n{TK}{TK}{TK}{TK} — Indestructible\n{TK}{TK} — 3/2\n{TK}{TK}{TK} — 5/4",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 1000,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "10": {
+              "FaceURL": "https://cards.scryfall.io/large/front/3/b/3bf70946-5a50-4918-bb61-23be7c2cc75a.jpg?1675457053",
+              "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "abe869",
+          "Name": "Card",
+          "Transform": {
+            "posX": 10.5749731,
+            "posY": 0.9832698,
+            "posZ": -7.829999,
+            "rotX": 1.19953526e-07,
+            "rotY": 180.002884,
+            "rotZ": -0.00163236051,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Eldrazi Guacamole Tightrope\nStickers 0CMC",
+          "Description": "{TK}{TK} — Haste\n{TK}{TK}{TK}{TK}{TK} — You may cast this card from your graveyard by paying 2 life in addition to paying its other costs.\n{TK}{TK} — 1/4\n{TK}{TK}{TK} — 5/3",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 200,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "2": {
+              "FaceURL": "https://cards.scryfall.io/large/front/b/8/b8f1abc7-1a86-4e43-8105-10c1c55e65ba.jpg?1675456946",
+              "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "47fd0b",
+          "Name": "Card",
+          "Transform": {
+            "posX": 12.9249382,
+            "posY": 0.983336747,
+            "posZ": -7.83000231,
+            "rotX": 9.606604e-08,
+            "rotY": 180.002884,
+            "rotZ": -0.00163233816,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Misunderstood Trapeze Elf\nStickers 0CMC",
+          "Description": "{TK}{TK} — Whenever you cast a spell, this creature gets +X/+X until end of turn, where X is the amount of generic mana in that spell's mana cost.\n{TK}{TK}{TK} — Hexproof\n{TK}{TK} — 4/2\n{TK}{TK}{TK}{TK} — 6/6",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 11822100,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "118221": {
+              "FaceURL": "https://cards.scryfall.io/large/front/e/6/e6952074-d6c2-4fbe-88ca-6d42f83c7ee7.jpg?1675456983",
+              "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "665eac",
+          "Name": "Card",
+          "Transform": {
+            "posX": 12.9250059,
+            "posY": 0.983336747,
+            "posZ": -11.07,
+            "rotX": 7.00908842e-08,
+            "rotY": 180.00296,
+            "rotZ": -0.00163233583,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Playable Delusionary Hydra\nStickers 0CMC",
+          "Description": "{TK}{TK} — {T}: Draw a card, then discard a card.\n{TK}{TK}{TK}{TK} — Whenever this creature attacks, you gain 3 life and draw a card.\n{TK}{TK} — 1/5\n{TK}{TK}{TK} — 4/4",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 600,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "6": {
+              "FaceURL": "https://cards.scryfall.io/large/front/c/2/c27dffce-908c-45cf-bfe5-67af12467321.jpg?1675457266",
+              "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "c9c6bd",
+          "Name": "Card",
+          "Transform": {
+            "posX": 10.5749216,
+            "posY": 0.983269751,
+            "posZ": -11.0700016,
+            "rotX": 1.22492224e-07,
+            "rotY": 180.002869,
+            "rotZ": -0.0016323789,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Unassuming Gelatinous Serpent\nStickers 0CMC",
+          "Description": "{TK}{TK} — When this permanent dies, return target noncreature, nonland card from your graveyard to your hand.\n{TK}{TK}{TK}{TK} — Whenever this creature deals combat damage to a player, that player mills twice that many cards.\n{TK}{TK} — 2/3\n{TK}{TK}{TK} — 7/2",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 800,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "8": {
+              "FaceURL": "https://cards.scryfall.io/large/front/7/9/7985d1dd-32cf-4c83-ae68-ee4961c1e6b9.jpg?1681385067",
+              "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "ef9547",
+          "Name": "Card",
+          "Transform": {
+            "posX": 8.224957,
+            "posY": 0.983202934,
+            "posZ": -11.07,
+            "rotX": 1.06402041e-07,
+            "rotY": 180.002975,
+            "rotZ": -0.001632342,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Narrow-Minded Baloney Fireworks\nStickers 0CMC",
+          "Description": "{TK}{TK} — Whenever this creature attacks, you gain 2 life.\n{TK}{TK}{TK} — Vigilance, reach\n{TK}{TK} — 2/4\n{TK}{TK}{TK}{TK}{TK} — 7/7",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 11822200,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "118222": {
+              "FaceURL": "https://cards.scryfall.io/large/front/1/b/1b516ae7-2891-40e9-80a1-48ec62171275.jpg?1675457043",
+              "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "28162d",
+          "Name": "Card",
+          "Transform": {
+            "posX": 5.874997,
+            "posY": 0.983135939,
+            "posZ": -11.0699978,
+            "rotX": 9.297835e-08,
+            "rotY": 180.002869,
+            "rotZ": -0.00163234421,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Phyrexian Midway Bamboozle\nStickers 0CMC",
+          "Description": "{TK}{TK} — Whenever this creature attacks, you get {TK}.\n{TK}{TK}{TK} — Undying (When this creature dies, if it had no +1/+1 counters on it, return it to the battlefield under its owner's control with a +1/+1 counter on it.)\n{TK}{TK} — 4/2\n{TK}{TK}{TK}{TK}{TK} — 6/9",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 500,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "5": {
+              "FaceURL": "https://cards.scryfall.io/large/front/5/d/5daeb14a-dcc5-4761-84a4-a60d22a6c944.jpg?1675457092",
+              "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        },
+        {
+          "GUID": "c99d9a",
+          "Name": "Card",
+          "Transform": {
+            "posX": 3.52491,
+            "posY": 0.9830689,
+            "posZ": -11.0700045,
+            "rotX": 8.788917e-08,
+            "rotY": 180.002869,
+            "rotZ": -0.00163232908,
+            "scaleX": 1.0,
+            "scaleY": 1.0,
+            "scaleZ": 1.0
+          },
+          "Nickname": "Ancestral Hot Dog Minotaur\nStickers 0CMC",
+          "Description": "{TK}{TK} — Afflict 2 (Whenever this creature becomes blocked, defending player loses 2 life.)\n{TK}{TK}{TK} — Flying\n{TK}{TK} — 1/4\n{TK}{TK}{TK}{TK}{TK} — 8/6",
+          "GMNotes": "",
+          "AltLookAngle": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "ColorDiffuse": {
+            "r": 0.713235259,
+            "g": 0.713235259,
+            "b": 0.713235259
+          },
+          "LayoutGroupSortIndex": 0,
+          "Value": 0,
+          "Locked": false,
+          "Grid": true,
+          "Snap": true,
+          "IgnoreFoW": false,
+          "MeasureMovement": false,
+          "DragSelectable": true,
+          "Autoraise": true,
+          "Sticky": true,
+          "Tooltip": true,
+          "GridProjection": false,
+          "HideWhenFaceDown": true,
+          "Hands": true,
+          "CardID": 11822000,
+          "SidewaysCard": false,
+          "CustomDeck": {
+            "118220": {
+              "FaceURL": "https://cards.scryfall.io/large/front/3/4/34c3979d-60e7-44b5-bb9f-1b6b0f2b70c3.jpg?1675457204",
+              "BackURL": "https://steamusercontent-a.akamaihd.net/ugc/2442730426865822027/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/",
+              "NumWidth": 1,
+              "NumHeight": 1,
+              "BackIsHidden": true,
+              "UniqueBack": false,
+              "Type": 0
+            }
+          },
+          "LuaScript": "",
+          "LuaScriptState": "",
+          "XmlUI": ""
+        }
+      ]
+    }
+  ]
+}

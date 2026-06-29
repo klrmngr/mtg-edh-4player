@@ -1,0 +1,66 @@
+{
+  "GUID": "8a4c8b",
+  "Name": "Custom_Model",
+  "Transform": {
+    "posX": -22.9999924,
+    "posY": 1.0,
+    "posZ": 26.99999,
+    "rotX": -4.54699366e-05,
+    "rotY": 0.0122938892,
+    "rotZ": 0.0,
+    "scaleX": 1.0,
+    "scaleY": 1.0,
+    "scaleZ": 1.0
+  },
+  "Nickname": "Scry",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 1.0,
+    "g": 1.0,
+    "b": 1.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomMesh": {
+    "MeshURL": "https://steamusercontent-a.akamaihd.net/ugc/1646593629348216858/13BEB07D15ABA51C725265DF239ED4F84D3A872C/",
+    "DiffuseURL": "https://steamusercontent-a.akamaihd.net/ugc/1646593669490497456/BFD0E86A012B7CBD3C1AB7F6E1FFCEDBD2CFFE34/",
+    "NormalURL": "",
+    "ColliderURL": "",
+    "Convex": true,
+    "MaterialIndex": 2,
+    "TypeIndex": 0,
+    "CustomShader": {
+      "SpecularColor": {
+        "r": 0.5,
+        "g": 0.5,
+        "b": 0.5
+      },
+      "SpecularIntensity": 0.2,
+      "SpecularSharpness": 4.0,
+      "FresnelStrength": 0.2
+    },
+    "CastShadows": true
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

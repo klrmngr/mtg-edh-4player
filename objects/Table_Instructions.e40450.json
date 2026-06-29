@@ -1,0 +1,58 @@
+{
+  "GUID": "e40450",
+  "Name": "Custom_Tile",
+  "Transform": {
+    "posX": -30.0,
+    "posY": 22.0,
+    "posZ": 111.5,
+    "rotX": 82.90005,
+    "rotY": 180.0,
+    "rotZ": 1.64687957e-12,
+    "scaleX": 25.0,
+    "scaleY": 1.0,
+    "scaleZ": 25.0
+  },
+  "Nickname": "Table Instructions",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "",
+  "AltLookAngle": {
+    "x": 0.0,
+    "y": 0.0,
+    "z": 0.0
+  },
+  "ColorDiffuse": {
+    "r": 0.0,
+    "g": 0.0,
+    "b": 0.0
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": false,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "https://steamusercontent-a.akamaihd.net/ugc/1771581173235519174/7E9A311D31EF84C195777E3583B0FF5A0C779DF3/",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1.0,
+    "WidthScale": 0.0,
+    "CustomTile": {
+      "Type": 3,
+      "Thickness": 0.1,
+      "Stackable": false,
+      "Stretch": true
+    }
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}
