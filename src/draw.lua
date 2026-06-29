@@ -43,12 +43,14 @@ function playerDraw(button, playerColor, alt)
 				end
 			end
 			draw1(playerColor)
+			announceDrawTriggers(playerColor, 1)
 		else
 			buttonPress(button, drawDelay * nAlt)
 			buttonCooldown(button, drawDelay * nAlt)
 			Wait.time(function()
 				draw1(playerColor)
 			end, drawDelay, nAlt)
+			announceDrawTriggers(playerColor, nAlt)
 		end
 	else
 		warnNotYours(button, playerColor)
