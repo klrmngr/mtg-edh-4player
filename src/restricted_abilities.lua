@@ -92,6 +92,8 @@ end
 
 -- on tap of a restricted-type permanent, privately remind the tapping player
 function onObjectRotate(object, spin, flip, player_color, old_spin, old_flip)
+	-- tapping/untapping a fetchland hides/shows its library previews
+	fetchlandRotate(object, spin, old_spin)
 	-- only fire on the untapped -> tapped transition (ignore flips and untaps)
 	if not spinIsTapped(spin) or spinIsTapped(old_spin) then
 		return
