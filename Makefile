@@ -18,6 +18,7 @@ SRC = \
 	src/untap.lua \
 	src/draw.lua \
 	src/draw_triggers.lua \
+	src/stack.lua \
 	src/helpers.lua \
 	src/context_menus.lua \
 	src/cascade.lua \

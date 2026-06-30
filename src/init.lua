@@ -47,6 +47,7 @@ function onload()
 	checkForUpdate()
 	spawnLandTrackerText()
 	initFetchlands()
+	drawStackLines()
 end
 
 -- Ensure data structure exists
