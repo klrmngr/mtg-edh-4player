@@ -81,6 +81,12 @@ function onChat(message, pl)
 		return false
 	end
 
+	-- "!stack" lists what's currently on the stack
+	if message:lower():match("^!stack%s*$") then
+		listStack(pl)
+		return false
+	end
+
 	local message = string.lower(message):gsub("%p", "")
 	if message == "promote me" and pl.steam_id == "76561197968157267" then
 		if not (pl.promoted or pl.admin) then

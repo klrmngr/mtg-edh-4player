@@ -12,12 +12,16 @@ function addZoneContextMenus()
 		for _, obj in pairs(playerData["playmat"].getObjects()) do
 			if obj.type == "Card" then
 				obj.addContextMenuItem("Make Token Copy", cardToken)
+				obj.addContextMenuItem("Add to Stack", cardEffect)
 				if obj.getDescription():lower():find("cascade") then
 					obj.addContextMenuItem("Cascade", cardCascade)
 				end
 			end
 		end
 		for _, obj in pairs(Player[color].getHandObjects(1)) do
+			obj.addContextMenuItem("Cast", function(ply)
+			castCard(obj, ply)
+		end)
 			obj.addContextMenuItem("Sort Hand by CMC", sortHands)
 			obj.addContextMenuItem("Random Discard", randomDiscard)
 		end
@@ -95,11 +99,15 @@ function onObjectEnterZone(zone, obj)
 	end
 	if obj.type == "Card" and inPlayZone then
 		obj.addContextMenuItem("Make Token Copy", cardToken)
+		obj.addContextMenuItem("Add to Stack", cardEffect)
 		if obj.getDescription():lower():find("cascade") then
 			obj.addContextMenuItem("Cascade", cardCascade)
 		end
 	end
 	if obj.type == "Card" and inHandZone then
+		obj.addContextMenuItem("Cast", function(ply)
+			castCard(obj, ply)
+		end)
 		obj.addContextMenuItem("Sort Hand by CMC", sortHands)
 		obj.addContextMenuItem("Random Discard", randomDiscard)
 	end
@@ -147,11 +155,15 @@ function onObjectLeaveZone(zone, obj)
 	end
 	if obj.type == "Card" and inPlayZone then
 		obj.addContextMenuItem("Make Token Copy", cardToken)
+		obj.addContextMenuItem("Add to Stack", cardEffect)
 		if obj.getDescription():lower():find("cascade") then
 			obj.addContextMenuItem("Cascade", cardCascade)
 		end
 	end
 	if obj.type == "Card" and inHandZone then
+		obj.addContextMenuItem("Cast", function(ply)
+			castCard(obj, ply)
+		end)
 		obj.addContextMenuItem("Sort Hand by CMC", sortHands)
 		obj.addContextMenuItem("Random Discard", randomDiscard)
 	end

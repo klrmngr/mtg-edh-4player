@@ -74,6 +74,8 @@ end
 -- starting player's land zone and clear their entered-this-turn list
 function onPlayerTurnStart(player_color_start, player_color_previous)
 	clearLandGlows()
+	-- a new turn clears anyone who was passing priority for the rest of the turn
+	clearPriorityRestOfTurn()
 	-- the previous player's turn just ended -- drop their Etali glow if it's theirs
 	maybeClearEtaliGlows(player_color_previous)
 	-- and resolve their staged Ral ult/pif cards
