@@ -24,6 +24,9 @@ function dfcLandEnter(zone, obj)
 	if backName == nil or not nameTypeLineIsLand(backName) then
 		return -- no back face, or it isn't a land
 	end
+	if names[1] ~= nil and nameTypeLineIsLand(names[1]) then
+		return -- front face is already a land; leave it so that side can be played
+	end
 	if obj.getStateId() == 2 then
 		return -- already showing the land face
 	end
