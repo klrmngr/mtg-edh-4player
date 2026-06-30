@@ -140,7 +140,6 @@ function createMenu(t)
         ['co']=0,     -- notepad
         ['no']=1,
         ['ke']=2,     -- keywords
-        ['ca']=3,     -- card importer
         ['mt']=4.5,   -- mtg colors
         ['ph']=5.5,   -- phasing
         ['is']=6.5,   -- is token
