@@ -48,6 +48,13 @@ SAVE_NAME = "MTG EDH 4-player (χ)"
 # Per-file extension -> the object key it maps to.
 SCRIPT_KEYS = {".lua": "LuaScript", ".xml": "XmlUI"}
 
+# A live TTS table never sits perfectly still: physics settling nudges object
+# positions/rotations and re-serialises colours by a hair every save. On split we
+# snap any number within this tolerance of the already-committed value back to
+# that value, so an unchanged-but-jiggled table doesn't churn the JSON. Real
+# moves (well above this) still come through. Tune up if tiny shifts persist.
+JITTER_EPSILON = 1e-3
+
 
 def safe_name(name: str) -> str:
     name = (name or "unnamed").strip() or "unnamed"
@@ -82,6 +89,27 @@ def walk_objects(obj: dict):
         yield from walk_objects(child)
     for child in (obj.get("States") or {}).values():
         yield from walk_objects(child)
+
+
+def stabilize(new, old):
+    """Return `new` with each numeric leaf snapped to `old`'s value wherever the
+    two differ by less than JITTER_EPSILON, so physics jitter doesn't churn the
+    committed JSON. Walks both structures in parallel; anything whose shape
+    doesn't line up (new/changed objects) keeps `new` as-is. Booleans are left
+    untouched so e.g. a Locked toggle still registers."""
+    if isinstance(new, dict) and isinstance(old, dict):
+        return {k: stabilize(v, old.get(k)) for k, v in new.items()}
+    if isinstance(new, list) and isinstance(old, list) and len(new) == len(old):
+        return [stabilize(a, b) for a, b in zip(new, old)]
+    if (
+        isinstance(new, (int, float))
+        and isinstance(old, (int, float))
+        and not isinstance(new, bool)
+        and not isinstance(old, bool)
+        and abs(new - old) < JITTER_EPSILON
+    ):
+        return old
+    return new
 
 
 def read(path: str) -> str:
@@ -122,6 +150,13 @@ def split(save_path: str, objects_dir: str) -> None:
 
     written = 0
     for obj in objects:
+        base = f"{safe_name(obj.get('Nickname') or obj.get('Name'))}.{obj.get('GUID')}"
+        out_path = os.path.join(objects_dir, base + ".json")
+        # Snap sub-threshold physics jitter back to the committed values so an
+        # unchanged-but-jiggled object doesn't churn its position/colour floats.
+        if os.path.exists(out_path):
+            with open(out_path, encoding="utf-8") as f:
+                obj = stabilize(obj, json.load(f))
         # Strip any script that is tracked as a .lua/.xml file (it gets injected
         # back on build); leave inline scripts that have no tracked file.
         for node in walk_objects(obj):
@@ -129,8 +164,7 @@ def split(save_path: str, objects_dir: str) -> None:
             for ext, key in SCRIPT_KEYS.items():
                 if ext in files:
                     node[key] = ""
-        base = f"{safe_name(obj.get('Nickname') or obj.get('Name'))}.{obj.get('GUID')}"
-        with open(os.path.join(objects_dir, base + ".json"), "w", encoding="utf-8") as f:
+        with open(out_path, "w", encoding="utf-8") as f:
             json.dump(obj, f, indent=2, ensure_ascii=False)
         written += 1
 
