@@ -176,6 +176,9 @@ def build(objects_dir: str, out_dir: str = None) -> None:
     now = datetime.datetime.now()
     stem = f"{SAVE_NAME} {read_version()}-{now:%Y%m%d%H%M%S}"
     save["SaveName"] = stem
+    # GameMode is what TTS shows in the server browser; keep it in sync with our
+    # mod name so joiners don't see the upstream (π) name we forked from.
+    save["GameMode"] = SAVE_NAME
     save["Date"] = now.strftime("%m/%d/%Y %I:%M:%S %p")
     save["EpochTime"] = int(now.timestamp())
 
