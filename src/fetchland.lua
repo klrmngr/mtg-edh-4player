@@ -382,17 +382,16 @@ function resolveFetch(info)
 	-- Fabled Passage, which counts itself toward its "4 or more lands" check)
 	local forcedTapped = fetchlandForcesTapped(fetch, color)
 
-	-- 2. pull the chosen land from the library, place it next to the fetchland.
-	-- Orient it to the land zone (untapped), never to the fetchland -- which may
-	-- itself be tapped/rotated -- then tap it afterwards only if it enters tapped.
+	-- 2. pull the chosen land from the library, place it exactly where the
+	-- fetchland sits (the fetchland is sent to the graveyard right after, so it
+	-- frees up that spot). Orient it to the land zone (untapped), never to the
+	-- fetchland -- which may itself be tapped/rotated -- then tap it afterwards
+	-- only if it enters tapped.
 	local baseY = data[color]["landZone"].getRotation().y
 	local landPos
 	if fetch ~= nil then
-		local zone = data[color]["landZone"]
-		local yaw = math.rad(zone.getRotation().y)
-		local rgt = { x = math.cos(yaw), z = -math.sin(yaw) }
 		local b = fetch.getPosition()
-		landPos = { x = b.x + rgt.x * 2.6, y = b.y + 1, z = b.z + rgt.z * 2.6 }
+		landPos = { x = b.x, y = b.y + 1, z = b.z }
 	else
 		landPos = data[color]["landZone"].getPosition()
 	end
