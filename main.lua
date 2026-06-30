@@ -2255,6 +2255,8 @@ end
 
 -- on tap of a restricted-type permanent, privately remind the tapping player
 function onObjectRotate(object, spin, flip, player_color, old_spin, old_flip)
+	-- tapping/untapping a fetchland hides/shows its library previews
+	fetchlandRotate(object, spin, old_spin)
 	-- only fire on the untapped -> tapped transition (ignore flips and untaps)
 	if not spinIsTapped(spin) or spinIsTapped(old_spin) then
 		return
@@ -2406,6 +2408,10 @@ function showFetchPreviews(zone, fetch)
 		return
 	end
 	clearFetchPreviews(fetch.getGUID())
+	-- a tapped fetchland is spent; don't show previews for it
+	if spinIsTapped(fetch.getRotation().y) then
+		return
+	end
 
 	local deck = getDeckFromZone(data[color]["libraryZone"])
 	if deck == nil then
@@ -2783,6 +2789,30 @@ function fetchlandLeave(zone, obj)
 		return
 	end
 	clearFetchPreviews(obj.getGUID())
+end
+
+-- show/hide previews as a fetchland is tapped/untapped: a tapped fetchland is
+-- "spent", so hide its previews; untapping a fetchland still in its land zone
+-- brings them back. Called from onObjectRotate.
+function fetchlandRotate(obj, spin, old_spin)
+	if obj == nil or obj.type ~= "Card" or obj.hasTag("FetchPreview") then
+		return
+	end
+	-- only act on a tap/untap transition, not flips or untouched rotations
+	if spinIsTapped(spin) == spinIsTapped(old_spin) then
+		return
+	end
+	for color, _ in pairs(data) do
+		local zone = data[color]["landZone"]
+		if zone ~= nil and zoneContains(zone, obj) and fetchLandTargets(obj) ~= nil then
+			if spinIsTapped(spin) then
+				clearFetchPreviews(obj.getGUID())
+			else
+				showFetchPreviews(zone, obj)
+			end
+			return
+		end
+	end
 end
 
 -- on load, clear any orphaned preview copies left over from a previous script
