@@ -48,7 +48,7 @@ end)
 __bundle_register("import", function(require, _LOADED, __bundle_register, __bundle_modules)
 local M = {}
 
-local asset_base_url = 'https://importer-static.rikrassen.xyz'
+local asset_base_url = 'https://importer-static.rikrassen.com'
 local env = 'PROD'
 -- local env = 'STAGING'
 -- local env = 'DEV'

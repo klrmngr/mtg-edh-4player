@@ -58,97 +58,97 @@
     {
       "Type": 0,
       "Name": "deck_tab",
-      "URL": "https://importer-static.rikrassen.xyz/deck_tab_v0_10_1.png"
+      "URL": "https://importer-static.rikrassen.com/deck_tab_v0_10_1.png"
     },
     {
       "Type": 0,
       "Name": "deck_tab_button",
-      "URL": "https://importer-static.rikrassen.xyz/deck_tab_button.png"
+      "URL": "https://importer-static.rikrassen.com/deck_tab_button.png"
     },
     {
       "Type": 0,
       "Name": "deck_tab_button_hover",
-      "URL": "https://importer-static.rikrassen.xyz/deck_tab_button_hover.png"
+      "URL": "https://importer-static.rikrassen.com/deck_tab_button_hover.png"
     },
     {
       "Type": 0,
       "Name": "draft_tab",
-      "URL": "https://importer-static.rikrassen.xyz/draft_tab_v0_10_1.png"
+      "URL": "https://importer-static.rikrassen.com/draft_tab_v0_10_1.png"
     },
     {
       "Type": 0,
       "Name": "draft_tab_button",
-      "URL": "https://importer-static.rikrassen.xyz/draft_tab_button.png"
+      "URL": "https://importer-static.rikrassen.com/draft_tab_button.png"
     },
     {
       "Type": 0,
       "Name": "draft_tab_button_hover",
-      "URL": "https://importer-static.rikrassen.xyz/draft_tab_button_hover.png"
+      "URL": "https://importer-static.rikrassen.com/draft_tab_button_hover.png"
     },
     {
       "Type": 0,
       "Name": "cube_tab",
-      "URL": "https://importer-static.rikrassen.xyz/cube_tab_v0_10_1.png"
+      "URL": "https://importer-static.rikrassen.com/cube_tab_v0_10_1.png"
     },
     {
       "Type": 0,
       "Name": "cube_tab_button",
-      "URL": "https://importer-static.rikrassen.xyz/cube_tab_button.png"
+      "URL": "https://importer-static.rikrassen.com/cube_tab_button.png"
     },
     {
       "Type": 0,
       "Name": "cube_tab_button_hover",
-      "URL": "https://importer-static.rikrassen.xyz/cube_tab_button_hover.png"
+      "URL": "https://importer-static.rikrassen.com/cube_tab_button_hover.png"
     },
     {
       "Type": 0,
       "Name": "close_button",
-      "URL": "https://importer-static.rikrassen.xyz/close_button.png"
+      "URL": "https://importer-static.rikrassen.com/close_button.png"
     },
     {
       "Type": 0,
       "Name": "close_button_hover",
-      "URL": "https://importer-static.rikrassen.xyz/close_button_hover.png"
+      "URL": "https://importer-static.rikrassen.com/close_button_hover.png"
     },
     {
       "Type": 0,
       "Name": "submit_button",
-      "URL": "https://importer-static.rikrassen.xyz/submit_button_v0_10_1.png"
+      "URL": "https://importer-static.rikrassen.com/submit_button_v0_10_1.png"
     },
     {
       "Type": 0,
       "Name": "submit_button_hover",
-      "URL": "https://importer-static.rikrassen.xyz/submit_button_hover_v0_10_1.png"
+      "URL": "https://importer-static.rikrassen.com/submit_button_hover_v0_10_1.png"
     },
     {
       "Type": 0,
       "Name": "settings_button",
-      "URL": "https://importer-static.rikrassen.xyz/settings_button.png"
+      "URL": "https://importer-static.rikrassen.com/settings_button.png"
     },
     {
       "Type": 0,
       "Name": "settings_button_hover",
-      "URL": "https://importer-static.rikrassen.xyz/settings_button_hover.png"
+      "URL": "https://importer-static.rikrassen.com/settings_button_hover.png"
     },
     {
       "Type": 0,
       "Name": "settings_tab",
-      "URL": "https://importer-static.rikrassen.xyz/settings_tab_v0_10_1.png"
+      "URL": "https://importer-static.rikrassen.com/settings_tab_v0_10_1.png"
     },
     {
       "Type": 0,
       "Name": "question_button",
-      "URL": "https://importer-static.rikrassen.xyz/question_button.png"
+      "URL": "https://importer-static.rikrassen.com/question_button.png"
     },
     {
       "Type": 0,
       "Name": "buy_me_a_coffee",
-      "URL": "https://importer-static.rikrassen.xyz/buy_me_a_coffee.png"
+      "URL": "https://importer-static.rikrassen.com/buy_me_a_coffee.png"
     },
     {
       "Type": 1,
       "Name": "Roboto",
-      "URL": "https://importer-static.rikrassen.xyz/roboto.unity3d"
+      "URL": "https://importer-static.rikrassen.com/roboto.unity3d"
     }
   ]
 }
