@@ -1,5 +1,6 @@
 -- Main functionality
-function onload()
+function onload(saved)
+	restoreSettings(saved)
 	buildDataStructure()
 	registerObjectGUIDs()
 	buildTableButtons()
@@ -659,7 +660,7 @@ function revealFan(button, ply, alt)
 	local now = os.time()
 	local lastT = tonumber(button.memo)
 	local nRevealed = tonumber(button.getGMNotes())
-	if now - lastT > 30 then
+	if now - lastT > getSetting(ply, "revealResetSecs") then
 		nRevealed = 0
 		revealedCMC = revealedCMC or {}
 		revealedCMC[ply] = 0
@@ -697,7 +698,7 @@ function revealStack(button, ply, alt)
 	local now = os.time()
 	local lastT = tonumber(button.memo)
 	local nRevealed = tonumber(button.getGMNotes())
-	if now - lastT > 30 then
+	if now - lastT > getSetting(ply, "revealResetSecs") then
 		nRevealed = 0
 		revealedCMC = revealedCMC or {}
 		revealedCMC[ply] = 0
@@ -2118,6 +2119,10 @@ function trackLandEnter(zone, obj)
 	if color == nil or not cardIsLand(obj) then
 		return
 	end
+	-- respect the owner's land-tracker setting
+	if not getSetting(color, "landTracker") then
+		return
+	end
 	-- wait for the card to come to rest before counting it: a card being drawn
 	-- animates through the land zone without stopping, and must not be counted as
 	-- a land played this turn. whenSettledInZone skips it if it left in transit.
@@ -2156,6 +2161,11 @@ end
 function refreshLandTrackerText(color)
 	local mat = data[color]["playmat"]
 	if mat == nil then
+		return
+	end
+	-- blank the display entirely when the owner has the tracker turned off
+	if not getSetting(color, "landTracker") then
+		mat.editButton({ index = 0, label = "" })
 		return
 	end
 	local names = {}
@@ -2271,6 +2281,10 @@ function onObjectRotate(object, spin, flip, player_color, old_spin, old_flip)
 		return
 	end
 	if not isBattlefieldCard(object) then
+		return
+	end
+	-- respect the tapping player's ability-restriction reminder setting
+	if not getSetting(player_color, "abilityRestrictions") then
 		return
 	end
 	local line = cardTypeLine(object)
@@ -2410,6 +2424,10 @@ end
 function showFetchPreviews(zone, fetch)
 	local color = landZoneColor(zone)
 	if color == nil then
+		return
+	end
+	-- respect the owner's fetchland-preview setting
+	if not getSetting(color, "fetchPreviews") then
 		return
 	end
 	local targets = fetchLandTargets(fetch)
@@ -3115,7 +3133,7 @@ function playerDraw(button, playerColor, alt)
 			local drawStep = lastUntapPress[playerColor] ~= nil
 				and (os.time() - lastUntapPress[playerColor]) <= skipDrawWindow
 			lastUntapPress[playerColor] = nil
-			if drawStep then
+			if drawStep and getSetting(playerColor, "drawSkipReminder") then
 				local skipper = skipDrawStepCard(playerColor)
 				if skipper ~= nil then
 					broadcastToColor(
@@ -3299,8 +3317,9 @@ function announceDrawTriggers(drawerColor, count, isDrawStep)
 	local drawerList = {}
 	for _, h in ipairs(hits) do
 		-- tell the controller their trigger fired (skip if they are the drawer --
-		-- the drawer's summary below already covers it)
-		if h.color ~= drawerColor then
+		-- the drawer's summary below already covers it), unless they've muted
+		-- draw-trigger notifications in their settings
+		if h.color ~= drawerColor and getSetting(h.color, "oppDrawTriggers") then
 			broadcastToColor(
 				drawerColor .. " drew " .. drewStr .. " -- your " .. h.name .. " triggers" .. timesStr .. ".",
 				h.color,
@@ -3310,7 +3329,9 @@ function announceDrawTriggers(drawerColor, count, isDrawStep)
 		table.insert(drawerList, h.color .. "'s " .. h.name)
 	end
 	-- tell the drawer what they set off
-	broadcastToColor("Your draw triggers: " .. table.concat(drawerList, ", ") .. ".", drawerColor, color)
+	if getSetting(drawerColor, "oppDrawTriggers") then
+		broadcastToColor("Your draw triggers: " .. table.concat(drawerList, ", ") .. ".", drawerColor, color)
+	end
 end
 ----------------------------------- UNIVERSAL ----------------------------------
 
@@ -5793,6 +5814,142 @@ function cleanPatchNotes(body)
 	-- trim surrounding whitespace
 	body = body:gsub("^%s+", ""):gsub("%s+$", "")
 	return body
+end
+--------------------------------- SETTINGS -------------------------------------
+-- Per-player settings. Each player opens a private settings panel from the gear
+-- button in their UI; the panel is shown only to them via the same visibility
+-- rules the Scryfall panels use (visibleOpenRules / visibleCloseRules). Values
+-- are stored per colour in playerSettings and persisted across save/load.
+--
+-- NOTE: the panel is a single shared widget set. A toggle always writes to the
+-- *acting* player's settings (player.color), so storage stays correctly
+-- per-player; only the on-screen toggle states would be shared if two players
+-- happened to have the panel open at the same instant.
+
+-- default value for every setting, applied to each colour on load
+settingsDefaults = {
+	oppDrawTriggers = false, -- notify this player about draw triggers (theirs / others')
+	                         -- default off: feature is unfinished / somewhat buggy
+	drawSkipReminder = true, -- warn (and stop the draw) on a "skip your draw step" card
+	abilityRestrictions = false, -- remind on tapping a permanent whose activated abilities are prohibited
+	                             -- default off: feature is unfinished / somewhat buggy
+	landTracker = true,      -- track / show lands entered this turn on this player's mat
+	fetchPreviews = true,    -- float library-land previews above this player's fetchlands
+	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
+}
+
+-- panel toggle id -> settings key it controls
+settingsToggleIds = {
+	setOppDrawTriggers = "oppDrawTriggers",
+	setDrawSkipReminder = "drawSkipReminder",
+	setAbilityRestrictions = "abilityRestrictions",
+	setLandTracker = "landTracker",
+	setFetchPreviews = "fetchPreviews",
+}
+
+-- colour -> { key = value }
+playerSettings = playerSettings or {}
+
+settingsColors = { "White", "Red", "Yellow", "Blue" }
+
+-- fill in any missing colours / keys with defaults; called from onload after any
+-- saved state has been restored
+function initSettings()
+	playerSettings = playerSettings or {}
+	for _, color in ipairs(settingsColors) do
+		playerSettings[color] = playerSettings[color] or {}
+		for key, def in pairs(settingsDefaults) do
+			if playerSettings[color][key] == nil then
+				playerSettings[color][key] = def
+			end
+		end
+	end
+end
+
+-- read a setting for a colour, falling back to the default
+function getSetting(color, key)
+	local s = playerSettings[color]
+	if s ~= nil and s[key] ~= nil then
+		return s[key]
+	end
+	return settingsDefaults[key]
+end
+
+---------------------------------- PERSISTENCE ---------------------------------
+-- TTS serialises the Global script state via onSave; we stash playerSettings in
+-- it and read it back in onload(saved). Tolerant of a nil / malformed blob.
+-- Both casings are defined because this table's entry point is lower-case
+-- onload(); whichever name TTS calls, the other is simply dead.
+function saveSettings()
+	return JSON.encode({ playerSettings = playerSettings })
+end
+
+function restoreSettings(saved)
+	if saved ~= nil and saved ~= "" then
+		local ok, decoded = pcall(JSON.decode, saved)
+		if ok and type(decoded) == "table" and type(decoded.playerSettings) == "table" then
+			playerSettings = decoded.playerSettings
+		end
+	end
+	initSettings()
+end
+
+function onSave()
+	return saveSettings()
+end
+
+function onsave()
+	return saveSettings()
+end
+
+------------------------------------ PANEL -------------------------------------
+-- reflect the opening player's stored settings into the shared widgets, then
+-- show the panel only to them
+function openSettings(player)
+	if player == nil or player.color == "Grey" then
+		return
+	end
+	local color = player.color
+	for id, key in pairs(settingsToggleIds) do
+		UI.setAttribute(id, "isOn", getSetting(color, key) and "True" or "False")
+	end
+	UI.setAttribute("setRevealResetSecs", "text", tostring(getSetting(color, "revealResetSecs")))
+	visibleOpenRules(color, "SettingsPanel")
+end
+
+function closeSettings(player)
+	visibleCloseRules(player, "SettingsPanel")
+end
+
+-- a toggle changed: write the acting player's setting
+function settingsToggle(player, value, id)
+	local key = settingsToggleIds[id]
+	if key == nil or player == nil then
+		return
+	end
+	playerSettings[player.color] = playerSettings[player.color] or {}
+	local on = (value == "True" or value == true)
+	playerSettings[player.color][key] = on
+	UI.setAttribute(id, "isOn", on and "True" or "False")
+	-- the land tracker display is passive, so refresh it the moment it's toggled
+	if key == "landTracker" then
+		refreshLandTrackerText(player.color)
+	end
+end
+
+-- reveal-reset timeout committed
+function settingsRevealReset(player, value, id)
+	if player == nil then
+		return
+	end
+	local n = tonumber(value)
+	if n == nil or n < 1 then
+		n = settingsDefaults.revealResetSecs
+	end
+	n = math.floor(n)
+	playerSettings[player.color] = playerSettings[player.color] or {}
+	playerSettings[player.color].revealResetSecs = n
+	UI.setAttribute("setRevealResetSecs", "text", tostring(n))
 end
 --------------------------------------------------------------------------------
 -- pie's manual "JSONdecode" for scryfall's api output

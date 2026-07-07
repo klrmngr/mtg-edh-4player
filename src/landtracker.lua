@@ -137,6 +137,10 @@ function trackLandEnter(zone, obj)
 	if color == nil or not cardIsLand(obj) then
 		return
 	end
+	-- respect the owner's land-tracker setting
+	if not getSetting(color, "landTracker") then
+		return
+	end
 	-- wait for the card to come to rest before counting it: a card being drawn
 	-- animates through the land zone without stopping, and must not be counted as
 	-- a land played this turn. whenSettledInZone skips it if it left in transit.
@@ -175,6 +179,11 @@ end
 function refreshLandTrackerText(color)
 	local mat = data[color]["playmat"]
 	if mat == nil then
+		return
+	end
+	-- blank the display entirely when the owner has the tracker turned off
+	if not getSetting(color, "landTracker") then
+		mat.editButton({ index = 0, label = "" })
 		return
 	end
 	local names = {}

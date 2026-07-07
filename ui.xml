@@ -406,3 +406,41 @@
         </VerticalScrollView>
     </VerticalLayout>
 </Panel>
+
+<!-- SETTINGS -->
+<!-- always-on gear button; each player opens their own private settings panel -->
+<Button id="settingsGear" onClick="openSettings" text="&#9881;"
+    rectAlignment="LowerRight" offsetXY="-61 6" width="46" height="46" fontSize="28"
+    color="rgba(0.1,0.1,0.1,0.85)" textColor="#FFFFFF"
+    tooltip="Player settings" tooltipPosition="Left" tooltipBorderColor="rgba(0,0,0,0)" />
+
+<Panel id="SettingsPanel" width="380" height="540" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
+    <VerticalLayout padding="16 16 16 16" spacing="12" childForceExpandWidth="true" childForceExpandHeight="false">
+        <Panel preferredHeight="40" minHeight="40" flexibleHeight="0">
+            <Text fontSize="26" fontStyle="Bold" color="rgb(1,1,1)" alignment="MiddleCenter" text="Player Settings" />
+            <Button rectAlignment="UpperRight" width="30" height="30" color="#990000" textColor="#FFFFFF" text="X" fontSize="18" onClick="closeSettings" />
+        </Panel>
+
+        <Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" preferredHeight="20" minHeight="20" flexibleHeight="0" text="TRIGGERS" />
+        <VerticalLayout spacing="0" preferredHeight="44" minHeight="44" flexibleHeight="0" childForceExpandHeight="false">
+            <Toggle id="setOppDrawTriggers" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Opponent-draw trigger alerts</Toggle>
+            <Text color="#e0a030" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="unfinished, somewhat buggy" />
+        </VerticalLayout>
+
+        <Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" preferredHeight="20" minHeight="20" flexibleHeight="0" text="STATE-BASED" />
+        <Toggle id="setDrawSkipReminder" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="30" minHeight="30">Draw-step skip reminder</Toggle>
+        <VerticalLayout spacing="0" preferredHeight="44" minHeight="44" flexibleHeight="0" childForceExpandHeight="false">
+            <Toggle id="setAbilityRestrictions" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Can't-activate-ability reminder</Toggle>
+            <Text color="#e0a030" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="unfinished, somewhat buggy" />
+        </VerticalLayout>
+
+        <Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" preferredHeight="20" minHeight="20" flexibleHeight="0" text="DISPLAY" />
+        <Toggle id="setLandTracker" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="30" minHeight="30">Land-entered tracker</Toggle>
+        <Toggle id="setFetchPreviews" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="30" minHeight="30">Fetchland previews</Toggle>
+
+        <HorizontalLayout minHeight="36" preferredHeight="36" flexibleHeight="0" spacing="8" childAlignment="MiddleLeft" childForceExpandWidth="false">
+            <Text fontSize="17" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" minWidth="220" text="Reveal reset (seconds)" />
+            <InputField id="setRevealResetSecs" characterValidation="Integer" onEndEdit="settingsRevealReset" text="30" minWidth="64" preferredWidth="64" flexibleWidth="0" fontSize="17" textAlignment="MiddleCenter" color="rgb(0.25,0.25,0.25)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" />
+        </HorizontalLayout>
+    </VerticalLayout>
+</Panel>
