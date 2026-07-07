@@ -2695,11 +2695,87 @@ function fetchedLandETB(card, color)
 	Player[color].broadcast("Surveil " .. n .. " from " .. mainCardName(card.getName()) .. ".")
 end
 
+-- phrases / names identifying face-up battlefield cards that restrict library
+-- searches. Kept specific so they never match a fetchland's or tutor's own
+-- beneficial "search your library for..." text.
+searchRestrictionPhrases = {
+	"can't search",                    -- Leonin Arbiter, Stranglehold, Ashiok, Dream Render
+	"top four cards of that library",  -- Aven Mindcensor
+	"top four cards of their library", -- (wording variant)
+}
+searchRestrictionNames = {
+	"opposition agent", -- takes control of the searching player
+}
+
+-- list of distinct card names currently imposing a search restriction
+function searchRestrictionsInPlay()
+	local names = {}
+	local seen = {}
+	for color, _ in pairs(data) do
+		local mat = data[color]["playmat"]
+		if mat ~= nil then
+			for _, v in pairs(mat.getObjects()) do
+				if v.type == "Card" and not v.is_face_down then
+					local desc = (v.getDescription() or ""):lower()
+					local cname = (v.getName() or ""):lower()
+					local hit = false
+					for _, p in ipairs(searchRestrictionPhrases) do
+						if desc:find(p, 1, true) then
+							hit = true
+							break
+						end
+					end
+					if not hit then
+						for _, nm in ipairs(searchRestrictionNames) do
+							if cname:find(nm, 1, true) then
+								hit = true
+								break
+							end
+						end
+					end
+					if hit then
+						local n = mainCardName(v.getName())
+						if not seen[n] then
+							seen[n] = true
+							table.insert(names, n)
+						end
+					end
+				end
+			end
+		end
+	end
+	return names
+end
+
 -- carry out a fetch: lose 1 life (only if the land says so), pull the chosen
 -- land next to the fetchland, and send the fetchland to the graveyard
 function resolveFetch(info)
 	local color = info.color
 	local fetch = getObjectFromGUID(info.fetchGuid)
+
+	-- tutor/search hate (Aven Mindcensor, Leonin Arbiter, Opposition Agent, ...):
+	-- don't perform the search at all. Send the fetchland to the graveyard and
+	-- have the player resolve the (restricted) search by hand.
+	if getSetting(color, "searchRestrictions") then
+		local blockers = searchRestrictionsInPlay()
+		if #blockers > 0 then
+			-- the fetch's "pay 1 life" is a cost, so it's still paid
+			if fetch ~= nil and (fetch.getDescription() or ""):lower():find("pay 1 life") then
+				loseLife(color, 1, mainCardName(fetch.getName()))
+			end
+			if fetch ~= nil then
+				discardCard(fetch, color)
+			end
+			clearFetchPreviews(info.fetchGuid)
+			broadcastToColor(
+				"Search restricted by " .. table.concat(blockers, ", ")
+					.. " -- fetchland sent to graveyard; resolve the search manually.",
+				color,
+				{ 0.9, 0.3, 0.3 }
+			)
+			return
+		end
+	end
 
 	-- 1. lose 1 life, but only if the fetchland actually says "pay 1 life"
 	-- (some lands -- Evolving Wilds, panoramas, etc. -- fetch for free)
@@ -5833,6 +5909,7 @@ settingsDefaults = {
 	drawSkipReminder = true, -- warn (and stop the draw) on a "skip your draw step" card
 	abilityRestrictions = false, -- remind on tapping a permanent whose activated abilities are prohibited
 	                             -- default off: feature is unfinished / somewhat buggy
+	searchRestrictions = true, -- block fetchland resolution when a tutor/search-hate card is in play
 	landTracker = true,      -- track / show lands entered this turn on this player's mat
 	fetchPreviews = true,    -- float library-land previews above this player's fetchlands
 	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
@@ -5843,6 +5920,7 @@ settingsToggleIds = {
 	setOppDrawTriggers = "oppDrawTriggers",
 	setDrawSkipReminder = "drawSkipReminder",
 	setAbilityRestrictions = "abilityRestrictions",
+	setSearchRestrictions = "searchRestrictions",
 	setLandTracker = "landTracker",
 	setFetchPreviews = "fetchPreviews",
 }

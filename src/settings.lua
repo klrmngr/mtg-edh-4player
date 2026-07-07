@@ -16,6 +16,7 @@ settingsDefaults = {
 	drawSkipReminder = true, -- warn (and stop the draw) on a "skip your draw step" card
 	abilityRestrictions = false, -- remind on tapping a permanent whose activated abilities are prohibited
 	                             -- default off: feature is unfinished / somewhat buggy
+	searchRestrictions = true, -- block fetchland resolution when a tutor/search-hate card is in play
 	landTracker = true,      -- track / show lands entered this turn on this player's mat
 	fetchPreviews = true,    -- float library-land previews above this player's fetchlands
 	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
@@ -26,6 +27,7 @@ settingsToggleIds = {
 	setOppDrawTriggers = "oppDrawTriggers",
 	setDrawSkipReminder = "drawSkipReminder",
 	setAbilityRestrictions = "abilityRestrictions",
+	setSearchRestrictions = "searchRestrictions",
 	setLandTracker = "landTracker",
 	setFetchPreviews = "fetchPreviews",
 }
