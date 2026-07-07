@@ -43,14 +43,15 @@ function playerDraw(button, playerColor, alt)
 				end
 			end
 			draw1(playerColor)
-			announceDrawTriggers(playerColor, 1)
+			announceDrawTriggers(playerColor, 1, drawStep)
 		else
 			buttonPress(button, drawDelay * nAlt)
 			buttonCooldown(button, drawDelay * nAlt)
 			Wait.time(function()
 				draw1(playerColor)
 			end, drawDelay, nAlt)
-			announceDrawTriggers(playerColor, nAlt)
+			-- an explicit multi-draw isn't the draw-for-turn
+			announceDrawTriggers(playerColor, nAlt, false)
 		end
 	else
 		warnNotYours(button, playerColor)
