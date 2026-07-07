@@ -31,7 +31,7 @@ function playerDraw(button, playerColor, alt)
 			local drawStep = lastUntapPress[playerColor] ~= nil
 				and (os.time() - lastUntapPress[playerColor]) <= skipDrawWindow
 			lastUntapPress[playerColor] = nil
-			if drawStep then
+			if drawStep and getSetting(playerColor, "drawSkipReminder") then
 				local skipper = skipDrawStepCard(playerColor)
 				if skipper ~= nil then
 					broadcastToColor(

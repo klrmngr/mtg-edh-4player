@@ -1,5 +1,6 @@
 -- Main functionality
-function onload()
+function onload(saved)
+	restoreSettings(saved)
 	buildDataStructure()
 	registerObjectGUIDs()
 	buildTableButtons()

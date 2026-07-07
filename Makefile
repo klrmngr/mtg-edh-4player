@@ -25,6 +25,7 @@ SRC = \
 	src/chat.lua \
 	src/scryfall.lua \
 	src/patchnotes.lua \
+	src/settings.lua \
 	src/json.lua
 
 main.lua: $(SRC)

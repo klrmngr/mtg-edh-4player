@@ -64,8 +64,9 @@ function announceDrawTriggers(drawerColor, count, isDrawStep)
 	local drawerList = {}
 	for _, h in ipairs(hits) do
 		-- tell the controller their trigger fired (skip if they are the drawer --
-		-- the drawer's summary below already covers it)
-		if h.color ~= drawerColor then
+		-- the drawer's summary below already covers it), unless they've muted
+		-- draw-trigger notifications in their settings
+		if h.color ~= drawerColor and getSetting(h.color, "oppDrawTriggers") then
 			broadcastToColor(
 				drawerColor .. " drew " .. drewStr .. " -- your " .. h.name .. " triggers" .. timesStr .. ".",
 				h.color,
@@ -75,5 +76,7 @@ function announceDrawTriggers(drawerColor, count, isDrawStep)
 		table.insert(drawerList, h.color .. "'s " .. h.name)
 	end
 	-- tell the drawer what they set off
-	broadcastToColor("Your draw triggers: " .. table.concat(drawerList, ", ") .. ".", drawerColor, color)
+	if getSetting(drawerColor, "oppDrawTriggers") then
+		broadcastToColor("Your draw triggers: " .. table.concat(drawerList, ", ") .. ".", drawerColor, color)
+	end
 end

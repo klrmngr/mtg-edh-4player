@@ -101,6 +101,10 @@ function onObjectRotate(object, spin, flip, player_color, old_spin, old_flip)
 	if not isBattlefieldCard(object) then
 		return
 	end
+	-- respect the tapping player's ability-restriction reminder setting
+	if not getSetting(player_color, "abilityRestrictions") then
+		return
+	end
 	local line = cardTypeLine(object)
 	if line == "" then
 		return

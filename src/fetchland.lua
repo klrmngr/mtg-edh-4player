@@ -104,6 +104,10 @@ function showFetchPreviews(zone, fetch)
 	if color == nil then
 		return
 	end
+	-- respect the owner's fetchland-preview setting
+	if not getSetting(color, "fetchPreviews") then
+		return
+	end
 	local targets = fetchLandTargets(fetch)
 	if targets == nil then
 		return
