@@ -2109,6 +2109,11 @@ function trackLandEnter(zone, obj)
 	if obj ~= nil and obj.hasTag("FetchPreview") then
 		return
 	end
+	-- a face-down card isn't a land on the battlefield (morph/manifest/face-down
+	-- drop), even though its hidden name still matches cardIsLand
+	if obj ~= nil and obj.is_face_down then
+		return
+	end
 	local color = landZoneColor(zone)
 	if color == nil or not cardIsLand(obj) then
 		return
@@ -2123,6 +2128,10 @@ end
 
 -- record a land that has actually settled in a player's land zone this turn
 function registerLandEntered(color, obj)
+	-- re-check: it may have been flipped face-down between entering and settling
+	if obj.is_face_down then
+		return
+	end
 	local guid = obj.getGUID()
 	-- ignore lands that were already in the zone when the turn began
 	if landZoneBaseline[color] and landZoneBaseline[color][guid] then
