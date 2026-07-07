@@ -1,7 +1,7 @@
 <Panel
     id="SearchTypePanel"
-    width="340"
-    height="430"
+    width="300"
+    height="370"
     rectAlignment="MiddleCenter"
     showAnimation="FadeIn"
     hideAnimation="FadeOut"
@@ -11,206 +11,189 @@
     visibility=""
     active="False"
     >
-    <VerticalLayout
-      padding="12 12 12 12"
-      spacing="10"
-      childAlignment="UpperCenter"
-      childForceExpandWidth="false"
-      childForceExpandHeight="false">
     <Text
       id="STtext"
-      fontSize="30"
+      offsetXY="0 -5"
+      fontSize="40"
       color="rgb(1,1,1)"
-      alignment="MiddleCenter"
-      minHeight="68"
-      preferredHeight="68"
-      text="Select type(s)
-to look for" />
+      text="select type(s)    to look for"
+      alignment="UpperCenter" />
 
     <InputField
       color="rgb(0.25,0.25,0.25)"
       textColor="rgb(1,1,1)"
       caretColor="rgb(1,1,1)"
       placeholder="enter custom type"
-      characterValidation="None"
+      characterValidation="Alphanumeric"
       onEndEdit="UItypeCustom"
       id="typeCustom"
-      preferredWidth="180"
-      minWidth="180"
-      preferredHeight="30"
-      minHeight="30"
+      width="140"
+      height="30"
       fontSize="15"
+      offsetXY="0 70"
+      alignment="MiddleCenter"
     />
 
-    <GridLayout
-      minWidth="308"
-      preferredWidth="308"
-      minHeight="146"
-      preferredHeight="146"
-      cellSize="150 30"
-      spacing="8 8"
-      constraint="FixedColumnCount"
-      constraintCount="2"
-      startCorner="UpperLeft"
-      startAxis="Horizontal"
-      childAlignment="MiddleCenter">
-        <ToggleButton
-          isOn="false"
-          onValueChanged="UItypeToggle"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
-          fontSize="18"
-          id="land"
-          textColor="rgb(1,1,1)"
-          alignment="MiddleCenter"
-          text="Land" />
-        <ToggleButton
-          isOn="false"
-          onValueChanged="UItypeToggle"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
-          fontSize="18"
-          id="creature"
-          textColor="rgb(1,1,1)"
-          alignment="MiddleCenter"
-          text="Creature" />
-        <ToggleButton
-          isOn="false"
-          onValueChanged="UItypeToggle"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
-          fontSize="18"
-          id="artifact"
-          textColor="rgb(1,1,1)"
-          alignment="MiddleCenter"
-          text="Artifact" />
-        <ToggleButton
-          isOn="false"
-          onValueChanged="UItypeToggle"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
-          fontSize="18"
-          id="enchantment"
-          textColor="rgb(1,1,1)"
-          alignment="MiddleCenter"
-          text="Enchantment" />
-        <ToggleButton
-          isOn="false"
-          onValueChanged="UItypeToggle"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
-          fontSize="18"
-          id="planeswalker"
-          textColor="rgb(1,1,1)"
-          alignment="MiddleCenter"
-          text="Planeswalker" />
-        <ToggleButton
-          isOn="false"
-          onValueChanged="UItypeToggle"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
-          fontSize="18"
-          id="battle"
-          textColor="rgb(1,1,1)"
-          alignment="MiddleCenter"
-          text="Battle" />
-        <ToggleButton
-          isOn="false"
-          onValueChanged="UItypeToggle"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
-          fontSize="18"
-          id="instant"
-          textColor="rgb(1,1,1)"
-          alignment="MiddleCenter"
-          text="Instant" />
-        <ToggleButton
-          isOn="false"
-          onValueChanged="UItypeToggle"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
-          fontSize="18"
-          id="sorcery"
-          textColor="rgb(1,1,1)"
-          alignment="MiddleCenter"
-          text="Sorcery" />
-    </GridLayout>
+    <ToggleButton
+      isOn="false"
+      onValueChanged="UItypeToggle"
+      colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
+      selectedBackgroundColor="rgb(0.5,0.5,0.2)"
+      deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
+      width="60"
+      height="27.5"
+      fontSize="20"
+      offsetXY="-90 37.5"
+      id="land"
+      textColor="rgb(1,1,1)"
+      alignment="MiddleCenter"
+      text="Land"
+    />
+    <ToggleButton
+      isOn="false"
+      onValueChanged="UItypeToggle"
+      colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
+      selectedBackgroundColor="rgb(0.5,0.5,0.2)"
+      deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
+      width="90"
+      height="27.5"
+      fontSize="20"
+      offsetXY="-10 37.5"
+      id="creature"
+      textColor="rgb(1,1,1)"
+      alignment="MiddleCenter"
+      text="Creature"
+    />
+    <ToggleButton
+      isOn="false"
+      onValueChanged="UItypeToggle"
+      colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
+      selectedBackgroundColor="rgb(0.5,0.5,0.2)"
+      deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
+      width="80"
+      height="27.5"
+      fontSize="20"
+      offsetXY="80 37.5"
+      id="artifact"
+      textColor="rgb(1,1,1)"
+      alignment="MiddleCenter"
+      text="Artifact"
+    />
+    <ToggleButton
+      isOn="false"
+      onValueChanged="UItypeToggle"
+      colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
+      selectedBackgroundColor="rgb(0.5,0.5,0.2)"
+      deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
+      width="130"
+      height="27.5"
+      fontSize="20"
+      offsetXY="-67.5 5"
+      id="enchantment"
+      textColor="rgb(1,1,1)"
+      alignment="MiddleCenter"
+      text="Enchantment"
+    />
+    <ToggleButton
+      isOn="false"
+      onValueChanged="UItypeToggle"
+      colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
+      selectedBackgroundColor="rgb(0.5,0.5,0.2)"
+      deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
+      width="130"
+      height="27.5"
+      fontSize="20"
+      offsetXY="67.5 5"
+      id="planeswalker"
+      textColor="rgb(1,1,1)"
+      alignment="MiddleCenter"
+      text="Planeswalker"
+    />
+    <ToggleButton
+      isOn="false"
+      onValueChanged="UItypeToggle"
+      colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
+      selectedBackgroundColor="rgb(0.5,0.5,0.2)"
+      deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
+      width="90"
+      height="27.5"
+      fontSize="20"
+      offsetXY="-47.5 -27.5"
+      id="instant"
+      textColor="rgb(1,1,1)"
+      alignment="MiddleCenter"
+      text="Instant"
+    />
+    <ToggleButton
+      isOn="false"
+      onValueChanged="UItypeToggle"
+      colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
+      selectedBackgroundColor="rgb(0.5,0.5,0.2)"
+      deselectedBackgroundColor="rgb(0.25,0.25,0.25)"
+      width="90"
+      height="27.5"
+      fontSize="20"
+      offsetXY="47.5 -27.5"
+      id="sorcery"
+      textColor="rgb(1,1,1)"
+      alignment="MiddleCenter"
+      text="Sorcery"
+    />
 
     <HorizontalLayout
-      minWidth="216"
-      preferredWidth="216"
-      minHeight="30"
-      preferredHeight="30"
-      spacing="8"
-      childAlignment="MiddleCenter"
-      childForceExpandWidth="false">
-        <Text fontSize="20" color="rgb(1,1,1)" minWidth="78" preferredWidth="78">repeat</Text>
+      width="165"
+      height="30"
+      spacing="-15"
+      offsetXY="-5 -70"
+      alignment="LowerCenter"
+      childAlignment="MiddleCenter">
+        <Text fontSize="20" color="rgb(1,1,1)">repeat</Text>
         <InputField
           id="repeatX"
           color="rgb(0.3,0.3,0.3)"
-          textOffset="0 0 0 0"
-          textAlignment="MiddleCenter"
+          textOffset="8 8 5 0"
           textColor="rgb(1,1,1)"
           caretColor="rgb(1,1,1)"
           characterValidation="Integer"
           onEndEdit="UIrepeatSearchType"
           placeholder="X"
-          minWidth="44"
-          preferredWidth="44"
-          flexibleWidth="0"
           tooltip="enter number to repeat the search procedure that many times"
           tooltipPosition="Below"
           tooltipBorderColor="rgba(0,0,0,0)"
           fontSize="20"/>
-        <Text fontSize="20" color="rgb(1,1,1)" minWidth="62" preferredWidth="62">times</Text>
+        <Text fontSize="20" color="rgb(1,1,1)">times</Text>
     </HorizontalLayout>
 
-    <HorizontalLayout
-      minHeight="80"
-      preferredHeight="80"
-      spacing="20"
-      childAlignment="MiddleCenter"
-      childForceExpandWidth="false">
-        <Button
-          onClick="STcancel"
-          text="✗"
-          minWidth="80"
-          preferredWidth="80"
-          minHeight="80"
-          preferredHeight="80"
-          fontSize="60"
-          textColor="rgb(1,0,0)"
-          textAlignment="MiddleCenter"
-          colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)"
-        />
-        <Button
-          onClick="STokay"
-          text="✓"
-          minWidth="80"
-          preferredWidth="80"
-          minHeight="80"
-          preferredHeight="80"
-          fontSize="60"
-          textColor="rgb(0,0.6,0)"
-          textAlignment="MiddleCenter"
-          colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)"
-        />
-    </HorizontalLayout>
-    </VerticalLayout>
+    <Button
+      onClick="STokay"
+      offsetXY="50 10"
+      text="✓"
+      rectAlignment="LowerCenter"
+      width="80"
+      height="80"
+      fontSize="60"
+      textColor="rgb(0,0.6,0)"
+      textAlignment="MiddleCenter"
+      colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)"
+    />
+    <Button
+      onClick="STcancel"
+      offsetXY="-50 10"
+      text="✗"
+      rectAlignment="LowerCenter"
+      width="80"
+      height="80"
+      fontSize="60"
+      textColor="rgb(1,0,0)"
+      textAlignment="MiddleCenter"
+      colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)"
+    />
 </Panel>
 
 <Panel
     id="GetValuePanel"
-    width="340"
-    height="340"
+    width="300"
+    height="330"
     rectAlignment="MiddleCenter"
     showAnimation="FadeIn"
     hideAnimation="FadeOut"
@@ -220,29 +203,22 @@ to look for" />
     visibility=""
     active="False"
     >
-    <VerticalLayout
-      padding="12 12 12 12"
-      spacing="14"
-      childAlignment="UpperCenter"
-      childForceExpandWidth="false"
-      childForceExpandHeight="false">
     <Text
       id="CMtext"
-      fontSize="30"
+      offsetXY="0 -10"
+      fontSize="40"
       color="rgb(1,1,1)"
-      alignment="MiddleCenter"
-      minHeight="68"
-      preferredHeight="68"
-      text="Enter amount
-to scry for" />
+      text="enter amount
+            to scry for"
+      alignment="UpperCenter" />
     <InputField
       id="CMinput"
+      alignment="MiddleCenter"
       maxLength="2"
-      preferredWidth="200"
-      minWidth="200"
-      preferredHeight="80"
-      minHeight="80"
-      fontSize="48"
+      offsetXY="0 15"
+      width="150"
+      height="80"
+      fontSize="60"
       textAlignment="MiddleCenter"
       characterValidation="Integer"
       placeholder="here"
@@ -252,66 +228,53 @@ to scry for" />
     />
 
     <HorizontalLayout
-      minWidth="216"
-      preferredWidth="216"
-      minHeight="30"
-      preferredHeight="30"
-      spacing="8"
-      childAlignment="MiddleCenter"
-      childForceExpandWidth="false">
-        <Text fontSize="20" color="rgb(1,1,1)" minWidth="78" preferredWidth="78">repeat</Text>
+      width="165"
+      height="30"
+      spacing="-15"
+      offsetXY="-5 -50"
+      alignment="LowerCenter"
+      childAlignment="MiddleCenter">
+        <Text fontSize="20" color="rgb(1,1,1)">repeat</Text>
         <InputField
           id="repeatCascadeX"
           color="rgb(0.3,0.3,0.3)"
-          textOffset="0 0 0 0"
-          textAlignment="MiddleCenter"
+          textOffset="8 8 5 0"
           textColor="rgb(1,1,1)"
           caretColor="rgb(1,1,1)"
           characterValidation="Integer"
           onEndEdit="UIrepeatCascade"
           placeholder="X"
-          minWidth="44"
-          preferredWidth="44"
-          flexibleWidth="0"
           tooltip="enter number to repeat the search procedure that many times"
           tooltipPosition="Below"
           tooltipBorderColor="rgba(0,0,0,0)"
           fontSize="20"/>
-        <Text fontSize="20" color="rgb(1,1,1)" minWidth="62" preferredWidth="62">times</Text>
+        <Text fontSize="20" color="rgb(1,1,1)">times</Text>
     </HorizontalLayout>
 
-    <HorizontalLayout
-      minHeight="80"
-      preferredHeight="80"
-      spacing="20"
-      childAlignment="MiddleCenter"
-      childForceExpandWidth="false">
-        <Button
-          onClick="CMcancel"
-          text="✗"
-          minWidth="80"
-          preferredWidth="80"
-          minHeight="80"
-          preferredHeight="80"
-          fontSize="60"
-          textColor="rgb(1,0,0)"
-          textAlignment="MiddleCenter"
-          colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)"
-        />
-        <Button
-          onClick="CMokay"
-          text="✓"
-          minWidth="80"
-          preferredWidth="80"
-          minHeight="80"
-          preferredHeight="80"
-          fontSize="60"
-          textColor="rgb(0,0.6,0)"
-          textAlignment="MiddleCenter"
-          colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)"
-        />
-    </HorizontalLayout>
-    </VerticalLayout>
+    <Button
+      onClick="CMokay"
+      offsetXY="50 10"
+      text="✓"
+      rectAlignment="LowerCenter"
+      width="80"
+      height="80"
+      fontSize="60"
+      textColor="rgb(0,0.6,0)"
+      textAlignment="MiddleCenter"
+      colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)"
+    />
+    <Button
+      onClick="CMcancel"
+      offsetXY="-50 10"
+      text="✗"
+      rectAlignment="LowerCenter"
+      width="80"
+      height="80"
+      fontSize="60"
+      textColor="rgb(1,0,0)"
+      textAlignment="MiddleCenter"
+      colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)"
+    />
 </Panel>
 
 <!-- Scryfall search bar -->
