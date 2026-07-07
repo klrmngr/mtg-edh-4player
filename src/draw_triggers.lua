@@ -17,9 +17,17 @@ drawTriggerPhrases = {
 	{ text = "whenever a player draws a card", selfCounts = true },
 }
 
+-- some triggers exempt the first draw of each draw step (Orcish Bowmasters:
+-- "...except the first one they draw in each of their draw steps"). Recognised
+-- generically so the draw-for-turn doesn't set them off.
+function drawTriggerExemptsDrawStep(desc)
+	return desc:find("except the first", 1, true) ~= nil and desc:find("draw step", 1, true) ~= nil
+end
+
 -- list of { color, name } for every face-up permanent that triggers off a draw
--- by drawerColor
-function opponentDrawTriggers(drawerColor)
+-- by drawerColor. isDrawStep marks the drawer's first draw of their draw step
+-- (the draw-for-turn), which cards like Orcish Bowmasters explicitly ignore.
+function opponentDrawTriggers(drawerColor, isDrawStep)
 	local hits = {}
 	for color, _ in pairs(data) do
 		local mat = data[color]["playmat"]
@@ -29,7 +37,10 @@ function opponentDrawTriggers(drawerColor)
 					local desc = (obj.getDescription() or ""):lower()
 					for _, phrase in ipairs(drawTriggerPhrases) do
 						if desc:find(phrase.text, 1, true) and (color ~= drawerColor or phrase.selfCounts) then
-							table.insert(hits, { color = color, name = mainCardName(obj.getName()) })
+							-- skip Bowmasters-style triggers on the drawer's draw-step draw
+							if not (isDrawStep and drawTriggerExemptsDrawStep(desc)) then
+								table.insert(hits, { color = color, name = mainCardName(obj.getName()) })
+							end
 							break -- one entry per card, even if it matches twice
 						end
 					end
@@ -42,8 +53,8 @@ end
 
 -- after drawerColor draws `count` card(s) with the draw button, remind every
 -- triggered controller and the drawer
-function announceDrawTriggers(drawerColor, count)
-	local hits = opponentDrawTriggers(drawerColor)
+function announceDrawTriggers(drawerColor, count, isDrawStep)
+	local hits = opponentDrawTriggers(drawerColor, isDrawStep)
 	if #hits == 0 then
 		return
 	end
