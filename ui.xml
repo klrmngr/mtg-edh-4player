@@ -448,3 +448,57 @@
         </HorizontalLayout>
     </VerticalLayout>
 </Panel>
+
+<!-- HOST SETTINGS -->
+<!-- host-only gear (gold), sits left of the per-player gear -->
+<Button id="hostGear" onClick="openHostSettings" text="&#9881;"
+    rectAlignment="LowerRight" offsetXY="-113 6" width="46" height="46" fontSize="28"
+    color="rgba(0.1,0.1,0.1,0.85)" textColor="#e0a030"
+    tooltip="Host settings (host only)" tooltipPosition="Left" tooltipBorderColor="rgba(0,0,0,0)" />
+
+<Panel id="HostSettingsPanel" width="430" height="352" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#e0a030" outlineSize="2 -2" visibility="" active="False">
+    <VerticalLayout padding="16 16 14 16" spacing="8" childForceExpandWidth="true" childForceExpandHeight="false">
+        <Panel preferredHeight="38" minHeight="38" flexibleHeight="0">
+            <Text fontSize="24" fontStyle="Bold" color="#e0a030" alignment="MiddleCenter" text="Host Settings" />
+            <Button rectAlignment="UpperRight" width="30" height="30" color="#990000" textColor="#FFFFFF" text="X" fontSize="18" onClick="closeHostSettings" />
+        </Panel>
+        <Text fontSize="12" color="#9aa0a8" alignment="MiddleCenter" preferredHeight="16" minHeight="16" text="Enforce forces a setting on all players and locks their toggle." />
+
+        <HorizontalLayout preferredHeight="20" minHeight="20" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
+            <Text fontSize="12" fontStyle="Bold" color="#6fa0d8" alignment="MiddleCenter" minWidth="52" preferredWidth="52" flexibleWidth="0" text="ENF" />
+            <Text fontSize="12" fontStyle="Bold" color="#6fa0d8" alignment="MiddleCenter" minWidth="42" preferredWidth="42" flexibleWidth="0" text="ON" />
+            <Text fontSize="12" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" flexibleWidth="1" text="SETTING" />
+        </HorizontalLayout>
+
+        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
+            <Toggle id="hostEnf_oppDrawTriggers" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
+            <Toggle id="hostVal_oppDrawTriggers" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
+            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Opponent-draw trigger alerts" />
+        </HorizontalLayout>
+        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
+            <Toggle id="hostEnf_drawSkipReminder" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
+            <Toggle id="hostVal_drawSkipReminder" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
+            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Draw-step skip reminder" />
+        </HorizontalLayout>
+        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
+            <Toggle id="hostEnf_abilityRestrictions" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
+            <Toggle id="hostVal_abilityRestrictions" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
+            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Can't-activate-ability reminder" />
+        </HorizontalLayout>
+        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
+            <Toggle id="hostEnf_searchRestrictions" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
+            <Toggle id="hostVal_searchRestrictions" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
+            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Tutor/search restriction" />
+        </HorizontalLayout>
+        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
+            <Toggle id="hostEnf_landTracker" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
+            <Toggle id="hostVal_landTracker" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
+            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Land-entered tracker" />
+        </HorizontalLayout>
+        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
+            <Toggle id="hostEnf_fetchPreviews" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
+            <Toggle id="hostVal_fetchPreviews" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
+            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Fetchland previews" />
+        </HorizontalLayout>
+    </VerticalLayout>
+</Panel>
