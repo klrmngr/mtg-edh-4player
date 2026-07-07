@@ -378,7 +378,7 @@ function resolveFetch(info)
 	-- 1. lose 1 life, but only if the fetchland actually says "pay 1 life"
 	-- (some lands -- Evolving Wilds, panoramas, etc. -- fetch for free)
 	if fetch ~= nil and (fetch.getDescription() or ""):lower():find("pay 1 life") then
-		loseLife(color, 1)
+		loseLife(color, 1, mainCardName(fetch.getName()))
 	end
 
 	-- decide whether the fetchland forces the land in tapped, while the fetchland
@@ -456,8 +456,11 @@ function resolveFetch(info)
 	clearFetchPreviews(info.fetchGuid)
 end
 
--- subtract n life from a player's Life_Tracker and update its display
-function loseLife(color, n)
+-- subtract n life from a player's Life_Tracker and update its display, then
+-- announce it in the same format the Life_Tracker uses for manual changes
+-- ("<Color> lost N life |total|"), so scripted life loss reads identically. When
+-- a source is given it's named too ("<Color> lost N life from <source> |total|").
+function loseLife(color, n, source)
 	local tracker = data[color] and data[color]["lifeTracker"]
 	if tracker == nil then
 		return
@@ -467,6 +470,20 @@ function loseLife(color, n)
 	tracker.setVar("count", count)
 	tracker.editButton({ index = 0, label = tostring(count) })
 	tracker.call("updateSave")
+	if n ~= 0 then
+		local verb, amt = "lost", n
+		if n < 0 then
+			verb, amt = "gained", -n
+		end
+		local from = ""
+		if source ~= nil and source ~= "" then
+			from = " from " .. source
+		end
+		printToAll(
+			color .. "[999999] " .. verb .. " " .. amt .. " life" .. from .. " [-]|" .. count .. "|",
+			stringColorToRGB(color)
+		)
+	end
 end
 
 -- event hooks (called from onObjectEnterZone / onObjectLeaveZone)

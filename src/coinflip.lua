@@ -159,7 +159,7 @@ function playerCoinFlip(obj, clickerColor, alt)
 	if math.random(2) == 1 then
 		broadcastToAll(ownerColor .. " flips a coin: Heads", stringColorToRGB(ownerColor))
 	else
-		loseLife(ownerColor, 1) -- tails: the flipper loses 1 life
+		loseLife(ownerColor, 1, "coin flip") -- tails: the flipper loses 1 life
 		broadcastToAll(ownerColor .. " flips a coin: Tails (-1 life)", stringColorToRGB(ownerColor))
 	end
 end
