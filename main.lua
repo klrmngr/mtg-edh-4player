@@ -1318,7 +1318,7 @@ function refreshEtaliButton(color)
 		return
 	end
 	removeCommandZoneButton(color, "playerEtali")
-	if commandZoneHasCommander(color, ETALI_COMMANDER_NAME) then
+	if getSetting(color, "commanderQOL") and commandZoneHasCommander(color, ETALI_COMMANDER_NAME) then
 		addCommandZoneButton(color, {
 			click_function = "playerEtali",
 			label = "Etali Trigger",
@@ -1512,7 +1512,7 @@ function refreshRalButton(color)
 	for _, def in ipairs(ralCounterDefs) do
 		removeCommandZoneButton(color, def.click_function)
 	end
-	if not commandZoneHasCommander(color, RAL_COMMANDER_NAME) then
+	if not getSetting(color, "commanderQOL") or not commandZoneHasCommander(color, RAL_COMMANDER_NAME) then
 		return
 	end
 	ralCounts[color] = { storm = 0, spells = 0 }
@@ -5912,6 +5912,7 @@ settingsDefaults = {
 	searchRestrictions = true, -- block fetchland resolution when a tutor/search-hate card is in play
 	landTracker = true,      -- track / show lands entered this turn on this player's mat
 	fetchPreviews = true,    -- float library-land previews above this player's fetchlands
+	commanderQOL = true,     -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
 	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
 }
 
@@ -5923,6 +5924,7 @@ settingsToggleIds = {
 	setSearchRestrictions = "searchRestrictions",
 	setLandTracker = "landTracker",
 	setFetchPreviews = "fetchPreviews",
+	setCommanderQOL = "commanderQOL",
 }
 
 -- colour -> { key = value }
@@ -5941,6 +5943,7 @@ enforceableKeys = {
 	"searchRestrictions",
 	"landTracker",
 	"fetchPreviews",
+	"commanderQOL",
 }
 
 -- key -> { enforced = bool, value = bool }

@@ -19,6 +19,7 @@ settingsDefaults = {
 	searchRestrictions = true, -- block fetchland resolution when a tutor/search-hate card is in play
 	landTracker = true,      -- track / show lands entered this turn on this player's mat
 	fetchPreviews = true,    -- float library-land previews above this player's fetchlands
+	commanderQOL = true,     -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
 	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
 }
 
@@ -30,6 +31,7 @@ settingsToggleIds = {
 	setSearchRestrictions = "searchRestrictions",
 	setLandTracker = "landTracker",
 	setFetchPreviews = "fetchPreviews",
+	setCommanderQOL = "commanderQOL",
 }
 
 -- colour -> { key = value }
@@ -48,6 +50,7 @@ enforceableKeys = {
 	"searchRestrictions",
 	"landTracker",
 	"fetchPreviews",
+	"commanderQOL",
 }
 
 -- key -> { enforced = bool, value = bool }
