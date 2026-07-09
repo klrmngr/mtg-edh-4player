@@ -1,9 +1,9 @@
 {
-  "SaveName": "MTG EDH 4-player (X) v0.1.6 wip",
-  "EpochTime": 1782539431,
-  "Date": "6/27/2026 12:50:31 AM",
+  "SaveName": "split me",
+  "EpochTime": 1783614888,
+  "Date": "7/9/2026 11:34:48 AM",
   "VersionNumber": "v14.2.1",
-  "GameMode": "MTG EDH 4-player (π)",
+  "GameMode": "MTG EDH 4-player (χ)",
   "GameType": "Game",
   "GameComplexity": "Low Complexity",
   "PlayingTime": [
@@ -277,7 +277,7 @@
   ],
   "DecalPallet": [],
   "LuaScript": "",
-  "LuaScriptState": "",
+  "LuaScriptState": "{\"enforcedSettings\":{\"abilityRestrictions\":{\"enforced\":false,\"value\":false},\"commanderQOL\":{\"enforced\":false,\"value\":false},\"drawSkipReminder\":{\"enforced\":false,\"value\":false},\"fetchPreviews\":{\"enforced\":false,\"value\":false},\"landTracker\":{\"enforced\":false,\"value\":false},\"oppDrawTriggers\":{\"enforced\":false,\"value\":false},\"searchRestrictions\":{\"enforced\":false,\"value\":false}},\"playerSettings\":{\"Blue\":{\"abilityRestrictions\":false,\"commanderQOL\":true,\"drawSkipReminder\":true,\"fetchPreviews\":true,\"landTracker\":true,\"oppDrawTriggers\":false,\"revealResetSecs\":30,\"searchRestrictions\":true},\"Red\":{\"abilityRestrictions\":false,\"commanderQOL\":true,\"drawSkipReminder\":true,\"fetchPreviews\":true,\"landTracker\":true,\"oppDrawTriggers\":false,\"revealResetSecs\":30,\"searchRestrictions\":true},\"White\":{\"abilityRestrictions\":false,\"commanderQOL\":true,\"drawSkipReminder\":true,\"fetchPreviews\":true,\"landTracker\":true,\"oppDrawTriggers\":false,\"revealResetSecs\":30,\"searchRestrictions\":true},\"Yellow\":{\"abilityRestrictions\":false,\"commanderQOL\":true,\"drawSkipReminder\":true,\"fetchPreviews\":true,\"landTracker\":true,\"oppDrawTriggers\":false,\"revealResetSecs\":30,\"searchRestrictions\":true}}}",
   "XmlUI": "",
   "CustomUIAssets": [
     {
@@ -440,7 +440,7 @@
       "Rotation": {
         "x": 9.487078e-07,
         "y": 179.989426,
-        "z": 7.6191634e-07
+        "z": 7.619164e-07
       }
     },
     {
