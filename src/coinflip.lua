@@ -64,7 +64,7 @@ function refreshRalButton(color)
 	for _, def in ipairs(ralCounterDefs) do
 		removeCommandZoneButton(color, def.click_function)
 	end
-	if not commandZoneHasCommander(color, RAL_COMMANDER_NAME) then
+	if not getSetting(color, "commanderQOL") or not commandZoneHasCommander(color, RAL_COMMANDER_NAME) then
 		return
 	end
 	ralCounts[color] = { storm = 0, spells = 0 }

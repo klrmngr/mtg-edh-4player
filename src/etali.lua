@@ -20,7 +20,7 @@ function refreshEtaliButton(color)
 		return
 	end
 	removeCommandZoneButton(color, "playerEtali")
-	if commandZoneHasCommander(color, ETALI_COMMANDER_NAME) then
+	if getSetting(color, "commanderQOL") and commandZoneHasCommander(color, ETALI_COMMANDER_NAME) then
 		addCommandZoneButton(color, {
 			click_function = "playerEtali",
 			label = "Etali Trigger",
