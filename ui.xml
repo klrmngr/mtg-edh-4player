@@ -414,7 +414,7 @@
     color="rgba(0.1,0.1,0.1,0.85)" textColor="#FFFFFF"
     tooltip="Player settings" tooltipPosition="Left" tooltipBorderColor="rgba(0,0,0,0)" />
 
-<Panel id="SettingsPanel" width="380" height="660" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
+<Panel id="SettingsPanel" width="380" height="716" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
     <VerticalLayout padding="16 16 16 16" spacing="12" childForceExpandWidth="true" childForceExpandHeight="false">
         <Panel preferredHeight="40" minHeight="40" flexibleHeight="0">
             <Text fontSize="26" fontStyle="Bold" color="rgb(1,1,1)" alignment="MiddleCenter" text="Player Settings" />
@@ -441,6 +441,10 @@
         <Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" preferredHeight="20" minHeight="20" flexibleHeight="0" text="DISPLAY" />
         <Toggle id="setLandTracker" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="30" minHeight="30">Land-entered tracker</Toggle>
         <Toggle id="setFetchPreviews" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="30" minHeight="30">Fetchland previews</Toggle>
+        <VerticalLayout spacing="0" preferredHeight="44" minHeight="44" flexibleHeight="0" childForceExpandHeight="false">
+            <Toggle id="setFetchFromClone" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Show all possible fetchables</Toggle>
+            <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="reads game-start deck; no hidden-removal leak" />
+        </VerticalLayout>
 
         <Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" preferredHeight="20" minHeight="20" flexibleHeight="0" text="COMMANDER" />
         <VerticalLayout spacing="0" preferredHeight="44" minHeight="44" flexibleHeight="0" childForceExpandHeight="false">
@@ -462,7 +466,7 @@
     color="rgba(0.1,0.1,0.1,0.85)" textColor="#e0a030"
     tooltip="Host settings (host only)" tooltipPosition="Left" tooltipBorderColor="rgba(0,0,0,0)" />
 
-<Panel id="HostSettingsPanel" width="430" height="388" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#e0a030" outlineSize="2 -2" visibility="" active="False">
+<Panel id="HostSettingsPanel" width="430" height="424" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#e0a030" outlineSize="2 -2" visibility="" active="False">
     <VerticalLayout padding="16 16 14 16" spacing="8" childForceExpandWidth="true" childForceExpandHeight="false">
         <Panel preferredHeight="38" minHeight="38" flexibleHeight="0">
             <Text fontSize="24" fontStyle="Bold" color="#e0a030" alignment="MiddleCenter" text="Host Settings" />
@@ -505,6 +509,11 @@
             <Toggle id="hostEnf_fetchPreviews" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
             <Toggle id="hostVal_fetchPreviews" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
             <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Fetchland previews" />
+        </HorizontalLayout>
+        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
+            <Toggle id="hostEnf_fetchFromClone" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
+            <Toggle id="hostVal_fetchFromClone" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
+            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Show all possible fetchables" />
         </HorizontalLayout>
         <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
             <Toggle id="hostEnf_commanderQOL" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />

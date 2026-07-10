@@ -19,6 +19,9 @@ settingsDefaults = {
 	searchRestrictions = true, -- block fetchland resolution when a tutor/search-hate card is in play
 	landTracker = true,      -- track / show lands entered this turn on this player's mat
 	fetchPreviews = true,    -- float library-land previews above this player's fetchlands
+	fetchFromClone = false,  -- read those previews from the game-start deck clone instead of
+	                         -- the live library, so an opponent's hidden removal (Praetor's
+	                         -- Grasp, etc.) can't leak which land left. Off = live library.
 	commanderQOL = true,     -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
 	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
 }
@@ -31,6 +34,7 @@ settingsToggleIds = {
 	setSearchRestrictions = "searchRestrictions",
 	setLandTracker = "landTracker",
 	setFetchPreviews = "fetchPreviews",
+	setFetchFromClone = "fetchFromClone",
 	setCommanderQOL = "commanderQOL",
 }
 
@@ -50,6 +54,7 @@ enforceableKeys = {
 	"searchRestrictions",
 	"landTracker",
 	"fetchPreviews",
+	"fetchFromClone",
 	"commanderQOL",
 }
 
@@ -193,9 +198,12 @@ function settingsToggle(player, value, id)
 	local on = (value == "True" or value == true)
 	playerSettings[player.color][key] = on
 	UI.setAttribute(id, "isOn", on and "True" or "False")
-	-- the land tracker display is passive, so refresh it the moment it's toggled
+	-- the land tracker + fetch previews are passive, so refresh them the moment they
+	-- are toggled (fetchFromClone changes the preview source, so refresh it too)
 	if key == "landTracker" then
 		refreshLandTrackerText(player.color)
+	elseif key == "fetchPreviews" or key == "fetchFromClone" then
+		refreshFetchPreviewsForColor(player.color)
 	end
 end
 
@@ -247,6 +255,8 @@ function hostToggleEnforced(player, value, id)
 	applyEnforcementToPlayerPanel(nil)
 	if key == "landTracker" then
 		refreshAllLandTrackers()
+	elseif key == "fetchPreviews" or key == "fetchFromClone" then
+		refreshAllFetchPreviews()
 	end
 end
 
@@ -264,6 +274,8 @@ function hostToggleValue(player, value, id)
 	applyEnforcementToPlayerPanel(nil)
 	if key == "landTracker" then
 		refreshAllLandTrackers()
+	elseif key == "fetchPreviews" or key == "fetchFromClone" then
+		refreshAllFetchPreviews()
 	end
 end
 

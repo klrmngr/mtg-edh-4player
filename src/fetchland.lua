@@ -118,11 +118,26 @@ function showFetchPreviews(zone, fetch)
 		return
 	end
 
-	local deck = getDeckFromZone(data[color]["libraryZone"])
-	if deck == nil then
-		return
+	-- source the matching lands from either the live library (default -- accurate,
+	-- but an opponent's hidden removal would leak which land left) or the frozen
+	-- game-start deck clone (fetchFromClone -- immune to hidden removals, at the
+	-- cost of not reflecting cards legitimately drawn/fetched since game start).
+	-- resolveFetch always searches the live library, so a stale clone entry just
+	-- no-ops on click.
+	local contained
+	if getSetting(color, "fetchFromClone") then
+		local snap = data[color]["resetSnapshot"]
+		if snap == nil or snap.deckData == nil then
+			return -- no game-start clone yet (opening hand not drawn); nothing to show
+		end
+		contained = snap.deckData.ContainedObjects or {}
+	else
+		local deck = getDeckFromZone(data[color]["libraryZone"])
+		if deck == nil then
+			return
+		end
+		contained = deck.getData().ContainedObjects or {}
 	end
-	local contained = deck.getData().ContainedObjects or {}
 	local matches = {}
 	local seen = {} -- dedupe identical lands and skip blank / face-down (nameless) cards
 	for _, cardData in ipairs(contained) do
@@ -610,6 +625,30 @@ function fetchlandRotate(obj, spin, old_spin)
 			end
 			return
 		end
+	end
+end
+
+-- rebuild every fetchland preview for one player. Used when a setting that
+-- affects previews is toggled (fetchPreviews on/off, or fetchFromClone switching
+-- the source): clear first so turning previews off actually removes them, then
+-- re-show (a no-op while fetchPreviews is off).
+function refreshFetchPreviewsForColor(color)
+	local zone = data[color] and data[color]["landZone"]
+	if zone == nil then
+		return
+	end
+	for _, obj in ipairs(zone.getObjects()) do
+		if not obj.hasTag("FetchPreview") and fetchLandTargets(obj) ~= nil then
+			clearFetchPreviews(obj.getGUID())
+			showFetchPreviews(zone, obj)
+		end
+	end
+end
+
+-- same, for every player (used when the host enforces a preview-related setting)
+function refreshAllFetchPreviews()
+	for color, _ in pairs(data) do
+		refreshFetchPreviewsForColor(color)
 	end
 end
 

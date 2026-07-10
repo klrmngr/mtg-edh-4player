@@ -13,22 +13,36 @@
 
 resetDoubleClickSecs = 0.5
 -- take the game-start snapshot for a player. Called from bumpMulliganCount on
--- each fresh opening hand (count at 0), while the library is still complete.
--- Without force, an existing snapshot is kept; force overwrites it so a new game
--- after a mulligan-count reset re-snapshots the (possibly different) library.
+-- each fresh opening hand (count at 0), while the library is still complete. This
+-- clone is the single source of truth for both the board reset and the
+-- clone-sourced fetch previews (see fetchland.lua).
+--
+-- Without force, an existing snapshot is kept. Even with force we refuse to
+-- overwrite a fuller clone with a smaller (mid-game / degraded) library: a fresh
+-- opening hand drawn after cards have been deleted must NOT replace the complete
+-- game-start deck, or a later reset would restore an incomplete deck. A genuinely
+-- new game restores every card to the library first, so its count matches (or
+-- exceeds) the old clone and overwrites as expected.
 function captureResetSnapshot(color, force)
 	if data[color] == nil then
 		return
 	end
-	if data[color]["resetSnapshot"] ~= nil and not force then
+	local existing = data[color]["resetSnapshot"]
+	if existing ~= nil and not force then
 		return
 	end
-	local snap = { commanders = {} }
 	-- the full library deck, before the opening hand is drawn
 	local deck = getDeckFromZone(data[color]["libraryZone"])
-	if deck ~= nil then
-		snap.deckData = deck.getData()
+	if deck == nil then
+		return -- no deck to clone right now; keep any existing snapshot
 	end
+	local deckData = deck.getData()
+	local deckCount = deckData.ContainedObjects and #deckData.ContainedObjects or 0
+	-- don't degrade a good clone with a smaller library (deleted cards mid-game)
+	if existing ~= nil and existing.deckCount ~= nil and deckCount < existing.deckCount then
+		return
+	end
+	local snap = { commanders = {}, deckData = deckData, deckCount = deckCount }
 	-- whatever is sitting in the command zone (commander, partner, ...)
 	local cz = data[color]["commandZone"]
 	if cz ~= nil then

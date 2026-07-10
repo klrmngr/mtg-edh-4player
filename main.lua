@@ -1002,22 +1002,36 @@ end
 
 resetDoubleClickSecs = 0.5
 -- take the game-start snapshot for a player. Called from bumpMulliganCount on
--- each fresh opening hand (count at 0), while the library is still complete.
--- Without force, an existing snapshot is kept; force overwrites it so a new game
--- after a mulligan-count reset re-snapshots the (possibly different) library.
+-- each fresh opening hand (count at 0), while the library is still complete. This
+-- clone is the single source of truth for both the board reset and the
+-- clone-sourced fetch previews (see fetchland.lua).
+--
+-- Without force, an existing snapshot is kept. Even with force we refuse to
+-- overwrite a fuller clone with a smaller (mid-game / degraded) library: a fresh
+-- opening hand drawn after cards have been deleted must NOT replace the complete
+-- game-start deck, or a later reset would restore an incomplete deck. A genuinely
+-- new game restores every card to the library first, so its count matches (or
+-- exceeds) the old clone and overwrites as expected.
 function captureResetSnapshot(color, force)
 	if data[color] == nil then
 		return
 	end
-	if data[color]["resetSnapshot"] ~= nil and not force then
+	local existing = data[color]["resetSnapshot"]
+	if existing ~= nil and not force then
 		return
 	end
-	local snap = { commanders = {} }
 	-- the full library deck, before the opening hand is drawn
 	local deck = getDeckFromZone(data[color]["libraryZone"])
-	if deck ~= nil then
-		snap.deckData = deck.getData()
+	if deck == nil then
+		return -- no deck to clone right now; keep any existing snapshot
 	end
+	local deckData = deck.getData()
+	local deckCount = deckData.ContainedObjects and #deckData.ContainedObjects or 0
+	-- don't degrade a good clone with a smaller library (deleted cards mid-game)
+	if existing ~= nil and existing.deckCount ~= nil and deckCount < existing.deckCount then
+		return
+	end
+	local snap = { commanders = {}, deckData = deckData, deckCount = deckCount }
 	-- whatever is sitting in the command zone (commander, partner, ...)
 	local cz = data[color]["commandZone"]
 	if cz ~= nil then
@@ -2440,11 +2454,26 @@ function showFetchPreviews(zone, fetch)
 		return
 	end
 
-	local deck = getDeckFromZone(data[color]["libraryZone"])
-	if deck == nil then
-		return
+	-- source the matching lands from either the live library (default -- accurate,
+	-- but an opponent's hidden removal would leak which land left) or the frozen
+	-- game-start deck clone (fetchFromClone -- immune to hidden removals, at the
+	-- cost of not reflecting cards legitimately drawn/fetched since game start).
+	-- resolveFetch always searches the live library, so a stale clone entry just
+	-- no-ops on click.
+	local contained
+	if getSetting(color, "fetchFromClone") then
+		local snap = data[color]["resetSnapshot"]
+		if snap == nil or snap.deckData == nil then
+			return -- no game-start clone yet (opening hand not drawn); nothing to show
+		end
+		contained = snap.deckData.ContainedObjects or {}
+	else
+		local deck = getDeckFromZone(data[color]["libraryZone"])
+		if deck == nil then
+			return
+		end
+		contained = deck.getData().ContainedObjects or {}
 	end
-	local contained = deck.getData().ContainedObjects or {}
 	local matches = {}
 	local seen = {} -- dedupe identical lands and skip blank / face-down (nameless) cards
 	for _, cardData in ipairs(contained) do
@@ -2932,6 +2961,30 @@ function fetchlandRotate(obj, spin, old_spin)
 			end
 			return
 		end
+	end
+end
+
+-- rebuild every fetchland preview for one player. Used when a setting that
+-- affects previews is toggled (fetchPreviews on/off, or fetchFromClone switching
+-- the source): clear first so turning previews off actually removes them, then
+-- re-show (a no-op while fetchPreviews is off).
+function refreshFetchPreviewsForColor(color)
+	local zone = data[color] and data[color]["landZone"]
+	if zone == nil then
+		return
+	end
+	for _, obj in ipairs(zone.getObjects()) do
+		if not obj.hasTag("FetchPreview") and fetchLandTargets(obj) ~= nil then
+			clearFetchPreviews(obj.getGUID())
+			showFetchPreviews(zone, obj)
+		end
+	end
+end
+
+-- same, for every player (used when the host enforces a preview-related setting)
+function refreshAllFetchPreviews()
+	for color, _ in pairs(data) do
+		refreshFetchPreviewsForColor(color)
 	end
 end
 
@@ -5912,6 +5965,9 @@ settingsDefaults = {
 	searchRestrictions = true, -- block fetchland resolution when a tutor/search-hate card is in play
 	landTracker = true,      -- track / show lands entered this turn on this player's mat
 	fetchPreviews = true,    -- float library-land previews above this player's fetchlands
+	fetchFromClone = false,  -- read those previews from the game-start deck clone instead of
+	                         -- the live library, so an opponent's hidden removal (Praetor's
+	                         -- Grasp, etc.) can't leak which land left. Off = live library.
 	commanderQOL = true,     -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
 	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
 }
@@ -5924,6 +5980,7 @@ settingsToggleIds = {
 	setSearchRestrictions = "searchRestrictions",
 	setLandTracker = "landTracker",
 	setFetchPreviews = "fetchPreviews",
+	setFetchFromClone = "fetchFromClone",
 	setCommanderQOL = "commanderQOL",
 }
 
@@ -5943,6 +6000,7 @@ enforceableKeys = {
 	"searchRestrictions",
 	"landTracker",
 	"fetchPreviews",
+	"fetchFromClone",
 	"commanderQOL",
 }
 
@@ -6086,9 +6144,12 @@ function settingsToggle(player, value, id)
 	local on = (value == "True" or value == true)
 	playerSettings[player.color][key] = on
 	UI.setAttribute(id, "isOn", on and "True" or "False")
-	-- the land tracker display is passive, so refresh it the moment it's toggled
+	-- the land tracker + fetch previews are passive, so refresh them the moment they
+	-- are toggled (fetchFromClone changes the preview source, so refresh it too)
 	if key == "landTracker" then
 		refreshLandTrackerText(player.color)
+	elseif key == "fetchPreviews" or key == "fetchFromClone" then
+		refreshFetchPreviewsForColor(player.color)
 	end
 end
 
@@ -6140,6 +6201,8 @@ function hostToggleEnforced(player, value, id)
 	applyEnforcementToPlayerPanel(nil)
 	if key == "landTracker" then
 		refreshAllLandTrackers()
+	elseif key == "fetchPreviews" or key == "fetchFromClone" then
+		refreshAllFetchPreviews()
 	end
 end
 
@@ -6157,6 +6220,8 @@ function hostToggleValue(player, value, id)
 	applyEnforcementToPlayerPanel(nil)
 	if key == "landTracker" then
 		refreshAllLandTrackers()
+	elseif key == "fetchPreviews" or key == "fetchFromClone" then
+		refreshAllFetchPreviews()
 	end
 end
 
