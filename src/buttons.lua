@@ -194,6 +194,21 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		hover_color = { 1, 1, 1, 0.1 },
 		press_color = { 1, 0, 0, 0.2 },
 	})
+	-- keep / pregame button, mirroring the serum powder button on the opposite
+	-- side of the mulligan button (-lp.x). Its state machine lives in pregame.lua.
+	object.createButton({
+		click_function = "playerKeep",
+		label = "Keep",
+		tooltip = "                    [b]Keep[/b]\n[i]left click[/i] to keep your hand;\n click again if you have a pregame action",
+		width = 2500,
+		height = 1000,
+		position = { -lp.x, 0.1, lp.z },
+		font_size = 500,
+		color = { 1, 1, 1, 0 },
+		font_color = { 1, 1, 1, 100 },
+		hover_color = { 1, 1, 1, 0.1 },
+		press_color = { 1, 0, 0, 0.2 },
+	})
 end
 
 function noop() end
