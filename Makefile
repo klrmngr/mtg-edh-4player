@@ -6,6 +6,7 @@ SRC = \
 	src/reveal.lua \
 	src/mulligan.lua \
 	src/reset.lua \
+	src/pregame.lua \
 	src/command_buttons.lua \
 	src/etali.lua \
 	src/obnix.lua \

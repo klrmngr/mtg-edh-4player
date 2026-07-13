@@ -47,6 +47,7 @@ function onload(saved)
 	spawnPatchNotesButton()
 	checkForUpdate()
 	spawnLandTrackerText()
+	spawnKeepButtons()
 	initFetchlands()
 end
 

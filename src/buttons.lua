@@ -194,6 +194,8 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		hover_color = { 1, 1, 1, 0.1 },
 		press_color = { 1, 0, 0, 0.2 },
 	})
+	-- the keep / pregame button no longer lives here -- it's created directly at the
+	-- centre of each player's playmat by spawnKeepButtons (see pregame.lua).
 end
 
 function noop() end

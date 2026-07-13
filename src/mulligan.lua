@@ -37,6 +37,8 @@ function resetMulliganCount(color)
 	end
 	data[color]["mulliganCount"] = 0
 	data[color]["mulliganButton"].editButton({ index = 1, label = "Mulligans: 0" })
+	-- re-arm the keep/pregame flow for a fresh game
+	resetKeepState(color)
 end
 
 function handIsEmpty(color)
