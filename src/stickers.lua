@@ -43,6 +43,9 @@ function refreshGoblinStickers(color)
 	if data[color] == nil or data[color]["goblinStickersDealt"] then
 		return
 	end
+	if not getSetting(color, "goblinStickers") then
+		return
+	end
 	if not libraryHasGoblin(color) then
 		return
 	end

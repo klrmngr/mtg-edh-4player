@@ -396,15 +396,15 @@
 
 <!-- PATCH NOTES -->
 <Panel id="PatchNotesPanel" width="620" height="520" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
-    <VerticalLayout padding="14 14 14 14" spacing="10" childForceExpandWidth="true" childForceExpandHeight="false">
-        <Panel preferredHeight="44" minHeight="44" flexibleHeight="0">
-            <Text id="PatchNotesTitle" fontSize="28" fontStyle="Bold" color="rgb(1,1,1)" alignment="MiddleCenter" text="Patch Notes" />
-            <Button id="PatchNotesCloseButton" rectAlignment="UpperRight" width="34" height="34" color="#990000" textColor="#FFFFFF" text="X" fontSize="20" onClick="closePatchNotes" />
-        </Panel>
-        <VerticalScrollView color="rgba(0,0,0,0.35)" flexibleHeight="1" scrollSensitivity="30">
-            <Text id="PatchNotesText" fontSize="17" color="rgb(0.9,0.9,0.9)" alignment="UpperLeft" text="Loading..." preferredHeight="1100" />
-        </VerticalScrollView>
-    </VerticalLayout>
+    <Text id="PatchNotesTitle" rectAlignment="UpperCenter" offsetXY="0 -22" width="520" height="36" fontSize="28" fontStyle="Bold" color="rgb(1,1,1)" alignment="MiddleCenter" text="Patch Notes" />
+    <Button id="PatchNotesCloseButton" rectAlignment="UpperRight" offsetXY="-10 -10" width="34" height="34" color="#990000" textColor="#FFFFFF" text="X" fontSize="20" onClick="closePatchNotes" />
+    <VerticalScrollView rectAlignment="LowerCenter" offsetXY="0 14" width="596" height="448" horizontal="false" horizontalScrollbarVisibility="None" scrollSensitivity="30" color="rgba(0,0,0,0.35)">
+        <TableLayout autoCalculateHeight="true" cellSpacing="0" padding="4 8 4 4" columnWidths="560" cellBackgroundColor="rgba(0,0,0,0)">
+            <Row id="PatchNotesRow" preferredHeight="1100"><Cell>
+                <Text id="PatchNotesText" fontSize="17" color="rgb(0.9,0.9,0.9)" alignment="UpperLeft" text="Loading..." />
+            </Cell></Row>
+        </TableLayout>
+    </VerticalScrollView>
 </Panel>
 
 <!-- SETTINGS -->
@@ -414,49 +414,65 @@
     color="rgba(0.1,0.1,0.1,0.85)" textColor="#FFFFFF"
     tooltip="Player settings" tooltipPosition="Left" tooltipBorderColor="rgba(0,0,0,0)" />
 
-<Panel id="SettingsPanel" width="380" height="716" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
-    <VerticalLayout padding="16 16 16 16" spacing="12" childForceExpandWidth="true" childForceExpandHeight="false">
-        <Panel preferredHeight="40" minHeight="40" flexibleHeight="0">
-            <Text fontSize="26" fontStyle="Bold" color="rgb(1,1,1)" alignment="MiddleCenter" text="Player Settings" />
-            <Button rectAlignment="UpperRight" width="30" height="30" color="#990000" textColor="#FFFFFF" text="X" fontSize="18" onClick="closeSettings" />
-        </Panel>
+<Panel id="SettingsPanel" width="440" height="560" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
+    <Text rectAlignment="UpperCenter" offsetXY="0 -20" width="360" height="34" fontSize="26" fontStyle="Bold" color="rgb(1,1,1)" alignment="MiddleCenter" text="Player Settings" />
+    <Button rectAlignment="UpperRight" offsetXY="-8 -8" width="30" height="30" color="#990000" textColor="#FFFFFF" text="X" fontSize="18" onClick="closeSettings" />
+    <InputField id="settingsSearchInput" rectAlignment="UpperCenter" offsetXY="0 -62" width="404" height="34" onValueChanged="settingsSearch" placeholder="Search settings..." text="" fontSize="16" textAlignment="MiddleLeft" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" />
 
-        <Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" preferredHeight="20" minHeight="20" flexibleHeight="0" text="TRIGGERS" />
-        <VerticalLayout spacing="0" preferredHeight="44" minHeight="44" flexibleHeight="0" childForceExpandHeight="false">
-            <Toggle id="setOppDrawTriggers" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Opponent-draw trigger alerts</Toggle>
-            <Text color="#e0a030" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="unfinished, somewhat buggy" />
-        </VerticalLayout>
+    <VerticalScrollView rectAlignment="LowerCenter" offsetXY="0 12" width="416" height="438" horizontal="false" horizontalScrollbarVisibility="None" scrollSensitivity="26" color="rgba(0,0,0,0.15)" scrollbarBackgroundColor="rgba(0,0,0,0.2)">
+        <TableLayout autoCalculateHeight="true" cellSpacing="4" padding="12 8 12 4" columnWidths="372" cellBackgroundColor="rgba(0,0,0,0)">
+            <Row id="hdr_triggers" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="TRIGGERS" /></Cell></Row>
+            <Row id="row_oppDrawTriggers" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
+                <Toggle id="setOppDrawTriggers" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Opponent-draw trigger alerts</Toggle>
+                <Text color="#e0a030" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="unfinished, somewhat buggy" />
+            </VerticalLayout></Cell></Row>
 
-        <Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" preferredHeight="20" minHeight="20" flexibleHeight="0" text="STATE-BASED" />
-        <Toggle id="setDrawSkipReminder" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="30" minHeight="30">Draw-step skip reminder</Toggle>
-        <VerticalLayout spacing="0" preferredHeight="44" minHeight="44" flexibleHeight="0" childForceExpandHeight="false">
-            <Toggle id="setAbilityRestrictions" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Can't-activate-ability reminder</Toggle>
-            <Text color="#e0a030" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="unfinished, somewhat buggy" />
-        </VerticalLayout>
-        <VerticalLayout spacing="0" preferredHeight="44" minHeight="44" flexibleHeight="0" childForceExpandHeight="false">
-            <Toggle id="setSearchRestrictions" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Tutor/search restriction (blocks fetch)</Toggle>
-            <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="fetchland to grave, resolve manually" />
-        </VerticalLayout>
+            <Row id="hdr_stateBased" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="STATE-BASED" /></Cell></Row>
+            <Row id="row_drawSkipReminder" preferredHeight="32"><Cell><Toggle id="setDrawSkipReminder" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17">Draw-step skip reminder</Toggle></Cell></Row>
+            <Row id="row_abilityRestrictions" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
+                <Toggle id="setAbilityRestrictions" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Can't-activate-ability reminder</Toggle>
+                <Text color="#e0a030" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="unfinished, somewhat buggy" />
+            </VerticalLayout></Cell></Row>
+            <Row id="row_searchRestrictions" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
+                <Toggle id="setSearchRestrictions" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Tutor/search restriction (blocks fetch)</Toggle>
+                <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="fetchland to grave, resolve manually" />
+            </VerticalLayout></Cell></Row>
+            <Row id="row_seedbornUntap" preferredHeight="32"><Cell><Toggle id="setSeedbornUntap" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17">Seedborn Muse untap</Toggle></Cell></Row>
 
-        <Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" preferredHeight="20" minHeight="20" flexibleHeight="0" text="DISPLAY" />
-        <Toggle id="setLandTracker" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="30" minHeight="30">Land-entered tracker</Toggle>
-        <Toggle id="setFetchPreviews" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="30" minHeight="30">Fetchland previews</Toggle>
-        <VerticalLayout spacing="0" preferredHeight="44" minHeight="44" flexibleHeight="0" childForceExpandHeight="false">
-            <Toggle id="setFetchFromClone" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Show all possible fetchables</Toggle>
-            <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="reads game-start deck; no hidden-removal leak" />
-        </VerticalLayout>
+            <Row id="hdr_automation" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="AUTOMATION" /></Cell></Row>
+            <Row id="row_cmdrDamageAutoLife" preferredHeight="32"><Cell><Toggle id="setCmdrDamageAutoLife" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17">Commander damage adjusts life</Toggle></Cell></Row>
+            <Row id="row_dfcLandFlip" preferredHeight="32"><Cell><Toggle id="setDfcLandFlip" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17">Flip DFC to land face in land zone</Toggle></Cell></Row>
+            <Row id="row_fetchSurveil" preferredHeight="32"><Cell><Toggle id="setFetchSurveil" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17">Fetched-land surveil / scry</Toggle></Cell></Row>
+            <Row id="row_fetchEntersTapped" preferredHeight="32"><Cell><Toggle id="setFetchEntersTapped" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17">Fetched land enters tapped</Toggle></Cell></Row>
 
-        <Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" preferredHeight="20" minHeight="20" flexibleHeight="0" text="COMMANDER" />
-        <VerticalLayout spacing="0" preferredHeight="44" minHeight="44" flexibleHeight="0" childForceExpandHeight="false">
-            <Toggle id="setCommanderQOL" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Commander QOL buttons</Toggle>
-            <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="Etali trigger / Ral grid, applied next game" />
-        </VerticalLayout>
+            <Row id="hdr_display" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="DISPLAY" /></Cell></Row>
+            <Row id="row_landTracker" preferredHeight="32"><Cell><Toggle id="setLandTracker" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17">Land-entered tracker</Toggle></Cell></Row>
+            <Row id="row_fetchPreviews" preferredHeight="32"><Cell><Toggle id="setFetchPreviews" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17">Fetchland previews</Toggle></Cell></Row>
+            <Row id="row_fetchFromClone" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
+                <Toggle id="setFetchFromClone" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Show all possible fetchables</Toggle>
+                <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="reads game-start deck; no hidden-removal leak" />
+            </VerticalLayout></Cell></Row>
 
-        <HorizontalLayout minHeight="36" preferredHeight="36" flexibleHeight="0" spacing="8" childAlignment="MiddleLeft" childForceExpandWidth="false">
-            <Text fontSize="17" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" minWidth="220" text="Reveal reset (seconds)" />
-            <InputField id="setRevealResetSecs" characterValidation="Integer" onEndEdit="settingsRevealReset" text="30" minWidth="64" preferredWidth="64" flexibleWidth="0" fontSize="17" textAlignment="MiddleCenter" color="rgb(0.25,0.25,0.25)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" />
-        </HorizontalLayout>
-    </VerticalLayout>
+            <Row id="hdr_commander" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="COMMANDER" /></Cell></Row>
+            <Row id="row_commanderQOL" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
+                <Toggle id="setCommanderQOL" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Commander QOL buttons</Toggle>
+                <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="Etali trigger / Ral grid, applied next game" />
+            </VerticalLayout></Cell></Row>
+
+            <Row id="hdr_game" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="GAME" /></Cell></Row>
+            <Row id="row_goblinStickers" preferredHeight="32"><Cell><Toggle id="setGoblinStickers" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17">Goblin stickers</Toggle></Cell></Row>
+            <Row id="row_keepPregameFlow" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
+                <Toggle id="setKeepPregameFlow" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Keep / pregame flow</Toggle>
+                <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="centre-mat Keep button + pregame announce" />
+            </VerticalLayout></Cell></Row>
+
+            <Row id="hdr_misc" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="MISC" /></Cell></Row>
+            <Row id="row_revealResetSecs" preferredHeight="38"><Cell><HorizontalLayout spacing="8" childAlignment="MiddleLeft" childForceExpandWidth="false">
+                <Text fontSize="17" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" minWidth="200" text="Reveal reset (seconds)" />
+                <InputField id="setRevealResetSecs" characterValidation="Integer" onEndEdit="settingsRevealReset" text="30" minWidth="64" preferredWidth="64" flexibleWidth="0" fontSize="17" textAlignment="MiddleCenter" color="rgb(0.25,0.25,0.25)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" />
+            </HorizontalLayout></Cell></Row>
+        </TableLayout>
+    </VerticalScrollView>
 </Panel>
 
 <!-- HOST SETTINGS -->
@@ -466,59 +482,106 @@
     color="rgba(0.1,0.1,0.1,0.85)" textColor="#e0a030"
     tooltip="Host settings (host only)" tooltipPosition="Left" tooltipBorderColor="rgba(0,0,0,0)" />
 
-<Panel id="HostSettingsPanel" width="430" height="424" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#e0a030" outlineSize="2 -2" visibility="" active="False">
-    <VerticalLayout padding="16 16 14 16" spacing="8" childForceExpandWidth="true" childForceExpandHeight="false">
-        <Panel preferredHeight="38" minHeight="38" flexibleHeight="0">
-            <Text fontSize="24" fontStyle="Bold" color="#e0a030" alignment="MiddleCenter" text="Host Settings" />
-            <Button rectAlignment="UpperRight" width="30" height="30" color="#990000" textColor="#FFFFFF" text="X" fontSize="18" onClick="closeHostSettings" />
-        </Panel>
-        <Text fontSize="12" color="#9aa0a8" alignment="MiddleCenter" preferredHeight="16" minHeight="16" text="Enforce forces a setting on all players and locks their toggle." />
+<Panel id="HostSettingsPanel" width="440" height="560" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.32,0.20,0.03,0.98)" outline="#e0a030" outlineSize="2 -2" visibility="" active="False">
+    <Text rectAlignment="UpperCenter" offsetXY="0 -20" width="360" height="34" fontSize="26" fontStyle="Bold" color="#ffd873" alignment="MiddleCenter" text="Host Settings" />
+    <Button rectAlignment="UpperRight" offsetXY="-8 -8" width="30" height="30" color="#990000" textColor="#FFFFFF" text="X" fontSize="18" onClick="closeHostSettings" />
+    <InputField id="hostSearchInput" rectAlignment="UpperCenter" offsetXY="0 -62" width="404" height="34" onValueChanged="hostSettingsSearch" placeholder="Search settings..." text="" fontSize="16" textAlignment="MiddleLeft" color="rgba(0.5,0.34,0.06,0.9)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" />
 
-        <HorizontalLayout preferredHeight="20" minHeight="20" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
-            <Text fontSize="12" fontStyle="Bold" color="#6fa0d8" alignment="MiddleCenter" minWidth="52" preferredWidth="52" flexibleWidth="0" text="ENF" />
-            <Text fontSize="12" fontStyle="Bold" color="#6fa0d8" alignment="MiddleCenter" minWidth="42" preferredWidth="42" flexibleWidth="0" text="ON" />
-            <Text fontSize="12" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" flexibleWidth="1" text="SETTING" />
-        </HorizontalLayout>
+    <VerticalScrollView rectAlignment="LowerCenter" offsetXY="0 12" width="416" height="438" horizontal="false" horizontalScrollbarVisibility="None" scrollSensitivity="26" color="rgba(0,0,0,0.12)" scrollbarBackgroundColor="rgba(0,0,0,0.18)">
+        <TableLayout autoCalculateHeight="true" cellSpacing="4" padding="12 8 12 4" columnWidths="372" cellBackgroundColor="rgba(0,0,0,0)">
+            <Row id="hosthdr_legend" preferredHeight="24"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="12" fontStyle="Bold" color="#ffd873" alignment="MiddleLeft" flexibleWidth="1" text="ENF forces the value on all players" />
+                <Text fontSize="12" fontStyle="Bold" color="#ffd873" alignment="MiddleCenter" minWidth="46" preferredWidth="46" flexibleWidth="0" text="ENF" />
+                <Text fontSize="12" fontStyle="Bold" color="#ffd873" alignment="MiddleCenter" minWidth="46" preferredWidth="46" flexibleWidth="0" text="ON" />
+            </HorizontalLayout></Cell></Row>
 
-        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
-            <Toggle id="hostEnf_oppDrawTriggers" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
-            <Toggle id="hostVal_oppDrawTriggers" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
-            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Opponent-draw trigger alerts" />
-        </HorizontalLayout>
-        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
-            <Toggle id="hostEnf_drawSkipReminder" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
-            <Toggle id="hostVal_drawSkipReminder" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
-            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Draw-step skip reminder" />
-        </HorizontalLayout>
-        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
-            <Toggle id="hostEnf_abilityRestrictions" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
-            <Toggle id="hostVal_abilityRestrictions" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
-            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Can't-activate-ability reminder" />
-        </HorizontalLayout>
-        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
-            <Toggle id="hostEnf_searchRestrictions" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
-            <Toggle id="hostVal_searchRestrictions" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
-            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Tutor/search restriction" />
-        </HorizontalLayout>
-        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
-            <Toggle id="hostEnf_landTracker" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
-            <Toggle id="hostVal_landTracker" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
-            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Land-entered tracker" />
-        </HorizontalLayout>
-        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
-            <Toggle id="hostEnf_fetchPreviews" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
-            <Toggle id="hostVal_fetchPreviews" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
-            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Fetchland previews" />
-        </HorizontalLayout>
-        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
-            <Toggle id="hostEnf_fetchFromClone" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
-            <Toggle id="hostVal_fetchFromClone" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
-            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Show all possible fetchables" />
-        </HorizontalLayout>
-        <HorizontalLayout preferredHeight="30" minHeight="30" flexibleHeight="0" spacing="6" childForceExpandWidth="false" childAlignment="MiddleLeft">
-            <Toggle id="hostEnf_commanderQOL" isOn="False" onValueChanged="hostToggleEnforced" minWidth="52" preferredWidth="52" flexibleWidth="0" />
-            <Toggle id="hostVal_commanderQOL" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="42" preferredWidth="42" flexibleWidth="0" />
-            <Text fontSize="15" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" flexibleWidth="1" text="Commander QOL buttons" />
-        </HorizontalLayout>
-    </VerticalLayout>
+            <Row id="hosthdr_triggers" preferredHeight="24"><Cell><Text fontSize="14" fontStyle="Bold" color="#f4c261" alignment="MiddleLeft" text="TRIGGERS" /></Cell></Row>
+            <Row id="hostrow_oppDrawTriggers" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Opponent-draw trigger alerts" />
+                <Toggle id="hostEnf_oppDrawTriggers" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_oppDrawTriggers" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+
+            <Row id="hosthdr_stateBased" preferredHeight="24"><Cell><Text fontSize="14" fontStyle="Bold" color="#f4c261" alignment="MiddleLeft" text="STATE-BASED" /></Cell></Row>
+            <Row id="hostrow_drawSkipReminder" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Draw-step skip reminder" />
+                <Toggle id="hostEnf_drawSkipReminder" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_drawSkipReminder" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+            <Row id="hostrow_abilityRestrictions" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Can't-activate-ability reminder" />
+                <Toggle id="hostEnf_abilityRestrictions" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_abilityRestrictions" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+            <Row id="hostrow_searchRestrictions" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Tutor/search restriction" />
+                <Toggle id="hostEnf_searchRestrictions" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_searchRestrictions" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+
+            <Row id="hostrow_seedbornUntap" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Seedborn Muse untap" />
+                <Toggle id="hostEnf_seedbornUntap" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_seedbornUntap" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+
+            <Row id="hosthdr_automation" preferredHeight="24"><Cell><Text fontSize="14" fontStyle="Bold" color="#f4c261" alignment="MiddleLeft" text="AUTOMATION" /></Cell></Row>
+            <Row id="hostrow_cmdrDamageAutoLife" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Commander damage adjusts life" />
+                <Toggle id="hostEnf_cmdrDamageAutoLife" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_cmdrDamageAutoLife" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+            <Row id="hostrow_dfcLandFlip" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Flip DFC to land face" />
+                <Toggle id="hostEnf_dfcLandFlip" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_dfcLandFlip" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+            <Row id="hostrow_fetchSurveil" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Fetched-land surveil / scry" />
+                <Toggle id="hostEnf_fetchSurveil" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_fetchSurveil" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+            <Row id="hostrow_fetchEntersTapped" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Fetched land enters tapped" />
+                <Toggle id="hostEnf_fetchEntersTapped" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_fetchEntersTapped" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+
+            <Row id="hosthdr_display" preferredHeight="24"><Cell><Text fontSize="14" fontStyle="Bold" color="#f4c261" alignment="MiddleLeft" text="DISPLAY" /></Cell></Row>
+            <Row id="hostrow_landTracker" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Land-entered tracker" />
+                <Toggle id="hostEnf_landTracker" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_landTracker" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+            <Row id="hostrow_fetchPreviews" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Fetchland previews" />
+                <Toggle id="hostEnf_fetchPreviews" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_fetchPreviews" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+            <Row id="hostrow_fetchFromClone" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Show all possible fetchables" />
+                <Toggle id="hostEnf_fetchFromClone" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_fetchFromClone" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+
+            <Row id="hosthdr_commander" preferredHeight="24"><Cell><Text fontSize="14" fontStyle="Bold" color="#f4c261" alignment="MiddleLeft" text="COMMANDER" /></Cell></Row>
+            <Row id="hostrow_commanderQOL" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Commander QOL buttons" />
+                <Toggle id="hostEnf_commanderQOL" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_commanderQOL" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+
+            <Row id="hosthdr_game" preferredHeight="24"><Cell><Text fontSize="14" fontStyle="Bold" color="#f4c261" alignment="MiddleLeft" text="GAME" /></Cell></Row>
+            <Row id="hostrow_goblinStickers" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Goblin stickers" />
+                <Toggle id="hostEnf_goblinStickers" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_goblinStickers" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+            <Row id="hostrow_keepPregameFlow" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Keep / pregame flow" />
+                <Toggle id="hostEnf_keepPregameFlow" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_keepPregameFlow" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+        </TableLayout>
+    </VerticalScrollView>
 </Panel>

@@ -194,20 +194,22 @@ function commanderDamageDealt(params)
 		if trackers ~= nil then
 			for _, guid in ipairs(trackers) do
 				if guid == params.guid then
-					pdata["cmdrDmgPending"] = (pdata["cmdrDmgPending"] or 0) + params.delta
-					if pdata["cmdrDmgTimer"] ~= nil then
-						Wait.stop(pdata["cmdrDmgTimer"])
-					end
-					pdata["cmdrDmgTimer"] = Wait.time(function()
-						local total = pdata["cmdrDmgPending"] or 0
-						pdata["cmdrDmgPending"] = nil
-						pdata["cmdrDmgTimer"] = nil
-						-- only a net increase in commander damage costs life;
-						-- lowering the counter must never restore it
-						if total > 0 then
-							loseLife(color, total, "commander damage")
+					if getSetting(color, "cmdrDamageAutoLife") then
+						pdata["cmdrDmgPending"] = (pdata["cmdrDmgPending"] or 0) + params.delta
+						if pdata["cmdrDmgTimer"] ~= nil then
+							Wait.stop(pdata["cmdrDmgTimer"])
 						end
-					end, commanderDamageSettle)
+						pdata["cmdrDmgTimer"] = Wait.time(function()
+							local total = pdata["cmdrDmgPending"] or 0
+							pdata["cmdrDmgPending"] = nil
+							pdata["cmdrDmgTimer"] = nil
+							-- only a net increase in commander damage costs life;
+							-- lowering the counter must never restore it
+							if total > 0 then
+								loseLife(color, total, "commander damage")
+							end
+						end, commanderDamageSettle)
+					end
 					return
 				end
 			end

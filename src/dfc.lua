@@ -7,8 +7,12 @@ function dfcLandEnter(zone, obj)
 	if obj == nil or obj.type ~= "Card" then
 		return
 	end
-	if landZoneColor(zone) == nil then
+	local zoneColor = landZoneColor(zone)
+	if zoneColor == nil then
 		return -- not a land zone
+	end
+	if not getSetting(zoneColor, "dfcLandFlip") then
+		return
 	end
 	local states = obj.getStates()
 	if states == nil or #states == 0 then
