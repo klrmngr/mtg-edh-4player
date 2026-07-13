@@ -142,8 +142,8 @@ end
 -- placeholder Ral abilities -- no-op until they're implemented
 function ralPlaceholder() end
 
--- button handler: only the owning player may flip. Every flip bumps both counters
--- by 1; a tails also costs the flipper 1 life. Announce the result to the table.
+-- button handler: only the owning player may flip. A tails costs the flipper
+-- 1 life. Announce the result to the table. (Counters are not auto-bumped.)
 function playerCoinFlip(obj, clickerColor, alt)
 	local ownerColor = commandZoneOwnerOf(obj)
 	if ownerColor == nil then
@@ -153,9 +153,6 @@ function playerCoinFlip(obj, clickerColor, alt)
 		Player[clickerColor].broadcast("Only " .. ownerColor .. " may flip this coin.")
 		return
 	end
-	-- every flip counts toward storm and instants/sorceries cast
-	ralBump(ownerColor, ralCounterDefs[1], 1)
-	ralBump(ownerColor, ralCounterDefs[2], 1)
 	if math.random(2) == 1 then
 		broadcastToAll(ownerColor .. " flips a coin: Heads", stringColorToRGB(ownerColor))
 	else
