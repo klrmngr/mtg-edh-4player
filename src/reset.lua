@@ -183,7 +183,9 @@ function commanderDamageDealt(params)
 		if trackers ~= nil then
 			for _, guid in ipairs(trackers) do
 				if guid == params.guid then
-					loseLife(color, params.delta, "commander damage")
+					if getSetting(color, "cmdrDamageAutoLife") then
+						loseLife(color, params.delta, "commander damage")
+					end
 					return
 				end
 			end

@@ -1177,7 +1177,9 @@ function commanderDamageDealt(params)
 		if trackers ~= nil then
 			for _, guid in ipairs(trackers) do
 				if guid == params.guid then
-					loseLife(color, params.delta, "commander damage")
+					if getSetting(color, "cmdrDamageAutoLife") then
+						loseLife(color, params.delta, "commander damage")
+					end
 					return
 				end
 			end
@@ -1203,6 +1205,9 @@ pregameAnnounced = false -- table-wide one-shot guard for the announcement
 -- on the mat object and is found later by its click_function. Called once at load
 -- (after the land tracker has claimed the mat's index-0 button) via spawnKeepButtons.
 function createKeepButton(color)
+	if not getSetting(color, "keepPregameFlow") then
+		return
+	end
 	local mat = data[color] and data[color]["playmat"]
 	if mat == nil then
 		return
@@ -1255,12 +1260,40 @@ function setKeepButtonVisible(color, visible)
 	end
 end
 
--- the game colours seated at the table right now -- only these need to Keep before
--- the pregame announcement fires (an empty seat would otherwise block it forever)
+-- reconcile a player's keep button with their keepPregameFlow setting: create or
+-- show it when enabled, hide it when disabled. Called when the setting is toggled
+-- (per-player or host-enforced), since the button is otherwise spawned once at load.
+function refreshKeepButton(color)
+	local mat = data[color] and data[color]["playmat"]
+	if mat == nil then
+		return
+	end
+	local exists = false
+	for _, b in ipairs(mat.getButtons() or {}) do
+		if b.click_function == "playerKeep" then
+			exists = true
+			break
+		end
+	end
+	if getSetting(color, "keepPregameFlow") then
+		if exists then
+			setKeepButtonVisible(color, true)
+		else
+			createKeepButton(color)
+		end
+	elseif exists then
+		setKeepButtonVisible(color, false)
+	end
+end
+
+-- the game colours seated at the table right now that are running the keep flow --
+-- only these need to Keep before the pregame announcement fires. An empty seat would
+-- otherwise block it forever, and a player who has the flow disabled never gets a
+-- Keep button, so they must be excluded too.
 function seatedGameColors()
 	local seated = {}
 	for color, _ in pairs(data) do
-		if Player[color] ~= nil and Player[color].seated then
+		if Player[color] ~= nil and Player[color].seated and getSetting(color, "keepPregameFlow") then
 			table.insert(seated, color)
 		end
 	end
@@ -1362,7 +1395,7 @@ function resetKeepState(color)
 	end
 	data[color]["kept"] = false
 	data[color]["pregameAction"] = false
-	setKeepButtonVisible(color, true)
+	refreshKeepButton(color)
 	pregameAnnounced = false
 end
 -------------------------- COMMAND-ZONE COMMANDER BUTTONS -----------------------
@@ -2071,6 +2104,9 @@ end
 -- game-start hook: once per player, deal the stickers if they have the Goblin
 function refreshGoblinStickers(color)
 	if data[color] == nil or data[color]["goblinStickersDealt"] then
+		return
+	end
+	if not getSetting(color, "goblinStickers") then
 		return
 	end
 	if not libraryHasGoblin(color) then
@@ -2872,7 +2908,7 @@ function orientFetchedLand(card, baseY, color, forcedTapped)
 		return
 	end
 	local y = baseY
-	if forcedTapped or landEntersTapped(card, color) then
+	if getSetting(color, "fetchEntersTapped") and (forcedTapped or landEntersTapped(card, color)) then
 		y = baseY + 90
 	end
 	card.setRotationSmooth({ 0, y, 0 }, false, true)
@@ -2895,6 +2931,9 @@ end
 -- lands, auto-surveil for the player using the same scry primitive as the Scry
 -- button, after the post-fetch library shuffle has settled.
 function fetchedLandETB(card, color)
+	if not getSetting(color, "fetchSurveil") then
+		return
+	end
 	local n = surveilOnEnter(card)
 	if n <= 0 then
 		return
@@ -3200,8 +3239,12 @@ function dfcLandEnter(zone, obj)
 	if obj == nil or obj.type ~= "Card" then
 		return
 	end
-	if landZoneColor(zone) == nil then
+	local zoneColor = landZoneColor(zone)
+	if zoneColor == nil then
 		return -- not a land zone
+	end
+	if not getSetting(zoneColor, "dfcLandFlip") then
+		return
 	end
 	local states = obj.getStates()
 	if states == nil or #states == 0 then
@@ -3310,7 +3353,7 @@ function playerUntap(button, playerColor, alt)
 		-- untap step, "doesn't untap during your untap step" cards (Mana Vault,
 		-- Basalt/Grim Monolith, ...) untap as well (foreign = true).
 		for color, _ in pairs(data) do
-			if color ~= playerColor and controlsSeedbornMuse(color) then
+			if color ~= playerColor and getSetting(color, "seedbornUntap") and controlsSeedbornMuse(color) then
 				untapAll(color, true)
 				broadcastToColor("Seedborn Muse untaps your permanents.", color, { 0.4, 0.9, 0.4 })
 			end
@@ -6092,8 +6135,16 @@ function showPatchNotes(obj, color, alt)
 			end
 			table.insert(parts, "<b>" .. tag .. "</b>\n" .. notes)
 		end
+		local combined = table.concat(parts, "\n\n")
+		-- size the scroll content to the notes so the TableLayout can auto-calc its
+		-- height: estimate wrapped visual lines (~68 chars per line at this width/font)
+		local visualLines = 0
+		for line in (combined .. "\n"):gmatch("(.-)\n") do
+			visualLines = visualLines + math.max(1, math.ceil(#line / 68))
+		end
 		UI.setAttribute("PatchNotesTitle", "text", "Patch Notes")
-		UI.setValue("PatchNotesText", table.concat(parts, "\n\n"))
+		UI.setAttribute("PatchNotesRow", "preferredHeight", tostring(math.max(400, visualLines * 24 + 40)))
+		UI.setValue("PatchNotesText", combined)
 		visibleOpenRules(color, "PatchNotesPanel")
 	end)
 end
@@ -6152,6 +6203,13 @@ settingsDefaults = {
 	                         -- the live library, so an opponent's hidden removal (Praetor's
 	                         -- Grasp, etc.) can't leak which land left. Off = live library.
 	commanderQOL = true,     -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
+	cmdrDamageAutoLife = true, -- commander-damage tracker deltas auto-adjust this player's life
+	seedbornUntap = true,    -- this player's Seedborn Muse untaps their board on others' untap steps
+	dfcLandFlip = true,      -- flip a double-faced card to its land back face in the land zone
+	fetchSurveil = false,    -- auto-surveil/scry when a fetched land has an ETB surveil/scry trigger
+	fetchEntersTapped = false, -- tap a fetched land whose text (or the fetchland) says it enters tapped
+	goblinStickers = true,   -- deal goblin sticker cards when a "_____ Goblin" starts in the library
+	keepPregameFlow = false, -- show the centre-mat Keep button and run the pregame-action announcement
 	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
 }
 
@@ -6165,6 +6223,13 @@ settingsToggleIds = {
 	setFetchPreviews = "fetchPreviews",
 	setFetchFromClone = "fetchFromClone",
 	setCommanderQOL = "commanderQOL",
+	setCmdrDamageAutoLife = "cmdrDamageAutoLife",
+	setSeedbornUntap = "seedbornUntap",
+	setDfcLandFlip = "dfcLandFlip",
+	setFetchSurveil = "fetchSurveil",
+	setFetchEntersTapped = "fetchEntersTapped",
+	setGoblinStickers = "goblinStickers",
+	setKeepPregameFlow = "keepPregameFlow",
 }
 
 -- colour -> { key = value }
@@ -6185,6 +6250,13 @@ enforceableKeys = {
 	"fetchPreviews",
 	"fetchFromClone",
 	"commanderQOL",
+	"cmdrDamageAutoLife",
+	"seedbornUntap",
+	"dfcLandFlip",
+	"fetchSurveil",
+	"fetchEntersTapped",
+	"goblinStickers",
+	"keepPregameFlow",
 }
 
 -- key -> { enforced = bool, value = bool }
@@ -6274,6 +6346,109 @@ function onsave()
 	return saveSettings()
 end
 
+-------------------------------- SEARCH FILTER ---------------------------------
+-- The player panel scrolls; the search box at the top filters it. Each setting
+-- row has a stable id (row_<key>) plus a bag of keywords. Typing hides every row
+-- whose keywords don't contain the query, and hides the section headers while a
+-- query is active (they'd otherwise float above empty space).
+settingsSearchRows = {
+	{ id = "row_oppDrawTriggers", text = "opponent draw trigger alerts triggers" },
+	{ id = "row_drawSkipReminder", text = "draw step skip reminder state based" },
+	{ id = "row_abilityRestrictions", text = "cant activate ability reminder cannot state based" },
+	{ id = "row_searchRestrictions", text = "tutor search restriction blocks fetch state based" },
+	{ id = "row_cmdrDamageAutoLife", text = "commander damage adjusts life automation" },
+	{ id = "row_seedbornUntap", text = "seedborn muse untap state based" },
+	{ id = "row_dfcLandFlip", text = "flip dfc double faced land face automation" },
+	{ id = "row_fetchSurveil", text = "fetched land surveil scry automation fetch" },
+	{ id = "row_fetchEntersTapped", text = "fetched land enters tapped automation fetch" },
+	{ id = "row_landTracker", text = "land entered tracker display" },
+	{ id = "row_fetchPreviews", text = "fetchland previews display fetch" },
+	{ id = "row_fetchFromClone", text = "show all possible fetchables clone display fetch" },
+	{ id = "row_commanderQOL", text = "commander qol buttons etali ral" },
+	{ id = "row_goblinStickers", text = "goblin stickers game" },
+	{ id = "row_keepPregameFlow", text = "keep pregame flow game" },
+	{ id = "row_revealResetSecs", text = "reveal reset seconds misc" },
+}
+
+settingsSearchHeaders = {
+	"hdr_triggers", "hdr_stateBased", "hdr_automation",
+	"hdr_display", "hdr_commander", "hdr_game", "hdr_misc",
+}
+
+-- restore every row + header to visible (no active query)
+function clearSettingsSearch()
+	for _, r in ipairs(settingsSearchRows) do
+		UI.setAttribute(r.id, "active", "true")
+	end
+	for _, h in ipairs(settingsSearchHeaders) do
+		UI.setAttribute(h, "active", "true")
+	end
+end
+
+-- InputField handler: filter the panel to rows matching the query. Headers are
+-- hidden while filtering since a section may end up empty.
+function settingsSearch(player, value, id)
+	local q = (value or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+	if q == "" then
+		clearSettingsSearch()
+		return
+	end
+	for _, h in ipairs(settingsSearchHeaders) do
+		UI.setAttribute(h, "active", "false")
+	end
+	for _, r in ipairs(settingsSearchRows) do
+		UI.setAttribute(r.id, "active", r.text:find(q, 1, true) ~= nil and "true" or "false")
+	end
+end
+
+-- host panel mirrors the player panel: same row ids prefixed "hostrow_", same
+-- keyword bags. The legend row is never hidden so the ENF/ON columns stay labelled.
+hostSearchRows = {
+	{ id = "hostrow_oppDrawTriggers", text = "opponent draw trigger alerts triggers" },
+	{ id = "hostrow_drawSkipReminder", text = "draw step skip reminder state based" },
+	{ id = "hostrow_abilityRestrictions", text = "cant activate ability reminder cannot state based" },
+	{ id = "hostrow_searchRestrictions", text = "tutor search restriction blocks fetch state based" },
+	{ id = "hostrow_cmdrDamageAutoLife", text = "commander damage adjusts life automation" },
+	{ id = "hostrow_seedbornUntap", text = "seedborn muse untap state based" },
+	{ id = "hostrow_dfcLandFlip", text = "flip dfc double faced land face automation" },
+	{ id = "hostrow_fetchSurveil", text = "fetched land surveil scry automation fetch" },
+	{ id = "hostrow_fetchEntersTapped", text = "fetched land enters tapped automation fetch" },
+	{ id = "hostrow_landTracker", text = "land entered tracker display" },
+	{ id = "hostrow_fetchPreviews", text = "fetchland previews display fetch" },
+	{ id = "hostrow_fetchFromClone", text = "show all possible fetchables clone display fetch" },
+	{ id = "hostrow_commanderQOL", text = "commander qol buttons etali ral" },
+	{ id = "hostrow_goblinStickers", text = "goblin stickers game" },
+	{ id = "hostrow_keepPregameFlow", text = "keep pregame flow game" },
+}
+
+hostSearchHeaders = {
+	"hosthdr_triggers", "hosthdr_stateBased", "hosthdr_automation",
+	"hosthdr_display", "hosthdr_commander", "hosthdr_game",
+}
+
+function clearHostSettingsSearch()
+	for _, r in ipairs(hostSearchRows) do
+		UI.setAttribute(r.id, "active", "true")
+	end
+	for _, h in ipairs(hostSearchHeaders) do
+		UI.setAttribute(h, "active", "true")
+	end
+end
+
+function hostSettingsSearch(player, value, id)
+	local q = (value or ""):lower():gsub("^%s+", ""):gsub("%s+$", "")
+	if q == "" then
+		clearHostSettingsSearch()
+		return
+	end
+	for _, h in ipairs(hostSearchHeaders) do
+		UI.setAttribute(h, "active", "false")
+	end
+	for _, r in ipairs(hostSearchRows) do
+		UI.setAttribute(r.id, "active", r.text:find(q, 1, true) ~= nil and "true" or "false")
+	end
+end
+
 -------------------------------- PLAYER PANEL ----------------------------------
 -- set each per-player toggle's enabled state to match host enforcement: an
 -- enforced setting is locked (non-interactable) and shows the enforced value; an
@@ -6303,6 +6478,9 @@ function openSettings(player)
 	local color = player.color
 	applyEnforcementToPlayerPanel(color)
 	UI.setAttribute("setRevealResetSecs", "text", tostring(getSetting(color, "revealResetSecs")))
+	-- start every open with an empty search box and all rows shown
+	UI.setAttribute("settingsSearchInput", "text", "")
+	clearSettingsSearch()
 	visibleOpenRules(color, "SettingsPanel")
 end
 
@@ -6333,6 +6511,8 @@ function settingsToggle(player, value, id)
 		refreshLandTrackerText(player.color)
 	elseif key == "fetchPreviews" or key == "fetchFromClone" then
 		refreshFetchPreviewsForColor(player.color)
+	elseif key == "keepPregameFlow" then
+		refreshKeepButton(player.color)
 	end
 end
 
@@ -6344,6 +6524,12 @@ end
 function refreshAllLandTrackers()
 	for _, color in ipairs(settingsColors) do
 		refreshLandTrackerText(color)
+	end
+end
+
+function refreshAllKeepButtons()
+	for _, color in ipairs(settingsColors) do
+		refreshKeepButton(color)
 	end
 end
 
@@ -6362,6 +6548,9 @@ function openHostSettings(player)
 		-- the value only matters while enforced, so lock it otherwise
 		UI.setAttribute("hostVal_" .. key, "interactable", e.enforced and "true" or "false")
 	end
+	-- start every open with an empty search box and all rows shown
+	UI.setAttribute("hostSearchInput", "text", "")
+	clearHostSettingsSearch()
 	visibleOpenRules(player.color, "HostSettingsPanel")
 end
 
@@ -6386,6 +6575,8 @@ function hostToggleEnforced(player, value, id)
 		refreshAllLandTrackers()
 	elseif key == "fetchPreviews" or key == "fetchFromClone" then
 		refreshAllFetchPreviews()
+	elseif key == "keepPregameFlow" then
+		refreshAllKeepButtons()
 	end
 end
 
@@ -6405,6 +6596,8 @@ function hostToggleValue(player, value, id)
 		refreshAllLandTrackers()
 	elseif key == "fetchPreviews" or key == "fetchFromClone" then
 		refreshAllFetchPreviews()
+	elseif key == "keepPregameFlow" then
+		refreshAllKeepButtons()
 	end
 end
 

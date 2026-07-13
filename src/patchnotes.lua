@@ -130,8 +130,16 @@ function showPatchNotes(obj, color, alt)
 			end
 			table.insert(parts, "<b>" .. tag .. "</b>\n" .. notes)
 		end
+		local combined = table.concat(parts, "\n\n")
+		-- size the scroll content to the notes so the TableLayout can auto-calc its
+		-- height: estimate wrapped visual lines (~68 chars per line at this width/font)
+		local visualLines = 0
+		for line in (combined .. "\n"):gmatch("(.-)\n") do
+			visualLines = visualLines + math.max(1, math.ceil(#line / 68))
+		end
 		UI.setAttribute("PatchNotesTitle", "text", "Patch Notes")
-		UI.setValue("PatchNotesText", table.concat(parts, "\n\n"))
+		UI.setAttribute("PatchNotesRow", "preferredHeight", tostring(math.max(400, visualLines * 24 + 40)))
+		UI.setValue("PatchNotesText", combined)
 		visibleOpenRules(color, "PatchNotesPanel")
 	end)
 end

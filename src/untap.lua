@@ -16,7 +16,7 @@ function playerUntap(button, playerColor, alt)
 		-- untap step, "doesn't untap during your untap step" cards (Mana Vault,
 		-- Basalt/Grim Monolith, ...) untap as well (foreign = true).
 		for color, _ in pairs(data) do
-			if color ~= playerColor and controlsSeedbornMuse(color) then
+			if color ~= playerColor and getSetting(color, "seedbornUntap") and controlsSeedbornMuse(color) then
 				untapAll(color, true)
 				broadcastToColor("Seedborn Muse untaps your permanents.", color, { 0.4, 0.9, 0.4 })
 			end

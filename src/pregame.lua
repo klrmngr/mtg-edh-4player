@@ -17,6 +17,9 @@ pregameAnnounced = false -- table-wide one-shot guard for the announcement
 -- on the mat object and is found later by its click_function. Called once at load
 -- (after the land tracker has claimed the mat's index-0 button) via spawnKeepButtons.
 function createKeepButton(color)
+	if not getSetting(color, "keepPregameFlow") then
+		return
+	end
 	local mat = data[color] and data[color]["playmat"]
 	if mat == nil then
 		return
@@ -69,12 +72,40 @@ function setKeepButtonVisible(color, visible)
 	end
 end
 
--- the game colours seated at the table right now -- only these need to Keep before
--- the pregame announcement fires (an empty seat would otherwise block it forever)
+-- reconcile a player's keep button with their keepPregameFlow setting: create or
+-- show it when enabled, hide it when disabled. Called when the setting is toggled
+-- (per-player or host-enforced), since the button is otherwise spawned once at load.
+function refreshKeepButton(color)
+	local mat = data[color] and data[color]["playmat"]
+	if mat == nil then
+		return
+	end
+	local exists = false
+	for _, b in ipairs(mat.getButtons() or {}) do
+		if b.click_function == "playerKeep" then
+			exists = true
+			break
+		end
+	end
+	if getSetting(color, "keepPregameFlow") then
+		if exists then
+			setKeepButtonVisible(color, true)
+		else
+			createKeepButton(color)
+		end
+	elseif exists then
+		setKeepButtonVisible(color, false)
+	end
+end
+
+-- the game colours seated at the table right now that are running the keep flow --
+-- only these need to Keep before the pregame announcement fires. An empty seat would
+-- otherwise block it forever, and a player who has the flow disabled never gets a
+-- Keep button, so they must be excluded too.
 function seatedGameColors()
 	local seated = {}
 	for color, _ in pairs(data) do
-		if Player[color] ~= nil and Player[color].seated then
+		if Player[color] ~= nil and Player[color].seated and getSetting(color, "keepPregameFlow") then
 			table.insert(seated, color)
 		end
 	end
@@ -176,6 +207,6 @@ function resetKeepState(color)
 	end
 	data[color]["kept"] = false
 	data[color]["pregameAction"] = false
-	setKeepButtonVisible(color, true)
+	refreshKeepButton(color)
 	pregameAnnounced = false
 end

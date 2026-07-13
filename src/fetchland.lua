@@ -353,7 +353,7 @@ function orientFetchedLand(card, baseY, color, forcedTapped)
 		return
 	end
 	local y = baseY
-	if forcedTapped or landEntersTapped(card, color) then
+	if getSetting(color, "fetchEntersTapped") and (forcedTapped or landEntersTapped(card, color)) then
 		y = baseY + 90
 	end
 	card.setRotationSmooth({ 0, y, 0 }, false, true)
@@ -376,6 +376,9 @@ end
 -- lands, auto-surveil for the player using the same scry primitive as the Scry
 -- button, after the post-fetch library shuffle has settled.
 function fetchedLandETB(card, color)
+	if not getSetting(color, "fetchSurveil") then
+		return
+	end
 	local n = surveilOnEnter(card)
 	if n <= 0 then
 		return
