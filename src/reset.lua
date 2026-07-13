@@ -169,11 +169,22 @@ function resetLifeAndCommanderDamage(color)
 	end
 end
 
+-- how long (seconds) to wait for a player's commander-damage clicks to settle
+-- before mirroring the total onto their life. Matches the Life_Tracker's own
+-- 3s grouping window so scripted life loss reads the same as manual changes.
+commanderDamageSettle = 3
+
 -- Called by a Commander Damage tracker when its value changes (clicks or typed
--- input). Find the player whose board that tracker belongs to and apply the
--- change to their life: a positive delta is damage taken (lose that much life),
--- a negative delta is a correction (gain it back). Tracker resets don't call
--- this, so a board reset's separate life-to-40 step isn't double-counted.
+-- input). Find the player whose board that tracker belongs to and mirror the
+-- change onto their life: taking commander damage costs that much life. Commander
+-- damage never *gives* life back, so only a net increase touches life -- lowering
+-- the counter (a correction) is bookkeeping and leaves life alone. Tracker resets
+-- don't call this, so a board reset's separate life-to-40 step isn't double-counted.
+--
+-- Rather than hit life on every click, the deltas are accumulated and the life
+-- change is deferred until the clicks stop for a few seconds, then applied as a
+-- single grouped adjustment (one announcement). This is the same grouping the
+-- Life_Tracker does for its own manual changes.
 function commanderDamageDealt(params)
 	if params == nil or params.guid == nil or params.delta == nil then
 		return
@@ -183,7 +194,20 @@ function commanderDamageDealt(params)
 		if trackers ~= nil then
 			for _, guid in ipairs(trackers) do
 				if guid == params.guid then
-					loseLife(color, params.delta, "commander damage")
+					pdata["cmdrDmgPending"] = (pdata["cmdrDmgPending"] or 0) + params.delta
+					if pdata["cmdrDmgTimer"] ~= nil then
+						Wait.stop(pdata["cmdrDmgTimer"])
+					end
+					pdata["cmdrDmgTimer"] = Wait.time(function()
+						local total = pdata["cmdrDmgPending"] or 0
+						pdata["cmdrDmgPending"] = nil
+						pdata["cmdrDmgTimer"] = nil
+						-- only a net increase in commander damage costs life;
+						-- lowering the counter must never restore it
+						if total > 0 then
+							loseLife(color, total, "commander damage")
+						end
+					end, commanderDamageSettle)
 					return
 				end
 			end
