@@ -9,6 +9,7 @@ SRC = \
 	src/pregame.lua \
 	src/command_buttons.lua \
 	src/etali.lua \
+	src/obnix.lua \
 	src/coinflip.lua \
 	src/stickers.lua \
 	src/landtracker.lua \

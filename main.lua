@@ -786,6 +786,7 @@ function bumpMulliganCount(color)
 		-- show/hide this player's commander buttons based on their command zone now
 		refreshEtaliButton(color)
 		refreshRalButton(color)
+		refreshObNixButton(color)
 		-- deal goblin sticker cards if their commander is "_____ Goblin" (once)
 		refreshGoblinStickers(color)
 	end
@@ -1163,11 +1164,22 @@ function resetLifeAndCommanderDamage(color)
 	end
 end
 
+-- how long (seconds) to wait for a player's commander-damage clicks to settle
+-- before mirroring the total onto their life. Matches the Life_Tracker's own
+-- 3s grouping window so scripted life loss reads the same as manual changes.
+commanderDamageSettle = 3
+
 -- Called by a Commander Damage tracker when its value changes (clicks or typed
--- input). Find the player whose board that tracker belongs to and apply the
--- change to their life: a positive delta is damage taken (lose that much life),
--- a negative delta is a correction (gain it back). Tracker resets don't call
--- this, so a board reset's separate life-to-40 step isn't double-counted.
+-- input). Find the player whose board that tracker belongs to and mirror the
+-- change onto their life: taking commander damage costs that much life. Commander
+-- damage never *gives* life back, so only a net increase touches life -- lowering
+-- the counter (a correction) is bookkeeping and leaves life alone. Tracker resets
+-- don't call this, so a board reset's separate life-to-40 step isn't double-counted.
+--
+-- Rather than hit life on every click, the deltas are accumulated and the life
+-- change is deferred until the clicks stop for a few seconds, then applied as a
+-- single grouped adjustment (one announcement). This is the same grouping the
+-- Life_Tracker does for its own manual changes.
 function commanderDamageDealt(params)
 	if params == nil or params.guid == nil or params.delta == nil then
 		return
@@ -1178,7 +1190,20 @@ function commanderDamageDealt(params)
 			for _, guid in ipairs(trackers) do
 				if guid == params.guid then
 					if getSetting(color, "cmdrDamageAutoLife") then
-						loseLife(color, params.delta, "commander damage")
+						pdata["cmdrDmgPending"] = (pdata["cmdrDmgPending"] or 0) + params.delta
+						if pdata["cmdrDmgTimer"] ~= nil then
+							Wait.stop(pdata["cmdrDmgTimer"])
+						end
+						pdata["cmdrDmgTimer"] = Wait.time(function()
+							local total = pdata["cmdrDmgPending"] or 0
+							pdata["cmdrDmgPending"] = nil
+							pdata["cmdrDmgTimer"] = nil
+							-- only a net increase in commander damage costs life;
+							-- lowering the counter must never restore it
+							if total > 0 then
+								loseLife(color, total, "commander damage")
+							end
+						end, commanderDamageSettle)
 					end
 					return
 				end
@@ -1678,6 +1703,69 @@ function etaliPlaceNonland(clickerColor, ownerColor, card)
 	card.setRotationSmooth({ 0, mat.getRotation().y, 0 }, false, true)
 	card.setPositionSmooth(pos, false, true)
 	etaliGlow(card, ownerColor)
+end
+-------------------------------------- PING --------------------------------------
+-- A handful of "ping" commanders get a per-owner "Ping" button. Like the Etali
+-- trigger it is NOT on the table by default: when a game starts (the opening-hand
+-- snapshot -- see bumpMulliganCount) we check that player's command zone, and if
+-- their commander is one of PING_COMMANDER_NAMES we attach the button there (see
+-- command_buttons.lua for the shared placement/detection). It persists until the
+-- next game start at which the player no longer has a ping commander.
+--
+-- Clicking it reduces every opponent's life by 1 (life loss reuses loseLife, so
+-- it announces and updates each Life_Tracker exactly like other scripted drains).
+
+PING_COMMANDER_NAMES = {
+	"Ob Nixilis, Captive Kingpin",
+	"Vivi Ornitier",
+	"Crystal, Inhuman Princess",
+}
+
+-- does this player's command zone hold any of the ping commanders?
+function hasPingCommander(color)
+	for _, name in ipairs(PING_COMMANDER_NAMES) do
+		if commandZoneHasCommander(color, name) then
+			return true
+		end
+	end
+	return false
+end
+
+-- game-start hook: the Ping button should be present iff the player has a ping
+-- commander in their command zone at this moment. Clear first so a reload (where
+-- the zone may keep a stale button) can't leave a duplicate.
+function refreshObNixButton(color)
+	if data[color] == nil then
+		return
+	end
+	removeCommandZoneButton(color, "playerObNixPing")
+	if getSetting(color, "commanderQOL") and hasPingCommander(color) then
+		addCommandZoneButton(color, {
+			click_function = "playerObNixPing",
+			label = "Ping",
+			tooltip = "                  [b]Ping[/b]\neach opponent loses 1 life",
+		})
+	end
+end
+
+-- button handler: only the owning player may activate their Ping. Every other
+-- colour in the game loses 1 life (loseLife no-ops when a player has no
+-- Life_Tracker, so absent seats are skipped).
+function playerObNixPing(obj, clickerColor, alt)
+	local ownerColor = commandZoneOwnerOf(obj)
+	if ownerColor == nil then
+		return
+	end
+	if clickerColor ~= ownerColor then
+		Player[clickerColor].broadcast("Only " .. ownerColor .. " may use this Ping.")
+		return
+	end
+	Player[ownerColor].broadcast(ownerColor .. " pinged opponents for 1", ownerColor)
+	for color, _ in pairs(data) do
+		if color ~= ownerColor then
+			loseLife(color, 1, "Ping")
+		end
+	end
 end
 ------------------------------------- RAL --------------------------------------
 -- "Ral, Monsoon Mage" gets a small button cluster by the command zone, present
