@@ -1,28 +1,68 @@
 -------------------------------- KEEP / PREGAME --------------------------------
--- A "Keep" button sits to the right of each player's Mulligan button, mirroring
--- the Serum Powder button on the left (see buttons.lua). Clicking Keep locks in
--- that player's opening hand and relabels the button to "Pregame"; clicking it
--- again toggles whether the player has a pregame action (Leyline, Chancellor,
--- Gemstone Caverns, ...). Once every seated player has clicked Keep, the table
--- announces who declared a pregame action.
+-- A big "Keep" button sits in the centre of each player's playmat. Left-clicking
+-- it locks in that player's opening hand; right-clicking privately declares that
+-- the player has a pregame action (Leyline, Chancellor, Gemstone Caverns, ...).
+--
+-- The button never changes its label -- doing so would leak whether a player has
+-- a pregame action to the rest of the table. Instead each click just sends the
+-- clicker a private message. Once every seated player has kept, the table
+-- announces who declared a pregame action and every keep button hides itself
+-- until the next round of mulligans re-arms the flow.
 
 pregameAnnounceDelay = 2 -- grace period after the last Keep before announcing, so
                          -- the final player can still declare a pregame action
 pregameAnnounced = false -- table-wide one-shot guard for the announcement
 
--- set the Keep/Pregame button's label + colour for a player. The button lives on
--- the mulligan token and is found by its click_function.
-function setKeepButtonLabel(color, label, active)
-	local obj = data[color] and data[color]["mulliganButton"]
-	if obj == nil then
+-- create the keep button in the centre of one player's playmat. The button lives
+-- on the mat object and is found later by its click_function. Called once at load
+-- (after the land tracker has claimed the mat's index-0 button) via spawnKeepButtons.
+function createKeepButton(color)
+	local mat = data[color] and data[color]["playmat"]
+	if mat == nil then
 		return
 	end
-	for _, b in ipairs(obj.getButtons() or {}) do
+	-- inverse-scale so the button renders at a consistent size no matter how big
+	-- the mat is scaled (same trick the land tracker uses)
+	local scale = mat.getScale()
+	local textScale = { 1 / scale.x, 1 / scale.y, 1 / scale.z }
+	mat.createButton({
+		click_function = "playerKeep",
+		function_owner = Global,
+		label = "Keep",
+		tooltip = "                    [b]Keep[/b]\n[i]left click[/i] to keep your hand\n[i]right click[/i] if you have a pregame action",
+		position = { 0, 0.1, 0 },
+		scale = textScale,
+		width = 3500,
+		height = 1400,
+		font_size = 800,
+		color = { 1, 1, 1, 0 },
+		font_color = { 1, 1, 1, 100 },
+		hover_color = { 1, 1, 1, 0.1 },
+		press_color = { 1, 0, 0, 0.2 },
+	})
+end
+
+-- create every player's keep button. Called from onload after spawnLandTrackerText.
+function spawnKeepButtons()
+	for color, _ in pairs(data) do
+		createKeepButton(color)
+	end
+end
+
+-- show or hide a player's keep button without disturbing the land tracker's own
+-- button (index 0). Found by click_function so button indices never need tracking.
+function setKeepButtonVisible(color, visible)
+	local mat = data[color] and data[color]["playmat"]
+	if mat == nil then
+		return
+	end
+	for _, b in ipairs(mat.getButtons() or {}) do
 		if b.click_function == "playerKeep" then
-			obj.editButton({
+			mat.editButton({
 				index = b.index,
-				label = label,
-				font_color = active and { 0.4, 1, 0.4, 100 } or { 1, 1, 1, 100 },
+				label = visible and "Keep" or "",
+				width = visible and 3500 or 0,
+				height = visible and 1400 or 0,
 			})
 			return
 		end
@@ -68,7 +108,8 @@ function joinNames(names)
 	return table.concat(names, ", ", 1, n - 1) .. " and " .. names[n]
 end
 
--- announce which seated players declared a pregame action
+-- announce which seated players declared a pregame action, then hide every keep
+-- button until the next round of mulligans re-arms them
 function announcePregame()
 	local withAction = {}
 	for _, color in ipairs(seatedGameColors()) do
@@ -84,10 +125,14 @@ function announcePregame()
 	else
 		broadcastToAll(joinNames(withAction) .. " have pregame actions!", gold)
 	end
+	for color, _ in pairs(data) do
+		setKeepButtonVisible(color, false)
+	end
 end
 
--- button handler. First click = keep (relabel to Pregame). Later clicks toggle the
--- player's pregame-action declaration. Owner-only.
+-- button handler. Left click = keep your hand; right click = privately declare a
+-- pregame action (toggled). Neither changes the button, so nothing about a
+-- player's hand or pregame action leaks to the rest of the table. Owner-only.
 function playerKeep(obj, clickerColor, alt)
 	local ownerColor = buttonOwner(obj)
 	if ownerColor == nil then
@@ -97,39 +142,40 @@ function playerKeep(obj, clickerColor, alt)
 		warnNotYours(obj, clickerColor)
 		return
 	end
-	if not data[ownerColor]["kept"] then
-		-- first click: lock in the keep and reveal the Pregame toggle
-		data[ownerColor]["kept"] = true
-		data[ownerColor]["pregameAction"] = false
-		setKeepButtonLabel(ownerColor, "Pregame", false)
-		Player[ownerColor].broadcast("Hand kept -- click Pregame if you have a pregame action.", ownerColor)
-		-- once the last seated player keeps, announce after a short grace period so
-		-- that final player still has a moment to declare their own pregame action
-		if not pregameAnnounced and allPlayersKept() then
-			pregameAnnounced = true
-			Wait.time(function()
-				if allPlayersKept() then
-					announcePregame()
-				end
-			end, pregameAnnounceDelay)
-		end
-	else
-		-- toggle this player's pregame-action declaration
+	if alt then
+		-- right click: privately toggle this player's pregame-action declaration
 		local on = not data[ownerColor]["pregameAction"]
 		data[ownerColor]["pregameAction"] = on
-		setKeepButtonLabel(ownerColor, on and "Pregame ✔" or "Pregame", on)
+		Player[ownerColor].broadcast(on and "Pregame action noted." or "Pregame action cleared.", ownerColor)
+		return
+	end
+	if data[ownerColor]["kept"] then
+		return -- already kept; nothing to do on another left click
+	end
+	-- first left click: lock in the keep (privately -- no visible change)
+	data[ownerColor]["kept"] = true
+	Player[ownerColor].broadcast("Hand kept -- right-click Keep if you have a pregame action.", ownerColor)
+	-- once the last seated player keeps, announce after a short grace period so
+	-- that final player still has a moment to declare their own pregame action
+	if not pregameAnnounced and allPlayersKept() then
+		pregameAnnounced = true
+		Wait.time(function()
+			if allPlayersKept() then
+				announcePregame()
+			end
+		end, pregameAnnounceDelay)
 	end
 end
 
--- clear a player's keep/pregame state and restore the button to "Keep". Called
--- from resetMulliganCount so a fresh game (right-click count reset or a board
--- reset) re-arms the keep flow and lets the announcement fire again.
+-- clear a player's keep/pregame state and re-show the button. Called from
+-- resetMulliganCount so a fresh game (right-click count reset or a board reset)
+-- re-arms the keep flow and lets the announcement fire again.
 function resetKeepState(color)
 	if data[color] == nil then
 		return
 	end
 	data[color]["kept"] = false
 	data[color]["pregameAction"] = false
-	setKeepButtonLabel(color, "Keep", false)
+	setKeepButtonVisible(color, true)
 	pregameAnnounced = false
 end

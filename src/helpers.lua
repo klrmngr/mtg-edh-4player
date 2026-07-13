@@ -53,7 +53,7 @@ function getDeckFromZone(zone)
 end
 
 -- the per-player buttons that live on a token belonging to one colour
-buttonOwnerKeys = { "drawButton", "scryButton", "millButton", "untapButton", "mulliganButton", "revealButton" }
+buttonOwnerKeys = { "drawButton", "scryButton", "millButton", "untapButton", "mulliganButton", "revealButton", "playmat" }
 
 -- reverse-lookup the owner colour of a per-player button object, or nil
 function buttonOwner(obj)
