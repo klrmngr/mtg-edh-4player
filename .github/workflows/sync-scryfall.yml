@@ -1,0 +1,27 @@
+name: sync-scryfall-r2
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # 06:00 UTC daily
+  workflow_dispatch:       # manual "Run workflow" button
+
+concurrency:
+  group: sync-scryfall     # never overlap runs
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350   # first run is the long one; under the 6h cap
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install boto3 requests
+      - run: python tools/r2-mirror/sync.py
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_KEY: ${{ secrets.R2_KEY }}
+          R2_SECRET: ${{ secrets.R2_SECRET }}
+          R2_BUCKET: ${{ vars.R2_BUCKET }}
