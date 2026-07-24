@@ -49,6 +49,7 @@ function onload(saved)
 	spawnLandTrackerText()
 	spawnKeepButtons()
 	initFetchlands()
+	initStickerBagMenu()
 end
 
 -- Ensure data structure exists
@@ -2187,6 +2188,23 @@ function libraryHasGoblin(color)
 		end
 	end
 	return false
+end
+
+-- add a right-click "Draw Me Stickers" item to the sticker bag, so any player can
+-- deal themselves 3 random stickers on demand (same path as the Goblin auto-deal).
+-- Called once from onload.
+function initStickerBagMenu()
+	local bag = getObjectFromGUID(GOBLIN_STICKER_BAG)
+	if bag == nil then
+		return
+	end
+	bag.clearContextMenu()
+	bag.addContextMenuItem("Draw Me Stickers", function(color)
+		if data[color] == nil or data[color]["playmat"] == nil then
+			return
+		end
+		dealGoblinStickers(color)
+	end)
 end
 
 -- game-start hook: once per player, deal the stickers if they have the Goblin

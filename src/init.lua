@@ -49,6 +49,7 @@ function onload(saved)
 	spawnLandTrackerText()
 	spawnKeepButtons()
 	initFetchlands()
+	initStickerBagMenu()
 end
 
 -- Ensure data structure exists
