@@ -186,6 +186,11 @@ function showFetchPreviews(zone, fetch)
 			y = base.y + 0.5,
 			z = base.z + fwd.z * offFwd + rgt.z * offRight,
 		}
+		-- spawn well below the table first: there's a 1-2 frame gap between the
+		-- spawn and setInvisibleTo running in the callback, during which the card
+		-- is visible to everyone. Spawning it out of sight and only moving it up to
+		-- `pos` once it's hidden keeps that flash off-screen for other players.
+		local hiddenPos = { x = pos.x, y = base.y - 50, z = pos.z }
 		local cardData = matches[i]
 		-- tag the copy so the land tracker / fetch logic ignore it
 		cardData.Tags = { "FetchPreview" }
@@ -196,7 +201,7 @@ function showFetchPreviews(zone, fetch)
 		cardData.Transform.scaleZ = fetchPreviewScale
 		local preview = spawnObjectData({
 			data = cardData,
-			position = pos,
+			position = hiddenPos,
 			rotation = rot,
 			scale = { fetchPreviewScale, fetchPreviewScale, fetchPreviewScale },
 			callback_function = function(obj)
@@ -204,6 +209,9 @@ function showFetchPreviews(zone, fetch)
 				obj.setLock(true)
 				-- only the land zone's owner sees their own fetch previews
 				obj.setInvisibleTo(allBut(color))
+				-- now that it's hidden from everyone else, snap it up into place
+				-- (instant, not smooth -- the owner just sees it appear where it belongs)
+				obj.setPosition(pos)
 				-- record what this preview resolves to, and add a click target
 				fetchPreviewData[obj.getGUID()] = {
 					color = color,
