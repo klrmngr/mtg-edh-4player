@@ -20,7 +20,7 @@ DRY_RUN = "--dry-run" in sys.argv
 BUCKET = os.environ.get("R2_BUCKET", "mtg-cards")
 ACCOUNT_ID = os.environ["R2_ACCOUNT_ID"]
 UA = {"User-Agent": "klrmngr-cdn/1.0", "Accept": "application/json"}
-IMG_HEADERS = {"User-Agent": "klrmngr-cdn/1.0", "Accept": "image/jpeg,*/*"}
+IMG_HEADERS = {"User-Agent": "klrmngr-cdn/1.0", "Accept": "image/webp,*/*"}
 DELAY = 0.05  # polite gap between image downloads
 
 S3 = boto3.client(
@@ -49,16 +49,21 @@ def bulk_default_cards():
 
 
 def card_images(card):
-    """Yield (key, url) for the large JPG of each face, key = Scryfall CDN path."""
-    urls = []
-    if "image_uris" in card:
-        urls.append(card["image_uris"]["large"])
-    else:
-        for face in card.get("card_faces", []):
-            if "image_uris" in face:
-                urls.append(face["image_uris"]["large"])
-    for url in urls:
+    """Yield (key, url) for the webp versions of each face, key = Scryfall CDN path."""
+    # Skip digging through card data, just build the URLs directly from the versions we want.
+    # https://scryfall.com/docs/api/images
+    # thumb: 146x204
+    # grid: 488x680
+    # display: 672x936
+    # crop: 480x680 trimmed border
+    # art: 626x457 only art
+    versions = ["thumb", "grid", "display", "crop", "art"]
+    for url in [f"https://cards.scryfall.io/{version}/front/{card.get("id", "")[0]}/{card.get("id", "")[1]}/{card.get("id", "")}.webp" for version in versions]:
         yield urlparse(url).path.lstrip("/"), url
+    # Catches possible adventure frame mishaps, only grabs back images for cards that have back images
+    if "card_faces" in card and "image_uris" in card["card_faces"][0]:
+        for url in [f"https://cards.scryfall.io/{version}/back/{card.get("id", "")[0]}/{card.get("id", "")[1]}/{card.get("id", "")}.webp" for version in versions]:
+            yield urlparse(url).path.lstrip("/"), url
 
 
 def main():
@@ -73,7 +78,7 @@ def main():
     uploaded = 0
     failed = 0
     for card in cards:
-        if card.get("lang") != "en":
+        if card.get("lang") != "en" or card.get("image_status") != "highres_scan":
             continue
         for key, url in card_images(card):
             if key in have:
@@ -87,13 +92,13 @@ def main():
                 img = requests.get(url, headers=IMG_HEADERS, timeout=30)
                 img.raise_for_status()
                 ctype = img.headers.get("Content-Type", "")
-                if ctype != "image/jpeg":
+                if ctype != "image/webp":
                     raise ValueError(f"unexpected content-type {ctype!r}")
                 S3.put_object(
                     Bucket=BUCKET,
                     Key=key,
                     Body=img.content,
-                    ContentType="image/jpeg",
+                    ContentType="image/webp",
                     CacheControl="public, max-age=31536000, immutable",
                 )
                 have.add(key)
