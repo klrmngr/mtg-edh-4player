@@ -18,22 +18,3 @@ function createButton()
     tooltip=ttip
   })
 end
-
-function mullSwitch(obj,ply)
-  if Player[ply].steam_id=='76561197968157267' then
-    smartMulligan=Global.getVar('smartMulligan')
-    if smartMulligan==nil then
-      smartMulligan=false
-    end
-    smartMulligan=not(smartMulligan)
-    Global.setVar('smartMulligan',smartMulligan)
-    if smartMulligan then
-      ttip='on'
-      createButton()
-    else
-      ttip='off'
-      createButton()
-    end
-    Player[ply].broadcast('smart mulligan is '..ttip)
-  end
-end
