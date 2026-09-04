@@ -82,13 +82,6 @@ function onChat(message, pl)
 	end
 
 	local message = string.lower(message):gsub("%p", "")
-	if message == "promote me" and pl.steam_id == "76561197968157267" then
-		if not (pl.promoted or pl.admin) then
-			pl.promote()
-		end
-		pl.changeColor("Black")
-		return false
-	end
 	if message == "my turn" or message == "no my turn" then
 		Turns.enable = true
 		Turns.turn_color = pl.color
