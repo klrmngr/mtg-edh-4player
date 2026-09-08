@@ -1,15 +1,6 @@
 # MTG EDH 4-player (χ)
 
-A scripted [Tabletop Simulator](https://store.steampowered.com/app/286160/) mod for 4-player Magic: The Gathering Commander. Fork of [MTG EDH 4-player (π)](https://steamcommunity.com/sharedfiles/filedetails/?id=3719365187).
-
-## Features
-
-- Per-player table buttons: Draw, Scry, Mill, Untap, Reveal (left click = 1, right click = several, or type a number).
-- Mulligan button with a running counter; right click resets it (any player can reset another's).
-- Serum Powder button: exiles your hand and draws a fresh one of the same size.
-- Scryfall card search and decklist importer.
-- Cascade and reveal-until-type helper panels.
-- Patch-notes button that pulls release notes from GitHub.
+A scripted [Tabletop Simulator](https://store.steampowered.com/app/286160/) mod for 4-player Magic: The Gathering Commander. Fork of [MTG EDH 4-player (π)](https://steamcommunity.com/sharedfiles/filedetails/?id=2296042369).
 
 ## Layout
 
@@ -24,18 +15,6 @@ A scripted [Tabletop Simulator](https://store.steampowered.com/app/286160/) mod 
 - `tts_save.py` — splits a TTS save into the per-object JSON above and rebuilds it.
 
 ## Development
-
-Edit files under `src/`, then rebuild:
-
-```sh
-make
-```
-
-To push changes into a running game on save (TTS must be open with a save loaded):
-
-```sh
-python tts_push.py
-```
 
 ### Saves
 
