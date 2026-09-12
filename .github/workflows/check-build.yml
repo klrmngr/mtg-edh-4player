@@ -1,0 +1,12 @@
+name: check-build
+
+on:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify main.lua matches a fresh build from src/
+        run: make check
