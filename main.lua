@@ -882,6 +882,29 @@ function playerMulligan(button, playerColor, alt)
 			Wait.time(function()
 				deck.shuffle()
 			end, 0.1, 7)
+
+			Wait.time(function()
+				if smartMulligan then -- ensure 2-5 lands in hand
+					local nMulls = 0
+					local keepTrying = true
+					while keepTrying do
+						nMulls = nMulls + 1
+						deck.shuffle()
+						local nLands = 0
+						local cards = deck.getObjects()
+						for i = 1, 7 do
+							if cards[i].name:lower():find("land") then
+								nLands = nLands + 1
+							end
+						end
+						if (nLands >= 3 and nLands <= 4) or nMulls >= 3 then
+							keepTrying = false
+						end
+					end
+				end
+				deck.deal(data[playerColor]["mulliganNumber"], playerColor, 1)
+			end, 0.8)
+			-- Wait.time(function() sortHands(playerColor) end, 1.5)
 		end
 	end
 end
