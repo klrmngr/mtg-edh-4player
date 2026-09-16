@@ -67,13 +67,22 @@ async function handleReport(request, env) {
   const version = String(payload.version || "?").slice(0, 40);
 
   // A bug report carries a serialized table snapshot; stash it in R2 and link it
-  // so the issue stays small and the save is one click away.
+  // so the issue stays small and the save is one click away. The mod splices the
+  // snapshot in as a raw JSON object (to avoid a blocking re-encode on the game
+  // thread), so it arrives parsed -- re-stringify it here. Older builds sent it
+  // as a pre-encoded string; accept both.
+  const saveBlob =
+    payload.save == null
+      ? ""
+      : typeof payload.save === "string"
+        ? payload.save
+        : JSON.stringify(payload.save);
   let saveUrl = null;
-  if (isBug && typeof payload.save === "string" && payload.save.length > 0) {
+  if (isBug && saveBlob.length > 0) {
     const stamp = new Date().toISOString().replace(/[:.]/g, "-");
     const key = `bug-reports/${stamp}-${crypto.randomUUID().slice(0, 8)}.json`;
     try {
-      await env.BUCKET.put(key, payload.save, {
+      await env.BUCKET.put(key, saveBlob, {
         httpMetadata: { contentType: "application/json" },
       });
       saveUrl = `${new URL(request.url).origin}/${key}`;
