@@ -4838,10 +4838,16 @@ end
 -- foreign cards on YOUR mat aren't highlighted. Cards with no owner stamp (never
 -- seen in a private area) are never highlighted.
 
+-- private, owner-only scripting zones we stamp ownership from: a card seen in
+-- any of these belongs to that colour. Their command zone is included so
+-- commanders -- which start there and never pass through the library or hand --
+-- still get an owner.
+ownershipStampZones = { "libraryZone", "commandZone" }
+
 -- stamp ownership the first time a card is seen in one of its owner's private
--- areas: their library zone (matched by the per-colour zone) or their hand
--- (checked by hand membership). Only unstamped Cards are touched, and ownership,
--- once set, is never overwritten.
+-- areas: their library / command zone (matched by the per-colour zone) or their
+-- hand (checked by hand membership). Only unstamped Cards are touched, and
+-- ownership, once set, is never overwritten.
 function stampOwnershipOnEnter(zone, obj)
 	if obj == nil or obj.type ~= "Card" then
 		return
@@ -4849,11 +4855,16 @@ function stampOwnershipOnEnter(zone, obj)
 	if getCardNote(obj, "owner") ~= nil then
 		return
 	end
-	-- library zone: unambiguous per-colour scripting zone
+	-- private per-colour scripting zones (library, command)
 	for _, color in ipairs(settingsColors) do
-		if data[color] ~= nil and zone == data[color]["libraryZone"] then
-			setCardNote(obj, "owner", color)
-			return
+		local pd = data[color]
+		if pd ~= nil then
+			for _, key in ipairs(ownershipStampZones) do
+				if zone == pd[key] then
+					setCardNote(obj, "owner", color)
+					return
+				end
+			end
 		end
 	end
 	-- hand: only your own cards sit in your hand
