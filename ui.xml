@@ -24,7 +24,7 @@
 
         <HorizontalLayout preferredHeight="34" minHeight="34" spacing="8" childAlignment="MiddleLeft" childForceExpandWidth="false" childForceExpandHeight="false">
             <Text fontSize="16" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" preferredWidth="70" minWidth="70" text="Repeat" />
-            <InputField id="repeatX" onEndEdit="UIrepeatSearchType" characterValidation="Integer" placeholder="1" text="" fontSize="16" textAlignment="MiddleCenter" preferredWidth="56" minWidth="56" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" tooltip="how many times to repeat the reveal" tooltipPosition="Above" tooltipBorderColor="rgba(0,0,0,0)" />
+            <InputField id="repeatX" onEndEdit="UIrepeatSearchType" characterValidation="Integer" placeholder="1" text="" fontSize="16" textAlignment="MiddleCenter" preferredWidth="56" minWidth="56" preferredHeight="34" minHeight="34" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" tooltip="how many times to repeat the reveal" tooltipPosition="Above" tooltipBorderColor="rgba(0,0,0,0)" />
             <Text fontSize="16" color="rgb(0.6,0.6,0.6)" alignment="MiddleLeft" flexibleWidth="1" text="time(s)" />
         </HorizontalLayout>
 
@@ -36,17 +36,17 @@
 <!-- Deck context-menu number picker (cascade; scry/mill reserved). CMtext is
      rewritten at runtime and drives which action CMokay runs, so it keeps the
      action keyword. Styled to match Settings / Bug-report. -->
-<Panel id="GetValuePanel" width="320" height="330" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
+<Panel id="GetValuePanel" width="320" height="298" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
     <Text id="CMtext" rectAlignment="UpperCenter" offsetXY="0 -18" width="280" height="32" fontSize="24" fontStyle="Bold" color="rgb(1,1,1)" alignment="MiddleCenter" text="Cascade" />
     <Button rectAlignment="UpperRight" offsetXY="-8 -8" width="30" height="30" color="#990000" textColor="#FFFFFF" text="X" fontSize="18" onClick="CMcancel" />
 
-    <VerticalLayout rectAlignment="UpperCenter" offsetXY="0 -56" width="256" height="258" spacing="8" childForceExpandHeight="false" childForceExpandWidth="true">
+    <VerticalLayout rectAlignment="UpperCenter" offsetXY="0 -56" width="256" height="226" spacing="8" childForceExpandHeight="false" childForceExpandWidth="true">
         <Text preferredHeight="20" minHeight="20" fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleCenter" text="MAXIMUM CMC" />
-        <InputField id="CMinput" preferredHeight="84" minHeight="84" onEndEdit="CMgetVal" onSubmit="CMokay" maxLength="2" characterLimit="2" characterValidation="Integer" placeholder="#" text="" fontSize="56" textAlignment="MiddleCenter" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" />
+        <InputField id="CMinput" preferredHeight="52" minHeight="52" onEndEdit="CMgetVal" onSubmit="CMokay" maxLength="2" characterLimit="2" characterValidation="Integer" placeholder="#" text="" fontSize="30" textAlignment="MiddleCenter" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" />
 
         <HorizontalLayout preferredHeight="34" minHeight="34" spacing="8" childAlignment="MiddleCenter" childForceExpandWidth="false" childForceExpandHeight="false">
             <Text fontSize="16" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" preferredWidth="70" minWidth="70" text="Repeat" />
-            <InputField id="repeatCascadeX" onEndEdit="UIrepeatCascade" characterValidation="Integer" placeholder="1" text="" fontSize="16" textAlignment="MiddleCenter" preferredWidth="56" minWidth="56" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" tooltip="how many times to repeat the cascade" tooltipPosition="Above" tooltipBorderColor="rgba(0,0,0,0)" />
+            <InputField id="repeatCascadeX" onEndEdit="UIrepeatCascade" characterValidation="Integer" placeholder="1" text="" fontSize="16" textAlignment="MiddleCenter" preferredWidth="56" minWidth="56" preferredHeight="34" minHeight="34" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" tooltip="how many times to repeat the cascade" tooltipPosition="Above" tooltipBorderColor="rgba(0,0,0,0)" />
             <Text fontSize="16" color="rgb(0.6,0.6,0.6)" alignment="MiddleLeft" flexibleWidth="1" text="time(s)" />
         </HorizontalLayout>
 
