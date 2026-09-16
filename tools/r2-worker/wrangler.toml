@@ -1,31 +1,26 @@
-name = "mtg-cdn"
+name = "mtg-bug-report"
 main = "src/worker.js"
 compatibility_date = "2024-09-01"
 
-# Serve the bucket on the card domain.
-routes = [{ pattern = "img.klrmngr.com/*", zone_name = "klrmngr.com" }]
+# Dedicated subdomain for the in-game report endpoint. custom_domain = true makes
+# Cloudflare create the proxied DNS record + edge cert for report.klrmngr.com on
+# deploy, so this never touches the img.klrmngr.com image host.
+routes = [{ pattern = "report.klrmngr.com", custom_domain = true }]
 
-# The card bucket, bound as env.BUCKET. Read for image serving; also written to
-# under bug-reports/ when a player files an in-game bug report with a snapshot.
+# Snapshot store, bound as env.BUCKET. Bug reports write their table snapshot
+# under bug-reports/ and the worker serves it back as the issue's download link.
 [[r2_buckets]]
 binding = "BUCKET"
-bucket_name = "mtg-cards"
-
-# Dedup store: one entry per 404'd key so bots hammering the same
-# missing path only ever file one issue. See src/worker.js.
-[[kv_namespaces]]
-binding = "SEEN"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"   # `wrangler kv namespace create SEEN`
+bucket_name = "mtg-bug-reports"
 
 [vars]
 GITHUB_REPO = "klrmngr/mtg-edh-4player"
-DEDUP_TTL_SECONDS = "604800"          # 7 days: same missing key won't re-file within a week
 
 # GITHUB_TOKEN is a SECRET, not a var. Set it with:
 #   wrangler secret put GITHUB_TOKEN
 # Use a fine-grained PAT scoped to only this repo with Issues: Read & Write.
 #
 # REPORT_KEY (optional) is a weak shared gate for POST /report. When set, the
-# Worker rejects reports whose X-Report-Key header doesn't match. It ships inside
+# worker rejects reports whose X-Report-Key header doesn't match. It ships inside
 # the mod (bugReportKey in src/bugreport.lua) so it only deters casual spam:
 #   wrangler secret put REPORT_KEY

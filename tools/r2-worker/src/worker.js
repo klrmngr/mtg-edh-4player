@@ -1,94 +1,41 @@
-// Front the mtg-cards R2 bucket. Serve hits straight from R2; on a miss,
-// return 404 and — only for a legitimately-shaped card key — file a GitHub
-// issue so a genuinely missing mirror surfaces as a tracked bug.
+// Backs the in-game bug reporter for the MTG EDH mod. A single dedicated worker
+// on report.klrmngr.com:
+//   POST /report   -- file a bug report / feature request as a GitHub issue,
+//                     stashing any table snapshot in R2 and linking it.
+//   GET  /<key>    -- serve a stored snapshot back (maintainer download link).
 //
-// The point is to catch "a card image the sync should have uploaded is gone",
-// NOT to log every scanner probing for /.env or /wp-login.php. Two gates keep
-// the issue tracker clean:
-//   1. Shape filter  — the path must match an expected image key, or we just
-//                      404 silently and never touch GitHub.
-//   2. KV dedup      — a given missing key files at most one issue per TTL,
-//                      so bots retrying the same URL don't spam.
-
-// display/front/2/2/<uuid>.webp   or   large/back/a/b/<uuid>.jpg
-// The two shard chars mirror the first two of the uuid, matching Scryfall's paths.
-const CARD_KEY = /^(display|large)\/(front|back)\/[0-9a-f]\/[0-9a-f]\/[0-9a-f-]{36}\.(webp|jpg)$/;
+// The GitHub token is a Worker secret (env.GITHUB_TOKEN) and must NEVER ship in
+// the mod: the save file is readable by anyone who has it.
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env) {
     const url = new URL(request.url);
 
-    // Players file bugs / feature requests from inside the mod via POST /report.
+    // Players file bugs / feature requests from inside the mod.
     if (request.method === "POST" && url.pathname === "/report") {
       return handleReport(request, env);
     }
 
-    if (request.method !== "GET" && request.method !== "HEAD") {
-      return new Response("Method Not Allowed", { status: 405 });
+    // Serve a stored snapshot back so the issue's "Table snapshot" link resolves.
+    // Keys are timestamp + random, so they aren't guessable; the bucket only ever
+    // holds bug-report JSON.
+    if (request.method === "GET" || request.method === "HEAD") {
+      const key = decodeURIComponent(url.pathname.slice(1));
+      if (key) {
+        const object = await env.BUCKET.get(key);
+        if (object) {
+          const headers = new Headers();
+          object.writeHttpMetadata(headers);
+          headers.set("etag", object.httpEtag);
+          return new Response(request.method === "HEAD" ? null : object.body, { headers });
+        }
+      }
+      return new Response("Not found", { status: 404 });
     }
 
-    const key = decodeURIComponent(url.pathname.slice(1));
-    const object = await env.BUCKET.get(key);
-
-    if (object) {
-      const headers = new Headers();
-      object.writeHttpMetadata(headers);           // Content-Type from the stored object
-      headers.set("etag", object.httpEtag);
-      headers.set("cache-control", "public, max-age=31536000, immutable");
-      return new Response(request.method === "HEAD" ? null : object.body, { headers });
-    }
-
-    // Miss. File an issue in the background so the client still gets its 404 fast.
-    if (CARD_KEY.test(key)) {
-      ctx.waitUntil(reportMissing(key, request, env));
-    }
-    return new Response("Not found", { status: 404 });
+    return new Response("Method Not Allowed", { status: 405 });
   },
 };
-
-async function reportMissing(key, request, env) {
-  try {
-    // Dedup: first requester of this key within the TTL wins.
-    if (await env.SEEN.get(key)) return;
-    await env.SEEN.put(key, "1", { expirationTtl: Number(env.DEDUP_TTL_SECONDS) });
-
-    const cf = request.cf || {};
-    const body = [
-      `A card image was requested but is missing from the \`mtg-cards\` bucket.`,
-      ``,
-      `- **Key:** \`${key}\``,
-      `- **URL:** ${request.url}`,
-      `- **Referer:** ${request.headers.get("referer") || "(none)"}`,
-      `- **Country:** ${cf.country || "?"}`,
-      `- **First seen:** ${new Date().toISOString()}`,
-      ``,
-      `Likely a gap in the Scryfall mirror — re-run \`tools/r2-mirror/sync.py\`.`,
-    ].join("\n");
-
-    const resp = await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/issues`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${env.GITHUB_TOKEN}`,
-        "Accept": "application/vnd.github+json",
-        "User-Agent": "mtg-cdn-worker",           // GitHub rejects requests without a UA
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: `Missing card image: ${key}`,
-        body,
-        labels: ["missing-image", "cdn"],
-      }),
-    });
-
-    if (!resp.ok) {
-      // Roll back the dedup marker so a transient GitHub failure retries next time.
-      await env.SEEN.delete(key);
-      console.error(`GitHub issue failed: ${resp.status} ${await resp.text()}`);
-    }
-  } catch (e) {
-    console.error("reportMissing error", e);
-  }
-}
 
 // Handle an in-game bug report / feature request: stash any table snapshot in
 // R2, then file a labelled GitHub issue and return its URL to the mod.

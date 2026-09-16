@@ -6735,9 +6735,10 @@ end
 -- title/description/type are mirrored into one shared draft as they're edited,
 -- and the submitting player is attributed at submit time.
 
--- POST target: the same Worker/domain that fronts the card bucket. A GET serves
--- images; a POST to /report files an issue. See tools/r2-worker/src/worker.js.
-bugReportURL = "https://img.klrmngr.com/report"
+-- POST target: the dedicated report worker (separate from the img.klrmngr.com
+-- image host). A POST to /report files a GitHub issue. See
+-- tools/r2-worker/src/worker.js.
+bugReportURL = "https://report.klrmngr.com/report"
 
 -- Weak, ships-in-the-save shared key. This is NOT a secret (anyone with the mod
 -- can read it) -- it only turns away trivial drive-by POSTs. The Worker enforces
