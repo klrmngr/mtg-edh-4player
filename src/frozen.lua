@@ -55,8 +55,23 @@ function freezeCardUnder(token)
 	if data == nil then
 		return
 	end
-	data["mtg_frozen"] = true
-	enc.call("APIobjSetPropData", { obj = card, propID = "πKeywords", data = data })
-	enc.call("APIrebuildButtons", { obj = card })
+	-- Only apply Frozen if it isn't already set. We drive this through the
+	-- Keywords module's own toggle (rather than writing mtg_frozen directly),
+	-- because that path also registers the icon in activeIcons and flips the
+	-- module's internal updateDecals flag -- the only way the frozen decal
+	-- actually gets drawn above the card. Setting the value by hand freezes the
+	-- card (Untap respects it) but leaves no visible indicator.
+	if data["mtg_frozen"] ~= true then
+		local prop = enc.call("APIgetProp", { propID = "πKeywords" })
+		if prop ~= nil and prop.funcOwner ~= nil then
+			prop.funcOwner.call("toggleStatusmtg_frozen", card)
+		else
+			-- fallback: apply the flag directly so freezing still works even if
+			-- the Keywords module can't be reached (icon just won't render).
+			data["mtg_frozen"] = true
+			enc.call("APIobjSetPropData", { obj = card, propID = "πKeywords", data = data })
+			enc.call("APIrebuildButtons", { obj = card })
+		end
+	end
 	token.destruct()
 end
