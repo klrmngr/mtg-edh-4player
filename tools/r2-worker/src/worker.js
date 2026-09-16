@@ -47,20 +47,21 @@ async function handleReport(request, env) {
   const reporterId = String(payload.reporterId || "").replace(/\D/g, "").slice(0, 20);
   const version = String(payload.version || "?").slice(0, 40);
 
-  // Rate limit: 1 report / minute / person. Key on the SteamID when present --
-  // every in-game report is POSTed from the HOST's IP, so an IP key would
-  // throttle the whole table; the SteamID makes it per-player. It's self-asserted
-  // (spoofable), but this only guards against accidental spam / mashing submit.
-  // A named Durable Object per key is one globally-consistent instance, so it
-  // enforces the limit exactly (the native rate-limit binding is approximate and
-  // per-location -- it does not reliably block at limit 1).
-  const rlKey = reporterId || request.headers.get("cf-connecting-ip") || "anon";
-  const rlId = env.REPORT_LIMITER.idFromName(rlKey);
-  const rlResp = await env.REPORT_LIMITER.get(rlId).fetch("https://rl/check");
-  const { allowed } = await rlResp.json();
-  if (!allowed) {
-    return json({ error: "rate_limited" }, 429);
-  }
+  // Layered rate limiting, each backed by a globally-consistent Durable Object
+  // (the native rate-limit binding is approximate/per-location and won't block at
+  // limit 1). Checked cheapest-blast-radius first so a single-source flood is
+  // stopped before it touches per-person state:
+  //   1. per IP   -- every in-game report egresses from the HOST's IP, so one IP
+  //                  is a whole table (a few/min at most). Catches a one-machine
+  //                  attacker who varies the (spoofable) SteamID to dodge #2.
+  //   2. per person (SteamID) -- 1/min/player for honest use.
+  //   3. global   -- a daily backstop so even a botnet can't file unlimited
+  //                  issues; trips only under real abuse.
+  const ip = request.headers.get("cf-connecting-ip") || "noip";
+  const sid = reporterId || ip;
+  if (!(await rlAllow(env, `ip:${ip}`, 10, 60000))) return json({ error: "rate_limited" }, 429);
+  if (!(await rlAllow(env, `sid:${sid}`, 1, 60000))) return json({ error: "rate_limited" }, 429);
+  if (!(await rlAllow(env, "global:day", 300, 86400000))) return json({ error: "rate_limited" }, 429);
 
   const bodyLines = [
     description || "_(no description provided)_",
@@ -102,21 +103,42 @@ function json(obj, status = 200) {
   });
 }
 
-// One instance per rate-limit key (env.REPORT_LIMITER.idFromName(key)). Holds the
-// timestamp of that key's last allowed report; a request within 60s is denied.
-// Being a single logical instance makes the 1/min/person limit exact and global.
+// Ask the limiter DO for `key` whether another request fits `limit` per
+// `windowMs`. One DO instance per key, so the count is exact and global.
+async function rlAllow(env, key, limit, windowMs) {
+  const id = env.REPORT_LIMITER.idFromName(key);
+  const resp = await env.REPORT_LIMITER
+    .get(id)
+    .fetch(`https://rl/?limit=${limit}&window=${windowMs}`);
+  const { allowed } = await resp.json();
+  return allowed;
+}
+
+// Fixed-window counter, one instance per rate-limit key
+// (env.REPORT_LIMITER.idFromName(key)). limit + window come from the query so the
+// same class serves the per-IP, per-person and global buckets. Deny is read-only
+// (no write), so a flood against a filled window costs almost nothing.
 export class ReportRateLimiter {
   constructor(state) {
     this.state = state;
   }
 
-  async fetch() {
+  async fetch(request) {
+    const url = new URL(request.url);
+    const limit = parseInt(url.searchParams.get("limit") || "1", 10);
+    const windowMs = parseInt(url.searchParams.get("window") || "60000", 10);
     const now = Date.now();
-    const last = (await this.state.storage.get("last")) || 0;
-    if (now - last < 60000) {
-      return Response.json({ allowed: false, retryMs: 60000 - (now - last) });
+
+    const w = (await this.state.storage.get("w")) || { start: 0, count: 0 };
+    if (now - w.start >= windowMs) {
+      w.start = now;
+      w.count = 0;
     }
-    await this.state.storage.put("last", now);
+    if (w.count >= limit) {
+      return Response.json({ allowed: false });
+    }
+    w.count += 1;
+    await this.state.storage.put("w", w);
     return Response.json({ allowed: true });
   }
 }
