@@ -1,257 +1,56 @@
-<!-- Reveal-until-type picker. Laid out with nested layout groups so nothing is
-     hand-positioned: an outer VerticalLayout stacks the title, a 2-column grid
-     of type toggles, the custom-type field, the repeat row, and the OK/cancel
-     buttons; each section declares its own height so nothing clips or overlaps. -->
-<Panel
-    id="SearchTypePanel"
-    width="330"
-    height="430"
-    rectAlignment="MiddleCenter"
-    showAnimation="FadeIn"
-    hideAnimation="FadeOut"
-    returnToOriginalPositionWhenReleased="false"
-    allowDragging="true"
-    color="rgba(0.1,0.1,0.1,1)"
-    visibility=""
-    active="False"
-    >
-    <VerticalLayout
-      padding="18 18 16 16"
-      spacing="10"
-      childAlignment="UpperCenter"
-      childForceExpandWidth="true"
-      childForceExpandHeight="false"
-      childControlWidth="true"
-      childControlHeight="true">
+<!-- REVEAL UNTIL TYPE -->
+<!-- Deck context-menu picker: reveal cards until one of the chosen types is hit.
+     Styled to match the Settings / Bug-report panels: outlined dark panel, bold
+     title, red X close (STcancel), blue section headers, green action button. -->
+<Panel id="SearchTypePanel" width="384" height="452" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
+    <Text id="STtext" rectAlignment="UpperCenter" offsetXY="0 -18" width="340" height="32" fontSize="24" fontStyle="Bold" color="rgb(1,1,1)" alignment="MiddleCenter" text="Reveal Until Type" />
+    <Button rectAlignment="UpperRight" offsetXY="-8 -8" width="30" height="30" color="#990000" textColor="#FFFFFF" text="X" fontSize="18" onClick="STcancel" />
 
-      <Text id="STtext" fontSize="28" fontStyle="Bold" color="rgb(1,1,1)"
-            alignment="MiddleCenter" preferredHeight="34">Reveal until type</Text>
+    <VerticalLayout rectAlignment="UpperCenter" offsetXY="0 -56" width="344" height="380" spacing="8" childForceExpandHeight="false" childForceExpandWidth="true">
+        <Text preferredHeight="20" minHeight="20" fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="CARD TYPES" />
+        <GridLayout preferredHeight="148" minHeight="148" cellSize="164 32" spacing="8 6" constraint="FixedColumnCount" constraintCount="2" startCorner="UpperLeft" startAxis="Horizontal" childAlignment="MiddleCenter">
+            <ToggleButton id="land" text="Land" onValueChanged="UItypeToggle" isOn="false" fontSize="17" textColor="rgb(1,1,1)" alignment="MiddleCenter" colors="rgb(0.18,0.18,0.18)|rgb(0.26,0.26,0.26)|rgb(0.26,0.26,0.26)|rgb(0.18,0.18,0.18)" selectedBackgroundColor="#31506f" deselectedBackgroundColor="rgb(0.18,0.18,0.18)" />
+            <ToggleButton id="creature" text="Creature" onValueChanged="UItypeToggle" isOn="false" fontSize="17" textColor="rgb(1,1,1)" alignment="MiddleCenter" colors="rgb(0.18,0.18,0.18)|rgb(0.26,0.26,0.26)|rgb(0.26,0.26,0.26)|rgb(0.18,0.18,0.18)" selectedBackgroundColor="#31506f" deselectedBackgroundColor="rgb(0.18,0.18,0.18)" />
+            <ToggleButton id="artifact" text="Artifact" onValueChanged="UItypeToggle" isOn="false" fontSize="17" textColor="rgb(1,1,1)" alignment="MiddleCenter" colors="rgb(0.18,0.18,0.18)|rgb(0.26,0.26,0.26)|rgb(0.26,0.26,0.26)|rgb(0.18,0.18,0.18)" selectedBackgroundColor="#31506f" deselectedBackgroundColor="rgb(0.18,0.18,0.18)" />
+            <ToggleButton id="enchantment" text="Enchantment" onValueChanged="UItypeToggle" isOn="false" fontSize="17" textColor="rgb(1,1,1)" alignment="MiddleCenter" colors="rgb(0.18,0.18,0.18)|rgb(0.26,0.26,0.26)|rgb(0.26,0.26,0.26)|rgb(0.18,0.18,0.18)" selectedBackgroundColor="#31506f" deselectedBackgroundColor="rgb(0.18,0.18,0.18)" />
+            <ToggleButton id="planeswalker" text="Planeswalker" onValueChanged="UItypeToggle" isOn="false" fontSize="17" textColor="rgb(1,1,1)" alignment="MiddleCenter" colors="rgb(0.18,0.18,0.18)|rgb(0.26,0.26,0.26)|rgb(0.26,0.26,0.26)|rgb(0.18,0.18,0.18)" selectedBackgroundColor="#31506f" deselectedBackgroundColor="rgb(0.18,0.18,0.18)" />
+            <ToggleButton id="battle" text="Battle" onValueChanged="UItypeToggle" isOn="false" fontSize="17" textColor="rgb(1,1,1)" alignment="MiddleCenter" colors="rgb(0.18,0.18,0.18)|rgb(0.26,0.26,0.26)|rgb(0.26,0.26,0.26)|rgb(0.18,0.18,0.18)" selectedBackgroundColor="#31506f" deselectedBackgroundColor="rgb(0.18,0.18,0.18)" />
+            <ToggleButton id="instant" text="Instant" onValueChanged="UItypeToggle" isOn="false" fontSize="17" textColor="rgb(1,1,1)" alignment="MiddleCenter" colors="rgb(0.18,0.18,0.18)|rgb(0.26,0.26,0.26)|rgb(0.26,0.26,0.26)|rgb(0.18,0.18,0.18)" selectedBackgroundColor="#31506f" deselectedBackgroundColor="rgb(0.18,0.18,0.18)" />
+            <ToggleButton id="sorcery" text="Sorcery" onValueChanged="UItypeToggle" isOn="false" fontSize="17" textColor="rgb(1,1,1)" alignment="MiddleCenter" colors="rgb(0.18,0.18,0.18)|rgb(0.26,0.26,0.26)|rgb(0.26,0.26,0.26)|rgb(0.18,0.18,0.18)" selectedBackgroundColor="#31506f" deselectedBackgroundColor="rgb(0.18,0.18,0.18)" />
+        </GridLayout>
 
-      <GridLayout
-        cellSize="145 30"
-        spacing="4 6"
-        constraint="FixedColumnCount"
-        constraintCount="2"
-        startCorner="UpperLeft"
-        startAxis="Horizontal"
-        childAlignment="MiddleCenter"
-        preferredHeight="138"
-        flexibleHeight="0">
-        <ToggleButton id="land" text="Land"
-          onValueChanged="UItypeToggle" isOn="false" fontSize="20"
-          textColor="rgb(1,1,1)" alignment="MiddleCenter"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)" />
-        <ToggleButton id="creature" text="Creature"
-          onValueChanged="UItypeToggle" isOn="false" fontSize="20"
-          textColor="rgb(1,1,1)" alignment="MiddleCenter"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)" />
-        <ToggleButton id="artifact" text="Artifact"
-          onValueChanged="UItypeToggle" isOn="false" fontSize="20"
-          textColor="rgb(1,1,1)" alignment="MiddleCenter"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)" />
-        <ToggleButton id="enchantment" text="Enchantment"
-          onValueChanged="UItypeToggle" isOn="false" fontSize="20"
-          textColor="rgb(1,1,1)" alignment="MiddleCenter"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)" />
-        <ToggleButton id="planeswalker" text="Planeswalker"
-          onValueChanged="UItypeToggle" isOn="false" fontSize="20"
-          textColor="rgb(1,1,1)" alignment="MiddleCenter"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)" />
-        <ToggleButton id="battle" text="Battle"
-          onValueChanged="UItypeToggle" isOn="false" fontSize="20"
-          textColor="rgb(1,1,1)" alignment="MiddleCenter"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)" />
-        <ToggleButton id="instant" text="Instant"
-          onValueChanged="UItypeToggle" isOn="false" fontSize="20"
-          textColor="rgb(1,1,1)" alignment="MiddleCenter"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)" />
-        <ToggleButton id="sorcery" text="Sorcery"
-          onValueChanged="UItypeToggle" isOn="false" fontSize="20"
-          textColor="rgb(1,1,1)" alignment="MiddleCenter"
-          colors="rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)|rgb(0.3,0.3,0.3)"
-          selectedBackgroundColor="rgb(0.5,0.5,0.2)"
-          deselectedBackgroundColor="rgb(0.25,0.25,0.25)" />
-      </GridLayout>
+        <Text preferredHeight="20" minHeight="20" fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="CUSTOM TYPE" />
+        <InputField id="typeCustom" preferredHeight="32" minHeight="32" onEndEdit="UItypeCustom" placeholder="e.g. Dragon, Equipment…" text="" fontSize="16" textAlignment="MiddleLeft" characterValidation="Alphanumeric" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" />
 
-      <InputField
-        id="typeCustom"
-        color="rgb(0.25,0.25,0.25)"
-        textColor="rgb(1,1,1)"
-        caretColor="rgb(1,1,1)"
-        placeholder="or type a custom type…"
-        characterValidation="Alphanumeric"
-        onEndEdit="UItypeCustom"
-        fontSize="16"
-        preferredHeight="30"
-        alignment="MiddleCenter" />
+        <HorizontalLayout preferredHeight="34" minHeight="34" spacing="8" childAlignment="MiddleLeft" childForceExpandWidth="false" childForceExpandHeight="false">
+            <Text fontSize="16" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" preferredWidth="70" minWidth="70" text="Repeat" />
+            <InputField id="repeatX" onEndEdit="UIrepeatSearchType" characterValidation="Integer" placeholder="1" text="" fontSize="16" textAlignment="MiddleCenter" preferredWidth="56" minWidth="56" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" tooltip="how many times to repeat the reveal" tooltipPosition="Above" tooltipBorderColor="rgba(0,0,0,0)" />
+            <Text fontSize="16" color="rgb(0.6,0.6,0.6)" alignment="MiddleLeft" flexibleWidth="1" text="time(s)" />
+        </HorizontalLayout>
 
-      <HorizontalLayout
-        preferredHeight="30"
-        spacing="8"
-        childAlignment="MiddleCenter"
-        childForceExpandWidth="false"
-        childForceExpandHeight="false"
-        childControlWidth="false"
-        childControlHeight="false">
-        <Text fontSize="20" color="rgb(1,1,1)" preferredWidth="55">repeat</Text>
-        <InputField
-          id="repeatX"
-          color="rgb(0.3,0.3,0.3)"
-          textAlignment="MiddleCenter"
-          textColor="rgb(1,1,1)"
-          caretColor="rgb(1,1,1)"
-          characterValidation="Integer"
-          onEndEdit="UIrepeatSearchType"
-          placeholder="X"
-          tooltip="enter a number to repeat the reveal that many times"
-          tooltipPosition="Below"
-          tooltipBorderColor="rgba(0,0,0,0)"
-          preferredWidth="45"
-          preferredHeight="28"
-          fontSize="20"/>
-        <Text fontSize="20" color="rgb(1,1,1)" preferredWidth="45">times</Text>
-      </HorizontalLayout>
-
-      <HorizontalLayout
-        preferredHeight="80"
-        spacing="24"
-        childAlignment="MiddleCenter"
-        childForceExpandWidth="false"
-        childForceExpandHeight="false"
-        childControlWidth="false"
-        childControlHeight="false">
-        <Button
-          onClick="STcancel"
-          text="✗"
-          preferredWidth="80"
-          preferredHeight="80"
-          fontSize="60"
-          textColor="rgb(1,0,0)"
-          textAlignment="MiddleCenter"
-          colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)" />
-        <Button
-          onClick="STokay"
-          text="✓"
-          preferredWidth="80"
-          preferredHeight="80"
-          fontSize="60"
-          textColor="rgb(0,0.6,0)"
-          textAlignment="MiddleCenter"
-          colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)" />
-      </HorizontalLayout>
+        <Button onClick="STokay" preferredHeight="44" minHeight="44" text="Reveal" fontSize="18" fontStyle="Bold" color="#2a6f2a" textColor="#FFFFFF" />
     </VerticalLayout>
 </Panel>
 
-<!-- Value picker for cascade / scry / mill. CMtext is rewritten at runtime
-     (e.g. "Enter CMC\nto cascade for"); the whole panel is a VerticalLayout so
-     the title, the big number field, the repeat row, and the buttons stack
-     cleanly without hand-tuned offsets. -->
-<Panel
-    id="GetValuePanel"
-    width="300"
-    height="350"
-    rectAlignment="MiddleCenter"
-    showAnimation="FadeIn"
-    hideAnimation="FadeOut"
-    returnToOriginalPositionWhenReleased="false"
-    allowDragging="true"
-    color="rgba(0.1,0.1,0.1,1)"
-    visibility=""
-    active="False"
-    >
-    <VerticalLayout
-      padding="18 18 16 16"
-      spacing="12"
-      childAlignment="UpperCenter"
-      childForceExpandWidth="true"
-      childForceExpandHeight="false"
-      childControlWidth="true"
-      childControlHeight="true">
+<!-- CASCADE / VALUE PICKER -->
+<!-- Deck context-menu number picker (cascade; scry/mill reserved). CMtext is
+     rewritten at runtime and drives which action CMokay runs, so it keeps the
+     action keyword. Styled to match Settings / Bug-report. -->
+<Panel id="GetValuePanel" width="320" height="330" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
+    <Text id="CMtext" rectAlignment="UpperCenter" offsetXY="0 -18" width="280" height="32" fontSize="24" fontStyle="Bold" color="rgb(1,1,1)" alignment="MiddleCenter" text="Cascade" />
+    <Button rectAlignment="UpperRight" offsetXY="-8 -8" width="30" height="30" color="#990000" textColor="#FFFFFF" text="X" fontSize="18" onClick="CMcancel" />
 
-      <Text id="CMtext" fontSize="30" fontStyle="Bold" color="rgb(1,1,1)"
-            alignment="MiddleCenter" preferredHeight="70">Enter a value</Text>
+    <VerticalLayout rectAlignment="UpperCenter" offsetXY="0 -56" width="256" height="258" spacing="8" childForceExpandHeight="false" childForceExpandWidth="true">
+        <Text preferredHeight="20" minHeight="20" fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleCenter" text="MAXIMUM CMC" />
+        <InputField id="CMinput" preferredHeight="84" minHeight="84" onEndEdit="CMgetVal" onSubmit="CMokay" maxLength="2" characterLimit="2" characterValidation="Integer" placeholder="#" text="" fontSize="56" textAlignment="MiddleCenter" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" />
 
-      <InputField
-        id="CMinput"
-        alignment="MiddleCenter"
-        maxLength="2"
-        preferredHeight="80"
-        fontSize="60"
-        textAlignment="MiddleCenter"
-        characterValidation="Integer"
-        placeholder="#"
-        onSubmit="CMokay"
-        characterLimit="2"
-        onEndEdit="CMgetVal" />
+        <HorizontalLayout preferredHeight="34" minHeight="34" spacing="8" childAlignment="MiddleCenter" childForceExpandWidth="false" childForceExpandHeight="false">
+            <Text fontSize="16" color="rgb(0.9,0.9,0.9)" alignment="MiddleLeft" preferredWidth="70" minWidth="70" text="Repeat" />
+            <InputField id="repeatCascadeX" onEndEdit="UIrepeatCascade" characterValidation="Integer" placeholder="1" text="" fontSize="16" textAlignment="MiddleCenter" preferredWidth="56" minWidth="56" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" tooltip="how many times to repeat the cascade" tooltipPosition="Above" tooltipBorderColor="rgba(0,0,0,0)" />
+            <Text fontSize="16" color="rgb(0.6,0.6,0.6)" alignment="MiddleLeft" flexibleWidth="1" text="time(s)" />
+        </HorizontalLayout>
 
-      <HorizontalLayout
-        preferredHeight="30"
-        spacing="8"
-        childAlignment="MiddleCenter"
-        childForceExpandWidth="false"
-        childForceExpandHeight="false"
-        childControlWidth="false"
-        childControlHeight="false">
-        <Text fontSize="20" color="rgb(1,1,1)" preferredWidth="55">repeat</Text>
-        <InputField
-          id="repeatCascadeX"
-          color="rgb(0.3,0.3,0.3)"
-          textAlignment="MiddleCenter"
-          textColor="rgb(1,1,1)"
-          caretColor="rgb(1,1,1)"
-          characterValidation="Integer"
-          onEndEdit="UIrepeatCascade"
-          placeholder="X"
-          tooltip="enter a number to repeat the cascade that many times"
-          tooltipPosition="Below"
-          tooltipBorderColor="rgba(0,0,0,0)"
-          preferredWidth="45"
-          preferredHeight="28"
-          fontSize="20"/>
-        <Text fontSize="20" color="rgb(1,1,1)" preferredWidth="45">times</Text>
-      </HorizontalLayout>
-
-      <HorizontalLayout
-        preferredHeight="80"
-        spacing="24"
-        childAlignment="MiddleCenter"
-        childForceExpandWidth="false"
-        childForceExpandHeight="false"
-        childControlWidth="false"
-        childControlHeight="false">
-        <Button
-          onClick="CMcancel"
-          text="✗"
-          preferredWidth="80"
-          preferredHeight="80"
-          fontSize="60"
-          textColor="rgb(1,0,0)"
-          textAlignment="MiddleCenter"
-          colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)" />
-        <Button
-          onClick="CMokay"
-          text="✓"
-          preferredWidth="80"
-          preferredHeight="80"
-          fontSize="60"
-          textColor="rgb(0,0.6,0)"
-          textAlignment="MiddleCenter"
-          colors="rgb(0.25,0.25,0.25)|rgb(0.35,0.35,0.35)|rgb(0.5,0.5,0.5)|rgb(0.5,0.5,0.5)" />
-      </HorizontalLayout>
+        <Button onClick="CMokay" preferredHeight="44" minHeight="44" text="Cascade" fontSize="18" fontStyle="Bold" color="#2a6f2a" textColor="#FFFFFF" />
     </VerticalLayout>
 </Panel>
 
