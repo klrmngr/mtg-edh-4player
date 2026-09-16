@@ -305,7 +305,7 @@ function cascade(deck, playerColor, CMC)
 			-- reset encoder object data
 			Encoder.call("APIencodeObject", { obj = cardToPlay })
 			Encoder.call("APIdisableEncoding", { obj = cardToPlay })
-			cardToPlay.setGMNotes(playerColor) -- save the owner of card to only allow them to click buttons
+			setCardNote(cardToPlay, "castPrompt", playerColor) -- only this player may click the accept/decline buttons
 
 			-- create buttons on card to accept or decline casting it
 			-- decline
@@ -366,14 +366,14 @@ function cascade(deck, playerColor, CMC)
 end
 
 function acceptCascade(card, ply)
-	if ply ~= card.getGMNotes() then
+	if ply ~= getCardNote(card, "castPrompt") then
 		return
 	end
 	cardToPlay = nil
 	if Encoder.call("APIobjectExists", { obj = card }) then
 		Encoder.call("APIenableEncoding", { obj = card })
 	end
-	card.setGMNotes("")
+	setCardNote(card, "castPrompt", nil)
 	card.clearButtons()
 	if cDeck then -- put any other cascaded cards onto libBot
 		moveCDeckToBot(cDeck, ply)
@@ -405,14 +405,14 @@ function acceptCascade(card, ply)
 end
 
 function declineCascade(card, ply)
-	if ply ~= card.getGMNotes() then
+	if ply ~= getCardNote(card, "castPrompt") then
 		return
 	end
 	cardToPlay = nil
 	if Encoder.call("APIobjectExists", { obj = card }) then
 		Encoder.call("APIenableEncoding", { obj = card })
 	end
-	card.setGMNotes("")
+	setCardNote(card, "castPrompt", nil)
 	card.clearButtons()
 	local waitT = 1
 	if cDeck then -- add the card to other cascaded cards and then put all on libBot

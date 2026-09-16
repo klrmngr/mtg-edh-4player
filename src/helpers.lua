@@ -1,5 +1,40 @@
 ----------------------------------- UNIVERSAL ----------------------------------
 
+-- Cards carry a small JSON object in their GMNotes so several systems can annotate
+-- the same card without clobbering each other. Known keys:
+--   owner      -- persistent: the colour whose deck the card came from (ownership.lua)
+--   castPrompt -- transient: the colour allowed to click a cascade / reveal-until-type
+--                 accept/decline prompt (cascade.lua, reveal_type.lua)
+-- A card with no annotations keeps an empty ("") GMNotes. Legacy / externally set
+-- non-JSON GMNotes are treated as empty so we never crash on them.
+function getCardNotes(obj)
+	local raw = obj.getGMNotes()
+	if raw == nil or raw == "" then
+		return {}
+	end
+	local ok, decoded = pcall(JSON.decode, raw)
+	if ok and type(decoded) == "table" then
+		return decoded
+	end
+	return {}
+end
+
+function getCardNote(obj, key)
+	return getCardNotes(obj)[key]
+end
+
+-- set (value ~= nil) or clear (value == nil) one key, preserving the others. When
+-- the last key is removed the GMNotes is reset to "" so untouched cards stay clean.
+function setCardNote(obj, key, value)
+	local t = getCardNotes(obj)
+	t[key] = value
+	if next(t) == nil then
+		obj.setGMNotes("")
+	else
+		obj.setGMNotes(JSON.encode(t))
+	end
+end
+
 -- this should get the highest resting card from the library zones
 -- works if there are extra cards flipped face up on top of the deck
 -- (personally, I play with a bunch of decks that keep the top card of the library revealed)

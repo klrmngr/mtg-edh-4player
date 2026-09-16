@@ -22,6 +22,7 @@ settingsDefaults = {
 	fetchFromClone = false,  -- read those previews from the game-start deck clone instead of
 	                         -- the live library, so an opponent's hidden removal (Praetor's
 	                         -- Grasp, etc.) can't leak which land left. Off = live library.
+	ownerHighlight = true,   -- glow cards on this player's mat that belong to someone else, in the owner's colour
 	commanderQOL = true,     -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
 	cmdrDamageAutoLife = true, -- commander-damage tracker deltas auto-adjust this player's life
 	seedbornUntap = true,    -- this player's Seedborn Muse untaps their board on others' untap steps
@@ -43,6 +44,7 @@ settingsToggleIds = {
 	setLandTracker = "landTracker",
 	setFetchPreviews = "fetchPreviews",
 	setFetchFromClone = "fetchFromClone",
+	setOwnerHighlight = "ownerHighlight",
 	setCommanderQOL = "commanderQOL",
 	setCmdrDamageAutoLife = "cmdrDamageAutoLife",
 	setSeedbornUntap = "seedbornUntap",
@@ -71,6 +73,7 @@ enforceableKeys = {
 	"landTracker",
 	"fetchPreviews",
 	"fetchFromClone",
+	"ownerHighlight",
 	"commanderQOL",
 	"cmdrDamageAutoLife",
 	"seedbornUntap",
@@ -187,6 +190,7 @@ settingsSearchRows = {
 	{ id = "row_landTracker", text = "land entered tracker display" },
 	{ id = "row_fetchPreviews", text = "fetchland previews display fetch" },
 	{ id = "row_fetchFromClone", text = "show all possible fetchables clone display fetch" },
+	{ id = "row_ownerHighlight", text = "highlight foreign cards owner belongs other player mat glow display" },
 	{ id = "row_commanderQOL", text = "commander qol buttons etali ral" },
 	{ id = "row_keywordTokens", text = "keyword tokens frozen flying apply drop card game" },
 	{ id = "row_goblinStickers", text = "goblin stickers game" },
@@ -240,6 +244,7 @@ hostSearchRows = {
 	{ id = "hostrow_landTracker", text = "land entered tracker display" },
 	{ id = "hostrow_fetchPreviews", text = "fetchland previews display fetch" },
 	{ id = "hostrow_fetchFromClone", text = "show all possible fetchables clone display fetch" },
+	{ id = "hostrow_ownerHighlight", text = "highlight foreign cards owner belongs other player mat glow display" },
 	{ id = "hostrow_commanderQOL", text = "commander qol buttons etali ral" },
 	{ id = "hostrow_keywordTokens", text = "keyword tokens frozen flying apply drop card game" },
 	{ id = "hostrow_goblinStickers", text = "goblin stickers game" },

@@ -3880,6 +3880,41 @@ function announceDrawTriggers(drawerColor, count, isDrawStep)
 end
 ----------------------------------- UNIVERSAL ----------------------------------
 
+-- Cards carry a small JSON object in their GMNotes so several systems can annotate
+-- the same card without clobbering each other. Known keys:
+--   owner      -- persistent: the colour whose deck the card came from (ownership.lua)
+--   castPrompt -- transient: the colour allowed to click a cascade / reveal-until-type
+--                 accept/decline prompt (cascade.lua, reveal_type.lua)
+-- A card with no annotations keeps an empty ("") GMNotes. Legacy / externally set
+-- non-JSON GMNotes are treated as empty so we never crash on them.
+function getCardNotes(obj)
+	local raw = obj.getGMNotes()
+	if raw == nil or raw == "" then
+		return {}
+	end
+	local ok, decoded = pcall(JSON.decode, raw)
+	if ok and type(decoded) == "table" then
+		return decoded
+	end
+	return {}
+end
+
+function getCardNote(obj, key)
+	return getCardNotes(obj)[key]
+end
+
+-- set (value ~= nil) or clear (value == nil) one key, preserving the others. When
+-- the last key is removed the GMNotes is reset to "" so untouched cards stay clean.
+function setCardNote(obj, key, value)
+	local t = getCardNotes(obj)
+	t[key] = value
+	if next(t) == nil then
+		obj.setGMNotes("")
+	else
+		obj.setGMNotes(JSON.encode(t))
+	end
+end
+
 -- this should get the highest resting card from the library zones
 -- works if there are extra cards flipped face up on top of the deck
 -- (personally, I play with a bunch of decks that keep the top card of the library revealed)
@@ -4320,6 +4355,9 @@ function onObjectEnterZone(zone, obj)
 	fetchlandEnter(zone, obj)
 	-- double-faced cards: flip to a land back face dropped in a land zone (dfc.lua)
 	dfcLandEnter(zone, obj)
+	-- card ownership: stamp owner in a private zone, glow foreign cards on mats (ownership.lua)
+	stampOwnershipOnEnter(zone, obj)
+	ownershipMatEnter(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false
@@ -4372,6 +4410,8 @@ function onObjectLeaveZone(zone, obj)
 	end
 	-- fetchlands: remove previews when a fetchland leaves a land zone
 	fetchlandLeave(zone, obj)
+	-- card ownership: clear the foreign-card glow when it leaves a mat (ownership.lua)
+	ownershipMatLeave(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false
@@ -4779,6 +4819,115 @@ function discardCard(card, playerColor)
 	end, 0.5)
 end
 
+--------------------------------- CARD OWNERSHIP -------------------------------
+-- Every card belongs to the player whose deck it came from. We record that owner
+-- in the card's GMNotes (a JSON "owner" key; see getCardNote / setCardNote in
+-- helpers.lua) the first time the card is seen in one of its owner's PRIVATE
+-- areas -- their library zone or their hand. Those areas only ever hold that
+-- player's own cards, so it's a safe ownership signal; a playmat is not (it
+-- routinely holds cards lent to or stolen by other players). The stamp is written
+-- once and never changed.
+--
+-- We stamp from the Global script rather than inside rikrassen's importer because
+-- that importer replaces its own Lua on startup whenever a newer version exists
+-- (setLuaScript + reload), which would wipe any hook we added there.
+--
+-- A card whose owner differs from the playmat it is resting on is glowed in its
+-- owner's colour, so a card on someone else's board reads as "not theirs". Gated
+-- by the mat owner's "ownerHighlight" setting (host-enforceable): turn it off and
+-- foreign cards on YOUR mat aren't highlighted. Cards with no owner stamp (never
+-- seen in a private area) are never highlighted.
+
+-- private, owner-only scripting zones we stamp ownership from: a card seen in
+-- any of these belongs to that colour. Their command zone is included so
+-- commanders -- which start there and never pass through the library or hand --
+-- still get an owner.
+ownershipStampZones = { "libraryZone", "commandZone" }
+
+-- stamp ownership the first time a card is seen in one of its owner's private
+-- areas: their library / command zone (matched by the per-colour zone) or their
+-- hand (checked by hand membership). Only unstamped Cards are touched, and
+-- ownership, once set, is never overwritten.
+function stampOwnershipOnEnter(zone, obj)
+	if obj == nil or obj.type ~= "Card" then
+		return
+	end
+	if getCardNote(obj, "owner") ~= nil then
+		return
+	end
+	-- private per-colour scripting zones (library, command)
+	for _, color in ipairs(settingsColors) do
+		local pd = data[color]
+		if pd ~= nil then
+			for _, key in ipairs(ownershipStampZones) do
+				if zone == pd[key] then
+					setCardNote(obj, "owner", color)
+					return
+				end
+			end
+		end
+	end
+	-- hand: only your own cards sit in your hand
+	for _, color in ipairs(settingsColors) do
+		for _, held in ipairs(Player[color].getHandObjects(1)) do
+			if held == obj then
+				setCardNote(obj, "owner", color)
+				return
+			end
+		end
+	end
+end
+
+-- guids we've glowed as foreign, so onObjectLeaveZone only ever clears highlights
+-- we set here -- transient glows from other systems (cascade, reveal, ...) are
+-- left untouched.
+ownerHighlighted = ownerHighlighted or {}
+
+-- the colour whose playmat scripting zone this is, or nil if it isn't a playmat
+function playmatColorOfZone(zone)
+	for _, color in ipairs(settingsColors) do
+		local mat = data[color] and data[color]["playmat"]
+		if mat ~= nil and zone == mat then
+			return color
+		end
+	end
+	return nil
+end
+
+-- a card entered a zone: if it's a playmat and the card belongs to someone else,
+-- glow it in the owner's colour
+function ownershipMatEnter(zone, obj)
+	if obj == nil or obj.type ~= "Card" then
+		return
+	end
+	local matColor = playmatColorOfZone(zone)
+	if matColor == nil then
+		return
+	end
+	if not getSetting(matColor, "ownerHighlight") then
+		return
+	end
+	local owner = getCardNote(obj, "owner")
+	if owner ~= nil and owner ~= matColor and data[owner] ~= nil then
+		obj.highlightOn(stringColorToRGB(owner))
+		ownerHighlighted[obj.getGUID()] = true
+	end
+end
+
+-- a card left a zone: if we had glowed it as foreign, clear that glow
+function ownershipMatLeave(zone, obj)
+	if obj == nil or obj.type ~= "Card" then
+		return
+	end
+	if playmatColorOfZone(zone) == nil then
+		return
+	end
+	local guid = obj.getGUID()
+	if ownerHighlighted[guid] then
+		obj.highlightOff()
+		ownerHighlighted[guid] = nil
+	end
+end
 --------------------------------------------------------------------------------
 -- deck context menu UI
 -- function deckScry(ply)
@@ -5086,7 +5235,7 @@ function cascade(deck, playerColor, CMC)
 			-- reset encoder object data
 			Encoder.call("APIencodeObject", { obj = cardToPlay })
 			Encoder.call("APIdisableEncoding", { obj = cardToPlay })
-			cardToPlay.setGMNotes(playerColor) -- save the owner of card to only allow them to click buttons
+			setCardNote(cardToPlay, "castPrompt", playerColor) -- only this player may click the accept/decline buttons
 
 			-- create buttons on card to accept or decline casting it
 			-- decline
@@ -5147,14 +5296,14 @@ function cascade(deck, playerColor, CMC)
 end
 
 function acceptCascade(card, ply)
-	if ply ~= card.getGMNotes() then
+	if ply ~= getCardNote(card, "castPrompt") then
 		return
 	end
 	cardToPlay = nil
 	if Encoder.call("APIobjectExists", { obj = card }) then
 		Encoder.call("APIenableEncoding", { obj = card })
 	end
-	card.setGMNotes("")
+	setCardNote(card, "castPrompt", nil)
 	card.clearButtons()
 	if cDeck then -- put any other cascaded cards onto libBot
 		moveCDeckToBot(cDeck, ply)
@@ -5186,14 +5335,14 @@ function acceptCascade(card, ply)
 end
 
 function declineCascade(card, ply)
-	if ply ~= card.getGMNotes() then
+	if ply ~= getCardNote(card, "castPrompt") then
 		return
 	end
 	cardToPlay = nil
 	if Encoder.call("APIobjectExists", { obj = card }) then
 		Encoder.call("APIenableEncoding", { obj = card })
 	end
-	card.setGMNotes("")
+	setCardNote(card, "castPrompt", nil)
 	card.clearButtons()
 	local waitT = 1
 	if cDeck then -- add the card to other cascaded cards and then put all on libBot
@@ -5572,7 +5721,7 @@ function revealUntilType(deck, playerColor, searchTypes)
 			-- reset encoder object data
 			Encoder.call("APIencodeObject", { obj = cardToPlay })
 			Encoder.call("APIdisableEncoding", { obj = cardToPlay })
-			cardToPlay.setGMNotes(playerColor) -- save the owner of card to only allow them to click buttons
+			setCardNote(cardToPlay, "castPrompt", playerColor) -- only this player may click the accept/decline buttons
 
 			-- create buttons on card to accept or decline casting it
 			-- decline
@@ -6387,6 +6536,7 @@ settingsDefaults = {
 	fetchFromClone = false,  -- read those previews from the game-start deck clone instead of
 	                         -- the live library, so an opponent's hidden removal (Praetor's
 	                         -- Grasp, etc.) can't leak which land left. Off = live library.
+	ownerHighlight = true,   -- glow cards on this player's mat that belong to someone else, in the owner's colour
 	commanderQOL = true,     -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
 	cmdrDamageAutoLife = true, -- commander-damage tracker deltas auto-adjust this player's life
 	seedbornUntap = true,    -- this player's Seedborn Muse untaps their board on others' untap steps
@@ -6408,6 +6558,7 @@ settingsToggleIds = {
 	setLandTracker = "landTracker",
 	setFetchPreviews = "fetchPreviews",
 	setFetchFromClone = "fetchFromClone",
+	setOwnerHighlight = "ownerHighlight",
 	setCommanderQOL = "commanderQOL",
 	setCmdrDamageAutoLife = "cmdrDamageAutoLife",
 	setSeedbornUntap = "seedbornUntap",
@@ -6436,6 +6587,7 @@ enforceableKeys = {
 	"landTracker",
 	"fetchPreviews",
 	"fetchFromClone",
+	"ownerHighlight",
 	"commanderQOL",
 	"cmdrDamageAutoLife",
 	"seedbornUntap",
@@ -6552,6 +6704,7 @@ settingsSearchRows = {
 	{ id = "row_landTracker", text = "land entered tracker display" },
 	{ id = "row_fetchPreviews", text = "fetchland previews display fetch" },
 	{ id = "row_fetchFromClone", text = "show all possible fetchables clone display fetch" },
+	{ id = "row_ownerHighlight", text = "highlight foreign cards owner belongs other player mat glow display" },
 	{ id = "row_commanderQOL", text = "commander qol buttons etali ral" },
 	{ id = "row_keywordTokens", text = "keyword tokens frozen flying apply drop card game" },
 	{ id = "row_goblinStickers", text = "goblin stickers game" },
@@ -6605,6 +6758,7 @@ hostSearchRows = {
 	{ id = "hostrow_landTracker", text = "land entered tracker display" },
 	{ id = "hostrow_fetchPreviews", text = "fetchland previews display fetch" },
 	{ id = "hostrow_fetchFromClone", text = "show all possible fetchables clone display fetch" },
+	{ id = "hostrow_ownerHighlight", text = "highlight foreign cards owner belongs other player mat glow display" },
 	{ id = "hostrow_commanderQOL", text = "commander qol buttons etali ral" },
 	{ id = "hostrow_keywordTokens", text = "keyword tokens frozen flying apply drop card game" },
 	{ id = "hostrow_goblinStickers", text = "goblin stickers game" },
