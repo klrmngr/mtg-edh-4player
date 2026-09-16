@@ -1,8 +1,6 @@
 // Backs the in-game bug reporter for the MTG EDH mod. A single dedicated worker
 // on report.klrmngr.com:
-//   POST /report   -- file a bug report / feature request as a GitHub issue,
-//                     stashing any table snapshot in R2 and linking it.
-//   GET  /<key>    -- serve a stored snapshot back (maintainer download link).
+//   POST /report   -- file a bug report / feature request as a GitHub issue.
 //
 // The GitHub token is a Worker secret (env.GITHUB_TOKEN) and must NEVER ship in
 // the mod: the save file is readable by anyone who has it.
@@ -16,29 +14,12 @@ export default {
       return handleReport(request, env);
     }
 
-    // Serve a stored snapshot back so the issue's "Table snapshot" link resolves.
-    // Keys are timestamp + random, so they aren't guessable; the bucket only ever
-    // holds bug-report JSON.
-    if (request.method === "GET" || request.method === "HEAD") {
-      const key = decodeURIComponent(url.pathname.slice(1));
-      if (key) {
-        const object = await env.BUCKET.get(key);
-        if (object) {
-          const headers = new Headers();
-          object.writeHttpMetadata(headers);
-          headers.set("etag", object.httpEtag);
-          return new Response(request.method === "HEAD" ? null : object.body, { headers });
-        }
-      }
-      return new Response("Not found", { status: 404 });
-    }
-
-    return new Response("Method Not Allowed", { status: 405 });
+    return new Response("Not found", { status: 404 });
   },
 };
 
-// Handle an in-game bug report / feature request: stash any table snapshot in
-// R2, then file a labelled GitHub issue and return its URL to the mod.
+// Handle an in-game bug report / feature request: file a labelled GitHub issue
+// and return its URL to the mod.
 async function handleReport(request, env) {
   // Weak anti-spam gate. REPORT_KEY ships inside the mod, so it is NOT a real
   // secret -- it only turns away drive-by POSTs that don't send the header.
@@ -66,31 +47,6 @@ async function handleReport(request, env) {
   const reporterId = String(payload.reporterId || "").replace(/\D/g, "").slice(0, 20);
   const version = String(payload.version || "?").slice(0, 40);
 
-  // A bug report carries a serialized table snapshot; stash it in R2 and link it
-  // so the issue stays small and the save is one click away. The mod splices the
-  // snapshot in as a raw JSON object (to avoid a blocking re-encode on the game
-  // thread), so it arrives parsed -- re-stringify it here. Older builds sent it
-  // as a pre-encoded string; accept both.
-  const saveBlob =
-    payload.save == null
-      ? ""
-      : typeof payload.save === "string"
-        ? payload.save
-        : JSON.stringify(payload.save);
-  let saveUrl = null;
-  if (isBug && saveBlob.length > 0) {
-    const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const key = `bug-reports/${stamp}-${crypto.randomUUID().slice(0, 8)}.json`;
-    try {
-      await env.BUCKET.put(key, saveBlob, {
-        httpMetadata: { contentType: "application/json" },
-      });
-      saveUrl = `${new URL(request.url).origin}/${key}`;
-    } catch (e) {
-      console.error("snapshot upload failed", e);
-    }
-  }
-
   const bodyLines = [
     description || "_(no description provided)_",
     "",
@@ -100,7 +56,6 @@ async function handleReport(request, env) {
     `- **Table version:** ${version}`,
     `- **Filed via:** in-game report button`,
   ];
-  if (saveUrl) bodyLines.push(`- **Table snapshot:** ${saveUrl}`);
 
   const labels = isBug ? ["bug", "in-game-report"] : ["enhancement", "in-game-report"];
   const issueTitle = `${isBug ? "[Bug] " : "[Feature] "}${title}`;

@@ -6728,8 +6728,7 @@ end
 -- feature request) and submits. The request is POSTed to our Cloudflare Worker,
 -- which holds the GitHub token as a secret and files the issue on our behalf --
 -- the token must NEVER ship inside the mod, since the save file is readable by
--- anyone who has it. A bug report additionally attaches a serialized snapshot of
--- every table object so a maintainer can reproduce the exact board state.
+-- anyone who has it.
 --
 -- The panel widgets are a single shared set (same as the settings panel): the
 -- title/description/type are mirrored into one shared draft as they're edited,
@@ -6756,9 +6755,9 @@ end
 -- swap the hint line to match the selected type
 function updateBugReportHint()
 	if bugReportIsBug() then
-		UI.setAttribute("bugReportHint", "text", "Bug reports attach a snapshot of the current table.")
+		UI.setAttribute("bugReportHint", "text", "Describe what went wrong and how to reproduce it.")
 	else
-		UI.setAttribute("bugReportHint", "text", "Feature requests are filed as-is (no table snapshot).")
+		UI.setAttribute("bugReportHint", "text", "Describe the feature or change you'd like.")
 	end
 end
 
@@ -6796,13 +6795,6 @@ function bugReportType(player, value, id)
 	updateBugReportHint()
 end
 
--- A bug report attaches a serialized snapshot of every table object (a functional
--- save a maintainer can respawn, not a screenshot -- TTS has no Lua screenshot
--- API). Serialising every object is heavy, so it runs in a coroutine that yields
--- between objects (see bugReportSnapshotCoro); doing it inline froze the game on
--- submit. One in-flight report is tracked here while its snapshot builds.
-bugReportPending = nil
-
 function submitBugReport(player)
 	if player == nil or player.color == "Grey" then
 		return
@@ -6812,10 +6804,6 @@ function submitBugReport(player)
 		broadcastToColor("Enter a title before submitting.", player.color, { 1, 0.4, 0.4 })
 		return
 	end
-	if bugReportPending ~= nil then
-		broadcastToColor("A report is already being submitted...", player.color, { 1, 0.85, 0.2 })
-		return
-	end
 	local isBug = bugReportIsBug()
 	broadcastToColor(
 		"Submitting your " .. (isBug and "bug report" or "feature request") .. "...",
@@ -6823,8 +6811,8 @@ function submitBugReport(player)
 		{ 1, 0.85, 0.2 }
 	)
 
-	bugReportPending = {
-		isBug = isBug,
+	local payload = {
+		type = isBug and "bug" or "feature",
 		title = title,
 		description = bugReportDraft.description or "",
 		reporter = player.steam_name or player.color,
@@ -6832,99 +6820,18 @@ function submitBugReport(player)
 		-- it (TTS exposes no Steam auth ticket), so treat it as a strong hint only.
 		reporterId = player.steam_id,
 		reporterColor = player.color,
-		color = player.color,
+		version = VERSION,
 	}
-	visibleCloseRules(player, "BugReportPanel")
-
-	if isBug then
-		-- Capture the table across frames so the game stays responsive; the
-		-- coroutine hands off to sendBugReport() when the snapshot is ready.
-		startLuaCoroutine(Global, "bugReportSnapshotCoro")
-	else
-		sendBugReport()
-	end
-end
-
--- Serialize every object into a JSON array one at a time, yielding every few
--- objects so the game doesn't freeze, then hand the assembled snapshot to
--- sendBugReport(). Each object is encoded on its own and the pieces are
--- concatenated, so the whole nested table is never encoded in a single blocking
--- call. Runs as a TTS coroutine (must return 1 when done).
-function bugReportSnapshotCoro()
-	local parts = {}
-	local count = 0
-	local objs = getAllObjects()
-	for i, obj in ipairs(objs) do
-		local ok, dat = pcall(function()
-			return obj.getData()
-		end)
-		if ok and dat ~= nil then
-			local ok2, enc = pcall(JSON.encode, dat)
-			if ok2 then
-				parts[#parts + 1] = enc
-				count = count + 1
-			end
-		end
-		if i % 5 == 0 then
-			coroutine.yield(0)
-		end
-	end
-	if bugReportPending == nil then
-		return 1
-	end
-	-- Assemble by hand: the objects are already encoded JSON, so this is a plain
-	-- string concat, not another full encode of the nested data.
-	bugReportPending.save = table.concat({
-		'{"version":', JSON.encode(VERSION),
-		',"capturedAt":', tostring(os.time()),
-		',"objectCount":', tostring(count),
-		',"objects":[', table.concat(parts, ","), "]}",
-	})
-	sendBugReport()
-	return 1
-end
-
--- Build the POST body from the pending report and fire it. A snapshot, if
--- present, is already valid JSON and is spliced in raw (no second escape pass);
--- the Worker parses it and re-stringifies it on its side, off the game thread.
-function sendBugReport()
-	local p = bugReportPending
-	if p == nil then
-		return
-	end
-	local body
-	if p.save ~= nil then
-		body = table.concat({
-			'{"type":', JSON.encode(p.isBug and "bug" or "feature"),
-			',"title":', JSON.encode(p.title),
-			',"description":', JSON.encode(p.description),
-			',"reporter":', JSON.encode(p.reporter),
-			',"reporterId":', JSON.encode(p.reporterId or ""),
-			',"reporterColor":', JSON.encode(p.reporterColor),
-			',"version":', JSON.encode(VERSION),
-			',"save":', p.save, "}",
-		})
-	else
-		body = JSON.encode({
-			type = p.isBug and "bug" or "feature",
-			title = p.title,
-			description = p.description,
-			reporter = p.reporter,
-			reporterId = p.reporterId,
-			reporterColor = p.reporterColor,
-			version = VERSION,
-		})
-	end
 
 	local headers = {
 		["Content-Type"] = "application/json",
 		["X-Report-Key"] = bugReportKey,
 	}
-	local color = p.color
-	bugReportPending = nil
-	WebRequest.custom(bugReportURL, "POST", true, body, headers, function(resp)
+	local color = player.color
+	WebRequest.custom(bugReportURL, "POST", true, JSON.encode(payload), headers, function(resp)
 		bugReportDone(resp, color)
 	end)
+	visibleCloseRules(player, "BugReportPanel")
 end
 
 function bugReportDone(resp, color)
