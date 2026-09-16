@@ -278,6 +278,11 @@ function spawn(oracleID, name, oracle, face, back, player, isPart)
 		.. '",'
 		.. '"NumWidth":1,"NumHeight":1,"BackIsHidden":true}}}'
 	Object.params = { name = name, oracle = oracle }
+	-- remember who spawned this card so it can be glowed in their colour while it
+	-- sits on someone else's playmat (see updateSpawnerGlow in context_menus.lua)
+	Object.callback_function = function(obj)
+		obj.addTag(SPAWNER_TAG_PREFIX .. player.color)
+	end
 	spawnObjectJSON(Object)
 end
 

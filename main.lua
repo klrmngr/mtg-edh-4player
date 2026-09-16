@@ -4175,6 +4175,53 @@ function null() end
 
 --------------------------------- CONTEXT MENU ---------------------------------
 
+-- tag prefix marking which player spawned a card via the importer (see spawn() in
+-- scryfall.lua). Cards spawned by a player glow in that player's colour while they
+-- rest on a *different* player's playmat, so it's clear who dropped a card there.
+SPAWNER_TAG_PREFIX = "spawnedBy:"
+SPAWNER_GLOW_TAG = "spawnerGlow"
+
+-- pull the spawner's colour out of a card's tags, or nil if it wasn't importer-spawned
+function getSpawnerColor(obj)
+	for _, t in ipairs(obj.getTags()) do
+		local c = t:match("^" .. SPAWNER_TAG_PREFIX .. "(.+)$")
+		if c ~= nil then
+			return c
+		end
+	end
+	return nil
+end
+
+-- glow an importer-spawned card in its spawner's colour while it sits on another
+-- player's playmat; clear the glow once it's back on its own mat / off all mats.
+-- (safe to call on any object; only touches cards we spawned and only our own glow)
+function updateSpawnerGlow(obj)
+	if obj == nil or obj.type ~= "Card" then
+		return
+	end
+	local spawner = getSpawnerColor(obj)
+	if spawner == nil then
+		return
+	end
+	local onForeignMat = false
+	for _, z in pairs(obj.getZones()) do
+		for col, pd in pairs(data) do
+			if pd["playmat"] == z and col ~= spawner then
+				onForeignMat = true
+			end
+		end
+	end
+	if onForeignMat then
+		obj.highlightOn(stringColorToRGB(spawner))
+		if not obj.hasTag(SPAWNER_GLOW_TAG) then
+			obj.addTag(SPAWNER_GLOW_TAG)
+		end
+	elseif obj.hasTag(SPAWNER_GLOW_TAG) then
+		obj.highlightOff()
+		obj.removeTag(SPAWNER_GLOW_TAG)
+	end
+end
+
 function addZoneContextMenus()
 	for color, playerData in pairs(data) do
 		for _, obj in pairs(playerData["libraryZone"].getObjects()) do
@@ -4244,6 +4291,8 @@ function onObjectEnterZone(zone, obj)
 	fetchlandEnter(zone, obj)
 	-- double-faced cards: flip to a land back face dropped in a land zone (dfc.lua)
 	dfcLandEnter(zone, obj)
+	-- glow importer-spawned cards in the spawner's colour while on a foreign mat
+	updateSpawnerGlow(obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false
@@ -4296,6 +4345,8 @@ function onObjectLeaveZone(zone, obj)
 	end
 	-- fetchlands: remove previews when a fetchland leaves a land zone
 	fetchlandLeave(zone, obj)
+	-- re-evaluate the spawner glow now the card has left a zone
+	updateSpawnerGlow(obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false
@@ -5943,6 +5994,11 @@ function spawn(oracleID, name, oracle, face, back, player, isPart)
 		.. '",'
 		.. '"NumWidth":1,"NumHeight":1,"BackIsHidden":true}}}'
 	Object.params = { name = name, oracle = oracle }
+	-- remember who spawned this card so it can be glowed in their colour while it
+	-- sits on someone else's playmat (see updateSpawnerGlow in context_menus.lua)
+	Object.callback_function = function(obj)
+		obj.addTag(SPAWNER_TAG_PREFIX .. player.color)
+	end
 	spawnObjectJSON(Object)
 end
 
