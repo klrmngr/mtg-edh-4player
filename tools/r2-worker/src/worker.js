@@ -113,6 +113,10 @@ async function handleReport(request, env) {
   const isBug = payload.type !== "feature";
   const reporter = String(payload.reporter || "unknown").slice(0, 100);
   const reporterColor = String(payload.reporterColor || "").slice(0, 20);
+  // SteamID64 is all digits; strip anything else so the profile link can't be
+  // used to inject markup. This identity is self-asserted by the mod and NOT
+  // verified server-side -- surface it as a hint, never as proof.
+  const reporterId = String(payload.reporterId || "").replace(/\D/g, "").slice(0, 20);
   const version = String(payload.version || "?").slice(0, 40);
 
   // A bug report carries a serialized table snapshot; stash it in R2 and link it
@@ -136,6 +140,7 @@ async function handleReport(request, env) {
     "",
     "---",
     `- **Reporter:** ${reporter}${reporterColor ? ` (${reporterColor})` : ""}`,
+    `- **Steam ID (unverified):** ${reporterId ? `[${reporterId}](https://steamcommunity.com/profiles/${reporterId})` : "(none)"}`,
     `- **Table version:** ${version}`,
     `- **Filed via:** in-game report button`,
   ];

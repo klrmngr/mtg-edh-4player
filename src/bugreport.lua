@@ -117,6 +117,9 @@ function submitBugReport(player)
 		title = title,
 		description = bugReportDraft.description or "",
 		reporter = player.steam_name or player.color,
+		-- SteamID64: stable + unique, but self-asserted -- the Worker cannot verify
+		-- it (TTS exposes no Steam auth ticket), so treat it as a strong hint only.
+		reporterId = player.steam_id,
 		reporterColor = player.color,
 		version = VERSION,
 	}
