@@ -28,6 +28,7 @@ settingsDefaults = {
 	dfcLandFlip = true,      -- flip a double-faced card to its land back face in the land zone
 	fetchSurveil = false,    -- auto-surveil/scry when a fetched land has an ETB surveil/scry trigger
 	fetchEntersTapped = false, -- tap a fetched land whose text (or the fetchland) says it enters tapped
+	keywordTokens = true,    -- dropping a keyword token (Frozen, Flying, ...) on a card applies that keyword
 	goblinStickers = true,   -- deal goblin sticker cards when a "_____ Goblin" starts in the library
 	keepPregameFlow = false, -- show the centre-mat Keep button and run the pregame-action announcement
 	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
@@ -48,6 +49,7 @@ settingsToggleIds = {
 	setDfcLandFlip = "dfcLandFlip",
 	setFetchSurveil = "fetchSurveil",
 	setFetchEntersTapped = "fetchEntersTapped",
+	setKeywordTokens = "keywordTokens",
 	setGoblinStickers = "goblinStickers",
 	setKeepPregameFlow = "keepPregameFlow",
 }
@@ -75,6 +77,7 @@ enforceableKeys = {
 	"dfcLandFlip",
 	"fetchSurveil",
 	"fetchEntersTapped",
+	"keywordTokens",
 	"goblinStickers",
 	"keepPregameFlow",
 }
@@ -185,6 +188,7 @@ settingsSearchRows = {
 	{ id = "row_fetchPreviews", text = "fetchland previews display fetch" },
 	{ id = "row_fetchFromClone", text = "show all possible fetchables clone display fetch" },
 	{ id = "row_commanderQOL", text = "commander qol buttons etali ral" },
+	{ id = "row_keywordTokens", text = "keyword tokens frozen flying apply drop card game" },
 	{ id = "row_goblinStickers", text = "goblin stickers game" },
 	{ id = "row_keepPregameFlow", text = "keep pregame flow game" },
 	{ id = "row_revealResetSecs", text = "reveal reset seconds misc" },
@@ -237,6 +241,7 @@ hostSearchRows = {
 	{ id = "hostrow_fetchPreviews", text = "fetchland previews display fetch" },
 	{ id = "hostrow_fetchFromClone", text = "show all possible fetchables clone display fetch" },
 	{ id = "hostrow_commanderQOL", text = "commander qol buttons etali ral" },
+	{ id = "hostrow_keywordTokens", text = "keyword tokens frozen flying apply drop card game" },
 	{ id = "hostrow_goblinStickers", text = "goblin stickers game" },
 	{ id = "hostrow_keepPregameFlow", text = "keep pregame flow game" },
 }

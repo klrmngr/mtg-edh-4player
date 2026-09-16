@@ -237,6 +237,10 @@
             </VerticalLayout></Cell></Row>
 
             <Row id="hdr_game" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="GAME" /></Cell></Row>
+            <Row id="row_keywordTokens" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
+                <Toggle id="setKeywordTokens" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Keyword tokens</Toggle>
+                <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="drop a keyword token on a card to apply it" />
+            </VerticalLayout></Cell></Row>
             <Row id="row_goblinStickers" preferredHeight="32"><Cell><Toggle id="setGoblinStickers" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17">Goblin stickers</Toggle></Cell></Row>
             <Row id="row_keepPregameFlow" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
                 <Toggle id="setKeepPregameFlow" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Keep / pregame flow</Toggle>
@@ -349,6 +353,11 @@
             </HorizontalLayout></Cell></Row>
 
             <Row id="hosthdr_game" preferredHeight="24"><Cell><Text fontSize="14" fontStyle="Bold" color="#f4c261" alignment="MiddleLeft" text="GAME" /></Cell></Row>
+            <Row id="hostrow_keywordTokens" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Keyword tokens" />
+                <Toggle id="hostEnf_keywordTokens" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_keywordTokens" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
             <Row id="hostrow_goblinStickers" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
                 <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Goblin stickers" />
                 <Toggle id="hostEnf_goblinStickers" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
