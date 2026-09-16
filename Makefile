@@ -16,7 +16,7 @@ SRC = \
 	src/restricted_abilities.lua \
 	src/fetchland.lua \
 	src/dfc.lua \
-	src/frozen.lua \
+	src/keyword_tokens.lua \
 	src/untap.lua \
 	src/draw.lua \
 	src/draw_triggers.lua \

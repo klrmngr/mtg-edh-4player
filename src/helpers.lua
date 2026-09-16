@@ -242,7 +242,7 @@ function nameTypeLineIsLand(name)
 end
 
 -- write text into a card's "Notepad[sup]π[/sup]" Encoder prop (propID "πotepad",
--- value note = { text, editON }). Mirrors frozen.lua's πKeywords handling.
+-- value note = { text, editON }). Mirrors keyword_tokens.lua's πKeywords handling.
 function setCardNotepad(card, text)
 	local enc = Global.getVar("Encoder")
 	if enc == nil or card == nil then
