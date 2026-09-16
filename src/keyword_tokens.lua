@@ -54,6 +54,11 @@ function onObjectDropped(playerColor, object)
 	if object == nil or not object.hasTag("keywordToken") then
 		return
 	end
+	-- gated by the dropping player's "Keyword tokens" setting (host-enforceable);
+	-- off = the token behaves like an inert object and isn't consumed
+	if not getSetting(playerColor, "keywordTokens") then
+		return
+	end
 	whenSettled(object, applyKeywordUnder)
 end
 
