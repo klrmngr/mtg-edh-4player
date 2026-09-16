@@ -51,9 +51,14 @@ async function handleReport(request, env) {
   // every in-game report is POSTed from the HOST's IP, so an IP key would
   // throttle the whole table; the SteamID makes it per-player. It's self-asserted
   // (spoofable), but this only guards against accidental spam / mashing submit.
+  // A named Durable Object per key is one globally-consistent instance, so it
+  // enforces the limit exactly (the native rate-limit binding is approximate and
+  // per-location -- it does not reliably block at limit 1).
   const rlKey = reporterId || request.headers.get("cf-connecting-ip") || "anon";
-  const { success } = await env.REPORT_LIMITER.limit({ key: rlKey });
-  if (!success) {
+  const rlId = env.REPORT_LIMITER.idFromName(rlKey);
+  const rlResp = await env.REPORT_LIMITER.get(rlId).fetch("https://rl/check");
+  const { allowed } = await rlResp.json();
+  if (!allowed) {
     return json({ error: "rate_limited" }, 429);
   }
 
@@ -95,4 +100,23 @@ function json(obj, status = 200) {
     status,
     headers: { "Content-Type": "application/json" },
   });
+}
+
+// One instance per rate-limit key (env.REPORT_LIMITER.idFromName(key)). Holds the
+// timestamp of that key's last allowed report; a request within 60s is denied.
+// Being a single logical instance makes the 1/min/person limit exact and global.
+export class ReportRateLimiter {
+  constructor(state) {
+    this.state = state;
+  }
+
+  async fetch() {
+    const now = Date.now();
+    const last = (await this.state.storage.get("last")) || 0;
+    if (now - last < 60000) {
+      return Response.json({ allowed: false, retryMs: 60000 - (now - last) });
+    }
+    await this.state.storage.put("last", now);
+    return Response.json({ allowed: true });
+  }
 }
