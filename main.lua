@@ -4777,7 +4777,9 @@ function deckCascade(ply)
 
 	UI.setAttribute("GetValuePanel", "visibility", ply)
 	UI.setAttribute("GetValuePanel", "active", "True")
-	UI.setAttribute("CMtext", "text", "Enter CMC\nto cascade for")
+	-- CMtext doubles as the panel title and the action selector read by CMokay,
+	-- so it must contain the action keyword ("cascade"/"scry"/"mill").
+	UI.setAttribute("CMtext", "text", "Cascade")
 end
 
 function CMgetVal(ply, txt)
@@ -4800,7 +4802,7 @@ function CMokay(player)
 		Player[ply].broadcast("no deck found in the library zone")
 		return
 	end
-	local funTxt = UI.getAttribute("CMtext", "text")
+	local funTxt = (UI.getAttribute("CMtext", "text") or ""):lower()
 	if CMVal == "" or CMVal == nil then
 		return
 	end
