@@ -15,8 +15,9 @@ Two modes:
     python tts_save.py build [--out-dir DIR]
         Reassemble save.template.json + objects/*.json + main.lua + ui.xml into
         a full save written to
-            DIR/MTG EDH 4-player (χ) <version>-<YYYYMMDDHHMMSS>.json
-        where <version> is read from src/patchnotes.lua. DIR comes from the
+            DIR/MTG EDH 4-player (χ) <version> [<branch>]-<YYYYMMDDHHMMSS>.json
+        where <version> is read from src/patchnotes.lua and [<branch>] is the
+        current git branch (omitted on main/master). DIR comes from the
         argument, else SAVE_DIR in a local .env, else the current directory.
 
 The Lua/XML *source* stays single-sourced: the global script comes from main.lua
@@ -31,6 +32,7 @@ import glob
 import json
 import os
 import re
+import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -42,7 +44,8 @@ PATCHNOTES = os.path.join(HERE, "src", "patchnotes.lua")
 ENV_PATH = os.path.join(HERE, ".env")
 
 SAVES_DIR = os.path.expanduser("~/.local/share/Tabletop Simulator/Saves")
-# Built saves are named "<SAVE_NAME> <version>-<timestamp>.json".
+# Built saves are named "<SAVE_NAME> <version> [<branch>]-<timestamp>.json"
+# (the [<branch>] tag is omitted on main/master).
 SAVE_NAME = "MTG EDH 4-player (χ)"
 
 # Per-file extension -> the object key it maps to.
@@ -140,6 +143,18 @@ def read_version() -> str:
     return "v0.0.0"
 
 
+def current_branch() -> str:
+    """Current git branch name, or '' if unavailable (detached HEAD, no git)."""
+    try:
+        out = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=HERE, capture_output=True, text=True, check=True,
+        ).stdout.strip()
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return ""
+    return "" if out == "HEAD" else out
+
+
 def split(save_path: str, objects_dir: str) -> None:
     with open(save_path, encoding="utf-8") as f:
         save = json.load(f)
@@ -208,7 +223,11 @@ def build(objects_dir: str, out_dir: str = None) -> None:
     save["ObjectStates"] = objects
 
     now = datetime.datetime.now()
-    stem = f"{SAVE_NAME} {read_version()}-{now:%Y%m%d%H%M%S}"
+    # Tag the build with its branch so feature-branch test saves are
+    # distinguishable in the TTS load list; skip it for the mainline.
+    branch = current_branch()
+    branch_tag = f" [{safe_name(branch)}]" if branch and branch not in ("main", "master") else ""
+    stem = f"{SAVE_NAME} {read_version()}{branch_tag}-{now:%Y%m%d%H%M%S}"
     save["SaveName"] = stem
     # GameMode is what TTS shows in the server browser; keep it in sync with our
     # mod name so joiners don't see the upstream (π) name we forked from.
