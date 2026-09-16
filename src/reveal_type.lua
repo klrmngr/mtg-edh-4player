@@ -226,7 +226,7 @@ function revealUntilType(deck, playerColor, searchTypes)
 			-- reset encoder object data
 			Encoder.call("APIencodeObject", { obj = cardToPlay })
 			Encoder.call("APIdisableEncoding", { obj = cardToPlay })
-			cardToPlay.setGMNotes(playerColor) -- save the owner of card to only allow them to click buttons
+			setCardNote(cardToPlay, "castPrompt", playerColor) -- only this player may click the accept/decline buttons
 
 			-- create buttons on card to accept or decline casting it
 			-- decline

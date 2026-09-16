@@ -69,6 +69,9 @@ function onObjectEnterZone(zone, obj)
 	fetchlandEnter(zone, obj)
 	-- double-faced cards: flip to a land back face dropped in a land zone (dfc.lua)
 	dfcLandEnter(zone, obj)
+	-- card ownership: stamp owner in a private zone, glow foreign cards on mats (ownership.lua)
+	stampOwnershipOnEnter(zone, obj)
+	ownershipMatEnter(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false
@@ -121,6 +124,8 @@ function onObjectLeaveZone(zone, obj)
 	end
 	-- fetchlands: remove previews when a fetchland leaves a land zone
 	fetchlandLeave(zone, obj)
+	-- card ownership: clear the foreign-card glow when it leaves a mat (ownership.lua)
+	ownershipMatLeave(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false

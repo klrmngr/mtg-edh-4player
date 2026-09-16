@@ -22,6 +22,7 @@ SRC = \
 	src/draw_triggers.lua \
 	src/helpers.lua \
 	src/context_menus.lua \
+	src/ownership.lua \
 	src/cascade.lua \
 	src/reveal_type.lua \
 	src/chat.lua \

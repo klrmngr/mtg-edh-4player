@@ -229,6 +229,10 @@
                 <Toggle id="setFetchFromClone" isOn="False" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Show all possible fetchables</Toggle>
                 <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="reads game-start deck; no hidden-removal leak" />
             </VerticalLayout></Cell></Row>
+            <Row id="row_ownerHighlight" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
+                <Toggle id="setOwnerHighlight" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Highlight others' cards</Toggle>
+                <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="glow cards on your mat that belong to another player" />
+            </VerticalLayout></Cell></Row>
 
             <Row id="hdr_commander" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="COMMANDER" /></Cell></Row>
             <Row id="row_commanderQOL" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
@@ -343,6 +347,11 @@
                 <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Show all possible fetchables" />
                 <Toggle id="hostEnf_fetchFromClone" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
                 <Toggle id="hostVal_fetchFromClone" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+            </HorizontalLayout></Cell></Row>
+            <Row id="hostrow_ownerHighlight" preferredHeight="32"><Cell><HorizontalLayout spacing="8" childForceExpandWidth="false" childAlignment="MiddleLeft">
+                <Text fontSize="15" color="rgb(0.95,0.92,0.85)" alignment="MiddleLeft" flexibleWidth="1" text="Highlight others' cards" />
+                <Toggle id="hostEnf_ownerHighlight" isOn="False" onValueChanged="hostToggleEnforced" minWidth="46" preferredWidth="46" flexibleWidth="0" />
+                <Toggle id="hostVal_ownerHighlight" isOn="False" interactable="false" onValueChanged="hostToggleValue" minWidth="46" preferredWidth="46" flexibleWidth="0" />
             </HorizontalLayout></Cell></Row>
 
             <Row id="hosthdr_commander" preferredHeight="24"><Cell><Text fontSize="14" fontStyle="Bold" color="#f4c261" alignment="MiddleLeft" text="COMMANDER" /></Cell></Row>
