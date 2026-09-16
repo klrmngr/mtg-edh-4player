@@ -6842,16 +6842,15 @@ function bugReportDone(resp, color)
 	if not resp.is_done then
 		return
 	end
+	if resp.response_code == 429 then
+		broadcastToColor("You're submitting reports too quickly -- wait a minute and try again.", color, { 1, 0.6, 0.2 })
+		return
+	end
 	if resp.response_code ~= nil and resp.response_code >= 400 then
 		broadcastToColor("Report was rejected (HTTP " .. tostring(resp.response_code) .. ").", color, { 1, 0.3, 0.3 })
 		return
 	end
-	local ok, data = pcall(JSON.decode, resp.text)
-	if ok and type(data) == "table" and data.issueUrl then
-		broadcastToColor("Thanks! Issue filed: " .. tostring(data.issueUrl), color, { 0.4, 1, 0.4 })
-	else
-		broadcastToColor("Thanks! Your report was submitted.", color, { 0.4, 1, 0.4 })
-	end
+	broadcastToColor("Thanks! Your report was submitted.", color, { 0.4, 1, 0.4 })
 end
 --------------------------------------------------------------------------------
 -- pie's manual "JSONdecode" for scryfall's api output

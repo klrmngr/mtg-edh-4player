@@ -47,6 +47,16 @@ async function handleReport(request, env) {
   const reporterId = String(payload.reporterId || "").replace(/\D/g, "").slice(0, 20);
   const version = String(payload.version || "?").slice(0, 40);
 
+  // Rate limit: 1 report / minute / person. Key on the SteamID when present --
+  // every in-game report is POSTed from the HOST's IP, so an IP key would
+  // throttle the whole table; the SteamID makes it per-player. It's self-asserted
+  // (spoofable), but this only guards against accidental spam / mashing submit.
+  const rlKey = reporterId || request.headers.get("cf-connecting-ip") || "anon";
+  const { success } = await env.REPORT_LIMITER.limit({ key: rlKey });
+  if (!success) {
+    return json({ error: "rate_limited" }, 429);
+  }
+
   const bodyLines = [
     description || "_(no description provided)_",
     "",
@@ -73,11 +83,11 @@ async function handleReport(request, env) {
 
   if (!resp.ok) {
     console.error(`GitHub issue failed: ${resp.status} ${await resp.text()}`);
-    return json({ error: "github rejected", status: resp.status }, 502);
+    return json({ error: "submit failed" }, 502);
   }
 
-  const issue = await resp.json();
-  return json({ ok: true, issueUrl: issue.html_url, number: issue.number }, 201);
+  // Don't leak where the issue lives (repo URL / number) back to players.
+  return json({ ok: true }, 201);
 }
 
 function json(obj, status = 200) {
