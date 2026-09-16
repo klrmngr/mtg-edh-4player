@@ -28,6 +28,7 @@ SRC = \
 	src/scryfall.lua \
 	src/patchnotes.lua \
 	src/settings.lua \
+	src/bugreport.lua \
 	src/json.lua
 
 main.lua: $(SRC)

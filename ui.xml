@@ -256,6 +256,35 @@
     </VerticalScrollView>
 </Panel>
 
+<!-- BUG REPORT -->
+<!-- always-on report button; any seated player files a bug/feature request -->
+<Button id="bugReportButton" onClick="openBugReport" text="&#9873;"
+    rectAlignment="LowerRight" offsetXY="-165 6" width="46" height="46" fontSize="26"
+    color="rgba(0.1,0.1,0.1,0.85)" textColor="#d86f6f"
+    tooltip="Report a bug / request a feature" tooltipPosition="Left" tooltipBorderColor="rgba(0,0,0,0)" />
+
+<Panel id="BugReportPanel" width="470" height="490" rectAlignment="MiddleCenter" showAnimation="FadeIn" hideAnimation="FadeOut" returnToOriginalPositionWhenReleased="false" allowDragging="true" color="rgba(0.1,0.1,0.1,0.97)" outline="#635351" outlineSize="2 -2" visibility="" active="False">
+    <Text rectAlignment="UpperCenter" offsetXY="0 -18" width="380" height="32" fontSize="24" fontStyle="Bold" color="rgb(1,1,1)" alignment="MiddleCenter" text="Report an Issue" />
+    <Button rectAlignment="UpperRight" offsetXY="-8 -8" width="30" height="30" color="#990000" textColor="#FFFFFF" text="X" fontSize="18" onClick="closeBugReport" />
+
+    <VerticalLayout rectAlignment="UpperCenter" offsetXY="0 -56" width="422" height="416" spacing="6" childForceExpandHeight="false" childForceExpandWidth="true">
+        <Text preferredHeight="20" minHeight="20" fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="TYPE" />
+        <Dropdown id="bugTypeDropdown" preferredHeight="34" minHeight="34" onValueChanged="bugReportType" fontSize="16" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" itemBackgroundColors="rgb(0.18,0.18,0.18)|rgb(0.28,0.28,0.28)|rgb(0.28,0.28,0.28)|rgb(0.18,0.18,0.18)" itemTextColor="rgb(1,1,1)">
+            <Option selected="true">Bug report</Option>
+            <Option>Feature request</Option>
+        </Dropdown>
+
+        <Text preferredHeight="20" minHeight="20" fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="TITLE" />
+        <InputField id="bugTitleInput" preferredHeight="34" minHeight="34" onValueChanged="bugReportTitle" placeholder="Short summary..." text="" fontSize="16" textAlignment="MiddleLeft" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" characterLimit="120" />
+
+        <Text preferredHeight="20" minHeight="20" fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="DESCRIPTION" />
+        <InputField id="bugDescInput" preferredHeight="150" minHeight="150" onValueChanged="bugReportDesc" placeholder="What happened? What did you expect?" text="" lineType="MultiLineNewline" fontSize="16" textAlignment="UpperLeft" color="rgb(0.18,0.18,0.18)" textColor="rgb(1,1,1)" caretColor="rgb(1,1,1)" characterLimit="4000" />
+
+        <Text id="bugReportHint" preferredHeight="18" minHeight="18" fontSize="12" color="#9aa0a8" alignment="MiddleLeft" text="Bug reports attach a snapshot of the current table." />
+        <Button id="bugSubmitButton" preferredHeight="42" minHeight="42" onClick="submitBugReport" text="Submit" fontSize="18" color="#2a6f2a" textColor="#FFFFFF" />
+    </VerticalLayout>
+</Panel>
+
 <!-- HOST SETTINGS -->
 <!-- host-only gear (gold), sits left of the per-player gear -->
 <Button id="hostGear" onClick="openHostSettings" text="&#9881;"

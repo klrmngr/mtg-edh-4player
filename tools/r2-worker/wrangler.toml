@@ -1,0 +1,31 @@
+name = "mtg-bug-report"
+main = "src/worker.js"
+compatibility_date = "2024-09-01"
+
+# Dedicated subdomain for the in-game report endpoint. custom_domain = true makes
+# Cloudflare create the proxied DNS record + edge cert for report.klrmngr.com on
+# deploy, so this never touches the img.klrmngr.com image host.
+routes = [{ pattern = "report.klrmngr.com", custom_domain = true }]
+
+# 1 report / minute / person, enforced by a Durable Object (one consistent
+# instance per SteamID key -- see src/worker.js). SQLite-backed DO so it runs on
+# the free plan.
+[[durable_objects.bindings]]
+name = "REPORT_LIMITER"
+class_name = "ReportRateLimiter"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["ReportRateLimiter"]
+
+[vars]
+GITHUB_REPO = "klrmngr/mtg-edh-4player"
+
+# GITHUB_TOKEN is a SECRET, not a var. Set it with:
+#   wrangler secret put GITHUB_TOKEN
+# Use a fine-grained PAT scoped to only this repo with Issues: Read & Write.
+#
+# REPORT_KEY (optional) is a weak shared gate for POST /report. When set, the
+# worker rejects reports whose X-Report-Key header doesn't match. It ships inside
+# the mod (bugReportKey in src/bugreport.lua) so it only deters casual spam:
+#   wrangler secret put REPORT_KEY
