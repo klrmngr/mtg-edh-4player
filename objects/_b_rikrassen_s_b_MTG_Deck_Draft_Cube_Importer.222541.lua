@@ -48,7 +48,7 @@ end)
 __bundle_register("import", function(require, _LOADED, __bundle_register, __bundle_modules)
 local M = {}
 
-local asset_base_url = 'https://importer-static.rikrassen.com'
+local asset_base_url = 'https://importer-static.rikrassen.xyz'
 local env = 'PROD'
 -- local env = 'STAGING'
 -- local env = 'DEV'
@@ -73,14 +73,10 @@ function onLoad()
   self.createButton({
     click_function = 'click_show_import',
     function_owner = self,
-    tooltip = 'Open Importer GUI',
-    position = {0, 0.1, 0},
-    height = 750,
-    width = 1000,
-    color = {0, 0, 0, 0.8},
-    label = "deck importer",
-    font_size = 140,
-    font_color = {1, 1, 1, 2},
+    position = { 0, 0.1, 0 },
+    height = 800,
+    width = 800,
+    color = { 1, 1, 1, 0 },
   })
 end
 
@@ -149,72 +145,34 @@ function M.check_for_update(importer, color)
     importer.setLuaScript(new_script)
     local new_importer = importer.reload()
     -- Wait for the object to reload before calling show_import again
-    M._wait_for_stable(function()
+    Wait.frames(function()
       new_importer.setVar('checked_version', true)
       new_importer.call('remote_show_import', color)
-    end)
+    end, 2)
   end)
+end
+
+local function contains_asset(assets, new_asset)
+  for _, a in ipairs(assets) do
+    if a.name == new_asset.name then
+      return true
+    end
+  end
+  return false
 end
 
 local function load_custom_assets()
   local custom_assets = UI.getCustomAssets()
   local new_assets = {}
-  local dirty = false
   for _, asset in ipairs(assets) do
-    local found = false
-    for i, custom_asset in ipairs(custom_assets) do
-      if asset.name == custom_asset.name then
-        found = true
-        if asset.url == custom_asset.url and asset.type == custom_asset.type then
-          break
-        end
-        custom_assets[i] = asset
-        dirty = true
-        break
-      end
-    end
-    if not found then
+    if not contains_asset(custom_assets, asset) then
       table.insert(new_assets, asset)
-      dirty = true
     end
-  end
-  if not dirty then
-    return
   end
   for _, asset in ipairs(new_assets) do
     table.insert(custom_assets, asset)
   end
   UI.setCustomAssets(custom_assets)
-end
-
----@private
----@params fn function()
-function M._wait_for_stable(fn)
-  Wait.condition(
-    fn,
-    function()
-      return not UI.loading
-    end,
-    5,
-    fn
-  )
-end
-
----@param color string
-local function render_modal(color)
-  local ui = UI.getXmlTable()
-  if UI.getAttribute('tts-importer-defaults', 'id') == nil then
-    table.insert(ui, render_defaults())
-  end
-
-  local m = modal.Modal.new(color)
-  local modal_xml = m:render()
-  table.insert(ui, modal_xml)
-  UI.setXmlTable(ui)
-
-  M._wait_for_stable(function()
-    m:show()
-  end)
 end
 
 --- Show the import modal
@@ -233,9 +191,18 @@ function M.show_import(importer, color)
 
   load_custom_assets()
 
-  M._wait_for_stable(function()
-    render_modal(color)
-  end)
+  local ui = UI.getXmlTable()
+  if UI.getAttribute('tts-importer-defaults', 'id') == nil then
+    table.insert(ui, render_defaults())
+  end
+
+  local m = modal.Modal.new(color)
+  local modal_xml = m:render()
+  table.insert(ui, modal_xml)
+  UI.setXmlTable(ui)
+  Wait.frames(function()
+    m:show()
+  end, 2)
 end
 
 end)
@@ -1245,8 +1212,6 @@ return M
 end)
 __bundle_register("assets", function(require, _LOADED, __bundle_register, __bundle_modules)
 return {
-  ---@param base_url string
-  ---@return UI.CustomAsset[]
   build = function(base_url)
     local assets = {
       { name = 'deck_tab',        url = 'deck_tab_v0_10_1.png' },
