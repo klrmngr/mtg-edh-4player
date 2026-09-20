@@ -25,3 +25,9 @@ jobs:
           R2_KEY: ${{ secrets.R2_KEY }}
           R2_SECRET: ${{ secrets.R2_SECRET }}
           R2_BUCKET: ${{ vars.R2_BUCKET }}
+          # Purging is what makes a corrected image actually reach players --
+          # overwriting R2 leaves Cloudflare's edge copy in place for its full
+          # max-age. Token needs only Zone > Cache Purge > Purge on this zone.
+          CF_ZONE_ID: ${{ vars.ZONE_ID }}
+          CF_PURGE_TOKEN: ${{ secrets.ZONE_SECRET }}
+          R2_PUBLIC_HOST: ${{ vars.R2_PUBLIC_HOST }}
