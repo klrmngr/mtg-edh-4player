@@ -2,11 +2,12 @@
 
 -- rikrassen's importer is a deck builder: it POSTs a decklist to its backend
 -- and spawns the card JSON streamed back. We hit that backend directly (rather
--- than the table object, which self-updates its own script) so "scryfall <name>"
--- loads a single card as a one-line "deck". Contract mirrors the importer's
--- api.deck request: lang rides in the Accept-Language header, everything else in
--- the JSON body, and the response is newline-delimited JSON.
-rikrassenBuildURL = "https://importer.rikrassen.xyz/build"
+-- than the table object, whose script is upstream's and gets replaced wholesale
+-- on every pull) so "scryfall <name>" loads a single card as a one-line "deck".
+-- Contract mirrors the importer's api.deck request: lang rides in the
+-- Accept-Language header, everything else in the JSON body, and the response is
+-- newline-delimited JSON.
+rikrassenBuildURL = "https://importer.rikrassen.com/build"
 rikrassenClientVersion = "v0.11.0"
 rikrassenLang = "en"
 

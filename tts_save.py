@@ -16,7 +16,7 @@ Two modes:
         Reassemble save.template.json + objects/*.json + main.lua + ui.xml into
         a full save written to
             DIR/MTG EDH 4-player (χ) <version> [<branch>]-<YYYYMMDDHHMMSS>.json
-        where <version> is read from src/patchnotes.lua and [<branch>] is the
+        where <version> is read from src/ui/patchnotes.lua and [<branch>] is the
         current git branch (omitted on main/master). DIR comes from the
         argument, else SAVE_DIR in a local .env, else the current directory.
 
@@ -40,7 +40,7 @@ DEFAULT_OBJECTS_DIR = os.path.join(HERE, "objects")
 TEMPLATE_PATH = os.path.join(HERE, "save.template.json")
 MAIN_LUA = os.path.join(HERE, "main.lua")
 UI_XML = os.path.join(HERE, "ui.xml")
-PATCHNOTES = os.path.join(HERE, "src", "patchnotes.lua")
+PATCHNOTES = os.path.join(HERE, "src", "ui", "patchnotes.lua")
 ENV_PATH = os.path.join(HERE, ".env")
 
 SAVES_DIR = os.path.expanduser("~/.local/share/Tabletop Simulator/Saves")
@@ -135,7 +135,7 @@ def load_env(path: str = ENV_PATH) -> dict:
 
 
 def read_version() -> str:
-    """Current release tag from src/patchnotes.lua, e.g. 'v0.2.0'."""
+    """Current release tag from src/ui/patchnotes.lua, e.g. 'v0.2.0'."""
     if os.path.exists(PATCHNOTES):
         m = re.search(r'VERSION\s*=\s*"([^"]+)"', read(PATCHNOTES))
         if m:

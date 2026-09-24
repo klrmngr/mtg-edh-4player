@@ -8,8 +8,9 @@
 -- once and never changed.
 --
 -- We stamp from the Global script rather than inside rikrassen's importer because
--- that importer replaces its own Lua on startup whenever a newer version exists
--- (setLuaScript + reload), which would wipe any hook we added there.
+-- that importer is upstream's script, replaced wholesale whenever we pull a new
+-- build, which would wipe any hook we added there. (Older builds also rewrote
+-- their own Lua at runtime via setLuaScript + reload.)
 --
 -- A card whose owner differs from the playmat it is resting on is glowed in its
 -- owner's colour, so a card on someone else's board reads as "not theirs". Gated
