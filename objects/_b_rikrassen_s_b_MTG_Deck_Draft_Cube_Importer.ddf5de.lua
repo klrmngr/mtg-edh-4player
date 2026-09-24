@@ -54,9 +54,9 @@ local env = 'PROD'
 -- local env = 'DEV'
 
 if env == 'PROD' then
-  BaseURL = 'https://importer.rikrassen.xyz'
+  BaseURL = 'https://importer.rikrassen.com'
 elseif env == 'STAGING' then
-  BaseURL = 'https://importer-staging.rikrassen.xyz'
+  BaseURL = 'https://importer-staging.rikrassen.com'
 else
   BaseURL = 'http://localhost:8080'
   asset_base_url = 'http://localhost:8082'
@@ -65,7 +65,6 @@ local assets = require("assets").build(asset_base_url)
 
 local modal = require("modal")
 local utils = require("utils")
-local api = require("api")
 
 function onLoad()
   utils.set_guid(self.getGUID())
@@ -130,32 +129,6 @@ function click_show_import(importer, color)
   M.show_import(importer, color)
 end
 
-function remote_show_import(color)
-  M.show_import(self, color)
-end
-
---- Check for a new version of the importer script
---- @param importer Object
---- @param color string
-function M.check_for_update(importer, color)
-  api.check_version(BaseURL, asset_base_url, function(new_script)
-    importer.setVar('checked_version', true)
-    if not new_script then
-      M.show_import(importer, color)
-      return
-    end
-
-    log('Updating importer GUI...')
-    importer.setLuaScript(new_script)
-    local new_importer = importer.reload()
-    -- Wait for the object to reload before calling show_import again
-    M._wait_for_stable(function()
-      new_importer.setVar('checked_version', true)
-      new_importer.call('remote_show_import', color)
-    end)
-  end)
-end
-
 local function load_custom_assets()
   local custom_assets = UI.getCustomAssets()
   local new_assets = {}
@@ -187,212 +160,31 @@ local function load_custom_assets()
   UI.setCustomAssets(custom_assets)
 end
 
----@private
----@params fn function()
-function M._wait_for_stable(fn)
-  Wait.condition(
-    fn,
-    function()
-      return not UI.loading
-    end,
-    5,
-    fn
-  )
-end
+local function init_ui()
+  load_custom_assets()
 
----@param color string
-local function render_modal(color)
-  local ui = UI.getXmlTable()
   if UI.getAttribute('tts-importer-defaults', 'id') == nil then
+    local ui = UI.getXmlTable()
     table.insert(ui, render_defaults())
+    UI.setXmlTable(ui)
   end
-
-  local m = modal.Modal.new(color)
-  local modal_xml = m:render()
-  table.insert(ui, modal_xml)
-  UI.setXmlTable(ui)
-
-  M._wait_for_stable(function()
-    m:show()
-  end)
 end
 
 --- Show the import modal
 --- @param importer Object
 --- @param color string
 function M.show_import(importer, color)
-  if not importer.getVar('checked_version') then
-    M.check_for_update(importer, color)
-    return
-  end
-
   if modal.exists(color) then
     modal.show(color)
     return
   end
 
-  load_custom_assets()
+  init_ui()
 
-  M._wait_for_stable(function()
-    render_modal(color)
+  utils.wait_for_stable(function()
+    modal.show(color)
   end)
 end
-
-end)
-__bundle_register("api", function(require, _LOADED, __bundle_register, __bundle_modules)
-local CLIENT_VERSION = 'v0.11.0'
-local M = {}
-
-local function split_lines(resp)
-  local lines = {}
-  for s in resp:gmatch('[^\r\n]+') do
-    table.insert(lines, s)
-  end
-  return lines
-end
-
-local function postJSON(url, req, cb)
-  local lang = req.lang
-  req.lang = nil
-  WebRequest.custom(url, 'POST', true, JSON.encode(req), {
-    Accept = 'application/x-ndjson',
-    ['Content-Type'] = 'application/json',
-    ['X-Client-Version'] = CLIENT_VERSION,
-    ['Accept-Language'] = lang,
-  }, cb)
-end
-
-local function callback(resp, player, reqType, next)
-  next()
-
-  if resp.error ~= nil then
-    if string.find(resp.text, '"error"') then
-      local data = JSON.decode(resp.text)
-      broadcastToColor('There appears to be an issue with your ' .. reqType .. ': ' .. data.error,
-        player.color, Color.Red)
-    else
-      broadcastToColor('There was an issue with the server, please try again later', player.color,
-        Color.Red)
-    end
-    log(player.color .. ': server returned the error: ' .. resp.error)
-    return
-  end
-
-  if not resp.is_done then
-    return
-  end
-
-  broadcastToColor('Rendering ' .. reqType .. '...', player.color, Color.Yellow)
-
-  local issues = {}
-  for _, obj in ipairs(split_lines(resp.text)) do
-    if string.match(obj, '^{"error":') then
-      local error = JSON.decode(obj)
-      issues[#issues + 1] = error.error
-    else
-      spawnObjectJSON({ json = obj })
-    end
-  end
-  if #issues > 0 then
-    local issue_text
-    if #issues > 1 then
-      issue_text = 'are multiple issues'
-    else
-      issue_text = 'is an issue'
-    end
-    broadcastToColor('There ' .. issue_text .. ' with your ' .. reqType .. ': ' .. table.concat(issues, ', '),
-      player.color, Color.Red)
-  end
-end
-
-function M.draft_cube(color, data, next)
-  if data.url == '' then
-    broadcastToColor('Please enter a cube', color, 'Red')
-    return
-  end
-
-  broadcastToColor('Building cube...', color, 'Yellow')
-
-  local player = Player[color]
-  postJSON(BaseURL .. '/draftCube', data, function(resp)
-    callback(resp, player, 'cube', next)
-  end)
-end
-
-function M.deck(color, data, next)
-  if data.data == '' and data.url == '' then
-    broadcastToColor('Please enter a deck', color, 'Red')
-    return
-  end
-
-  broadcastToColor('Building deck...', color, 'Yellow')
-
-  local player = Player[color]
-  local hand = player.getHandTransform(1)
-  if hand == nil then
-    broadcastToColor('You need to take a seat for your deck to be generated', color, 'Red')
-    return
-  end
-
-  data.hand = hand
-  postJSON(BaseURL .. '/build', data, function(resp)
-    callback(resp, player, 'deck', next)
-  end)
-end
-
-function M.draft(color, data, next)
-  if data.set == '' then
-    broadcastToColor('Please enter a set', color, 'Red')
-    return
-  end
-
-  broadcastToAll('Building boosters...', 'Yellow')
-
-  local hands = {}
-  for _, seatedPlayer in ipairs(getSeatedPlayers()) do
-    local player = Player[seatedPlayer]
-    local hand = player.getHandTransform(1)
-    -- Skip players that don't actually have a seat.
-    if hand == nil then
-      broadcastToColor('You need to take a seat for packs to be generated', seatedPlayer, 'Red')
-    else
-      table.insert(hands, { position = hand.position, forward = hand.forward, right = hand.right })
-    end
-  end
-
-  local player = Player[color]
-
-  data.hands = hands
-  postJSON(BaseURL .. '/draft', data, function(resp)
-    callback(resp, player, 'boosters', next)
-  end)
-end
-
---- Check for a new version of the client
---- @param base_url string
---- @param asset_base_url string
---- @param cb function(new_script: string?)
-function M.check_version(base_url, asset_base_url, cb)
-  WebRequest.get(base_url .. '/version', function(resp)
-    if resp.error ~= nil then
-      cb()
-      return
-    end
-    if resp.text == CLIENT_VERSION then
-      cb()
-      return
-    end
-    WebRequest.get(asset_base_url .. '/importer.lua', function(script_resp)
-      if script_resp.error ~= nil then
-        cb()
-        return
-      end
-      cb(script_resp.text)
-    end)
-  end)
-end
-
-return M
 
 end)
 __bundle_register("utils", function(require, _LOADED, __bundle_register, __bundle_modules)
@@ -429,6 +221,22 @@ function M.merge(tbl, ...)
   return tbl
 end
 
+---@params fn function()
+function M.wait_for_stable(fn)
+  Wait.condition(
+    fn,
+    function()
+      return not UI.loading
+    end,
+    5,
+    fn
+  )
+end
+
+function M.dump(o)
+  print(JSON.encode_pretty(o))
+end
+
 return M
 
 end)
@@ -436,23 +244,9 @@ __bundle_register("modal", function(require, _LOADED, __bundle_register, __bundl
 local utils = require("utils")
 local api = require("api")
 
-local M = {}
-
-local AllModals = {}
-
-function M.exists(color)
-  return AllModals[color] ~= nil
-end
-
-function M.show(color)
-  if AllModals[color] == nil then
-    error('no modal for ' .. tostring(color))
-  end
-  AllModals[color]:show()
-end
-
+---@private
 ---@class Modal
----@field color string
+---@field color PlayerHandColor
 ---@field _deck_form table
 ---@field _draft_form table
 ---@field _cube_draft_form table
@@ -461,16 +255,61 @@ end
 local Modal = {}
 Modal.__index = Modal
 
-M.Modal = Modal
+local M = {
+  Modal = Modal,
+}
+
+--- @type table<PlayerHandColor, Modal>
+local ModalCache = {}
+
+local function update_modal_for_color(color)
+  local is_in_ui = UI.getAttribute('modal-' .. color, 'visibility') ~= nil
+  local is_in_cache = ModalCache[color] ~= nil
+  if is_in_ui == is_in_cache then
+    return
+  end
+  if is_in_ui and not is_in_cache then
+    ModalCache[color] = M.Modal.new(color)
+    return
+  end
+  if not is_in_ui and is_in_cache then
+    ModalCache[color] = nil
+    return
+  end
+  error('unexpected state for modal ' .. color)
+end
+
+--- @param color PlayerHandColor
+function M.exists(color)
+  update_modal_for_color(color)
+  return ModalCache[color] ~= nil
+end
+
+---@param m Modal
+local function render_modal(m)
+  local ui = UI.getXmlTable()
+  local modal_xml = m:render()
+  table.insert(ui, modal_xml)
+  UI.setXmlTable(ui)
+end
+
+--- @param color PlayerHandColor
+function M.show(color)
+  local modal = ModalCache[color]
+  if modal == nil then
+    modal = M.Modal.new(color)
+    ModalCache[color] = modal
+    render_modal(modal)
+  end
+  utils.wait_for_stable(function()
+    modal:show()
+  end)
+end
 
 --- Create a new Modal
---- @param color string
+--- @param color PlayerHandColor
 --- @return Modal
 function Modal.new(color)
-  if M.exists(color) then
-    return AllModals[color]
-  end
-
   local self = setmetatable({ color = color }, Modal)
 
   self._deck_form = { url = '', data = '' }
@@ -482,8 +321,6 @@ function Modal.new(color)
     lang = 'en',
   }
   self._tab = 'deck'
-
-  AllModals[color] = self
 
   return self
 end
@@ -712,7 +549,6 @@ Supported sites are:
   - mtggoldfish.com
   - mtgsalvation.com
   - mtgtop8.com
-  - mtgvault.com
   - scryfall.com
   - tappedout.net</size>]],
 
@@ -1238,6 +1074,201 @@ function Modal:render()
       },
     }),
   }
+end
+
+return M
+
+end)
+__bundle_register("api", function(require, _LOADED, __bundle_register, __bundle_modules)
+local CLIENT_VERSION = 'v0.11.0'
+local M = {}
+
+--- @class ImporterSettings
+--- @field lang string
+--- @field useStates boolean
+--- @field preferOriginalPrinting boolean
+--- @field backURL string
+
+--- @class DeckRequest : ImporterSettings
+--- @field url string
+--- @field data string
+--- @field hand table
+
+--- @class DraftRequest : ImporterSettings
+--- @field set string
+--- @field hands table[]
+
+--- @class CubeRequest : ImporterSettings
+--- @field url string
+--- @field drafters number
+--- @field packSize number
+--- @field packCount number
+
+--- @param resp string
+--- @return string[]
+local function split_lines(resp)
+  local lines = {}
+  for s in resp:gmatch('[^\r\n]+') do
+    table.insert(lines, s)
+  end
+  return lines
+end
+
+--- @param url string
+--- @param req DeckRequest | DraftRequest | CubeRequest
+--- @param cb function(resp: WebRequestInstance)
+local function postJSON(url, req, cb)
+  local lang = req.lang
+  req.lang = nil
+  WebRequest.custom(url, 'POST', true, JSON.encode(req), {
+    Accept = 'application/x-ndjson',
+    ['Content-Type'] = 'application/json',
+    ['X-Client-Version'] = CLIENT_VERSION,
+    ['Accept-Language'] = lang,
+  }, cb)
+end
+
+--- @param resp WebRequestInstance
+--- @param player PlayerInstance
+--- @param reqType string
+--- @param next function()
+local function callback(resp, player, reqType, next)
+  next()
+
+  if resp.error ~= nil then
+    if string.find(resp.text, '"error"') then
+      local data = JSON.decode(resp.text)
+      broadcastToColor('There appears to be an issue with your ' .. reqType .. ': ' .. data.error,
+        player.color, Color.Red)
+    else
+      broadcastToColor('There was an issue with the server, please try again later', player.color,
+        Color.Red)
+    end
+    log(player.color .. ': server returned the error: ' .. resp.error)
+    return
+  end
+
+  if not resp.is_done then
+    return
+  end
+
+  broadcastToColor('Rendering ' .. reqType .. '...', player.color, Color.Yellow)
+
+  local issues = {}
+  for _, obj in ipairs(split_lines(resp.text)) do
+    if string.match(obj, '^{"error":') then
+      local error = JSON.decode(obj)
+      issues[#issues + 1] = error.error
+    else
+      spawnObjectJSON({ json = obj })
+    end
+  end
+  if #issues > 0 then
+    local issue_text
+    if #issues > 1 then
+      issue_text = 'are multiple issues'
+    else
+      issue_text = 'is an issue'
+    end
+    broadcastToColor('There ' .. issue_text .. ' with your ' .. reqType .. ': ' .. table.concat(issues, ', '),
+      player.color, Color.Red)
+  end
+end
+
+--- @param color string
+--- @param data CubeRequest
+--- @param next function
+function M.draft_cube(color, data, next)
+  if data.url == '' then
+    broadcastToColor('Please enter a cube', color, Color.Red)
+    return
+  end
+
+  broadcastToColor('Building cube...', color, Color.Yellow)
+
+  local player = Player[color]
+  postJSON(BaseURL .. '/draftCube', data, function(resp)
+    callback(resp, player, 'cube', next)
+  end)
+end
+
+--- @param color string
+--- @param data DeckRequest
+--- @param next function
+function M.deck(color, data, next)
+  if data.data == '' and data.url == '' then
+    broadcastToColor('Please enter a deck', color, Color.Red)
+    return
+  end
+
+  broadcastToColor('Building deck...', color, Color.Yellow)
+
+  local player = Player[color]
+  local hand = player.getHandTransform(1)
+  if hand == nil then
+    broadcastToColor('You need to take a seat for your deck to be generated', color, Color.Red)
+    return
+  end
+
+  data.hand = hand
+  postJSON(BaseURL .. '/build', data, function(resp)
+    callback(resp, player, 'deck', next)
+  end)
+end
+
+--- @param color string
+--- @param data DraftRequest
+--- @param next function
+function M.draft(color, data, next)
+  if data.set == '' then
+    broadcastToColor('Please enter a set', color, Color.Red)
+    return
+  end
+
+  broadcastToAll('Building boosters...', Color.Yellow)
+
+  local hands = {}
+  for _, seatedPlayer in ipairs(getSeatedPlayers()) do
+    local player = Player[seatedPlayer]
+    local hand = player.getHandTransform(1)
+    -- Skip players that don't actually have a seat.
+    if hand == nil then
+      broadcastToColor('You need to take a seat for packs to be generated', seatedPlayer, Color.Red)
+    else
+      table.insert(hands, { position = hand.position, forward = hand.forward, right = hand.right })
+    end
+  end
+
+  local player = Player[color]
+
+  data.hands = hands
+  postJSON(BaseURL .. '/draft', data, function(resp)
+    callback(resp, player, 'boosters', next)
+  end)
+end
+
+--- Check for a new version of the client
+--- @param base_url string
+--- @param asset_base_url string
+--- @param cb function(new_script: string?)
+function M.check_version(base_url, asset_base_url, cb)
+  WebRequest.get(base_url .. '/version', function(resp)
+    if resp.error ~= nil then
+      cb()
+      return
+    end
+    if resp.text == CLIENT_VERSION then
+      cb()
+      return
+    end
+    WebRequest.get(asset_base_url .. '/importer.lua', function(script_resp)
+      if script_resp.error ~= nil then
+        cb()
+        return
+      end
+      cb(script_resp.text)
+    end)
+  end)
 end
 
 return M
