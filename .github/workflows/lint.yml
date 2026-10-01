@@ -1,0 +1,34 @@
+name: lint
+
+on:
+  pull_request:
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install stylua
+        env:
+          STYLUA_VERSION: 2.5.2
+        run: |
+          curl -fsSL -o /tmp/stylua.zip \
+            "https://github.com/JohnnyMorganz/StyLua/releases/download/v${STYLUA_VERSION}/stylua-linux-x86_64.zip"
+          unzip -q /tmp/stylua.zip -d /tmp
+          install -m 755 /tmp/stylua /usr/local/bin/stylua
+      - name: Check src/ formatting
+        run: make fmt-check
+
+  luacheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # .luacheckrc pins std = "lua52" (what TTS runs), so the host Lua here
+      # only needs to be new enough to run luacheck itself.
+      - uses: leafo/gh-actions-lua@v11
+        with:
+          luaVersion: "5.4"
+      - uses: leafo/gh-actions-luarocks@v5
+      - run: luarocks install luacheck
+      - name: Lint main.lua
+        run: make lint

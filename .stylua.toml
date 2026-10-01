@@ -1,0 +1,8 @@
+# stylua's defaults, pinned so CI and local runs agree. The src/ tree was
+# already formatted this way; writing it down keeps it from drifting.
+column_width = 120
+indent_type = "Tabs"
+indent_width = 4
+line_endings = "Unix"
+quote_style = "AutoPreferDouble"
+call_parentheses = "Always"
