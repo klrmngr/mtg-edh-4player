@@ -30,8 +30,6 @@ function move2botLib(ply)
 		if gr == nil or not (gr.type == "Card" or gr.type == "Deck") then
 			return
 		end
-		local rot = gr.getRotation()
-		rot[3] = 180
 		gr.interactable = false
 		gr.use_gravity = false
 		gr.shuffle()
@@ -144,4 +142,3 @@ function move2exile(ply)
 		gr.setPositionSmooth(pos, false, true)
 	end, 1)
 end
-

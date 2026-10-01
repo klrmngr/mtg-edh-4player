@@ -150,4 +150,3 @@ function checkPosMove(pos, libZone)
 		end
 	end
 end
-

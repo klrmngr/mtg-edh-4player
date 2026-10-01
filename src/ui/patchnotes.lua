@@ -113,7 +113,11 @@ function showPatchNotes(obj, color, alt)
 	end
 	WebRequest.get(RELEASES_API, function(req)
 		if req.is_error then
-			broadcastToColor("Patch notes: couldn't reach GitHub (" .. tostring(req.error) .. ")", color, { 1, 0.4, 0.4 })
+			broadcastToColor(
+				"Patch notes: couldn't reach GitHub (" .. tostring(req.error) .. ")",
+				color,
+				{ 1, 0.4, 0.4 }
+			)
 			return
 		end
 		local releases = JSONdecode(req.text)

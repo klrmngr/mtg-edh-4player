@@ -65,7 +65,7 @@ function search(player)
 	end
 
 	--TYPE RELATED
-	local tokenParam = ""
+	local tokenParam
 	if UI.getAttribute("vToken", "isOn") == "True" then
 		tokenParam = "include_extras=true&"
 		--+layout%3Dtoken+or+layout%3Ddouble_faced_token
@@ -102,12 +102,12 @@ function objectProccessor(webReturn, player, isPart)
 			errorJson(webReturn.text, player)
 		else
 			if isPart == false then
-				local object = string.sub(object, 11, -2)
-				if object == "list" then
+				local objectType = string.sub(object, 11, -2)
+				if objectType == "list" then
 					listJson(webReturn.text, player)
-				elseif object == "error" then
+				elseif objectType == "error" then
 					errorJson(webReturn.text, player)
-				elseif object == "card" then
+				elseif objectType == "card" then
 					cardJson(webReturn.text, "card", player, false)
 				else
 					printToAll("Unexpect object returned from search")
@@ -121,7 +121,7 @@ end
 
 function listJson(json, player)
 	local cardUri = string.match(json, '"uri":"[^"]*"')
-	local cardUri = string.sub(cardUri, 8, -2)
+	cardUri = string.sub(cardUri, 8, -2)
 	WebRequest.get(cardUri, function(a)
 		objectProccessor(a, player, false)
 	end)
@@ -139,10 +139,10 @@ function setOracle(c)
 	return c.oracle_text:gsub('"', "'") .. n .. "[/b]"
 end
 
-function cardJson(json, type, player, isPart)
+function cardJson(jsonText, type, player, isPart)
 	local back =
 		"https://steamusercontent-a.akamaihd.net/ugc/1647720103762682461/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/"
-	local json = JSONdecode(json)
+	local json = JSONdecode(jsonText)
 	if json.card_faces and type == "card" then
 		face = json.card_faces[1].image_uris.large:gsub("%?.*", "")
 		back = json.card_faces[2].image_uris.large:gsub("%?.*", "")
@@ -206,8 +206,8 @@ function cardJson(json, type, player, isPart)
 	end
 end
 
-function errorJson(json, player)
-	local json = JSONdecode(json)
+function errorJson(jsonText, player)
+	local json = JSONdecode(jsonText)
 	if json.status == 404 then
 		printToAll(
 			"Your query didn't match any cards. Adjust your search terms and try again.",
@@ -403,7 +403,7 @@ function createButtons(obj)
 			},
 			height = 170,
 			width = barSize,
-			font_size = fSize,
+			font_size = fsize,
 			rotation = { 0, 0, 90 - 90 * flip },
 		})
 	end
@@ -441,7 +441,6 @@ function encodeChar(chr)
 end
 
 function encodeString(str)
-	local output, t = string.gsub(str, "[^%w]", encodeChar)
+	local output = string.gsub(str, "[^%w]", encodeChar)
 	return output
 end
-

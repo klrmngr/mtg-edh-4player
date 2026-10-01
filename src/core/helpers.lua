@@ -40,7 +40,6 @@ end
 -- (personally, I play with a bunch of decks that keep the top card of the library revealed)
 -- works if there is just one card remaining in the zone, too
 function getCardFromZone(zone)
-	local card = nil
 	local highY = 0
 	local highObj = nil
 	local objects = zone.getObjects()
@@ -72,7 +71,7 @@ function getCardFromZone(zone)
 			return card
 		end
 	end
-	return card -- if nil?
+	return nil
 end
 
 function getDeckFromZone(zone)
@@ -88,7 +87,8 @@ function getDeckFromZone(zone)
 end
 
 -- the per-player buttons that live on a token belonging to one colour
-buttonOwnerKeys = { "drawButton", "scryButton", "millButton", "untapButton", "mulliganButton", "revealButton", "playmat" }
+buttonOwnerKeys =
+	{ "drawButton", "scryButton", "millButton", "untapButton", "mulliganButton", "revealButton", "playmat" }
 
 -- reverse-lookup the owner colour of a per-player button object, or nil
 function buttonOwner(obj)
@@ -106,10 +106,7 @@ end
 function warnNotYours(obj, clickerColor)
 	local owner = buttonOwner(obj)
 	if owner ~= nil and owner ~= clickerColor then
-		Player[clickerColor].broadcast(
-			"That's " .. owner .. "'s button -- you can only use your own.",
-			{ 1, 0.6, 0.2 }
-		)
+		Player[clickerColor].broadcast("That's " .. owner .. "'s button -- you can only use your own.", { 1, 0.6, 0.2 })
 	end
 end
 
@@ -403,4 +400,3 @@ function isDoubleClick(key, window)
 end
 
 function null() end
-

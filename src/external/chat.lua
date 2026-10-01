@@ -82,15 +82,15 @@ function onChat(message, pl)
 		return false
 	end
 
-	local message = string.lower(message):gsub("%p", "")
-	if message == "my turn" or message == "no my turn" then
+	local command = string.lower(message):gsub("%p", "")
+	if command == "my turn" or command == "no my turn" then
 		Turns.enable = true
 		Turns.turn_color = pl.color
 		-- return false
 	end
-	local i1, i2 = message:find("your turn ")
+	local _, i2 = command:find("your turn ")
 	if i2 ~= nil then
-		colStr = message:sub(i2 + 1)
+		colStr = command:sub(i2 + 1)
 		colStr = colStr:gsub("^%l", string.upper) -- Turn.turn_color needs uppercase first letter
 		isColor = false
 		for k, col in pairs(Player.getColors()) do -- is colStr a color at this table?
@@ -107,4 +107,3 @@ function onChat(message, pl)
 		end
 	end
 end
-

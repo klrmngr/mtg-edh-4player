@@ -119,7 +119,11 @@ function bugReportDone(resp, color)
 		return
 	end
 	if resp.response_code == 429 then
-		broadcastToColor("You're submitting reports too quickly -- wait a minute and try again.", color, { 1, 0.6, 0.2 })
+		broadcastToColor(
+			"You're submitting reports too quickly -- wait a minute and try again.",
+			color,
+			{ 1, 0.6, 0.2 }
+		)
 		return
 	end
 	if resp.response_code ~= nil and resp.response_code >= 400 then

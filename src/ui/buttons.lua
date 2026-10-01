@@ -231,4 +231,3 @@ function createTableButtonR(object)
 			font_color = { 1, 1, 1, 100 },
 		})
 end
-

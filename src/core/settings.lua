@@ -12,28 +12,28 @@
 -- default value for every setting, applied to each colour on load
 settingsDefaults = {
 	oppDrawTriggers = false, -- notify this player about draw triggers (theirs / others')
-	                         -- default off: feature is unfinished / somewhat buggy
+	-- default off: feature is unfinished / somewhat buggy
 	drawSkipReminder = true, -- warn (and stop the draw) on a "skip your draw step" card
 	abilityRestrictions = false, -- remind on tapping a permanent whose activated abilities are prohibited
-	                             -- default off: feature is unfinished / somewhat buggy
+	-- default off: feature is unfinished / somewhat buggy
 	searchRestrictions = true, -- block fetchland resolution when a tutor/search-hate card is in play
-	landTracker = true,      -- track / show lands entered this turn on this player's mat
-	fetchPreviews = true,    -- float library-land previews above this player's fetchlands
-	fetchFromClone = false,  -- read those previews from the game-start deck clone instead of
-	                         -- the live library, so an opponent's hidden removal (Praetor's
-	                         -- Grasp, etc.) can't leak which land left. Off = live library.
-	ownerHighlight = true,   -- glow cards on this player's mat that belong to someone else, in the owner's colour
-	commanderQOL = true,     -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
+	landTracker = true, -- track / show lands entered this turn on this player's mat
+	fetchPreviews = true, -- float library-land previews above this player's fetchlands
+	fetchFromClone = false, -- read those previews from the game-start deck clone instead of
+	-- the live library, so an opponent's hidden removal (Praetor's
+	-- Grasp, etc.) can't leak which land left. Off = live library.
+	ownerHighlight = true, -- glow cards on this player's mat that belong to someone else, in the owner's colour
+	commanderQOL = true, -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
 	cmdrDamageAutoLife = true, -- commander-damage tracker deltas auto-adjust this player's life
-	seedbornUntap = true,    -- this player's Seedborn Muse untaps their board on others' untap steps
-	dfcLandFlip = true,      -- flip a double-faced card to its land back face in the land zone
-	fetchSurveil = false,    -- auto-surveil/scry when a fetched land has an ETB surveil/scry trigger
+	seedbornUntap = true, -- this player's Seedborn Muse untaps their board on others' untap steps
+	dfcLandFlip = true, -- flip a double-faced card to its land back face in the land zone
+	fetchSurveil = false, -- auto-surveil/scry when a fetched land has an ETB surveil/scry trigger
 	fetchEntersTapped = false, -- tap a fetched land whose text (or the fetchland) says it enters tapped
-	keywordTokens = true,    -- dropping a keyword token (Frozen, Flying, ...) on a card applies that keyword
-	goblinStickers = true,   -- deal goblin sticker cards when a "_____ Goblin" starts in the library
-	mindmoil = true,         -- show the Mindmoil trigger button on a Mindmoil on this player's mat
+	keywordTokens = true, -- dropping a keyword token (Frozen, Flying, ...) on a card applies that keyword
+	goblinStickers = true, -- deal goblin sticker cards when a "_____ Goblin" starts in the library
+	mindmoil = true, -- show the Mindmoil trigger button on a Mindmoil on this player's mat
 	keepPregameFlow = false, -- show the centre-mat Keep button and run the pregame-action announcement
-	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
+	revealResetSecs = 30, -- seconds of inactivity before the reveal count resets
 }
 
 -- panel toggle id -> settings key it controls
@@ -203,8 +203,13 @@ settingsSearchRows = {
 }
 
 settingsSearchHeaders = {
-	"hdr_triggers", "hdr_stateBased", "hdr_automation",
-	"hdr_display", "hdr_commander", "hdr_game", "hdr_misc",
+	"hdr_triggers",
+	"hdr_stateBased",
+	"hdr_automation",
+	"hdr_display",
+	"hdr_commander",
+	"hdr_game",
+	"hdr_misc",
 }
 
 -- restore every row + header to visible (no active query)
@@ -257,8 +262,12 @@ hostSearchRows = {
 }
 
 hostSearchHeaders = {
-	"hosthdr_triggers", "hosthdr_stateBased", "hosthdr_automation",
-	"hosthdr_display", "hosthdr_commander", "hosthdr_game",
+	"hosthdr_triggers",
+	"hosthdr_stateBased",
+	"hosthdr_automation",
+	"hosthdr_display",
+	"hosthdr_commander",
+	"hosthdr_game",
 }
 
 function clearHostSettingsSearch()

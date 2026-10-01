@@ -148,4 +148,3 @@ function getHand2Pos(playerColor)
 	-- {x=pos.x+sca.x*rig.x*0.65,y=pos.y+sca.x*rig.y*0.65+1.5,z=pos.z+sca.x*rig.z*0.65}
 	return targPos
 end
-

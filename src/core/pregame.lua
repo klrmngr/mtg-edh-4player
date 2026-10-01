@@ -9,8 +9,9 @@
 -- announces who declared a pregame action and every keep button hides itself
 -- until the next round of mulligans re-arms the flow.
 
-pregameAnnounceDelay = 2 -- grace period after the last Keep before announcing, so
-                         -- the final player can still declare a pregame action
+-- grace period after the last Keep before announcing, so the final player can
+-- still declare a pregame action
+pregameAnnounceDelay = 2
 pregameAnnounced = false -- table-wide one-shot guard for the announcement
 
 -- create the keep button in the centre of one player's playmat. The button lives

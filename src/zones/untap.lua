@@ -117,4 +117,3 @@ function untapAll(playerColor, foreign)
 		end
 	end
 end
-
