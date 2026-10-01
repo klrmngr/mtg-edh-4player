@@ -42,4 +42,3 @@ function onScriptingButtonDown(index, playerColor)
 		move2botLib(playerColor)
 	end
 end
-

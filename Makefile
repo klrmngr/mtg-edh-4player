@@ -46,6 +46,29 @@ check:
 		&& echo "main.lua is in sync with src/" \
 		|| { echo "ERROR: main.lua differs from src/ build -- commit the rebuild"; exit 1; }
 
+# stylua over the hand-written sources, then rebuild main.lua from them.
+# objects/*.lua are exported TTS object scripts, several of them vendored from
+# other mods, so they are deliberately left alone.
+.PHONY: fmt
+fmt:
+	stylua src/
+	$(MAKE) main.lua
+
+.PHONY: fmt-check
+fmt-check:
+	stylua --check src/
+
+# luacheck, with warnings mapped back from main.lua to the src/ file they came
+# from. See the comment at the top of .luacheckrc for why it lints the bundle.
+.PHONY: lint
+lint: main.lua
+	@python3 tools/lint.py
+
+# the src file list in concatenation order, for tools/lint.py
+.PHONY: print-src
+print-src:
+	@printf '%s\n' $(SRC)
+
 # Reassemble save.template.json + objects/*.json + main.lua + ui.xml into a
 # full, loadable TTS save named "MTG EDH 4-player (χ) <version>-<timestamp>.json".
 # By default it writes to SAVE_DIR from .env; override the directory with

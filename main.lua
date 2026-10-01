@@ -199,7 +199,6 @@ function onPlayerDisconnect(player) -- flip cards in hand if disconnected
 		end
 	end
 end
-
 --------------------------------- TABLE BUTTONS --------------------------------
 function buildTableButtons()
 	-- support variables
@@ -433,7 +432,6 @@ function createTableButtonR(object)
 			font_color = { 1, 1, 1, 100 },
 		})
 end
-
 -- Scripting hotkeys
 function onScriptingButtonDown(index, playerColor)
 	if index == 10 then
@@ -478,7 +476,6 @@ function onScriptingButtonDown(index, playerColor)
 		move2botLib(playerColor)
 	end
 end
-
 function move2botLib(ply)
 	local objs = Player[ply].getSelectedObjects()
 	local cards = {}
@@ -511,8 +508,6 @@ function move2botLib(ply)
 		if gr == nil or not (gr.type == "Card" or gr.type == "Deck") then
 			return
 		end
-		local rot = gr.getRotation()
-		rot[3] = 180
 		gr.interactable = false
 		gr.use_gravity = false
 		gr.shuffle()
@@ -625,7 +620,6 @@ function move2exile(ply)
 		gr.setPositionSmooth(pos, false, true)
 	end, 1)
 end
-
 ------------------------------------ REVEAL ------------------------------------
 -- world position of the n-th card (0-based) in the fanned-reveal layout above
 -- ply's library, and the matching face-up rotation. The library zone was rotated
@@ -778,9 +772,13 @@ function checkPosMove(pos, libZone)
 		end
 	end
 end
-
 ----------------------------------- MULLIGAN -----------------------------------
 mulliganResetDelay = 300 -- auto-reset the count after this many seconds idle
+
+-- opt-in hand-fixing in playerMulligan: reshuffle (up to 3 times) until the
+-- top 7 hold 3-4 lands. Nothing turns this on yet, so the branch is inert --
+-- it needs a settings toggle before it does anything.
+smartMulligan = false
 
 -- bump a player's mulligan counter and refresh the on-table label
 function bumpMulliganCount(color)
@@ -998,7 +996,6 @@ function playerSerumPowder(button, playerColor, alt)
 		deck.deal(handSize, playerColor, 1)
 	end, 1.0)
 end
-
 ----------------------------------- BOARD RESET ----------------------------------
 -- A per-player "Reset" button (under the mulligan count) restores that player's
 -- board to its game-start state. At the opening hand (the first mulligan bump,
@@ -1228,8 +1225,9 @@ end
 -- announces who declared a pregame action and every keep button hides itself
 -- until the next round of mulligans re-arms the flow.
 
-pregameAnnounceDelay = 2 -- grace period after the last Keep before announcing, so
-                         -- the final player can still declare a pregame action
+-- grace period after the last Keep before announcing, so the final player can
+-- still declare a pregame action
+pregameAnnounceDelay = 2
 pregameAnnounced = false -- table-wide one-shot guard for the announcement
 
 -- create the keep button in the centre of one player's playmat. The button lives
@@ -3331,8 +3329,16 @@ end
 -- map a spelled-out (or numeric) count to a number, e.g. "two" -> 2
 function wordToCount(w)
 	local words = {
-		one = 1, two = 2, three = 3, four = 4, five = 5,
-		six = 6, seven = 7, eight = 8, nine = 9, ten = 10,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
 	}
 	return words[w] or tonumber(w)
 end
@@ -3477,8 +3483,8 @@ end
 -- searches. Kept specific so they never match a fetchland's or tutor's own
 -- beneficial "search your library for..." text.
 searchRestrictionPhrases = {
-	"can't search",                    -- Leonin Arbiter, Stranglehold, Ashiok, Dream Render
-	"top four cards of that library",  -- Aven Mindcensor
+	"can't search", -- Leonin Arbiter, Stranglehold, Ashiok, Dream Render
+	"top four cards of that library", -- Aven Mindcensor
 	"top four cards of their library", -- (wording variant)
 }
 searchRestrictionNames = {
@@ -3546,7 +3552,8 @@ function resolveFetch(info)
 			end
 			clearFetchPreviews(info.fetchGuid)
 			broadcastToColor(
-				"Search restricted by " .. table.concat(blockers, ", ")
+				"Search restricted by "
+					.. table.concat(blockers, ", ")
 					.. " -- fetchland sent to graveyard; resolve the search manually.",
 				color,
 				{ 0.9, 0.3, 0.3 }
@@ -4057,7 +4064,6 @@ function untapAll(playerColor, foreign)
 		end
 	end
 end
-
 ------------------------------------- DRAW -------------------------------------
 -- a draw within this many seconds of pressing untap-all counts as the turn's
 -- draw step, so a "skip your draw step" card should stop it
@@ -4208,7 +4214,6 @@ function getHand2Pos(playerColor)
 	-- {x=pos.x+sca.x*rig.x*0.65,y=pos.y+sca.x*rig.y*0.65+1.5,z=pos.z+sca.x*rig.z*0.65}
 	return targPos
 end
-
 ---------------------------- OPPONENT-DRAW TRIGGERS ----------------------------
 -- Cards that trigger when someone draws -- Smothering Tithe, Consecrated Sphinx,
 -- Sheoldred, the Apocalypse, ... -- all share the same shape: "Whenever an
@@ -4333,7 +4338,6 @@ end
 -- (personally, I play with a bunch of decks that keep the top card of the library revealed)
 -- works if there is just one card remaining in the zone, too
 function getCardFromZone(zone)
-	local card = nil
 	local highY = 0
 	local highObj = nil
 	local objects = zone.getObjects()
@@ -4365,7 +4369,7 @@ function getCardFromZone(zone)
 			return card
 		end
 	end
-	return card -- if nil?
+	return nil
 end
 
 function getDeckFromZone(zone)
@@ -4381,7 +4385,8 @@ function getDeckFromZone(zone)
 end
 
 -- the per-player buttons that live on a token belonging to one colour
-buttonOwnerKeys = { "drawButton", "scryButton", "millButton", "untapButton", "mulliganButton", "revealButton", "playmat" }
+buttonOwnerKeys =
+	{ "drawButton", "scryButton", "millButton", "untapButton", "mulliganButton", "revealButton", "playmat" }
 
 -- reverse-lookup the owner colour of a per-player button object, or nil
 function buttonOwner(obj)
@@ -4399,10 +4404,7 @@ end
 function warnNotYours(obj, clickerColor)
 	local owner = buttonOwner(obj)
 	if owner ~= nil and owner ~= clickerColor then
-		Player[clickerColor].broadcast(
-			"That's " .. owner .. "'s button -- you can only use your own.",
-			{ 1, 0.6, 0.2 }
-		)
+		Player[clickerColor].broadcast("That's " .. owner .. "'s button -- you can only use your own.", { 1, 0.6, 0.2 })
 	end
 end
 
@@ -4696,7 +4698,6 @@ function isDoubleClick(key, window)
 end
 
 function null() end
-
 --------------------------------- CONTEXT MENU ---------------------------------
 
 function addZoneContextMenus()
@@ -4794,9 +4795,7 @@ function onObjectEnterZone(zone, obj)
 		end
 	end
 	obj.clearContextMenu()
-	if obj.type == "Card" then
-		-- obj.addContextMenuItem('Encoder Menu',toggleEncMenu)
-	end
+	-- a Card used to also get: obj.addContextMenuItem('Encoder Menu', toggleEncMenu)
 	if obj.type == "Card" and inPlayZone then
 		obj.addContextMenuItem("Make Token Copy", cardToken)
 		if obj.getDescription():lower():find("cascade") then
@@ -4850,9 +4849,7 @@ function onObjectLeaveZone(zone, obj)
 		end
 	end
 	obj.clearContextMenu()
-	if obj.type == "Card" then
-		-- obj.addContextMenuItem('Encoder Menu',toggleEncMenu)
-	end
+	-- a Card used to also get: obj.addContextMenuItem('Encoder Menu', toggleEncMenu)
 	if obj.type == "Card" and inPlayZone then
 		obj.addContextMenuItem("Make Token Copy", cardToken)
 		if obj.getDescription():lower():find("cascade") then
@@ -5235,7 +5232,6 @@ function discardCard(card, playerColor)
 		checkMoveSuccess(card, target, playerColor)
 	end, 0.5)
 end
-
 --------------------------------- CARD OWNERSHIP -------------------------------
 -- Every card belongs to the player whose deck it came from. We record that owner
 -- in the card's GMNotes (a JSON "owner" key; see getCardNote / setCardNote in
@@ -5502,7 +5498,6 @@ end
 
 function enterCascadeVal(deck, ply, CMVal)
 	local val = tonumber(CMVal)
-	local maxVal = deck.getQuantity()
 	if val >= 0 then
 		local rot = deck.getRotation()
 		rot.z = 180
@@ -5622,7 +5617,7 @@ function cascade(deck, playerColor, CMC)
 			if card == nil then
 				return
 			end
-			local targPos = libPos
+			local targPos
 			if cardNo < nCards then
 				targPos = libPos + card.getTransformRight():scale(2.5 * deckDir)
 				targPos.y = 3 + cardNo * 0.05
@@ -5657,7 +5652,7 @@ function cascade(deck, playerColor, CMC)
 
 			-- create buttons on card to accept or decline casting it
 			-- decline
-			local backpars = { -- background frame
+			local declineBg = { -- background frame
 				label = "",
 				tooltip = "",
 				click_function = "null",
@@ -5670,21 +5665,21 @@ function cascade(deck, playerColor, CMC)
 				color = { 0.7, 0.7, 0.7 },
 				font_color = { 1, 1, 1 },
 			}
-			cardToPlay.createButton(backpars)
-			local forgpars = backpars
-			forgpars.label = "✗"
-			forgpars.tooltip = "[b]DO NOT CAST THE CARD[/b]\nmove all the cascaded\n"
+			cardToPlay.createButton(declineBg)
+			local declineFg = declineBg
+			declineFg.label = "✗"
+			declineFg.tooltip = "[b]DO NOT CAST THE CARD[/b]\nmove all the cascaded\n"
 				.. "cards to the bottom of the\nlibrary in random order"
-			forgpars.click_function = "declineCascade"
-			forgpars.rotation = { 0, 0, 0 }
-			forgpars.font_color = stringColorToRGB(playerColor)
-			forgpars.color = { 0.16, 0.16, 0.16 }
-			forgpars.hover_color = { 0.4, 0.4, 0.4 }
-			forgpars.scale = { 0.67, 0.67, 0.67 }
-			cardToPlay.createButton(forgpars)
+			declineFg.click_function = "declineCascade"
+			declineFg.rotation = { 0, 0, 0 }
+			declineFg.font_color = stringColorToRGB(playerColor)
+			declineFg.color = { 0.16, 0.16, 0.16 }
+			declineFg.hover_color = { 0.4, 0.4, 0.4 }
+			declineFg.scale = { 0.67, 0.67, 0.67 }
+			cardToPlay.createButton(declineFg)
 
 			-- accept
-			local backpars = { -- background frame
+			local acceptBg = { -- background frame
 				label = "",
 				tooltip = "",
 				click_function = "null",
@@ -5697,18 +5692,18 @@ function cascade(deck, playerColor, CMC)
 				color = { 0.7, 0.7, 0.7 },
 				font_color = { 1, 1, 1 },
 			}
-			cardToPlay.createButton(backpars)
-			local forgpars = backpars
-			forgpars.label = "✓"
-			forgpars.tooltip = "[b]CAST THE CARD[/b]\nmove all the other cascaded\n"
+			cardToPlay.createButton(acceptBg)
+			local acceptFg = acceptBg
+			acceptFg.label = "✓"
+			acceptFg.tooltip = "[b]CAST THE CARD[/b]\nmove all the other cascaded\n"
 				.. "cards to the bottom of the\nlibrary in random order"
-			forgpars.click_function = "acceptCascade"
-			forgpars.rotation = { 0, 0, 0 }
-			forgpars.font_color = stringColorToRGB(playerColor)
-			forgpars.color = { 0.16, 0.16, 0.16 }
-			forgpars.hover_color = { 0.4, 0.4, 0.4 }
-			forgpars.scale = { 0.67, 0.67, 0.67 }
-			cardToPlay.createButton(forgpars)
+			acceptFg.click_function = "acceptCascade"
+			acceptFg.rotation = { 0, 0, 0 }
+			acceptFg.font_color = stringColorToRGB(playerColor)
+			acceptFg.color = { 0.16, 0.16, 0.16 }
+			acceptFg.hover_color = { 0.4, 0.4, 0.4 }
+			acceptFg.scale = { 0.67, 0.67, 0.67 }
+			cardToPlay.createButton(acceptFg)
 		end
 	end, nCards * drawDelay + 0.75)
 end
@@ -5837,11 +5832,11 @@ function moveCDeckToBot(cDeck, ply)
 			deck.setPositionSmooth(deck.getPosition() + Vector(0, 2, 0), false, true)
 			cDeck = nil
 		else
-			local rot = cDeck.getRotation()
-			rot.z = 180
+			local libRot = cDeck.getRotation()
+			libRot.z = 180
 			local pos = data[ply]["libraryZone"].getPosition()
 			pos[2] = 1
-			cDeck.setRotationSmooth(rot, false, true)
+			cDeck.setRotationSmooth(libRot, false, true)
 			cDeck.setPositionSmooth(pos, false, true)
 			cDeck = nil
 		end
@@ -5910,7 +5905,6 @@ function getCMC(name, desc, negLands)
 	end
 	return cmc
 end
-
 --------------------------------------------------------------------------------
 -- revealUntilType
 function deckSeachType(ply)
@@ -6108,7 +6102,7 @@ function revealUntilType(deck, playerColor, searchTypes)
 			if card == nil then
 				return
 			end
-			local targPos = libPos
+			local targPos
 			if cardNo < nCards then
 				targPos = libPos + card.getTransformRight():scale(2.5 * deckDir)
 				targPos.y = 3 + cardNo * 0.05
@@ -6143,7 +6137,7 @@ function revealUntilType(deck, playerColor, searchTypes)
 
 			-- create buttons on card to accept or decline casting it
 			-- decline
-			local backpars = { -- background frame
+			local declineBg = { -- background frame
 				label = "",
 				tooltip = "",
 				click_function = "null",
@@ -6156,21 +6150,21 @@ function revealUntilType(deck, playerColor, searchTypes)
 				color = { 0.7, 0.7, 0.7 },
 				font_color = { 1, 1, 1 },
 			}
-			cardToPlay.createButton(backpars)
-			local forgpars = backpars
-			forgpars.label = "✗"
-			forgpars.tooltip = "[b]DO NOT CAST THE CARD[/b]\nmove all the other\n"
+			cardToPlay.createButton(declineBg)
+			local declineFg = declineBg
+			declineFg.label = "✗"
+			declineFg.tooltip = "[b]DO NOT CAST THE CARD[/b]\nmove all the other\n"
 				.. "cards to the bottom of the\nlibrary in random order"
-			forgpars.click_function = "declineCascade"
-			forgpars.rotation = { 0, 0, 0 }
-			forgpars.font_color = stringColorToRGB(playerColor)
-			forgpars.color = { 0.16, 0.16, 0.16 }
-			forgpars.hover_color = { 0.4, 0.4, 0.4 }
-			forgpars.scale = { 0.67, 0.67, 0.67 }
-			cardToPlay.createButton(forgpars)
+			declineFg.click_function = "declineCascade"
+			declineFg.rotation = { 0, 0, 0 }
+			declineFg.font_color = stringColorToRGB(playerColor)
+			declineFg.color = { 0.16, 0.16, 0.16 }
+			declineFg.hover_color = { 0.4, 0.4, 0.4 }
+			declineFg.scale = { 0.67, 0.67, 0.67 }
+			cardToPlay.createButton(declineFg)
 
 			-- accept
-			local backpars = { -- background frame
+			local acceptBg = { -- background frame
 				label = "",
 				tooltip = "",
 				click_function = "null",
@@ -6183,22 +6177,21 @@ function revealUntilType(deck, playerColor, searchTypes)
 				color = { 0.7, 0.7, 0.7 },
 				font_color = { 1, 1, 1 },
 			}
-			cardToPlay.createButton(backpars)
-			local forgpars = backpars
-			forgpars.label = "✓"
-			forgpars.tooltip = "[b]CAST THE CARD[/b]\nmove all the other\n"
+			cardToPlay.createButton(acceptBg)
+			local acceptFg = acceptBg
+			acceptFg.label = "✓"
+			acceptFg.tooltip = "[b]CAST THE CARD[/b]\nmove all the other\n"
 				.. "cards to the bottom of the\nlibrary in random order"
-			forgpars.click_function = "acceptCascade"
-			forgpars.rotation = { 0, 0, 0 }
-			forgpars.font_color = stringColorToRGB(playerColor)
-			forgpars.color = { 0.16, 0.16, 0.16 }
-			forgpars.hover_color = { 0.4, 0.4, 0.4 }
-			forgpars.scale = { 0.67, 0.67, 0.67 }
-			cardToPlay.createButton(forgpars)
+			acceptFg.click_function = "acceptCascade"
+			acceptFg.rotation = { 0, 0, 0 }
+			acceptFg.font_color = stringColorToRGB(playerColor)
+			acceptFg.color = { 0.16, 0.16, 0.16 }
+			acceptFg.hover_color = { 0.4, 0.4, 0.4 }
+			acceptFg.scale = { 0.67, 0.67, 0.67 }
+			cardToPlay.createButton(acceptFg)
 		end
 	end, nCards * drawDelay + 0.75)
 end
-
 --------------------------------- CHAT COMMANDS --------------------------------
 
 -- rikrassen's importer is a deck builder: it POSTs a decklist to its backend
@@ -6283,15 +6276,15 @@ function onChat(message, pl)
 		return false
 	end
 
-	local message = string.lower(message):gsub("%p", "")
-	if message == "my turn" or message == "no my turn" then
+	local command = string.lower(message):gsub("%p", "")
+	if command == "my turn" or command == "no my turn" then
 		Turns.enable = true
 		Turns.turn_color = pl.color
 		-- return false
 	end
-	local i1, i2 = message:find("your turn ")
+	local _, i2 = command:find("your turn ")
 	if i2 ~= nil then
-		colStr = message:sub(i2 + 1)
+		colStr = command:sub(i2 + 1)
 		colStr = colStr:gsub("^%l", string.upper) -- Turn.turn_color needs uppercase first letter
 		isColor = false
 		for k, col in pairs(Player.getColors()) do -- is colStr a color at this table?
@@ -6308,7 +6301,6 @@ function onChat(message, pl)
 		end
 	end
 end
-
 --------------------------------------------------------------------------------
 ---------------------- FUNCTIONS FOR SCRYFALL CARD SPAWNER ---------------------
 --------------------------------------------------------------------------------
@@ -6376,7 +6368,7 @@ function search(player)
 	end
 
 	--TYPE RELATED
-	local tokenParam = ""
+	local tokenParam
 	if UI.getAttribute("vToken", "isOn") == "True" then
 		tokenParam = "include_extras=true&"
 		--+layout%3Dtoken+or+layout%3Ddouble_faced_token
@@ -6413,12 +6405,12 @@ function objectProccessor(webReturn, player, isPart)
 			errorJson(webReturn.text, player)
 		else
 			if isPart == false then
-				local object = string.sub(object, 11, -2)
-				if object == "list" then
+				local objectType = string.sub(object, 11, -2)
+				if objectType == "list" then
 					listJson(webReturn.text, player)
-				elseif object == "error" then
+				elseif objectType == "error" then
 					errorJson(webReturn.text, player)
-				elseif object == "card" then
+				elseif objectType == "card" then
 					cardJson(webReturn.text, "card", player, false)
 				else
 					printToAll("Unexpect object returned from search")
@@ -6432,7 +6424,7 @@ end
 
 function listJson(json, player)
 	local cardUri = string.match(json, '"uri":"[^"]*"')
-	local cardUri = string.sub(cardUri, 8, -2)
+	cardUri = string.sub(cardUri, 8, -2)
 	WebRequest.get(cardUri, function(a)
 		objectProccessor(a, player, false)
 	end)
@@ -6450,10 +6442,10 @@ function setOracle(c)
 	return c.oracle_text:gsub('"', "'") .. n .. "[/b]"
 end
 
-function cardJson(json, type, player, isPart)
+function cardJson(jsonText, type, player, isPart)
 	local back =
 		"https://steamusercontent-a.akamaihd.net/ugc/1647720103762682461/35EF6E87970E2A5D6581E7D96A99F8A575B7A15F/"
-	local json = JSONdecode(json)
+	local json = JSONdecode(jsonText)
 	if json.card_faces and type == "card" then
 		face = json.card_faces[1].image_uris.large:gsub("%?.*", "")
 		back = json.card_faces[2].image_uris.large:gsub("%?.*", "")
@@ -6517,8 +6509,8 @@ function cardJson(json, type, player, isPart)
 	end
 end
 
-function errorJson(json, player)
-	local json = JSONdecode(json)
+function errorJson(jsonText, player)
+	local json = JSONdecode(jsonText)
 	if json.status == 404 then
 		printToAll(
 			"Your query didn't match any cards. Adjust your search terms and try again.",
@@ -6714,7 +6706,7 @@ function createButtons(obj)
 			},
 			height = 170,
 			width = barSize,
-			font_size = fSize,
+			font_size = fsize,
 			rotation = { 0, 0, 90 - 90 * flip },
 		})
 	end
@@ -6752,10 +6744,9 @@ function encodeChar(chr)
 end
 
 function encodeString(str)
-	local output, t = string.gsub(str, "[^%w]", encodeChar)
+	local output = string.gsub(str, "[^%w]", encodeChar)
 	return output
 end
-
 -------------------------------- PATCH NOTES -----------------------------------
 -- Version currently deployed. Bump this when cutting a new release.
 VERSION = "v0.2.14"
@@ -6871,7 +6862,11 @@ function showPatchNotes(obj, color, alt)
 	end
 	WebRequest.get(RELEASES_API, function(req)
 		if req.is_error then
-			broadcastToColor("Patch notes: couldn't reach GitHub (" .. tostring(req.error) .. ")", color, { 1, 0.4, 0.4 })
+			broadcastToColor(
+				"Patch notes: couldn't reach GitHub (" .. tostring(req.error) .. ")",
+				color,
+				{ 1, 0.4, 0.4 }
+			)
 			return
 		end
 		local releases = JSONdecode(req.text)
@@ -6945,28 +6940,28 @@ end
 -- default value for every setting, applied to each colour on load
 settingsDefaults = {
 	oppDrawTriggers = false, -- notify this player about draw triggers (theirs / others')
-	                         -- default off: feature is unfinished / somewhat buggy
+	-- default off: feature is unfinished / somewhat buggy
 	drawSkipReminder = true, -- warn (and stop the draw) on a "skip your draw step" card
 	abilityRestrictions = false, -- remind on tapping a permanent whose activated abilities are prohibited
-	                             -- default off: feature is unfinished / somewhat buggy
+	-- default off: feature is unfinished / somewhat buggy
 	searchRestrictions = true, -- block fetchland resolution when a tutor/search-hate card is in play
-	landTracker = true,      -- track / show lands entered this turn on this player's mat
-	fetchPreviews = true,    -- float library-land previews above this player's fetchlands
-	fetchFromClone = false,  -- read those previews from the game-start deck clone instead of
-	                         -- the live library, so an opponent's hidden removal (Praetor's
-	                         -- Grasp, etc.) can't leak which land left. Off = live library.
-	ownerHighlight = true,   -- glow cards on this player's mat that belong to someone else, in the owner's colour
-	commanderQOL = true,     -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
+	landTracker = true, -- track / show lands entered this turn on this player's mat
+	fetchPreviews = true, -- float library-land previews above this player's fetchlands
+	fetchFromClone = false, -- read those previews from the game-start deck clone instead of
+	-- the live library, so an opponent's hidden removal (Praetor's
+	-- Grasp, etc.) can't leak which land left. Off = live library.
+	ownerHighlight = true, -- glow cards on this player's mat that belong to someone else, in the owner's colour
+	commanderQOL = true, -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
 	cmdrDamageAutoLife = true, -- commander-damage tracker deltas auto-adjust this player's life
-	seedbornUntap = true,    -- this player's Seedborn Muse untaps their board on others' untap steps
-	dfcLandFlip = true,      -- flip a double-faced card to its land back face in the land zone
-	fetchSurveil = false,    -- auto-surveil/scry when a fetched land has an ETB surveil/scry trigger
+	seedbornUntap = true, -- this player's Seedborn Muse untaps their board on others' untap steps
+	dfcLandFlip = true, -- flip a double-faced card to its land back face in the land zone
+	fetchSurveil = false, -- auto-surveil/scry when a fetched land has an ETB surveil/scry trigger
 	fetchEntersTapped = false, -- tap a fetched land whose text (or the fetchland) says it enters tapped
-	keywordTokens = true,    -- dropping a keyword token (Frozen, Flying, ...) on a card applies that keyword
-	goblinStickers = true,   -- deal goblin sticker cards when a "_____ Goblin" starts in the library
-	mindmoil = true,         -- show the Mindmoil trigger button on a Mindmoil on this player's mat
+	keywordTokens = true, -- dropping a keyword token (Frozen, Flying, ...) on a card applies that keyword
+	goblinStickers = true, -- deal goblin sticker cards when a "_____ Goblin" starts in the library
+	mindmoil = true, -- show the Mindmoil trigger button on a Mindmoil on this player's mat
 	keepPregameFlow = false, -- show the centre-mat Keep button and run the pregame-action announcement
-	revealResetSecs = 30,    -- seconds of inactivity before the reveal count resets
+	revealResetSecs = 30, -- seconds of inactivity before the reveal count resets
 }
 
 -- panel toggle id -> settings key it controls
@@ -7136,8 +7131,13 @@ settingsSearchRows = {
 }
 
 settingsSearchHeaders = {
-	"hdr_triggers", "hdr_stateBased", "hdr_automation",
-	"hdr_display", "hdr_commander", "hdr_game", "hdr_misc",
+	"hdr_triggers",
+	"hdr_stateBased",
+	"hdr_automation",
+	"hdr_display",
+	"hdr_commander",
+	"hdr_game",
+	"hdr_misc",
 }
 
 -- restore every row + header to visible (no active query)
@@ -7190,8 +7190,12 @@ hostSearchRows = {
 }
 
 hostSearchHeaders = {
-	"hosthdr_triggers", "hosthdr_stateBased", "hosthdr_automation",
-	"hosthdr_display", "hosthdr_commander", "hosthdr_game",
+	"hosthdr_triggers",
+	"hosthdr_stateBased",
+	"hosthdr_automation",
+	"hosthdr_display",
+	"hosthdr_commander",
+	"hosthdr_game",
 }
 
 function clearHostSettingsSearch()
@@ -7510,7 +7514,11 @@ function bugReportDone(resp, color)
 		return
 	end
 	if resp.response_code == 429 then
-		broadcastToColor("You're submitting reports too quickly -- wait a minute and try again.", color, { 1, 0.6, 0.2 })
+		broadcastToColor(
+			"You're submitting reports too quickly -- wait a minute and try again.",
+			color,
+			{ 1, 0.6, 0.2 }
+		)
 		return
 	end
 	if resp.response_code ~= nil and resp.response_code >= 400 then
@@ -7591,13 +7599,13 @@ function JSONdecode(txt)
 	-- parse list: extract each card, and parse it separately
 	-- used when one wants to decode a whole list
 	if jsonType == "list" then
-		local txtBeginning = txt:sub(1, 80)
-		local nCards = txtBeginning:match('"total_cards":(%d+)')
+		local listHeader = txt:sub(1, 80)
+		local nCards = listHeader:match('"total_cards":(%d+)')
 		local cardEnd = 0
 		local cardDats = {}
 		for i = 1, nCards do -- could insert max number cards to parse here
 			local cardStart = string.find(txt, '{"object":"card"', cardEnd + 1)
-			local cardEnd = findClosingBracket(txt, cardStart)
+			cardEnd = findClosingBracket(txt, cardStart)
 			local cardDat = JSONdecode(txt:sub(cardStart, cardEnd))
 			table.insert(cardDats, cardDat)
 		end
@@ -7632,7 +7640,7 @@ function JSONdecode(txt)
 				en = findClosingBracket(all_parts_txt, st)
 				local related_card_txt = all_parts_txt:sub(st, en)
 				st = en
-				local s, e = 1, 1
+				local s = 1
 				local related_card = {}
 				for i, key in ipairs(related_card_keys) do
 					val, s = getKeyValue(related_card_txt, key, s)
@@ -7666,7 +7674,7 @@ function JSONdecode(txt)
 				en = findClosingBracket(card_faces_txt, st)
 				local card_face_txt = card_faces_txt:sub(st, en)
 				st = en
-				local s, e = 1, 1
+				local s = 1
 				local card_face = {}
 				for i, key in ipairs(card_face_keys) do
 					val, s = getKeyValue(card_face_txt, key, s)
@@ -7701,21 +7709,16 @@ function getNextCardDatFromList(txt, startHere)
 	local cardStart = string.find(txt, '{"object":"card"', startHere)
 	if cardStart == nil then
 		print("error: no more cards in list")
-		startHere = nil
 		return nil, nil, nil
 	end
 
 	local cardEnd = findClosingBracket(txt, cardStart)
 	if cardEnd == nil then
 		print("error: no more cards in list")
-		startHere = nil
 		return nil, nil, nil
 	end
 
-	-- startHere is not a local variable, so it's possible to just do:
-	-- getNextCardFromList(txt) and it will keep giving the next card or nil if there's no more
-	startHere = cardEnd + 1
-
+	-- to walk the whole list, pass cardEnd + 1 back in as startHere
 	local cardDat = JSONdecode(txt:sub(cardStart, cardEnd))
 
 	return cardDat, cardStart, cardEnd
@@ -7746,17 +7749,18 @@ function findClosingBracket(txt, st) -- find paired {} or []
 end
 
 --------------------------------------------------------------------------------
-function getKeyValue(txt, key, st)
+function getKeyValue(txt, key, from)
 	local str = '"' .. key .. '":'
-	local st = string.find(txt, str, st)
+	local st = string.find(txt, str, from)
 	local en = nil
 	local value = nil
 	if st ~= nil then
 		if key == "image_uris" then -- special case for scryfall's image_uris table
 			value = {}
 			local s = st
+			local val
 			for i, k in ipairs(image_uris_keys) do
-				local val, s = getKeyValue(txt, k, s)
+				val, s = getKeyValue(txt, k, s)
 				value[k] = val
 			end
 			en = s

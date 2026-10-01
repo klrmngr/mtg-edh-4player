@@ -1,6 +1,11 @@
 ----------------------------------- MULLIGAN -----------------------------------
 mulliganResetDelay = 300 -- auto-reset the count after this many seconds idle
 
+-- opt-in hand-fixing in playerMulligan: reshuffle (up to 3 times) until the
+-- top 7 hold 3-4 lands. Nothing turns this on yet, so the branch is inert --
+-- it needs a settings toggle before it does anything.
+smartMulligan = false
+
 -- bump a player's mulligan counter and refresh the on-table label
 function bumpMulliganCount(color)
 	-- a bump while the count sits at 0 is a fresh opening hand (the very first one,
@@ -217,4 +222,3 @@ function playerSerumPowder(button, playerColor, alt)
 		deck.deal(handSize, playerColor, 1)
 	end, 1.0)
 end
-

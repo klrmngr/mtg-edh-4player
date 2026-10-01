@@ -199,4 +199,3 @@ function onPlayerDisconnect(player) -- flip cards in hand if disconnected
 		end
 	end
 end
-

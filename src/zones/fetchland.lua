@@ -257,8 +257,16 @@ end
 -- map a spelled-out (or numeric) count to a number, e.g. "two" -> 2
 function wordToCount(w)
 	local words = {
-		one = 1, two = 2, three = 3, four = 4, five = 5,
-		six = 6, seven = 7, eight = 8, nine = 9, ten = 10,
+		one = 1,
+		two = 2,
+		three = 3,
+		four = 4,
+		five = 5,
+		six = 6,
+		seven = 7,
+		eight = 8,
+		nine = 9,
+		ten = 10,
 	}
 	return words[w] or tonumber(w)
 end
@@ -403,8 +411,8 @@ end
 -- searches. Kept specific so they never match a fetchland's or tutor's own
 -- beneficial "search your library for..." text.
 searchRestrictionPhrases = {
-	"can't search",                    -- Leonin Arbiter, Stranglehold, Ashiok, Dream Render
-	"top four cards of that library",  -- Aven Mindcensor
+	"can't search", -- Leonin Arbiter, Stranglehold, Ashiok, Dream Render
+	"top four cards of that library", -- Aven Mindcensor
 	"top four cards of their library", -- (wording variant)
 }
 searchRestrictionNames = {
@@ -472,7 +480,8 @@ function resolveFetch(info)
 			end
 			clearFetchPreviews(info.fetchGuid)
 			broadcastToColor(
-				"Search restricted by " .. table.concat(blockers, ", ")
+				"Search restricted by "
+					.. table.concat(blockers, ", ")
 					.. " -- fetchland sent to graveyard; resolve the search manually.",
 				color,
 				{ 0.9, 0.3, 0.3 }

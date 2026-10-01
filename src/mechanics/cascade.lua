@@ -154,7 +154,6 @@ end
 
 function enterCascadeVal(deck, ply, CMVal)
 	local val = tonumber(CMVal)
-	local maxVal = deck.getQuantity()
 	if val >= 0 then
 		local rot = deck.getRotation()
 		rot.z = 180
@@ -274,7 +273,7 @@ function cascade(deck, playerColor, CMC)
 			if card == nil then
 				return
 			end
-			local targPos = libPos
+			local targPos
 			if cardNo < nCards then
 				targPos = libPos + card.getTransformRight():scale(2.5 * deckDir)
 				targPos.y = 3 + cardNo * 0.05
@@ -309,7 +308,7 @@ function cascade(deck, playerColor, CMC)
 
 			-- create buttons on card to accept or decline casting it
 			-- decline
-			local backpars = { -- background frame
+			local declineBg = { -- background frame
 				label = "",
 				tooltip = "",
 				click_function = "null",
@@ -322,21 +321,21 @@ function cascade(deck, playerColor, CMC)
 				color = { 0.7, 0.7, 0.7 },
 				font_color = { 1, 1, 1 },
 			}
-			cardToPlay.createButton(backpars)
-			local forgpars = backpars
-			forgpars.label = "✗"
-			forgpars.tooltip = "[b]DO NOT CAST THE CARD[/b]\nmove all the cascaded\n"
+			cardToPlay.createButton(declineBg)
+			local declineFg = declineBg
+			declineFg.label = "✗"
+			declineFg.tooltip = "[b]DO NOT CAST THE CARD[/b]\nmove all the cascaded\n"
 				.. "cards to the bottom of the\nlibrary in random order"
-			forgpars.click_function = "declineCascade"
-			forgpars.rotation = { 0, 0, 0 }
-			forgpars.font_color = stringColorToRGB(playerColor)
-			forgpars.color = { 0.16, 0.16, 0.16 }
-			forgpars.hover_color = { 0.4, 0.4, 0.4 }
-			forgpars.scale = { 0.67, 0.67, 0.67 }
-			cardToPlay.createButton(forgpars)
+			declineFg.click_function = "declineCascade"
+			declineFg.rotation = { 0, 0, 0 }
+			declineFg.font_color = stringColorToRGB(playerColor)
+			declineFg.color = { 0.16, 0.16, 0.16 }
+			declineFg.hover_color = { 0.4, 0.4, 0.4 }
+			declineFg.scale = { 0.67, 0.67, 0.67 }
+			cardToPlay.createButton(declineFg)
 
 			-- accept
-			local backpars = { -- background frame
+			local acceptBg = { -- background frame
 				label = "",
 				tooltip = "",
 				click_function = "null",
@@ -349,18 +348,18 @@ function cascade(deck, playerColor, CMC)
 				color = { 0.7, 0.7, 0.7 },
 				font_color = { 1, 1, 1 },
 			}
-			cardToPlay.createButton(backpars)
-			local forgpars = backpars
-			forgpars.label = "✓"
-			forgpars.tooltip = "[b]CAST THE CARD[/b]\nmove all the other cascaded\n"
+			cardToPlay.createButton(acceptBg)
+			local acceptFg = acceptBg
+			acceptFg.label = "✓"
+			acceptFg.tooltip = "[b]CAST THE CARD[/b]\nmove all the other cascaded\n"
 				.. "cards to the bottom of the\nlibrary in random order"
-			forgpars.click_function = "acceptCascade"
-			forgpars.rotation = { 0, 0, 0 }
-			forgpars.font_color = stringColorToRGB(playerColor)
-			forgpars.color = { 0.16, 0.16, 0.16 }
-			forgpars.hover_color = { 0.4, 0.4, 0.4 }
-			forgpars.scale = { 0.67, 0.67, 0.67 }
-			cardToPlay.createButton(forgpars)
+			acceptFg.click_function = "acceptCascade"
+			acceptFg.rotation = { 0, 0, 0 }
+			acceptFg.font_color = stringColorToRGB(playerColor)
+			acceptFg.color = { 0.16, 0.16, 0.16 }
+			acceptFg.hover_color = { 0.4, 0.4, 0.4 }
+			acceptFg.scale = { 0.67, 0.67, 0.67 }
+			cardToPlay.createButton(acceptFg)
 		end
 	end, nCards * drawDelay + 0.75)
 end
@@ -489,11 +488,11 @@ function moveCDeckToBot(cDeck, ply)
 			deck.setPositionSmooth(deck.getPosition() + Vector(0, 2, 0), false, true)
 			cDeck = nil
 		else
-			local rot = cDeck.getRotation()
-			rot.z = 180
+			local libRot = cDeck.getRotation()
+			libRot.z = 180
 			local pos = data[ply]["libraryZone"].getPosition()
 			pos[2] = 1
-			cDeck.setRotationSmooth(rot, false, true)
+			cDeck.setRotationSmooth(libRot, false, true)
 			cDeck.setPositionSmooth(pos, false, true)
 			cDeck = nil
 		end
@@ -562,4 +561,3 @@ function getCMC(name, desc, negLands)
 	end
 	return cmc
 end
-

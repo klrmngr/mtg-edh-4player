@@ -70,13 +70,13 @@ function JSONdecode(txt)
 	-- parse list: extract each card, and parse it separately
 	-- used when one wants to decode a whole list
 	if jsonType == "list" then
-		local txtBeginning = txt:sub(1, 80)
-		local nCards = txtBeginning:match('"total_cards":(%d+)')
+		local listHeader = txt:sub(1, 80)
+		local nCards = listHeader:match('"total_cards":(%d+)')
 		local cardEnd = 0
 		local cardDats = {}
 		for i = 1, nCards do -- could insert max number cards to parse here
 			local cardStart = string.find(txt, '{"object":"card"', cardEnd + 1)
-			local cardEnd = findClosingBracket(txt, cardStart)
+			cardEnd = findClosingBracket(txt, cardStart)
 			local cardDat = JSONdecode(txt:sub(cardStart, cardEnd))
 			table.insert(cardDats, cardDat)
 		end
@@ -111,7 +111,7 @@ function JSONdecode(txt)
 				en = findClosingBracket(all_parts_txt, st)
 				local related_card_txt = all_parts_txt:sub(st, en)
 				st = en
-				local s, e = 1, 1
+				local s = 1
 				local related_card = {}
 				for i, key in ipairs(related_card_keys) do
 					val, s = getKeyValue(related_card_txt, key, s)
@@ -145,7 +145,7 @@ function JSONdecode(txt)
 				en = findClosingBracket(card_faces_txt, st)
 				local card_face_txt = card_faces_txt:sub(st, en)
 				st = en
-				local s, e = 1, 1
+				local s = 1
 				local card_face = {}
 				for i, key in ipairs(card_face_keys) do
 					val, s = getKeyValue(card_face_txt, key, s)
@@ -180,21 +180,16 @@ function getNextCardDatFromList(txt, startHere)
 	local cardStart = string.find(txt, '{"object":"card"', startHere)
 	if cardStart == nil then
 		print("error: no more cards in list")
-		startHere = nil
 		return nil, nil, nil
 	end
 
 	local cardEnd = findClosingBracket(txt, cardStart)
 	if cardEnd == nil then
 		print("error: no more cards in list")
-		startHere = nil
 		return nil, nil, nil
 	end
 
-	-- startHere is not a local variable, so it's possible to just do:
-	-- getNextCardFromList(txt) and it will keep giving the next card or nil if there's no more
-	startHere = cardEnd + 1
-
+	-- to walk the whole list, pass cardEnd + 1 back in as startHere
 	local cardDat = JSONdecode(txt:sub(cardStart, cardEnd))
 
 	return cardDat, cardStart, cardEnd
@@ -225,17 +220,18 @@ function findClosingBracket(txt, st) -- find paired {} or []
 end
 
 --------------------------------------------------------------------------------
-function getKeyValue(txt, key, st)
+function getKeyValue(txt, key, from)
 	local str = '"' .. key .. '":'
-	local st = string.find(txt, str, st)
+	local st = string.find(txt, str, from)
 	local en = nil
 	local value = nil
 	if st ~= nil then
 		if key == "image_uris" then -- special case for scryfall's image_uris table
 			value = {}
 			local s = st
+			local val
 			for i, k in ipairs(image_uris_keys) do
-				local val, s = getKeyValue(txt, k, s)
+				val, s = getKeyValue(txt, k, s)
 				value[k] = val
 			end
 			en = s

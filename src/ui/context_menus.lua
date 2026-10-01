@@ -95,9 +95,7 @@ function onObjectEnterZone(zone, obj)
 		end
 	end
 	obj.clearContextMenu()
-	if obj.type == "Card" then
-		-- obj.addContextMenuItem('Encoder Menu',toggleEncMenu)
-	end
+	-- a Card used to also get: obj.addContextMenuItem('Encoder Menu', toggleEncMenu)
 	if obj.type == "Card" and inPlayZone then
 		obj.addContextMenuItem("Make Token Copy", cardToken)
 		if obj.getDescription():lower():find("cascade") then
@@ -151,9 +149,7 @@ function onObjectLeaveZone(zone, obj)
 		end
 	end
 	obj.clearContextMenu()
-	if obj.type == "Card" then
-		-- obj.addContextMenuItem('Encoder Menu',toggleEncMenu)
-	end
+	-- a Card used to also get: obj.addContextMenuItem('Encoder Menu', toggleEncMenu)
 	if obj.type == "Card" and inPlayZone then
 		obj.addContextMenuItem("Make Token Copy", cardToken)
 		if obj.getDescription():lower():find("cascade") then
@@ -536,4 +532,3 @@ function discardCard(card, playerColor)
 		checkMoveSuccess(card, target, playerColor)
 	end, 0.5)
 end
-
