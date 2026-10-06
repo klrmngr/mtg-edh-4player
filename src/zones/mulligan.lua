@@ -117,7 +117,7 @@ function playerMulligan(button, playerColor, alt)
 						local nLands = 0
 						local cards = deck.getObjects()
 						for i = 1, 7 do
-							if cards[i].name:lower():find("land") then
+							if cardIsLand(cards[i].name) then
 								nLands = nLands + 1
 							end
 						end
