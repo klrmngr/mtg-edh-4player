@@ -1,45 +1,31 @@
 ------------------------------------ ETALI -------------------------------------
--- "Etali, Primal Conqueror" gets a per-owner "Etali Trigger" button. It is NOT on
--- the table by default: when a game starts (the opening-hand snapshot -- see
--- reset.lua / bumpMulliganCount) we check that player's command zone, and if their
--- commander is Etali we attach the button there (see command_buttons.lua for the
--- shared placement/detection). It persists until the next game start at which the
--- player no longer has Etali.
+-- "Etali, Primal Conqueror" gets an "Etali Trigger" button on the card itself
+-- while it sits on a playmat (see card_triggers.lua), gated by the mat owner's
+-- commanderQOL setting.
 --
 -- Clicking it reveals the top of every player's library until a nonland is hit:
 -- each land revealed goes to that player's exile, and the first nonland from each
 -- deck is placed in front of the owner. Land detection reuses cardIsLand.
 
-ETALI_COMMANDER_NAME = "Etali, Primal Conqueror"
-
--- game-start hook: the Etali button should be present iff the player has the
--- Etali commander in their command zone at this moment. Clear first so a reload
--- (where the zone may keep a stale button) can't leave a duplicate.
-function refreshEtaliButton(color)
-	if data[color] == nil then
-		return
-	end
-	removeCommandZoneButton(color, "playerEtali")
-	if getSetting(color, "commanderQOL") and commandZoneHasCommander(color, ETALI_COMMANDER_NAME) then
-		addCommandZoneButton(color, {
+registerCardTrigger({
+	names = { "Etali, Primal Conqueror" },
+	setting = "commanderQOL",
+	buttons = {
+		{
 			click_function = "playerEtali",
 			label = "Etali Trigger",
 			tooltip = "                  [b]Etali[/b]\nreveal each library until a nonland:\n  lands go to that player's exile,\n  the nonland comes to you",
-		})
-	end
-end
+		},
+	},
+})
 
 -- button handler: only the owning player may activate their Etali. Reveal the
 -- top of every player's library until a nonland is hit -- each land goes to that
 -- player's exile, the first nonland from each deck is placed in front of the
 -- owner. Land detection reuses the cascade "-1" CMC sentinel (see getCMC).
 function playerEtali(obj, clickerColor, alt)
-	local ownerColor = commandZoneOwnerOf(obj)
+	local ownerColor = cardTriggerController(obj, clickerColor, "Etali")
 	if ownerColor == nil then
-		return
-	end
-	if clickerColor ~= ownerColor then
-		Player[clickerColor].broadcast("Only " .. ownerColor .. " may activate this Etali.")
 		return
 	end
 	if etaliRunning then

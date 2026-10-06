@@ -1,10 +1,8 @@
 ------------------------------------ MINDMOIL -----------------------------------
 -- "Mindmoil" (Whenever you cast a spell, put the cards in your hand on the bottom
 -- of your library in any order, then draw that many cards) gets a button on the
--- card itself, and only while the card is sitting on a player's playmat -- it is
--- added when the card settles in a playmat zone and removed when it leaves (see
--- the mindmoilEnter / mindmoilLeave hooks in context_menus.lua). onload rescans
--- every mat so a reload doesn't lose (or duplicate) the button.
+-- card itself, and only while the card is sitting on a player's playmat (see
+-- card_triggers.lua for the shared button machinery).
 --
 -- Clicking it resolves the trigger for the mat's owner: their whole hand goes to
 -- the bottom of their library, left-to-right in hand = bottom-to-top in the
@@ -12,8 +10,6 @@
 --
 -- The mat owner's "mindmoil" setting (default on) controls whether the button is
 -- offered at all; toggling it adds/removes the buttons on that player's mat.
-
-MINDMOIL_CARD_NAME = "mindmoil"
 
 -- vertical gap between the hand cards as they are fanned above the library spot,
 -- and how far clear of that fan the library itself is hoisted while they drop.
@@ -31,158 +27,27 @@ mindmoilMergeTimeout = 3
 -- per-colour re-entry guard, so a double click can't run two triggers at once
 mindmoilRunning = mindmoilRunning or {}
 
--- is this object the Mindmoil card? (nicknames in this mod are
--- "<name>\n<type line> <cmc>CMC", so compare only the displayed name)
-function isMindmoilCard(obj)
-	if obj == nil or obj.type ~= "Card" then
-		return false
-	end
-	return mainCardName(obj.getName()):lower() == MINDMOIL_CARD_NAME
-end
-
--- the colour of the playmat this card is currently sitting on, or nil
-function mindmoilMatColor(card)
-	if card == nil then
-		return nil
-	end
-	for _, zone in ipairs(card.getZones()) do
-		local color = playmatColorOfZone(zone)
-		if color ~= nil then
-			return color
-		end
-	end
-	return nil
-end
-
---------------------------------- THE BUTTON ------------------------------------
-
--- drop any Mindmoil button(s) already on the card (high-to-low so indices hold)
-function removeMindmoilButton(card)
-	if card == nil then
-		return
-	end
-	local indices = {}
-	for _, b in ipairs(card.getButtons() or {}) do
-		if b.click_function == "mindmoilTrigger" then
-			table.insert(indices, b.index)
-		end
-	end
-	table.sort(indices, function(a, b)
-		return a > b
-	end)
-	for _, idx in ipairs(indices) do
-		card.removeButton(idx)
-	end
-end
-
--- put the trigger button just below the card face. Clear first so a card that
--- re-enters a mat (or a reload that kept the old button) can't end up with two.
-function addMindmoilButton(card)
-	if card == nil then
-		return
-	end
-	removeMindmoilButton(card)
-	card.createButton({
-		click_function = "mindmoilTrigger",
-		function_owner = self,
-		label = "Mindmoil",
-		tooltip = "                [b]Mindmoil[/b]\nput your hand on the bottom of your\n"
-			.. "library (left to right = bottom to top),\nthen draw that many cards",
-		position = { 0, 0.2, 1.9 },
-		rotation = { 0, 0, 0 },
-		width = 1400,
-		height = 400,
-		font_size = 220,
-		scale = { 0.6, 0.6, 0.6 },
-		color = { 0.16, 0.16, 0.16 },
-		font_color = { 1, 1, 1 },
-		hover_color = { 0.4, 0.4, 0.4 },
-		press_color = { 1, 0, 0, 0.2 },
-	})
-end
-
--- zone hooks (called from onObjectEnterZone / onObjectLeaveZone)
-function mindmoilEnter(zone, obj)
-	local matColor = playmatColorOfZone(zone)
-	if not isMindmoilCard(obj) or matColor == nil then
-		return
-	end
-	if not getSetting(matColor, "mindmoil") then
-		return
-	end
-	-- only button it once it has come to rest on the mat, and only if it's still
-	-- there (a card merely passing through the zone shouldn't get a button)
-	whenSettledInZone(obj, zone, function(o)
-		addMindmoilButton(o)
-	end)
-end
-
-function mindmoilLeave(zone, obj)
-	if not isMindmoilCard(obj) or playmatColorOfZone(zone) == nil then
-		return
-	end
-	removeMindmoilButton(obj)
-end
-
--- The Encoder rebuilds a card's entire button set from its own prop data, which
--- drops any button we put there (dropping a keyword token on the card, the untap
--- sweep clearing a stun/exert counter, notepads, token copies, ...). It calls us
--- back at the end of each rebuild so the button goes straight back on -- see
--- card_buttons.lua for the registration. No-ops for anything that isn't a
--- Mindmoil on a mat, since this runs for every rebuild of every encoded object.
-function mindmoilReassert(card)
-	if not isMindmoilCard(card) then
-		return
-	end
-	local color = mindmoilMatColor(card)
-	if color == nil or not getSetting(color, "mindmoil") then
-		return
-	end
-	addMindmoilButton(card)
-end
-
--- rescan a player's mat (or every mat, when color is nil) and make the buttons
--- match the setting: exactly one on each Mindmoil while it's on, none while it's
--- off. Used by onload and by the settings panel, which toggles it live.
-function refreshMindmoilButtons(color)
-	for c, _ in pairs(data) do
-		local mat = data[c] and data[c]["playmat"]
-		if mat ~= nil and (color == nil or c == color) then
-			local on = getSetting(c, "mindmoil")
-			for _, obj in ipairs(mat.getObjects()) do
-				if isMindmoilCard(obj) then
-					if on then
-						addMindmoilButton(obj)
-					else
-						removeMindmoilButton(obj)
-					end
-				end
-			end
-		end
-	end
-end
+registerCardTrigger({
+	names = { "Mindmoil" },
+	setting = "mindmoil",
+	buttons = {
+		{
+			click_function = "mindmoilTrigger",
+			label = "Mindmoil",
+			tooltip = "                [b]Mindmoil[/b]\nput your hand on the bottom of your\n"
+				.. "library (left to right = bottom to top),\nthen draw that many cards",
+		},
+	},
+})
 
 --------------------------------- THE TRIGGER -----------------------------------
 
 -- button handler: only the player whose mat the Mindmoil is on may trigger it
 function mindmoilTrigger(obj, clickerColor, alt)
-	local ownerColor = mindmoilMatColor(obj)
-	if ownerColor == nil then
-		return
+	local ownerColor = cardTriggerController(obj, clickerColor, "Mindmoil")
+	if ownerColor ~= nil then
+		mindmoilResolve(ownerColor)
 	end
-	if not getSetting(ownerColor, "mindmoil") then
-		-- setting was switched off with the button still on the card
-		removeMindmoilButton(obj)
-		return
-	end
-	if clickerColor ~= ownerColor then
-		Player[clickerColor].broadcast(
-			"That's " .. ownerColor .. "'s Mindmoil -- only they can trigger it.",
-			{ 1, 0.6, 0.2 }
-		)
-		return
-	end
-	mindmoilResolve(ownerColor)
 end
 
 -- put the whole hand on the bottom of the library, then draw that many cards.

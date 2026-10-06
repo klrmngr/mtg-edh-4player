@@ -7,7 +7,7 @@ SRC = \
 	src/zones/mulligan.lua \
 	src/core/reset.lua \
 	src/core/pregame.lua \
-	src/ui/command_buttons.lua \
+	src/ui/card_triggers.lua \
 	src/ui/card_buttons.lua \
 	src/cards/etali.lua \
 	src/cards/obnix.lua \

@@ -1,22 +1,14 @@
 ------------------------------------- RAL --------------------------------------
--- "Ral, Monsoon Mage" gets a small button cluster by the command zone, present
--- only when a game starts with Ral in the command zone (see command_buttons.lua)
--- and cleared at the next game start without Ral.
+-- "Ral, Monsoon Mage" (and its back face, "Ral, Leyline Prodigy") carries a small
+-- button grid on the card itself while it sits on a playmat (see
+-- card_triggers.lua), gated by the mat owner's commanderQOL setting.
 --
 -- Top row = two clickable counters (Strm = storm, Ral = instants/sorceries cast),
--- centred over the bottom row of three ability buttons (flip + two placeholders).
--- Counters left-click +1, right-click -1, clamped at 0, like commander tax but in
--- steps of one.
+-- above a bottom row of three ability buttons (flip, ult, pif). Counters
+-- left-click +1, right-click -1, clamped at 0, like commander tax but in steps of
+-- one.
 
-RAL_COMMANDER_NAME = "Ral, Monsoon Mage"
-
--- layout (tune to taste). Columns are spaced along the zone's right axis, rows
--- along its forward axis.
-ralColGap = 1.7 -- horizontal gap between adjacent columns (world units)
-ralRowOffset = 0.4 -- half the vertical gap between the two rows
-ralButtonWidth = 900
-ralButtonHeight = 425
-ralButtonFont = 210
+RAL_CARD_NAMES = { "Ral, Monsoon Mage", "Ral, Leyline Prodigy" }
 
 -- the bottom-row ability buttons (left to right). flip works; rest are placeholders.
 ralAbilities = {
@@ -43,81 +35,64 @@ ralCounterDefs = {
 	{ key = "spells", name = "Ral", click_function = "ralSpellCounter" },
 }
 
--- per-color counter values, (re)set to zero whenever the grid is spawned
+-- per-color counter values; a fresh pair on first use, zeroed at end of turn
 ralCounts = {}
+
+function ralCountsFor(color)
+	ralCounts[color] = ralCounts[color] or { storm = 0, spells = 0 }
+	return ralCounts[color]
+end
+
+function ralCounterLabel(def, color)
+	return def.name .. ": " .. ralCountsFor(color)[def.key]
+end
 
 -- cards staged by the ult (freecast) and pif (flashback) this turn, per color, so
 -- they can be resolved when that player's turn ends (see ralEndOfTurnCleanup)
 ralFreecastCards = {}
 ralFlashbackCards = {}
 
--- game-start hook: present the Ral grid iff the player has Ral in their command
--- zone right now. Clear first so a reload can't leave duplicates.
-function refreshRalButton(color)
-	if data[color] == nil then
-		return
-	end
-	-- clear every Ral button (abilities + counters) so a reload can't duplicate them
-	for _, b in ipairs(ralAbilities) do
-		removeCommandZoneButton(color, b.click_function)
-	end
-	for _, def in ipairs(ralCounterDefs) do
-		removeCommandZoneButton(color, def.click_function)
-	end
-	if not getSetting(color, "commanderQOL") or not commandZoneHasCommander(color, RAL_COMMANDER_NAME) then
-		return
-	end
-	ralCounts[color] = { storm = 0, spells = 0 }
-	addRalGrid(color)
-end
-
--- place the cluster: top row = two counters (centred), bottom row = three
--- abilities. The zone's forward axis is inverted here (the cluster is built under
--- the zone), so the top row uses -ralRowOffset and the bottom row +ralRowOffset.
-function addRalGrid(color)
-	-- top row: the two counters, centred over the three abilities below
-	local counterCols = { -ralColGap / 2, ralColGap / 2 }
+-- the card's grid: the counters on top, the abilities under them
+do
+	local buttons = {}
 	for i, def in ipairs(ralCounterDefs) do
-		addCommandZoneButton(color, {
+		table.insert(buttons, {
 			click_function = def.click_function,
-			label = def.name .. ": " .. ralCounts[color][def.key],
+			label = function(color)
+				return ralCounterLabel(def, color)
+			end,
 			tooltip = def.name .. " -- [i]left click[/i] +1, [i]right click[/i] -1",
-			right = counterCols[i],
-			forward = -ralRowOffset,
-			width = ralButtonWidth,
-			height = ralButtonHeight,
-			font_size = ralButtonFont,
+			row = 0,
+			col = i,
+			cols = #ralCounterDefs,
+			font_size = 180,
 		})
 	end
-	-- bottom row: the three ability buttons, centred on the zone
-	local abilityCols = { -ralColGap, 0, ralColGap }
 	for i, b in ipairs(ralAbilities) do
-		addCommandZoneButton(color, {
+		table.insert(buttons, {
 			click_function = b.click_function,
 			label = b.label,
 			tooltip = b.tooltip,
-			right = abilityCols[i],
-			forward = ralRowOffset,
-			width = ralButtonWidth,
-			height = ralButtonHeight,
-			font_size = ralButtonFont,
+			row = 1,
+			col = i,
+			cols = #ralAbilities,
+			font_size = 200,
 		})
 	end
+	registerCardTrigger({ names = RAL_CARD_NAMES, setting = "commanderQOL", buttons = buttons })
 end
 
 -- bump a counter by delta (clamped at 0) and refresh its label
 function ralBump(color, def, delta)
-	if ralCounts[color] == nil then
-		return
-	end
-	ralCounts[color][def.key] = math.max(0, ralCounts[color][def.key] + delta)
-	setCommandZoneButtonLabel(color, def.click_function, def.name .. ": " .. ralCounts[color][def.key])
+	local counts = ralCountsFor(color)
+	counts[def.key] = math.max(0, counts[def.key] + delta)
+	setCardTriggerLabel(color, def.click_function, ralCounterLabel(def, color))
 end
 
 -- adjust one counter (+1 left click, -1 right click, clamped at 0) and refresh
 -- its label. Like commander tax, anyone at the table may click it.
 function ralAdjustCounter(obj, alt, def)
-	local owner = commandZoneOwnerOf(obj)
+	local owner = cardMatColor(obj)
 	if owner == nil then
 		return
 	end
@@ -130,7 +105,7 @@ end
 
 -- the instants/sorceries counter also feeds storm, so adjust both by the same step
 function ralSpellCounter(obj, color, alt)
-	local owner = commandZoneOwnerOf(obj)
+	local owner = cardMatColor(obj)
 	if owner == nil then
 		return
 	end
@@ -145,12 +120,8 @@ function ralPlaceholder() end
 -- button handler: only the owning player may flip. A tails costs the flipper
 -- 1 life. Announce the result to the table. (Counters are not auto-bumped.)
 function playerCoinFlip(obj, clickerColor, alt)
-	local ownerColor = commandZoneOwnerOf(obj)
+	local ownerColor = cardTriggerController(obj, clickerColor, "Ral")
 	if ownerColor == nil then
-		return
-	end
-	if clickerColor ~= ownerColor then
-		Player[clickerColor].broadcast("Only " .. ownerColor .. " may flip this coin.")
 		return
 	end
 	if math.random(2) == 1 then
@@ -170,12 +141,8 @@ ralPifNote = "flashback (past in flames)" -- ditto, for Past in Flames
 
 -- button handler: owner-only, guarded against double-fire while cards animate
 function playerRalUlt(obj, clickerColor, alt)
-	local owner = commandZoneOwnerOf(obj)
+	local owner = cardTriggerController(obj, clickerColor, "Ral")
 	if owner == nil then
-		return
-	end
-	if clickerColor ~= owner then
-		Player[clickerColor].broadcast("Only " .. owner .. " may use Ral's ultimate.")
 		return
 	end
 	if ralUltRunning then
@@ -283,7 +250,7 @@ function ralEndOfTurnCleanup(color)
 	if ralCounts[color] ~= nil then
 		ralCounts[color] = { storm = 0, spells = 0 }
 		for _, def in ipairs(ralCounterDefs) do
-			setCommandZoneButtonLabel(color, def.click_function, def.name .. ": 0")
+			setCardTriggerLabel(color, def.click_function, ralCounterLabel(def, color))
 		end
 	end
 end
@@ -307,12 +274,8 @@ end
 -- Move every instant/sorcery in the owner's graveyard to the spell row (same spot
 -- as the ult), tagged "flashback". Nothing is exiled; non-spells stay put.
 function playerPif(obj, clickerColor, alt)
-	local owner = commandZoneOwnerOf(obj)
+	local owner = cardTriggerController(obj, clickerColor, "Ral")
 	if owner == nil then
-		return
-	end
-	if clickerColor ~= owner then
-		Player[clickerColor].broadcast("Only " .. owner .. " may use Past in Flames.")
 		return
 	end
 	if ralPifRunning then

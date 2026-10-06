@@ -50,9 +50,9 @@ function onload(saved)
 	spawnKeepButtons()
 	initFetchlands()
 	initStickerBagMenu()
-	-- give objects a moment to finish spawning, then re-hang the Mindmoil buttons
-	-- (a loaded save can restore stale ones; refreshMindmoilButtons dedupes)
-	Wait.time(refreshMindmoilButtons, 1)
+	-- give objects a moment to finish spawning, then re-hang the card trigger
+	-- buttons (a loaded save can restore stale ones; the refresh dedupes)
+	Wait.time(refreshCardTriggerButtons, 1)
 	-- keep our card buttons alive across the Encoder's rebuilds (card_buttons.lua)
 	registerGlobalCardButtons()
 end

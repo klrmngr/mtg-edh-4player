@@ -23,7 +23,7 @@ settingsDefaults = {
 	-- the live library, so an opponent's hidden removal (Praetor's
 	-- Grasp, etc.) can't leak which land left. Off = live library.
 	ownerHighlight = true, -- glow cards on this player's mat that belong to someone else, in the owner's colour
-	commanderQOL = true, -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
+	commanderQOL = true, -- trigger buttons on Etali / ping commanders / Ral while on this player's mat
 	cmdrDamageAutoLife = true, -- commander-damage tracker deltas auto-adjust this player's life
 	seedbornUntap = true, -- this player's Seedborn Muse untaps their board on others' untap steps
 	dfcLandFlip = true, -- flip a double-faced card to its land back face in the land zone
@@ -194,7 +194,7 @@ settingsSearchRows = {
 	{ id = "row_fetchPreviews", text = "fetchland previews display fetch" },
 	{ id = "row_fetchFromClone", text = "show all possible fetchables clone display fetch" },
 	{ id = "row_ownerHighlight", text = "highlight foreign cards owner belongs other player mat glow display" },
-	{ id = "row_commanderQOL", text = "commander qol buttons etali ral" },
+	{ id = "row_commanderQOL", text = "commander qol buttons etali ral ping trigger card" },
 	{ id = "row_keywordTokens", text = "keyword tokens frozen flying apply drop card game" },
 	{ id = "row_goblinStickers", text = "goblin stickers game" },
 	{ id = "row_mindmoil", text = "mindmoil hand bottom library trigger button game" },
@@ -254,7 +254,7 @@ hostSearchRows = {
 	{ id = "hostrow_fetchPreviews", text = "fetchland previews display fetch" },
 	{ id = "hostrow_fetchFromClone", text = "show all possible fetchables clone display fetch" },
 	{ id = "hostrow_ownerHighlight", text = "highlight foreign cards owner belongs other player mat glow display" },
-	{ id = "hostrow_commanderQOL", text = "commander qol buttons etali ral" },
+	{ id = "hostrow_commanderQOL", text = "commander qol buttons etali ral ping trigger card" },
 	{ id = "hostrow_keywordTokens", text = "keyword tokens frozen flying apply drop card game" },
 	{ id = "hostrow_goblinStickers", text = "goblin stickers game" },
 	{ id = "hostrow_mindmoil", text = "mindmoil hand bottom library trigger button game" },
@@ -357,8 +357,8 @@ function settingsToggle(player, value, id)
 		refreshFetchPreviewsForColor(player.color)
 	elseif key == "keepPregameFlow" then
 		refreshKeepButton(player.color)
-	elseif key == "mindmoil" then
-		refreshMindmoilButtons(player.color)
+	elseif key == "mindmoil" or key == "commanderQOL" then
+		refreshCardTriggerButtons(player.color)
 	end
 end
 
@@ -423,8 +423,8 @@ function hostToggleEnforced(player, value, id)
 		refreshAllFetchPreviews()
 	elseif key == "keepPregameFlow" then
 		refreshAllKeepButtons()
-	elseif key == "mindmoil" then
-		refreshMindmoilButtons()
+	elseif key == "mindmoil" or key == "commanderQOL" then
+		refreshCardTriggerButtons()
 	end
 end
 
@@ -446,8 +446,8 @@ function hostToggleValue(player, value, id)
 		refreshAllFetchPreviews()
 	elseif key == "keepPregameFlow" then
 		refreshAllKeepButtons()
-	elseif key == "mindmoil" then
-		refreshMindmoilButtons()
+	elseif key == "mindmoil" or key == "commanderQOL" then
+		refreshCardTriggerButtons()
 	end
 end
 

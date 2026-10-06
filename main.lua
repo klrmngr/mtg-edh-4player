@@ -50,9 +50,9 @@ function onload(saved)
 	spawnKeepButtons()
 	initFetchlands()
 	initStickerBagMenu()
-	-- give objects a moment to finish spawning, then re-hang the Mindmoil buttons
-	-- (a loaded save can restore stale ones; refreshMindmoilButtons dedupes)
-	Wait.time(refreshMindmoilButtons, 1)
+	-- give objects a moment to finish spawning, then re-hang the card trigger
+	-- buttons (a loaded save can restore stale ones; the refresh dedupes)
+	Wait.time(refreshCardTriggerButtons, 1)
 	-- keep our card buttons alive across the Encoder's rebuilds (card_buttons.lua)
 	registerGlobalCardButtons()
 end
@@ -378,9 +378,8 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		hover_color = { 1, 1, 1, 0.1 },
 		press_color = { 1, 0, 0, 0.2 },
 	})
-	-- (the Etali button is no longer here -- it spawns under the command zone only
-	-- when a player starts a game with Etali, Primal Conqueror as their commander;
-	-- see etali.lua)
+	-- (the Etali button is no longer here -- it lives on the Etali card itself
+	-- while it's on a playmat; see etali.lua / card_triggers.lua)
 	-- reset button, directly under the mulligan counter (z = 1.4)
 	object.createButton({
 		click_function = "playerReset",
@@ -787,10 +786,6 @@ function bumpMulliganCount(color)
 	-- for the reset button while the library is still complete (see reset.lua)
 	if (data[color]["mulliganCount"] or 0) == 0 then
 		captureResetSnapshot(color, true)
-		-- show/hide this player's commander buttons based on their command zone now
-		refreshEtaliButton(color)
-		refreshRalButton(color)
-		refreshObNixButton(color)
 		-- deal goblin sticker cards if their commander is "_____ Goblin" (once)
 		refreshGoblinStickers(color)
 	end
@@ -1427,104 +1422,87 @@ function resetKeepState(color)
 	refreshKeepButton(color)
 	pregameAnnounced = false
 end
--------------------------- COMMAND-ZONE COMMANDER BUTTONS -----------------------
--- Shared machinery for per-player buttons that appear on a command-zone scripting
--- zone when a specific commander is detected there at game start (see
--- bumpMulliganCount). Used by the Etali trigger and the Ral coin-flip features.
+------------------------------ CARD TRIGGER BUTTONS -----------------------------
+-- Cards whose triggers we can resolve for the player (Mindmoil, Etali, the ping
+-- commanders, Ral, ...) carry their buttons on the card itself, and only while it
+-- sits on a player's playmat: they are added once the card settles on a mat and
+-- removed when it leaves (cardTriggersEnter / cardTriggersLeave, hooked from
+-- onObjectEnterZone / onObjectLeaveZone in context_menus.lua). The mat's owner is
+-- the card's controller -- they're the one who may click its trigger.
 --
--- A button lives directly on the command-zone scripting zone so it renders as
--- floating white text with no tile, counter-scaled by the zone's scale so it
--- isn't stretched, on a table-level point behind the zone.
+-- Each card module registers itself with registerCardTrigger at load time:
+--
+--   registerCardTrigger({
+--     names = { "Etali, Primal Conqueror" },  -- card names (front/back faces)
+--     setting = "commanderQOL",                -- mat owner's setting gating it
+--     buttons = {                              -- laid out in rows under the card
+--       { click_function = "playerEtali", label = "Etali Trigger", tooltip = "..." },
+--     },
+--   })
+--
+-- A button may give row (0 = just under the card), col and cols (its slot in a
+-- row of that many equal-width buttons), and a label function(color) for labels
+-- that carry state (e.g. Ral's counters).
 
--- The command-zone scripting zone is a ~3-unit-tall box, so its centre sits ~1.5
--- above the table. We aim at a world point on the table, behind the zone, then
--- convert it into the zone's local space. Flip czButtonBehind's sign if "behind"
--- comes out as "in front".
-czButtonDrop = 1.5 -- world units down from the zone centre to the table
-czButtonLift = 0.05 -- small lift so the text sits just above the table
-czButtonBehind = 2.5 -- world units behind the zone, along its forward axis
+-- layout. A button spans width * scale / cardButtonUnits local units, so a row
+-- of cardTriggerRowWidth roughly matches the card's width. Nudge
+-- cardButtonUnits if the rows come out wider or narrower than the card.
+cardButtonUnits = 420 -- button width units per local unit, at scale 1
+cardTriggerScale = 0.6
+cardTriggerRowWidth = 1400 -- total width of one row, in button units
+cardTriggerSlotGap = 40 -- gap between buttons sharing a row, in button units
+cardTriggerTop = 1.9 -- local z of the first row (just below the card face)
+cardTriggerRowGap = 0.65 -- local z between rows
+cardTriggerHeight = 400
 
--- a TTS card name carries its type line on following newlines (e.g.
--- "Etali, Primal Conqueror\nLegendary Creature ..."), so match only the first line
-function commanderNameMatches(name, target)
-	if name == nil then
-		return false
+-- registered triggers, by lowercased card name, and every click_function any of
+-- them uses (so stale buttons can be told apart from the Encoder's own)
+cardTriggersByName = cardTriggersByName or {}
+cardTriggerClickFns = cardTriggerClickFns or {}
+
+function registerCardTrigger(def)
+	for _, name in ipairs(def.names) do
+		cardTriggersByName[name:lower()] = def
 	end
-	local firstLine = tostring(name):match("^[^\r\n]*") or ""
-	return firstLine == target
+	for _, b in ipairs(def.buttons) do
+		cardTriggerClickFns[b.click_function] = true
+	end
 end
 
--- does this player's command zone currently hold a commander with this name?
--- handles a lone commander card as well as a stacked deck (e.g. partners)
-function commandZoneHasCommander(color, name)
-	local cz = data[color] and data[color]["commandZone"]
-	if cz == nil then
-		return false
+-- the trigger registered for this card, or nil (nicknames in this mod are
+-- "<name>\n<type line> <cmc>CMC", so compare only the displayed name)
+function cardTriggerFor(obj)
+	if obj == nil or obj.type ~= "Card" then
+		return nil
 	end
-	for _, obj in ipairs(cz.getObjects()) do
-		if obj.type == "Card" then
-			if commanderNameMatches(obj.getName(), name) then
-				return true
-			end
-		elseif obj.type == "Deck" then
-			for _, c in ipairs(obj.getObjects()) do
-				if commanderNameMatches(c.name, name) then
-					return true
-				end
-			end
+	return cardTriggersByName[mainCardName(obj.getName()):lower()]
+end
+
+-- the colour of the playmat this card is currently sitting on, or nil
+function cardMatColor(card)
+	if card == nil then
+		return nil
+	end
+	for _, zone in ipairs(card.getZones()) do
+		local color = playmatColorOfZone(zone)
+		if color ~= nil then
+			return color
 		end
 	end
-	return false
+	return nil
 end
 
--- attach a button to the player's command-zone scripting zone, at the standard
--- spot. opts = { click_function, label, tooltip, right, forward } where right and
--- forward are optional world-unit offsets from the standard spot (for grids)
-function addCommandZoneButton(color, opts)
-	local cz = data[color] and data[color]["commandZone"]
-	if cz == nil then
-		return
-	end
-	-- aim at a point on the table behind the zone (plus any grid offset), then
-	-- convert to the zone's local space (positionToLocal handles rotation/scale)
-	local world = cz.getPosition()
-		+ cz.getTransformForward():scale(czButtonBehind + (opts.forward or 0))
-		+ cz.getTransformRight():scale(opts.right or 0)
-	world.y = world.y - czButtonDrop + czButtonLift
-	local lp = cz.positionToLocal(world)
-	-- counter-scale the button by the zone scale so the text renders un-stretched
-	local s = cz.getScale()
-	cz.createButton({
-		click_function = opts.click_function,
-		function_owner = self,
-		label = opts.label,
-		tooltip = opts.tooltip,
-		position = { lp.x, lp.y, lp.z },
-		scale = { 1 / s.x, 1 / s.y, 1 / s.z },
-		width = opts.width or 2000,
-		height = opts.height or 500,
-		font_size = opts.font_size or 250,
-		color = { 1, 1, 1, 0 },
-		font_color = { 1, 1, 1, 100 },
-		hover_color = { 1, 1, 1, 0.1 },
-		press_color = { 1, 0, 0, 0.2 },
-	})
-end
+--------------------------------- THE BUTTONS -----------------------------------
 
--- remove any button(s) with this click_function from the player's command zone
-function removeCommandZoneButton(color, clickFn)
-	local cz = data[color] and data[color]["commandZone"]
-	if cz == nil then
+-- drop every trigger button on the card (high-to-low so indices hold), leaving
+-- the Encoder's own buttons alone
+function removeCardTriggerButtons(card)
+	if card == nil then
 		return
 	end
-	local buttons = cz.getButtons()
-	if buttons == nil then
-		return
-	end
-	-- collect matching indices, then remove high-to-low so indices don't shift
 	local indices = {}
-	for _, b in ipairs(buttons) do
-		if b.click_function == clickFn then
+	for _, b in ipairs(card.getButtons() or {}) do
+		if cardTriggerClickFns[b.click_function] then
 			table.insert(indices, b.index)
 		end
 	end
@@ -1532,31 +1510,162 @@ function removeCommandZoneButton(color, clickFn)
 		return a > b
 	end)
 	for _, idx in ipairs(indices) do
-		cz.removeButton(idx)
+		card.removeButton(idx)
 	end
 end
 
--- set the label of the command-zone button(s) with this click_function
-function setCommandZoneButtonLabel(color, clickFn, label)
-	local cz = data[color] and data[color]["commandZone"]
-	if cz == nil then
+-- local position and width of a button in its row
+function cardTriggerSlot(b)
+	local cols = b.cols or 1
+	local col = b.col or 1
+	local slot = cardTriggerRowWidth / cols
+	local x = (col - (cols + 1) / 2) * slot * cardTriggerScale / cardButtonUnits
+	local z = cardTriggerTop + (b.row or 0) * cardTriggerRowGap
+	local width = cols == 1 and cardTriggerRowWidth or math.floor(slot - cardTriggerSlotGap)
+	return { x, 0.2, z }, width
+end
+
+function cardTriggerLabel(b, color)
+	if type(b.label) == "function" then
+		return b.label(color)
+	end
+	return b.label
+end
+
+-- hang the card's trigger buttons under it. Clear first so a card that re-enters
+-- a mat (or a reload that kept the old buttons) can't end up with two sets.
+function addCardTriggerButtons(card, def, color)
+	removeCardTriggerButtons(card)
+	for _, b in ipairs(def.buttons) do
+		local pos, width = cardTriggerSlot(b)
+		card.createButton({
+			click_function = b.click_function,
+			function_owner = self,
+			label = cardTriggerLabel(b, color),
+			tooltip = b.tooltip,
+			position = pos,
+			rotation = { 0, 0, 0 },
+			width = width,
+			height = cardTriggerHeight,
+			font_size = b.font_size or 220,
+			scale = { cardTriggerScale, cardTriggerScale, cardTriggerScale },
+			color = { 0.16, 0.16, 0.16 },
+			font_color = { 1, 1, 1 },
+			hover_color = { 0.4, 0.4, 0.4 },
+			press_color = { 1, 0, 0, 0.2 },
+		})
+	end
+end
+
+-- make the card's buttons match where it is now: a full set while it's on a mat
+-- whose owner has the setting on, none otherwise
+function syncCardTriggerButtons(card)
+	local def = cardTriggerFor(card)
+	local color = def and cardMatColor(card)
+	if color ~= nil and getSetting(color, def.setting) then
+		addCardTriggerButtons(card, def, color)
+	elseif card ~= nil and card.type == "Card" then
+		removeCardTriggerButtons(card)
+	end
+end
+
+-- zone hooks (called from onObjectEnterZone / onObjectLeaveZone)
+function cardTriggersEnter(zone, obj)
+	local def = cardTriggerFor(obj)
+	local matColor = playmatColorOfZone(zone)
+	if def == nil or matColor == nil or not getSetting(matColor, def.setting) then
 		return
 	end
-	for _, b in ipairs(cz.getButtons() or {}) do
-		if b.click_function == clickFn then
-			cz.editButton({ index = b.index, label = label })
+	-- only button it once it has come to rest on the mat, and only if it's still
+	-- there (a card merely passing through the zone shouldn't get buttons)
+	whenSettledInZone(obj, zone, function(o)
+		addCardTriggerButtons(o, def, matColor)
+	end)
+end
+
+function cardTriggersLeave(zone, obj)
+	if cardTriggerFor(obj) == nil or playmatColorOfZone(zone) == nil then
+		return
+	end
+	removeCardTriggerButtons(obj)
+end
+
+-- flipping a double-faced card swaps in the other face's object: give it the
+-- buttons for whichever face is now showing (Ral's back face keeps the grid)
+function onObjectStateChange(obj, _oldGuid)
+	Wait.frames(function()
+		if obj ~= nil then
+			syncCardTriggerButtons(obj)
+		end
+	end, 1)
+end
+
+-- The Encoder rebuilds a card's entire button set from its own prop data, which
+-- drops any button we put there. It calls us back at the end of each rebuild (see
+-- card_buttons.lua), so put ours straight back. No-ops for anything that isn't a
+-- trigger card, since this runs for every rebuild of every encoded object.
+function cardTriggersReassert(card)
+	if cardTriggerFor(card) ~= nil then
+		syncCardTriggerButtons(card)
+	end
+end
+
+-- rescan a player's mat (or every mat, when color is nil) and make the buttons
+-- match the settings. Used by onload and by the settings panels, which toggle
+-- them live.
+function refreshCardTriggerButtons(color)
+	for c, _ in pairs(data) do
+		local mat = data[c] and data[c]["playmat"]
+		if mat ~= nil and (color == nil or c == color) then
+			for _, obj in ipairs(mat.getObjects()) do
+				if cardTriggerFor(obj) ~= nil then
+					syncCardTriggerButtons(obj)
+				end
+			end
 		end
 	end
 end
 
--- map a command-zone object back to its owner colour
-function commandZoneOwnerOf(obj)
-	for color, pdata in pairs(data) do
-		if pdata["commandZone"] == obj then
-			return color
+-- relabel every button with this click_function on cards on color's mat
+function setCardTriggerLabel(color, clickFn, label)
+	local mat = data[color] and data[color]["playmat"]
+	if mat == nil then
+		return
+	end
+	for _, obj in ipairs(mat.getObjects()) do
+		if cardTriggerFor(obj) ~= nil then
+			for _, b in ipairs(obj.getButtons() or {}) do
+				if b.click_function == clickFn then
+					obj.editButton({ index = b.index, label = label })
+				end
+			end
 		end
 	end
-	return nil
+end
+
+--------------------------------- THE HANDLERS ----------------------------------
+
+-- the mat owner of a clicked trigger card, if the clicker is that owner. Anyone
+-- else gets told whose it is; a card whose setting was switched off with the
+-- buttons still on it just loses them. Returns nil when the click should no-op.
+function cardTriggerController(card, clickerColor, what)
+	local def = cardTriggerFor(card)
+	local owner = cardMatColor(card)
+	if def == nil or owner == nil then
+		return nil
+	end
+	if not getSetting(owner, def.setting) then
+		removeCardTriggerButtons(card)
+		return nil
+	end
+	if clickerColor ~= owner then
+		Player[clickerColor].broadcast(
+			"That's " .. owner .. "'s " .. what .. " -- only they can use it.",
+			{ 1, 0.6, 0.2 }
+		)
+		return nil
+	end
+	return owner
 end
 --------------------- GLOBAL-SCRIPT BUTTONS ON ENCODED CARDS --------------------
 -- The Encoder owns the button set on every card it has encoded: each rebuild
@@ -1596,7 +1705,7 @@ function registerGlobalCardButtons()
 		if not ok then
 			broadcastToAll(
 				"Encoder is missing APIregisterButtonProvider -- this table's card buttons "
-					.. "(the Mindmoil trigger) will disappear whenever a card's buttons are rebuilt. "
+					.. "(Mindmoil, Etali, Ping, Ral, ...) will disappear whenever a card's buttons are rebuilt. "
 					.. "Was the Encoder updated from upstream?",
 				{ 1, 0.6, 0.2 }
 			)
@@ -1613,50 +1722,36 @@ function globalCardButtons(p)
 	if obj == nil then
 		return
 	end
-	mindmoilReassert(obj)
+	cardTriggersReassert(obj)
 end
 ------------------------------------ ETALI -------------------------------------
--- "Etali, Primal Conqueror" gets a per-owner "Etali Trigger" button. It is NOT on
--- the table by default: when a game starts (the opening-hand snapshot -- see
--- reset.lua / bumpMulliganCount) we check that player's command zone, and if their
--- commander is Etali we attach the button there (see command_buttons.lua for the
--- shared placement/detection). It persists until the next game start at which the
--- player no longer has Etali.
+-- "Etali, Primal Conqueror" gets an "Etali Trigger" button on the card itself
+-- while it sits on a playmat (see card_triggers.lua), gated by the mat owner's
+-- commanderQOL setting.
 --
 -- Clicking it reveals the top of every player's library until a nonland is hit:
 -- each land revealed goes to that player's exile, and the first nonland from each
 -- deck is placed in front of the owner. Land detection reuses cardIsLand.
 
-ETALI_COMMANDER_NAME = "Etali, Primal Conqueror"
-
--- game-start hook: the Etali button should be present iff the player has the
--- Etali commander in their command zone at this moment. Clear first so a reload
--- (where the zone may keep a stale button) can't leave a duplicate.
-function refreshEtaliButton(color)
-	if data[color] == nil then
-		return
-	end
-	removeCommandZoneButton(color, "playerEtali")
-	if getSetting(color, "commanderQOL") and commandZoneHasCommander(color, ETALI_COMMANDER_NAME) then
-		addCommandZoneButton(color, {
+registerCardTrigger({
+	names = { "Etali, Primal Conqueror" },
+	setting = "commanderQOL",
+	buttons = {
+		{
 			click_function = "playerEtali",
 			label = "Etali Trigger",
 			tooltip = "                  [b]Etali[/b]\nreveal each library until a nonland:\n  lands go to that player's exile,\n  the nonland comes to you",
-		})
-	end
-end
+		},
+	},
+})
 
 -- button handler: only the owning player may activate their Etali. Reveal the
 -- top of every player's library until a nonland is hit -- each land goes to that
 -- player's exile, the first nonland from each deck is placed in front of the
 -- owner. Land detection reuses the cascade "-1" CMC sentinel (see getCMC).
 function playerEtali(obj, clickerColor, alt)
-	local ownerColor = commandZoneOwnerOf(obj)
+	local ownerColor = cardTriggerController(obj, clickerColor, "Etali")
 	if ownerColor == nil then
-		return
-	end
-	if clickerColor ~= ownerColor then
-		Player[clickerColor].broadcast("Only " .. ownerColor .. " may activate this Etali.")
 		return
 	end
 	if etaliRunning then
@@ -1766,59 +1861,35 @@ function etaliPlaceNonland(clickerColor, ownerColor, card)
 	etaliGlow(card, ownerColor)
 end
 -------------------------------------- PING --------------------------------------
--- A handful of "ping" commanders get a per-owner "Ping" button. Like the Etali
--- trigger it is NOT on the table by default: when a game starts (the opening-hand
--- snapshot -- see bumpMulliganCount) we check that player's command zone, and if
--- their commander is one of PING_COMMANDER_NAMES we attach the button there (see
--- command_buttons.lua for the shared placement/detection). It persists until the
--- next game start at which the player no longer has a ping commander.
+-- A handful of "ping" commanders get a "Ping" button on the card itself while it
+-- sits on a playmat (see card_triggers.lua), gated by the mat owner's
+-- commanderQOL setting.
 --
 -- Clicking it reduces every opponent's life by 1 (life loss reuses loseLife, so
 -- it announces and updates each Life_Tracker exactly like other scripted drains).
 
-PING_COMMANDER_NAMES = {
-	"Ob Nixilis, Captive Kingpin",
-	"Vivi Ornitier",
-	"Crystal, Inhuman Princess",
-}
-
--- does this player's command zone hold any of the ping commanders?
-function hasPingCommander(color)
-	for _, name in ipairs(PING_COMMANDER_NAMES) do
-		if commandZoneHasCommander(color, name) then
-			return true
-		end
-	end
-	return false
-end
-
--- game-start hook: the Ping button should be present iff the player has a ping
--- commander in their command zone at this moment. Clear first so a reload (where
--- the zone may keep a stale button) can't leave a duplicate.
-function refreshObNixButton(color)
-	if data[color] == nil then
-		return
-	end
-	removeCommandZoneButton(color, "playerObNixPing")
-	if getSetting(color, "commanderQOL") and hasPingCommander(color) then
-		addCommandZoneButton(color, {
+registerCardTrigger({
+	names = {
+		"Ob Nixilis, Captive Kingpin",
+		"Vivi Ornitier",
+		"Crystal, Inhuman Princess",
+	},
+	setting = "commanderQOL",
+	buttons = {
+		{
 			click_function = "playerObNixPing",
 			label = "Ping",
 			tooltip = "                  [b]Ping[/b]\neach opponent loses 1 life",
-		})
-	end
-end
+		},
+	},
+})
 
 -- button handler: only the owning player may activate their Ping. Every other
 -- colour in the game loses 1 life (loseLife no-ops when a player has no
 -- Life_Tracker, so absent seats are skipped).
 function playerObNixPing(obj, clickerColor, alt)
-	local ownerColor = commandZoneOwnerOf(obj)
+	local ownerColor = cardTriggerController(obj, clickerColor, "Ping")
 	if ownerColor == nil then
-		return
-	end
-	if clickerColor ~= ownerColor then
-		Player[clickerColor].broadcast("Only " .. ownerColor .. " may use this Ping.")
 		return
 	end
 	Player[ownerColor].broadcast(ownerColor .. " pinged opponents for 1", ownerColor)
@@ -1831,10 +1902,8 @@ end
 ------------------------------------ MINDMOIL -----------------------------------
 -- "Mindmoil" (Whenever you cast a spell, put the cards in your hand on the bottom
 -- of your library in any order, then draw that many cards) gets a button on the
--- card itself, and only while the card is sitting on a player's playmat -- it is
--- added when the card settles in a playmat zone and removed when it leaves (see
--- the mindmoilEnter / mindmoilLeave hooks in context_menus.lua). onload rescans
--- every mat so a reload doesn't lose (or duplicate) the button.
+-- card itself, and only while the card is sitting on a player's playmat (see
+-- card_triggers.lua for the shared button machinery).
 --
 -- Clicking it resolves the trigger for the mat's owner: their whole hand goes to
 -- the bottom of their library, left-to-right in hand = bottom-to-top in the
@@ -1842,8 +1911,6 @@ end
 --
 -- The mat owner's "mindmoil" setting (default on) controls whether the button is
 -- offered at all; toggling it adds/removes the buttons on that player's mat.
-
-MINDMOIL_CARD_NAME = "mindmoil"
 
 -- vertical gap between the hand cards as they are fanned above the library spot,
 -- and how far clear of that fan the library itself is hoisted while they drop.
@@ -1861,158 +1928,27 @@ mindmoilMergeTimeout = 3
 -- per-colour re-entry guard, so a double click can't run two triggers at once
 mindmoilRunning = mindmoilRunning or {}
 
--- is this object the Mindmoil card? (nicknames in this mod are
--- "<name>\n<type line> <cmc>CMC", so compare only the displayed name)
-function isMindmoilCard(obj)
-	if obj == nil or obj.type ~= "Card" then
-		return false
-	end
-	return mainCardName(obj.getName()):lower() == MINDMOIL_CARD_NAME
-end
-
--- the colour of the playmat this card is currently sitting on, or nil
-function mindmoilMatColor(card)
-	if card == nil then
-		return nil
-	end
-	for _, zone in ipairs(card.getZones()) do
-		local color = playmatColorOfZone(zone)
-		if color ~= nil then
-			return color
-		end
-	end
-	return nil
-end
-
---------------------------------- THE BUTTON ------------------------------------
-
--- drop any Mindmoil button(s) already on the card (high-to-low so indices hold)
-function removeMindmoilButton(card)
-	if card == nil then
-		return
-	end
-	local indices = {}
-	for _, b in ipairs(card.getButtons() or {}) do
-		if b.click_function == "mindmoilTrigger" then
-			table.insert(indices, b.index)
-		end
-	end
-	table.sort(indices, function(a, b)
-		return a > b
-	end)
-	for _, idx in ipairs(indices) do
-		card.removeButton(idx)
-	end
-end
-
--- put the trigger button just below the card face. Clear first so a card that
--- re-enters a mat (or a reload that kept the old button) can't end up with two.
-function addMindmoilButton(card)
-	if card == nil then
-		return
-	end
-	removeMindmoilButton(card)
-	card.createButton({
-		click_function = "mindmoilTrigger",
-		function_owner = self,
-		label = "Mindmoil",
-		tooltip = "                [b]Mindmoil[/b]\nput your hand on the bottom of your\n"
-			.. "library (left to right = bottom to top),\nthen draw that many cards",
-		position = { 0, 0.2, 1.9 },
-		rotation = { 0, 0, 0 },
-		width = 1400,
-		height = 400,
-		font_size = 220,
-		scale = { 0.6, 0.6, 0.6 },
-		color = { 0.16, 0.16, 0.16 },
-		font_color = { 1, 1, 1 },
-		hover_color = { 0.4, 0.4, 0.4 },
-		press_color = { 1, 0, 0, 0.2 },
-	})
-end
-
--- zone hooks (called from onObjectEnterZone / onObjectLeaveZone)
-function mindmoilEnter(zone, obj)
-	local matColor = playmatColorOfZone(zone)
-	if not isMindmoilCard(obj) or matColor == nil then
-		return
-	end
-	if not getSetting(matColor, "mindmoil") then
-		return
-	end
-	-- only button it once it has come to rest on the mat, and only if it's still
-	-- there (a card merely passing through the zone shouldn't get a button)
-	whenSettledInZone(obj, zone, function(o)
-		addMindmoilButton(o)
-	end)
-end
-
-function mindmoilLeave(zone, obj)
-	if not isMindmoilCard(obj) or playmatColorOfZone(zone) == nil then
-		return
-	end
-	removeMindmoilButton(obj)
-end
-
--- The Encoder rebuilds a card's entire button set from its own prop data, which
--- drops any button we put there (dropping a keyword token on the card, the untap
--- sweep clearing a stun/exert counter, notepads, token copies, ...). It calls us
--- back at the end of each rebuild so the button goes straight back on -- see
--- card_buttons.lua for the registration. No-ops for anything that isn't a
--- Mindmoil on a mat, since this runs for every rebuild of every encoded object.
-function mindmoilReassert(card)
-	if not isMindmoilCard(card) then
-		return
-	end
-	local color = mindmoilMatColor(card)
-	if color == nil or not getSetting(color, "mindmoil") then
-		return
-	end
-	addMindmoilButton(card)
-end
-
--- rescan a player's mat (or every mat, when color is nil) and make the buttons
--- match the setting: exactly one on each Mindmoil while it's on, none while it's
--- off. Used by onload and by the settings panel, which toggles it live.
-function refreshMindmoilButtons(color)
-	for c, _ in pairs(data) do
-		local mat = data[c] and data[c]["playmat"]
-		if mat ~= nil and (color == nil or c == color) then
-			local on = getSetting(c, "mindmoil")
-			for _, obj in ipairs(mat.getObjects()) do
-				if isMindmoilCard(obj) then
-					if on then
-						addMindmoilButton(obj)
-					else
-						removeMindmoilButton(obj)
-					end
-				end
-			end
-		end
-	end
-end
+registerCardTrigger({
+	names = { "Mindmoil" },
+	setting = "mindmoil",
+	buttons = {
+		{
+			click_function = "mindmoilTrigger",
+			label = "Mindmoil",
+			tooltip = "                [b]Mindmoil[/b]\nput your hand on the bottom of your\n"
+				.. "library (left to right = bottom to top),\nthen draw that many cards",
+		},
+	},
+})
 
 --------------------------------- THE TRIGGER -----------------------------------
 
 -- button handler: only the player whose mat the Mindmoil is on may trigger it
 function mindmoilTrigger(obj, clickerColor, alt)
-	local ownerColor = mindmoilMatColor(obj)
-	if ownerColor == nil then
-		return
+	local ownerColor = cardTriggerController(obj, clickerColor, "Mindmoil")
+	if ownerColor ~= nil then
+		mindmoilResolve(ownerColor)
 	end
-	if not getSetting(ownerColor, "mindmoil") then
-		-- setting was switched off with the button still on the card
-		removeMindmoilButton(obj)
-		return
-	end
-	if clickerColor ~= ownerColor then
-		Player[clickerColor].broadcast(
-			"That's " .. ownerColor .. "'s Mindmoil -- only they can trigger it.",
-			{ 1, 0.6, 0.2 }
-		)
-		return
-	end
-	mindmoilResolve(ownerColor)
 end
 
 -- put the whole hand on the bottom of the library, then draw that many cards.
@@ -2180,24 +2116,16 @@ function mindmoilDraw(color, n)
 	announceDrawTriggers(color, n, false)
 end
 ------------------------------------- RAL --------------------------------------
--- "Ral, Monsoon Mage" gets a small button cluster by the command zone, present
--- only when a game starts with Ral in the command zone (see command_buttons.lua)
--- and cleared at the next game start without Ral.
+-- "Ral, Monsoon Mage" (and its back face, "Ral, Leyline Prodigy") carries a small
+-- button grid on the card itself while it sits on a playmat (see
+-- card_triggers.lua), gated by the mat owner's commanderQOL setting.
 --
 -- Top row = two clickable counters (Strm = storm, Ral = instants/sorceries cast),
--- centred over the bottom row of three ability buttons (flip + two placeholders).
--- Counters left-click +1, right-click -1, clamped at 0, like commander tax but in
--- steps of one.
+-- above a bottom row of three ability buttons (flip, ult, pif). Counters
+-- left-click +1, right-click -1, clamped at 0, like commander tax but in steps of
+-- one.
 
-RAL_COMMANDER_NAME = "Ral, Monsoon Mage"
-
--- layout (tune to taste). Columns are spaced along the zone's right axis, rows
--- along its forward axis.
-ralColGap = 1.7 -- horizontal gap between adjacent columns (world units)
-ralRowOffset = 0.4 -- half the vertical gap between the two rows
-ralButtonWidth = 900
-ralButtonHeight = 425
-ralButtonFont = 210
+RAL_CARD_NAMES = { "Ral, Monsoon Mage", "Ral, Leyline Prodigy" }
 
 -- the bottom-row ability buttons (left to right). flip works; rest are placeholders.
 ralAbilities = {
@@ -2224,81 +2152,64 @@ ralCounterDefs = {
 	{ key = "spells", name = "Ral", click_function = "ralSpellCounter" },
 }
 
--- per-color counter values, (re)set to zero whenever the grid is spawned
+-- per-color counter values; a fresh pair on first use, zeroed at end of turn
 ralCounts = {}
+
+function ralCountsFor(color)
+	ralCounts[color] = ralCounts[color] or { storm = 0, spells = 0 }
+	return ralCounts[color]
+end
+
+function ralCounterLabel(def, color)
+	return def.name .. ": " .. ralCountsFor(color)[def.key]
+end
 
 -- cards staged by the ult (freecast) and pif (flashback) this turn, per color, so
 -- they can be resolved when that player's turn ends (see ralEndOfTurnCleanup)
 ralFreecastCards = {}
 ralFlashbackCards = {}
 
--- game-start hook: present the Ral grid iff the player has Ral in their command
--- zone right now. Clear first so a reload can't leave duplicates.
-function refreshRalButton(color)
-	if data[color] == nil then
-		return
-	end
-	-- clear every Ral button (abilities + counters) so a reload can't duplicate them
-	for _, b in ipairs(ralAbilities) do
-		removeCommandZoneButton(color, b.click_function)
-	end
-	for _, def in ipairs(ralCounterDefs) do
-		removeCommandZoneButton(color, def.click_function)
-	end
-	if not getSetting(color, "commanderQOL") or not commandZoneHasCommander(color, RAL_COMMANDER_NAME) then
-		return
-	end
-	ralCounts[color] = { storm = 0, spells = 0 }
-	addRalGrid(color)
-end
-
--- place the cluster: top row = two counters (centred), bottom row = three
--- abilities. The zone's forward axis is inverted here (the cluster is built under
--- the zone), so the top row uses -ralRowOffset and the bottom row +ralRowOffset.
-function addRalGrid(color)
-	-- top row: the two counters, centred over the three abilities below
-	local counterCols = { -ralColGap / 2, ralColGap / 2 }
+-- the card's grid: the counters on top, the abilities under them
+do
+	local buttons = {}
 	for i, def in ipairs(ralCounterDefs) do
-		addCommandZoneButton(color, {
+		table.insert(buttons, {
 			click_function = def.click_function,
-			label = def.name .. ": " .. ralCounts[color][def.key],
+			label = function(color)
+				return ralCounterLabel(def, color)
+			end,
 			tooltip = def.name .. " -- [i]left click[/i] +1, [i]right click[/i] -1",
-			right = counterCols[i],
-			forward = -ralRowOffset,
-			width = ralButtonWidth,
-			height = ralButtonHeight,
-			font_size = ralButtonFont,
+			row = 0,
+			col = i,
+			cols = #ralCounterDefs,
+			font_size = 180,
 		})
 	end
-	-- bottom row: the three ability buttons, centred on the zone
-	local abilityCols = { -ralColGap, 0, ralColGap }
 	for i, b in ipairs(ralAbilities) do
-		addCommandZoneButton(color, {
+		table.insert(buttons, {
 			click_function = b.click_function,
 			label = b.label,
 			tooltip = b.tooltip,
-			right = abilityCols[i],
-			forward = ralRowOffset,
-			width = ralButtonWidth,
-			height = ralButtonHeight,
-			font_size = ralButtonFont,
+			row = 1,
+			col = i,
+			cols = #ralAbilities,
+			font_size = 200,
 		})
 	end
+	registerCardTrigger({ names = RAL_CARD_NAMES, setting = "commanderQOL", buttons = buttons })
 end
 
 -- bump a counter by delta (clamped at 0) and refresh its label
 function ralBump(color, def, delta)
-	if ralCounts[color] == nil then
-		return
-	end
-	ralCounts[color][def.key] = math.max(0, ralCounts[color][def.key] + delta)
-	setCommandZoneButtonLabel(color, def.click_function, def.name .. ": " .. ralCounts[color][def.key])
+	local counts = ralCountsFor(color)
+	counts[def.key] = math.max(0, counts[def.key] + delta)
+	setCardTriggerLabel(color, def.click_function, ralCounterLabel(def, color))
 end
 
 -- adjust one counter (+1 left click, -1 right click, clamped at 0) and refresh
 -- its label. Like commander tax, anyone at the table may click it.
 function ralAdjustCounter(obj, alt, def)
-	local owner = commandZoneOwnerOf(obj)
+	local owner = cardMatColor(obj)
 	if owner == nil then
 		return
 	end
@@ -2311,7 +2222,7 @@ end
 
 -- the instants/sorceries counter also feeds storm, so adjust both by the same step
 function ralSpellCounter(obj, color, alt)
-	local owner = commandZoneOwnerOf(obj)
+	local owner = cardMatColor(obj)
 	if owner == nil then
 		return
 	end
@@ -2326,12 +2237,8 @@ function ralPlaceholder() end
 -- button handler: only the owning player may flip. A tails costs the flipper
 -- 1 life. Announce the result to the table. (Counters are not auto-bumped.)
 function playerCoinFlip(obj, clickerColor, alt)
-	local ownerColor = commandZoneOwnerOf(obj)
+	local ownerColor = cardTriggerController(obj, clickerColor, "Ral")
 	if ownerColor == nil then
-		return
-	end
-	if clickerColor ~= ownerColor then
-		Player[clickerColor].broadcast("Only " .. ownerColor .. " may flip this coin.")
 		return
 	end
 	if math.random(2) == 1 then
@@ -2351,12 +2258,8 @@ ralPifNote = "flashback (past in flames)" -- ditto, for Past in Flames
 
 -- button handler: owner-only, guarded against double-fire while cards animate
 function playerRalUlt(obj, clickerColor, alt)
-	local owner = commandZoneOwnerOf(obj)
+	local owner = cardTriggerController(obj, clickerColor, "Ral")
 	if owner == nil then
-		return
-	end
-	if clickerColor ~= owner then
-		Player[clickerColor].broadcast("Only " .. owner .. " may use Ral's ultimate.")
 		return
 	end
 	if ralUltRunning then
@@ -2464,7 +2367,7 @@ function ralEndOfTurnCleanup(color)
 	if ralCounts[color] ~= nil then
 		ralCounts[color] = { storm = 0, spells = 0 }
 		for _, def in ipairs(ralCounterDefs) do
-			setCommandZoneButtonLabel(color, def.click_function, def.name .. ": 0")
+			setCardTriggerLabel(color, def.click_function, ralCounterLabel(def, color))
 		end
 	end
 end
@@ -2488,12 +2391,8 @@ end
 -- Move every instant/sorcery in the owner's graveyard to the spell row (same spot
 -- as the ult), tagged "flashback". Nothing is exiled; non-spells stay put.
 function playerPif(obj, clickerColor, alt)
-	local owner = commandZoneOwnerOf(obj)
+	local owner = cardTriggerController(obj, clickerColor, "Ral")
 	if owner == nil then
-		return
-	end
-	if clickerColor ~= owner then
-		Player[clickerColor].broadcast("Only " .. owner .. " may use Past in Flames.")
 		return
 	end
 	if ralPifRunning then
@@ -2562,7 +2461,7 @@ function pifNext(color, queue, idx)
 	end)
 end
 ------------------------------- GOBLIN STICKERS --------------------------------
--- When a game starts (the same hook as Etali/Ral -- see bumpMulliganCount) with a
+-- When a game starts (the opening-hand hook -- see bumpMulliganCount) with a
 -- "_____ Goblin" card in the player's library (deck), deal that player 3 random
 -- sticker cards from the locked bag onto their board, once. Each dealt card's name
 -- is three words; we write the word with the most unique vowels (y counts), every
@@ -4772,8 +4671,8 @@ function onObjectEnterZone(zone, obj)
 	-- card ownership: stamp owner in a private zone, glow foreign cards on mats (ownership.lua)
 	stampOwnershipOnEnter(zone, obj)
 	ownershipMatEnter(zone, obj)
-	-- Mindmoil: show its trigger button while it sits on a playmat (mindmoil.lua)
-	mindmoilEnter(zone, obj)
+	-- trigger cards (Mindmoil, Etali, ...): buttons while on a playmat (card_triggers.lua)
+	cardTriggersEnter(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false
@@ -4826,8 +4725,8 @@ function onObjectLeaveZone(zone, obj)
 	fetchlandLeave(zone, obj)
 	-- card ownership: clear the foreign-card glow when it leaves a mat (ownership.lua)
 	ownershipMatLeave(zone, obj)
-	-- Mindmoil: drop its trigger button when it leaves a playmat (mindmoil.lua)
-	mindmoilLeave(zone, obj)
+	-- trigger cards: drop their buttons when they leave a playmat (card_triggers.lua)
+	cardTriggersLeave(zone, obj)
 	local inHandZone = false
 	local inPlayZone = false
 	local inLibrZone = false
@@ -6951,7 +6850,7 @@ settingsDefaults = {
 	-- the live library, so an opponent's hidden removal (Praetor's
 	-- Grasp, etc.) can't leak which land left. Off = live library.
 	ownerHighlight = true, -- glow cards on this player's mat that belong to someone else, in the owner's colour
-	commanderQOL = true, -- spawn the per-commander QOL buttons (Etali trigger, Ral grid)
+	commanderQOL = true, -- trigger buttons on Etali / ping commanders / Ral while on this player's mat
 	cmdrDamageAutoLife = true, -- commander-damage tracker deltas auto-adjust this player's life
 	seedbornUntap = true, -- this player's Seedborn Muse untaps their board on others' untap steps
 	dfcLandFlip = true, -- flip a double-faced card to its land back face in the land zone
@@ -7122,7 +7021,7 @@ settingsSearchRows = {
 	{ id = "row_fetchPreviews", text = "fetchland previews display fetch" },
 	{ id = "row_fetchFromClone", text = "show all possible fetchables clone display fetch" },
 	{ id = "row_ownerHighlight", text = "highlight foreign cards owner belongs other player mat glow display" },
-	{ id = "row_commanderQOL", text = "commander qol buttons etali ral" },
+	{ id = "row_commanderQOL", text = "commander qol buttons etali ral ping trigger card" },
 	{ id = "row_keywordTokens", text = "keyword tokens frozen flying apply drop card game" },
 	{ id = "row_goblinStickers", text = "goblin stickers game" },
 	{ id = "row_mindmoil", text = "mindmoil hand bottom library trigger button game" },
@@ -7182,7 +7081,7 @@ hostSearchRows = {
 	{ id = "hostrow_fetchPreviews", text = "fetchland previews display fetch" },
 	{ id = "hostrow_fetchFromClone", text = "show all possible fetchables clone display fetch" },
 	{ id = "hostrow_ownerHighlight", text = "highlight foreign cards owner belongs other player mat glow display" },
-	{ id = "hostrow_commanderQOL", text = "commander qol buttons etali ral" },
+	{ id = "hostrow_commanderQOL", text = "commander qol buttons etali ral ping trigger card" },
 	{ id = "hostrow_keywordTokens", text = "keyword tokens frozen flying apply drop card game" },
 	{ id = "hostrow_goblinStickers", text = "goblin stickers game" },
 	{ id = "hostrow_mindmoil", text = "mindmoil hand bottom library trigger button game" },
@@ -7285,8 +7184,8 @@ function settingsToggle(player, value, id)
 		refreshFetchPreviewsForColor(player.color)
 	elseif key == "keepPregameFlow" then
 		refreshKeepButton(player.color)
-	elseif key == "mindmoil" then
-		refreshMindmoilButtons(player.color)
+	elseif key == "mindmoil" or key == "commanderQOL" then
+		refreshCardTriggerButtons(player.color)
 	end
 end
 
@@ -7351,8 +7250,8 @@ function hostToggleEnforced(player, value, id)
 		refreshAllFetchPreviews()
 	elseif key == "keepPregameFlow" then
 		refreshAllKeepButtons()
-	elseif key == "mindmoil" then
-		refreshMindmoilButtons()
+	elseif key == "mindmoil" or key == "commanderQOL" then
+		refreshCardTriggerButtons()
 	end
 end
 
@@ -7374,8 +7273,8 @@ function hostToggleValue(player, value, id)
 		refreshAllFetchPreviews()
 	elseif key == "keepPregameFlow" then
 		refreshAllKeepButtons()
-	elseif key == "mindmoil" then
-		refreshMindmoilButtons()
+	elseif key == "mindmoil" or key == "commanderQOL" then
+		refreshCardTriggerButtons()
 	end
 end
 

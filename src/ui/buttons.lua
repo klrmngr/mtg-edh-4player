@@ -177,9 +177,8 @@ function createTableButtonM(object, name, clickFunction, ttip)
 		hover_color = { 1, 1, 1, 0.1 },
 		press_color = { 1, 0, 0, 0.2 },
 	})
-	-- (the Etali button is no longer here -- it spawns under the command zone only
-	-- when a player starts a game with Etali, Primal Conqueror as their commander;
-	-- see etali.lua)
+	-- (the Etali button is no longer here -- it lives on the Etali card itself
+	-- while it's on a playmat; see etali.lua / card_triggers.lua)
 	-- reset button, directly under the mulligan counter (z = 1.4)
 	object.createButton({
 		click_function = "playerReset",

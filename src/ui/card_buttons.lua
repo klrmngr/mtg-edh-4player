@@ -36,7 +36,7 @@ function registerGlobalCardButtons()
 		if not ok then
 			broadcastToAll(
 				"Encoder is missing APIregisterButtonProvider -- this table's card buttons "
-					.. "(the Mindmoil trigger) will disappear whenever a card's buttons are rebuilt. "
+					.. "(Mindmoil, Etali, Ping, Ral, ...) will disappear whenever a card's buttons are rebuilt. "
 					.. "Was the Encoder updated from upstream?",
 				{ 1, 0.6, 0.2 }
 			)
@@ -53,5 +53,5 @@ function globalCardButtons(p)
 	if obj == nil then
 		return
 	end
-	mindmoilReassert(obj)
+	cardTriggersReassert(obj)
 end

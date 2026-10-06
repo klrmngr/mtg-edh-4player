@@ -237,7 +237,7 @@
             <Row id="hdr_commander" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="COMMANDER" /></Cell></Row>
             <Row id="row_commanderQOL" preferredHeight="46"><Cell><VerticalLayout spacing="0" childForceExpandHeight="false">
                 <Toggle id="setCommanderQOL" isOn="True" onValueChanged="settingsToggle" textColor="rgb(0.9,0.9,0.9)" fontSize="17" preferredHeight="26" minHeight="26">Commander QOL buttons</Toggle>
-                <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="Etali trigger / Ral grid, applied next game" />
+                <Text color="#9aa0a8" fontSize="13" alignment="MiddleLeft" preferredHeight="16" minHeight="16" margin="24 0 0 0" text="Etali / Ping / Ral buttons on the card" />
             </VerticalLayout></Cell></Row>
 
             <Row id="hdr_game" preferredHeight="26"><Cell><Text fontSize="14" fontStyle="Bold" color="#6fa0d8" alignment="MiddleLeft" text="GAME" /></Cell></Row>

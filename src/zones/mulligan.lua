@@ -13,10 +13,6 @@ function bumpMulliganCount(color)
 	-- for the reset button while the library is still complete (see reset.lua)
 	if (data[color]["mulliganCount"] or 0) == 0 then
 		captureResetSnapshot(color, true)
-		-- show/hide this player's commander buttons based on their command zone now
-		refreshEtaliButton(color)
-		refreshRalButton(color)
-		refreshObNixButton(color)
 		-- deal goblin sticker cards if their commander is "_____ Goblin" (once)
 		refreshGoblinStickers(color)
 	end

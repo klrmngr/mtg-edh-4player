@@ -1,5 +1,5 @@
 ------------------------------- GOBLIN STICKERS --------------------------------
--- When a game starts (the same hook as Etali/Ral -- see bumpMulliganCount) with a
+-- When a game starts (the opening-hand hook -- see bumpMulliganCount) with a
 -- "_____ Goblin" card in the player's library (deck), deal that player 3 random
 -- sticker cards from the locked bag onto their board, once. Each dealt card's name
 -- is three words; we write the word with the most unique vowels (y counts), every
