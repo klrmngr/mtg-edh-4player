@@ -41,7 +41,6 @@ function onload(saved)
 	revealUp = 15.5
 	revealUpS = 3.1
 	revealRi = 1.5
-	exileRot = -180
 	gravFor = -4.14
 
 	spawnPatchNotesButton()
@@ -577,11 +576,11 @@ function move2grav(ply)
 		if gr.type == "Card" then
 			handTrigger(gr)
 		end
+		-- anchor on the dedicated graveyard zone, facing the owner like the library
 		local rot = gr.getRotation()
 		rot.z = 0
-		rot.y = data[ply]["libraryZone"].getRotation().y + exileRot
-		local pos = data[ply]["libraryZone"].getPosition()
-			+ data[ply]["libraryZone"].getTransformForward():scale(gravFor)
+		rot.y = data[ply]["libraryZone"].getRotation().y
+		local pos = data[ply]["graveyard"].getPosition()
 		pos[2] = 3
 		gr.setRotationSmooth(rot, false, true)
 		gr.setPositionSmooth(pos, false, true)
