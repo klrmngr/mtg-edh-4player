@@ -897,7 +897,7 @@ function playerMulligan(button, playerColor, alt)
 						local nLands = 0
 						local cards = deck.getObjects()
 						for i = 1, 7 do
-							if cards[i].name:lower():find("land") then
+							if cardIsLand(cards[i].name) then
 								nLands = nLands + 1
 							end
 						end
@@ -4563,9 +4563,9 @@ end
 
 -- Single source of truth for "is this card a land?" (basic lands included).
 -- Accepts either a card object or a name string. Card nicknames in this mod are
--- "<name>\n<type line> <cmc>CMC", so the type line is part of the name; matching
--- "land" there identifies lands without scanning the rules text. For objects we
--- also accept a "Land" tag.
+-- "<name>\n<type line> <cmc>CMC"; only the type line is checked so a card name
+-- like "Animate Land" doesn't count (see cardTypeText). For objects we also
+-- accept a "Land" tag.
 function cardIsLand(card)
 	if card == nil then
 		return false
@@ -4584,7 +4584,7 @@ function cardIsLand(card)
 		end
 		name = card.getName()
 	end
-	return (name or ""):lower():find("land") ~= nil
+	return cardTypeText(name):find("land") ~= nil
 end
 
 -- the card nickname's second line is its type line (see mainCardName), so an
@@ -4680,6 +4680,23 @@ function cardTypeLine(nameOrObj)
 		name = nameOrObj.getName()
 	end
 	return ((name or ""):match("[\r\n]+(.*)$") or ""):lower()
+end
+
+-- text to match card types against: the type line when the nickname has one,
+-- else the whole lowercased nickname (cards spawned without the importer's
+-- "<name>\n<type line>" format have nothing better to go on)
+function cardTypeText(nameOrObj)
+	local name
+	if type(nameOrObj) == "string" then
+		name = nameOrObj
+	elseif nameOrObj ~= nil and nameOrObj.getName ~= nil then
+		name = nameOrObj.getName()
+	end
+	name = name or ""
+	if name:find("[\r\n]") then
+		return cardTypeLine(name)
+	end
+	return name:lower()
 end
 
 -- is obj currently inside zone?
@@ -4915,7 +4932,7 @@ end
 function addLandContextMenus(deck)
 	local plains, island, mountain, swamp, forest, wastes = false, false, false, false, false, false
 	for _, card in pairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("plains") then
 			plains = true
 		end
@@ -4962,7 +4979,7 @@ function deckRampW(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("plains") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -4984,7 +5001,7 @@ function deckRampU(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("island") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -5006,7 +5023,7 @@ function deckRampR(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("mountain") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -5028,7 +5045,7 @@ function deckRampB(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("swamp") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -5050,7 +5067,7 @@ function deckRampG(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("forest") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -5072,7 +5089,7 @@ function deckRampWa(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("wastes") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -6071,7 +6088,7 @@ function revealUntilType(deck, playerColor, searchTypes)
 	for _, card in pairs(deck.getObjects()) do
 		nCards = nCards + 1
 		for _, searchType in pairs(searchTypes) do
-			if card.nickname:lower():find(searchType:lower()) then
+			if cardTypeText(card.nickname):find(searchType:lower()) then
 				cardFound = true
 				break
 			end

@@ -118,7 +118,7 @@ function revealUntilType(deck, playerColor, searchTypes)
 	for _, card in pairs(deck.getObjects()) do
 		nCards = nCards + 1
 		for _, searchType in pairs(searchTypes) do
-			if card.nickname:lower():find(searchType:lower()) then
+			if cardTypeText(card.nickname):find(searchType:lower()) then
 				cardFound = true
 				break
 			end

@@ -230,9 +230,9 @@ end
 
 -- Single source of truth for "is this card a land?" (basic lands included).
 -- Accepts either a card object or a name string. Card nicknames in this mod are
--- "<name>\n<type line> <cmc>CMC", so the type line is part of the name; matching
--- "land" there identifies lands without scanning the rules text. For objects we
--- also accept a "Land" tag.
+-- "<name>\n<type line> <cmc>CMC"; only the type line is checked so a card name
+-- like "Animate Land" doesn't count (see cardTypeText). For objects we also
+-- accept a "Land" tag.
 function cardIsLand(card)
 	if card == nil then
 		return false
@@ -251,7 +251,7 @@ function cardIsLand(card)
 		end
 		name = card.getName()
 	end
-	return (name or ""):lower():find("land") ~= nil
+	return cardTypeText(name):find("land") ~= nil
 end
 
 -- the card nickname's second line is its type line (see mainCardName), so an
@@ -347,6 +347,23 @@ function cardTypeLine(nameOrObj)
 		name = nameOrObj.getName()
 	end
 	return ((name or ""):match("[\r\n]+(.*)$") or ""):lower()
+end
+
+-- text to match card types against: the type line when the nickname has one,
+-- else the whole lowercased nickname (cards spawned without the importer's
+-- "<name>\n<type line>" format have nothing better to go on)
+function cardTypeText(nameOrObj)
+	local name
+	if type(nameOrObj) == "string" then
+		name = nameOrObj
+	elseif nameOrObj ~= nil and nameOrObj.getName ~= nil then
+		name = nameOrObj.getName()
+	end
+	name = name or ""
+	if name:find("[\r\n]") then
+		return cardTypeLine(name)
+	end
+	return name:lower()
 end
 
 -- is obj currently inside zone?

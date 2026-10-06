@@ -176,7 +176,7 @@ end
 function addLandContextMenus(deck)
 	local plains, island, mountain, swamp, forest, wastes = false, false, false, false, false, false
 	for _, card in pairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("plains") then
 			plains = true
 		end
@@ -223,7 +223,7 @@ function deckRampW(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("plains") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -245,7 +245,7 @@ function deckRampU(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("island") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -267,7 +267,7 @@ function deckRampR(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("mountain") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -289,7 +289,7 @@ function deckRampB(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("swamp") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -311,7 +311,7 @@ function deckRampG(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("forest") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
@@ -333,7 +333,7 @@ function deckRampWa(ply)
 		return
 	end
 	for i, card in ipairs(deck.getObjects()) do
-		local cname = card.name:lower():gsub("%p", "")
+		local cname = cardTypeText(card.name):gsub("%p", "")
 		if cname:find("basic") and cname:find("land") and cname:find("wastes") then
 			local rot = deck.getRotation()
 			local pos = deck.getPosition()
