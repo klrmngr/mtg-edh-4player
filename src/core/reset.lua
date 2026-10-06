@@ -170,8 +170,8 @@ function resetLifeAndCommanderDamage(color)
 end
 
 -- how long (seconds) to wait for a player's commander-damage clicks to settle
--- before mirroring the total onto their life. Matches the Life_Tracker's own
--- 3s grouping window so scripted life loss reads the same as manual changes.
+-- before announcing the life it cost. Matches the Life_Tracker's own 3s
+-- grouping window so scripted life loss reads the same as manual changes.
 commanderDamageSettle = 3
 
 -- Called by a Commander Damage tracker when its value changes (clicks or typed
@@ -181,10 +181,11 @@ commanderDamageSettle = 3
 -- the counter (a correction) is bookkeeping and leaves life alone. Tracker resets
 -- don't call this, so a board reset's separate life-to-40 step isn't double-counted.
 --
--- Rather than hit life on every click, the deltas are accumulated and the life
--- change is deferred until the clicks stop for a few seconds, then applied as a
--- single grouped adjustment (one announcement). This is the same grouping the
--- Life_Tracker does for its own manual changes.
+-- Life updates instantly on every click, but the announcement waits until the
+-- clicks stop for a few seconds and is then printed once for the grouped total --
+-- the same way the Life_Tracker handles its own manual changes. Within a window
+-- life always reflects the net increase so far (max(0, pending)), so overshooting
+-- and clicking back down corrects life too.
 function commanderDamageDealt(params)
 	if params == nil or params.guid == nil or params.delta == nil then
 		return
@@ -195,7 +196,14 @@ function commanderDamageDealt(params)
 			for _, guid in ipairs(trackers) do
 				if guid == params.guid then
 					if getSetting(color, "cmdrDamageAutoLife") then
-						pdata["cmdrDmgPending"] = (pdata["cmdrDmgPending"] or 0) + params.delta
+						local before = pdata["cmdrDmgPending"] or 0
+						local after = before + params.delta
+						pdata["cmdrDmgPending"] = after
+						local lifeDelta = math.max(0, after) - math.max(0, before)
+						if lifeDelta ~= 0 then
+							setLifeSilently(color, lifeDelta)
+						end
+						showPendingLifeChange(color, -math.max(0, after))
 						if pdata["cmdrDmgTimer"] ~= nil then
 							Wait.stop(pdata["cmdrDmgTimer"])
 						end
@@ -203,10 +211,11 @@ function commanderDamageDealt(params)
 							local total = pdata["cmdrDmgPending"] or 0
 							pdata["cmdrDmgPending"] = nil
 							pdata["cmdrDmgTimer"] = nil
-							-- only a net increase in commander damage costs life;
-							-- lowering the counter must never restore it
+							showPendingLifeChange(color, 0)
 							if total > 0 then
-								loseLife(color, total, "commander damage")
+								local tracker = pdata["lifeTracker"]
+								local count = tracker and tonumber(tracker.getVar("count")) or 0
+								announceLifeLoss(color, total, count, "commander damage")
 							end
 						end, commanderDamageSettle)
 					end
@@ -215,4 +224,20 @@ function commanderDamageDealt(params)
 			end
 		end
 	end
+end
+
+-- show the running "-N" under a player's life total while commander damage is
+-- still settling, like the Life_Tracker does for its own clicks (0 clears it)
+function showPendingLifeChange(color, n)
+	local tracker = data[color] and data[color]["lifeTracker"]
+	if tracker == nil then
+		return
+	end
+	local label = ""
+	if n ~= 0 then
+		label = tostring(n)
+	end
+	pcall(function()
+		tracker.editButton({ index = 1, label = label })
+	end)
 end

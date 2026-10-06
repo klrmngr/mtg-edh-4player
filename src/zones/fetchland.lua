@@ -567,29 +567,45 @@ end
 -- ("<Color> lost N life |total|"), so scripted life loss reads identically. When
 -- a source is given it's named too ("<Color> lost N life from <source> |total|").
 function loseLife(color, n, source)
+	local count = setLifeSilently(color, n)
+	if count ~= nil then
+		announceLifeLoss(color, n, count, source)
+	end
+end
+
+-- subtract n life from a player's Life_Tracker and update its display without
+-- announcing anything. Returns the new total, or nil if there's no tracker.
+function setLifeSilently(color, n)
 	local tracker = data[color] and data[color]["lifeTracker"]
 	if tracker == nil then
-		return
+		return nil
 	end
 	local count = tonumber(tracker.getVar("count")) or 0
 	count = count - n
 	tracker.setVar("count", count)
 	tracker.editButton({ index = 0, label = tostring(count) })
 	tracker.call("updateSave")
-	if n ~= 0 then
-		local verb, amt = "lost", n
-		if n < 0 then
-			verb, amt = "gained", -n
-		end
-		local from = ""
-		if source ~= nil and source ~= "" then
-			from = " from " .. source
-		end
-		printToAll(
-			color .. "[999999] " .. verb .. " " .. amt .. " life" .. from .. " [-]|" .. count .. "|",
-			stringColorToRGB(color)
-		)
+	return count
+end
+
+-- print "<Color> lost N life [from <source>] |total|" for a life change that's
+-- already been applied (a negative n reads as "gained")
+function announceLifeLoss(color, n, count, source)
+	if n == 0 then
+		return
 	end
+	local verb, amt = "lost", n
+	if n < 0 then
+		verb, amt = "gained", -n
+	end
+	local from = ""
+	if source ~= nil and source ~= "" then
+		from = " from " .. source
+	end
+	printToAll(
+		color .. "[999999] " .. verb .. " " .. amt .. " life" .. from .. " [-]|" .. count .. "|",
+		stringColorToRGB(color)
+	)
 end
 
 -- event hooks (called from onObjectEnterZone / onObjectLeaveZone)
